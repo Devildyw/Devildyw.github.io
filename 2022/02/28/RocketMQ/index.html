@@ -23,23 +23,55 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Devil的个人博客">
-<meta property="og:url" content="http://example.com/index.html">
+    <meta name="description" content="RocketMQMQ(Message Queue):消息队列 基本概念消息模型（Message Model）:RocketMQ主要由 Producer、Broker、Consumer 三部分组成，其中Producer 负责生产消息，Consumer 负责消费消息，Broker 负责存储消息。Broker 在实际部署过程中对应一台服务器，每个 Broker 可以存储多个Topic的消息，每个Topi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RocketMQ">
+<meta property="og:url" content="http://example.com/2022/02/28/RocketMQ/index.html">
 <meta property="og:site_name" content="Devil的个人博客">
+<meta property="og:description" content="RocketMQMQ(Message Queue):消息队列 基本概念消息模型（Message Model）:RocketMQ主要由 Producer、Broker、Consumer 三部分组成，其中Producer 负责生产消息，Consumer 负责消费消息，Broker 负责存储消息。Broker 在实际部署过程中对应一台服务器，每个 Broker 可以存储多个Topic的消息，每个Topi">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/2ms3i8hm3a.jpg">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220222203606812.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220223173114990.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220223173349238.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220223203009432.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220223210153476.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220224202331947.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220224214903923.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220224214826242.png">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-325e5949a667b144f2684caac49dd41a_720w.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225203843889.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225204155340.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225204909019.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225211130484.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225211155810.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225212158831.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225212521664.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225213018812.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225213710132.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225214232482.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225214249237.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225214305341.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225214842367.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225215028265.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225220215976.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220225220811978.png">
+<meta property="article:published_time" content="2022-02-28T12:58:54.000Z">
+<meta property="article:modified_time" content="2022-02-28T12:59:48.264Z">
 <meta property="article:author" content="Devil">
+<meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/2ms3i8hm3a.jpg">
 
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2022/02/28/RocketMQ/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/02/28/RocketMQ/","path":"2022/02/28/RocketMQ/","title":"RocketMQ"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Devil的个人博客</title>
+<title>RocketMQ | Devil的个人博客</title>
   
 
 
@@ -70,7 +102,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">Devil的个人博客</h1>
+      <p class="site-title">Devil的个人博客</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">永远详细美好的事情永远发生</p>
@@ -134,7 +166,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -147,6 +179,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RocketMQ"><span class="nav-text">RocketMQ</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E6%A8%A1%E5%9E%8B%EF%BC%88Message-Model%EF%BC%89"><span class="nav-text">消息模型（Message Model）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E8%80%85%EF%BC%88Producer%EF%BC%89"><span class="nav-text">消息生产者（Producer）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E8%80%85%EF%BC%88Consumer%EF%BC%89"><span class="nav-text">消息消费者（Consumer）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E9%A2%98%EF%BC%88Topic%EF%BC%89"><span class="nav-text">主题（Topic）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88Broker-Server%EF%BC%89"><span class="nav-text">代理服务器（Broker Server）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8D%E5%AD%97%E6%9C%8D%E5%8A%A1%EF%BC%88Name-Server%EF%BC%89"><span class="nav-text">名字服务（Name Server）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%89%E5%8F%96%E5%BC%8F%E6%B6%88%E8%B4%B9%EF%BC%88Pull-Consumer%EF%BC%89"><span class="nav-text">拉取式消费（Pull Consumer）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A8%E5%8A%A8%E5%BC%8F%E6%B6%88%E8%B4%B9%EF%BC%88Push-Consumer%EF%BC%89"><span class="nav-text">推动式消费（Push Consumer）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85%E7%BB%84%EF%BC%88Producer-Group%EF%BC%89"><span class="nav-text">生产者组（Producer Group）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84%EF%BC%88Consumer-Group%EF%BC%89"><span class="nav-text">消费者组（Consumer Group）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E6%B6%88%E8%B4%B9%EF%BC%88Clustering%EF%BC%89"><span class="nav-text">集群消费（Clustering）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%BF%E6%92%AD%E6%B6%88%E8%B4%B9%EF%BC%88Broadcasting%EF%BC%89"><span class="nav-text">广播消费（Broadcasting）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%EF%BC%88Normal-Ordered-Message%EF%BC%89"><span class="nav-text">普通顺序消息（Normal Ordered Message）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A5%E6%A0%BC%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%EF%BC%88Strictly-Ordered-Message%EF%BC%89"><span class="nav-text">严格顺序消息（Strictly Ordered Message）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%EF%BC%88Message%EF%BC%89"><span class="nav-text">消息（Message）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E7%AD%BE%EF%BC%88Tag%EF%BC%89"><span class="nav-text">标签（Tag）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MQ-Messages-Queue-%E4%B8%89%E5%A4%A7%E4%BC%98%E7%82%B9"><span class="nav-text">MQ(Messages Queue)三大优点:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E5%B8%B8%E7%9A%84MQ-%E4%B8%89%E5%A4%A7%E7%BC%BA%E7%82%B9"><span class="nav-text">通常的MQ 三大缺点:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%AF%B9%E5%8D%95%E6%A8%A1%E5%BC%8F-%E5%88%9D%E5%A7%8BRocketMQ"><span class="nav-text">单对单模式(初始RocketMQ)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85"><span class="nav-text">生产者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E8%B4%B9%E8%80%85"><span class="nav-text">消费者</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%AF%B9%E5%A4%9A-%E5%8D%95%E7%94%9F%E4%BA%A7%E8%80%85-%E5%A4%9A%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-text">一对多(单生产者 多消费者模式)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%B6%88%E8%B4%B9%E8%80%85%E9%83%BD%E5%9C%A8%E5%90%8C%E4%B8%80%E7%BB%84%E4%B8%AD%E6%97%B6"><span class="nav-text">多消费者都在同一组中时</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%B6%88%E8%B4%B9%E8%80%85%E5%9C%A8%E4%B8%8D%E5%90%8C%E7%BB%84%E6%97%B6"><span class="nav-text">多消费者在不同组时</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E5%AF%B9%E5%A4%9A-%E5%A4%9A%E7%94%9F%E4%BA%A7%E8%80%85-%E5%A4%9A%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-text">多对多(多生产者 多消费者模式)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E7%B1%BB%E5%88%AB"><span class="nav-text">消息类别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E6%B6%88%E6%81%AF"><span class="nav-text">同步消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E6%B6%88%E6%81%AF"><span class="nav-text">异步消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E5%90%91%E6%B6%88%E6%81%AF"><span class="nav-text">单向消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%B6%E6%97%B6%E6%B6%88%E6%81%AF"><span class="nav-text">延时消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%B9%E9%87%8F%E6%B6%88%E6%81%AF"><span class="nav-text">批量消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E8%BF%87%E6%BB%A4"><span class="nav-text">消息过滤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Tag%E8%BF%87%E6%BB%A4"><span class="nav-text">Tag过滤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL%E8%BF%87%E6%BB%A4"><span class="nav-text">SQL过滤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Springboot%E6%95%B4%E5%90%88RocketMQ"><span class="nav-text">Springboot整合RocketMQ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Producer"><span class="nav-text">Producer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Consumer"><span class="nav-text">Consumer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%A1%BA%E5%BA%8F"><span class="nav-text">消息顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF"><span class="nav-text">事务消息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RocketMQ%E4%BA%8B%E5%8A%A1%E6%B5%81%E7%A8%8B%E6%A6%82%E8%A6%81"><span class="nav-text">RocketMQ事务流程概要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RocketMQ%E4%BA%8B%E5%8A%A1%E6%B5%81%E7%A8%8B%E5%85%B3%E9%94%AE"><span class="nav-text">RocketMQ事务流程关键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA"><span class="nav-text">集群搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E5%88%86%E7%B1%BB"><span class="nav-text">集群分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RocketMQ%E9%9B%86%E7%BE%A4%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-text">RocketMQ集群工作流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RocketMQ%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7"><span class="nav-text">RocketMQ高级特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E7%9A%84%E5%AD%98%E5%82%A8"><span class="nav-text">消息的存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E7%9A%84%E5%AD%98%E5%82%A8%E4%BB%8B%E8%B4%A8"><span class="nav-text">消息的存储介质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E6%95%88%E7%9A%84%E6%B6%88%E6%81%AF%E5%AD%98%E5%82%A8%E4%B8%8E%E8%AF%BB%E5%86%99%E6%96%B9%E5%BC%8F"><span class="nav-text">高效的消息存储与读写方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E5%AD%98%E5%82%A8%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-text">消息存储的结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%B7%E7%9B%98%E6%9C%BA%E5%88%B6"><span class="nav-text">刷盘机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E5%88%B7%E7%9B%98"><span class="nav-text">同步刷盘:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E5%88%B7%E7%9B%98"><span class="nav-text">异步刷盘</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-text">高可用性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">负载均衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%87%8D%E8%AF%95"><span class="nav-text">消息重试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97"><span class="nav-text">死信队列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-1"><span class="nav-text">总结:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9"><span class="nav-text">消息重复消费</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%87%8D%E5%A4%8D%E5%8F%91%E9%80%81%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-text">消息重复发送的原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E5%B9%82%E7%AD%89"><span class="nav-text">消息幂等</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E2%80%94%E2%80%94End%E2%80%94%E2%80%94"><span class="nav-text">——End——</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -206,16 +239,17 @@
 </noscript>
 
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/28/RocketMQ/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -229,13 +263,13 @@
     </span>
     
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Devil的个人博客">
+      <meta itemprop="name" content="RocketMQ | Devil的个人博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/02/28/RocketMQ/" class="post-title-link" itemprop="url">RocketMQ</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          RocketMQ
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -250,6 +284,13 @@
     </span>
 
   
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
     <span class="post-meta-item" title="本文字数">
       <span class="post-meta-item-icon">
         <i class="far fa-file-word"></i>
@@ -273,7 +314,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="RocketMQ"><a href="#RocketMQ" class="headerlink" title="RocketMQ"></a><a target="_blank" rel="noopener" href="https://github.com/apache/rocketmq/blob/master/docs/cn/concept.md">RocketMQ</a></h1><p><strong>MQ(Message Queue)</strong>:消息队列</p>
+        <h1 id="RocketMQ"><a href="#RocketMQ" class="headerlink" title="RocketMQ"></a><a target="_blank" rel="noopener" href="https://github.com/apache/rocketmq/blob/master/docs/cn/concept.md">RocketMQ</a></h1><p><strong>MQ(Message Queue)</strong>:消息队列</p>
 <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="消息模型（Message-Model）"><a href="#消息模型（Message-Model）" class="headerlink" title="消息模型（Message Model）:"></a>消息模型（Message Model）:</h3><p>RocketMQ主要由 <strong>Producer、Broker、Consumer 三部分组成</strong>，其中Producer 负责生产消息，Consumer 负责消费消息，<strong>Broker 负责存储消息</strong>。Broker 在实际部署过程中对应一台服务器，每个 Broker 可以存储多个Topic的消息，每个Topic的消息也可以分片存储于不同的 Broker。Message Queue 用于存储消息的物理地址，每个Topic中的消息地址存储于多个 Message Queue 中。ConsumerGroup 由多个Consumer 实例构成。</p>
 <h3 id="消息生产者（Producer）"><a href="#消息生产者（Producer）" class="headerlink" title="消息生产者（Producer）:"></a>消息生产者（Producer）:</h3><p>负责生产消息，一般由业务系统负责生产消息。一个消息生产者会把业务应用系统里产生的消息发送到broker服务器。RocketMQ提供多种发送方式，<strong>同步发送、异步发送、顺序发送、单向发送</strong>。<strong>同步和异步方式均需要Broker返回确认信息，单向发送不需要。</strong></p>
 <h3 id="消息消费者（Consumer）"><a href="#消息消费者（Consumer）" class="headerlink" title="消息消费者（Consumer）:"></a>消息消费者（Consumer）:</h3><p>负责消费消息，一般是后台系统负责异步消费。一个消息消费者会从Broker服务器拉取消息、并将其提供给应用程序。从用户应用的角度而言提供了两种消费形式：拉取式消费、推动式消费。</p>
@@ -864,7 +905,6 @@
 </li>
 </ul>
 <h1 id="——End——"><a href="#——End——" class="headerlink" title="——End——"></a>——End——</h1>
-      
     </div>
 
     
@@ -872,11 +912,17 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          <div class="post-tags">
+   <a href="/tags/java/" rel="tag"> <i class="fa fa-tag"></i> java</a>
+
+          </div>
+
+        
+
     </footer>
   </article>
 </div>
+
 
 
 
