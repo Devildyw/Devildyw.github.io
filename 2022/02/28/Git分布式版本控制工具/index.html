@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Git分布式版本控制工具 命令如下：  clone（克隆）: 从远程仓库中克隆代码到本地仓库  checkout （检出）:从本地仓库中检出一个仓库分支然后进行修订  add（添加）: 在提交前先将代码提交到暂存区  commit（提交）: 提交到本地仓库。本地仓库中保存修改的各个历史版本  fetch (抓取) ： 从远程库，抓取到本地仓库，不进行任何的合并动作，一般操作比较少。  pull (">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git分布式版本控制工具">
+<meta property="og:url" content="http://example.com/2022/02/28/Git%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7/index.html">
+<meta property="og:site_name" content="Devil的个人博客">
+<meta property="og:description" content="Git分布式版本控制工具 命令如下：  clone（克隆）: 从远程仓库中克隆代码到本地仓库  checkout （检出）:从本地仓库中检出一个仓库分支然后进行修订  add（添加）: 在提交前先将代码提交到暂存区  commit（提交）: 提交到本地仓库。本地仓库中保存修改的各个历史版本  fetch (抓取) ： 从远程库，抓取到本地仓库，不进行任何的合并动作，一般操作比较少。  pull (">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220127230403996.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220127231451204.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220127233455735.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220128220100844.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220128221118298.png">
+<meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220128223521930.png">
+<meta property="article:published_time" content="2022-02-28T12:58:54.000Z">
+<meta property="article:modified_time" content="2022-02-28T13:02:10.350Z">
+<meta property="article:author" content="Devil">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220127230403996.png">
+
+
+<link rel="canonical" href="http://example.com/2022/02/28/Git%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/02/28/Git%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7/","path":"2022/02/28/Git分布式版本控制工具/","title":"Git分布式版本控制工具"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Git分布式版本控制工具 | Devil的个人博客</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Devil的个人博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">永远详细美好的事情永远发生</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Git%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7"><span class="nav-text">Git分布式版本控制工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93"><span class="nav-text">本地仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4"><span class="nav-text">命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%94%AF"><span class="nav-text">分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-text">远程仓库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-text">操作远程仓库</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Devil"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Devil</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Devildyw" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Devildyw" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1842501760@qq.com" title="E-Mail → mailto:1842501760@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+  
+<script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+<div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="250" height="250" id="resCanvas" style="width:100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">8</span></li></ul>
+        </canvas>
+    </div>
+</div>
+
+
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/28/Git%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Devil">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Devil的个人博客">
+      <meta itemprop="description" content="">
+    </span>
+    
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Git分布式版本控制工具 | Devil的个人博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Git分布式版本控制工具
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-02-28 20:58:54 / 修改时间：21:02:10" itemprop="dateCreated datePublished" datetime="2022-02-28T20:58:54+08:00">2022-02-28</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Git分布式版本控制工具"><a href="#Git分布式版本控制工具" class="headerlink" title="Git分布式版本控制工具"></a><a href="D:\BaiduNetdiskDownload\Git讲义.pdf">Git分布式版本控制工具</a></h1><p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220127230403996.png" alt="image-20220127230403996"></p>
+<p><strong>命令如下：</strong></p>
+<ol>
+<li><p><strong>clone（克隆）</strong>: 从远程仓库中克隆代码到本地仓库</p>
+</li>
+<li><p><strong>checkout （检出）</strong>:从本地仓库中检出一个仓库分支然后进行修订</p>
+</li>
+<li><p><strong>add（添加）</strong>: 在提交前先将代码提交到暂存区</p>
+</li>
+<li><p><strong>commit（提交）</strong>: 提交到本地仓库。本地仓库中保存修改的各个历史版本</p>
+</li>
+<li><p><strong>fetch (抓取)</strong> ： 从远程库，抓取到本地仓库，不进行任何的合并动作，一般操作比较少。</p>
+</li>
+<li><p><strong>pull (拉取)</strong> ： 从远程库拉到本地库，自动进行合并(merge)，然后放到到工作区，相当于fetch+merge</p>
+</li>
+<li><p><strong>push（推送）</strong> : 修改完成后，需要和团队成员共享代码时，将代码推送到远程仓库</p>
+</li>
+</ol>
+<hr>
+<p><strong>备注：</strong></p>
+<p><strong>Git GUI</strong>：Git提供的图形界面工具</p>
+<p><strong>Git Bash</strong>：Git提供的命令行工具</p>
+<p>当安装Git后首先要做的事情是<strong>设置用户名称</strong>和<strong>email</strong>地址。这是非常重要的，因为每次Git提交都会使用该用户信息</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;itcast&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;hello@qq.com&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>查看配置信息</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git confifig --global user.name</span><br><span class="line">git confifig --global user.email</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="本地仓库"><a href="#本地仓库" class="headerlink" title="本地仓库"></a><strong>本地仓库</strong></h2><p>要使用Git对我们的代码进行版本控制，首先需要获得本地仓库</p>
+<ol>
+<li><p>在电脑的任意位置创建一个空目录（例如test）作为我们的本地Git仓库</p>
+</li>
+<li><p>进入这个目录中，点击右键打开Git bash窗口</p>
+</li>
+<li><p>执行命令<strong>git init</strong> (初始化本文件为本地仓库)</p>
+</li>
+<li><p>如果创建成功后可在文件夹下看到隐藏的.git目录。</p>
+</li>
+</ol>
+<hr>
+<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a><strong>命令</strong></h2><ul>
+<li><strong>git touch</strong> 文件名 可以创建文件</li>
+</ul>
+<hr>
+<p>Git工作目录下对于文件的<strong>修改</strong>(增加、删除、更新)会存在几个状态，这些<strong>修改</strong>的状态会随着我们执行Git的命令而发生变化。</p>
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220127231451204.png" alt="image-20220127231451204"></p>
+<ul>
+<li><p><strong>git add</strong> (工作区 –&gt; 暂存区) (<strong>git add . 将所有修改加入暂存区</strong>)</p>
+</li>
+<li><p><strong>git commit</strong> (暂存区 –&gt; 本地仓库) (<strong>git commit -m ‘注释内容’</strong> 将暂存区中的内容提交到本地仓库)</p>
+</li>
+<li><p><strong>git status</strong>:<strong>查看修改的状态</strong></p>
+</li>
+</ul>
+<hr>
+<p><strong>查看提交日志</strong></p>
+<ul>
+<li><p><strong>git log</strong> [option]</p>
+</li>
+<li><p>options</p>
+<ul>
+<li><p><strong>all</strong> 显示所有分支</p>
+</li>
+<li><p><strong>pretty&#x3D;oneline</strong> 将提交信息显示为一行</p>
+</li>
+<li><p><strong>abbrev-commit</strong> 使得输出的commitId更简短</p>
+</li>
+<li><p><strong>graph</strong> 以图的形式显示</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>对log的格式进行自定义 并且对该操作使用alias起了一个别名</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global alias.lg <span class="string">&quot;log --color --graph --pretty=format:&#x27;%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset&#x27; --abbrev-commit&quot;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>版本回退</strong></p>
+<ul>
+<li>作用: 版本切换</li>
+<li>命令: <strong>git reset –hard commitID</strong><ul>
+<li><strong>commitID</strong> 可以使用 <strong>git lg</strong> 或 <strong>git log</strong> 指令查看</li>
+</ul>
+</li>
+</ul>
+<p><strong>如何查看已经删除的记录？</strong></p>
+<ul>
+<li><p><strong>git reflflog</strong></p>
+</li>
+<li><p>这个指令可以看到已经删除的提交记录</p>
+</li>
+</ul>
+<hr>
+<p><strong>添加文件至忽略列表</strong></p>
+<p>一般我们总会有些文件无需纳入Git 的管理，也不希望它们总出现在未跟踪文件列表。 通常都是些自动生成的文件，比如日志文件，或者编译过程中创建的临时文件等。 在这种情况下，我们可以在工作目录中创建一个名为 <strong>.gitignore 的文件（文件名称固定）</strong>，列出要忽略的文件模式。</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">HELP.md</span><br><span class="line">target/</span><br><span class="line">!.mvn/wrapper/maven-wrapper.jar</span><br><span class="line">!**/src/main/**/target/</span><br><span class="line">!**/src/test/**/target/</span><br><span class="line"></span><br><span class="line"><span class="params">###</span> STS <span class="params">###</span></span><br><span class="line">.apt<span class="built_in">_</span>generated</span><br><span class="line">.classpath</span><br><span class="line">.factorypath</span><br><span class="line">.project</span><br><span class="line">.settings</span><br><span class="line">.springBeans</span><br><span class="line">.sts4-cache</span><br><span class="line"></span><br><span class="line"><span class="params">###</span> IntelliJ IDEA <span class="params">###</span></span><br><span class="line">.idea</span><br><span class="line">*.iws</span><br><span class="line">*.iml</span><br><span class="line">*.ipr</span><br><span class="line"></span><br><span class="line"><span class="params">###</span> NetBeans <span class="params">###</span></span><br><span class="line">/nbproject/private/</span><br><span class="line">/nbbuild/</span><br><span class="line">/dist/</span><br><span class="line">/nbdist/</span><br><span class="line">/.nb-gradle/</span><br><span class="line">build/</span><br><span class="line">!**/src/main/**/build/</span><br><span class="line">!**/src/test/**/build/</span><br><span class="line"></span><br><span class="line"><span class="params">###</span> VS Code <span class="params">###</span></span><br><span class="line">.vscode/</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="分支"><a href="#分支" class="headerlink" title="分支"></a><strong>分支</strong></h2><p><strong>查看本地分支</strong></p>
+<ul>
+<li><strong>git branch</strong></li>
+</ul>
+<hr>
+<p><strong>创建本地分支</strong></p>
+<ul>
+<li><strong>git branch 分支名</strong></li>
+</ul>
+<hr>
+<p><strong>切换分支</strong></p>
+<ul>
+<li><strong>git checkout 分支名</strong></li>
+<li><strong>git checkout -b 分支名 (创建并切换)</strong></li>
+</ul>
+<hr>
+<p><strong>合并分支</strong></p>
+<ul>
+<li><strong>git merge 分支名称</strong></li>
+</ul>
+<hr>
+<p><strong>删除分支</strong></p>
+<ul>
+<li><strong>git branch -d 分支名 (删除分支时，需要做各种检查)</strong></li>
+<li><strong>git branch -D 分支名 (不做任何检查，强制删除)</strong></li>
+</ul>
+<hr>
+<p><strong>解决冲突</strong></p>
+<p>当两个分支上对文件的修改可能会存在冲突，例如同时修改了同一个文件的同一行，这时就需要手动解决冲突，解决冲突步骤如下：</p>
+<ol>
+<li><p>处理文件中冲突的地方</p>
+</li>
+<li><p>将解决完冲突的文件加入暂存区(add)</p>
+</li>
+<li><p>提交到仓库(commit)</p>
+</li>
+</ol>
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220127233455735.png" alt="image-20220127233455735"></p>
+<h2 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a><strong>远程仓库</strong></h2><ul>
+<li><p><strong>注册gitee(码云)</strong></p>
+</li>
+<li><p><strong>创建仓库</strong></p>
+</li>
+</ul>
+<p><strong>配置SSH公钥</strong></p>
+<ul>
+<li><p><strong>生成SSH公钥</strong></p>
+<ul>
+<li><strong>ssh-keygen -t rsa</strong></li>
+</ul>
+</li>
+<li><p><strong>Gitee设置账户共公钥</strong></p>
+<ul>
+<li><p>上面我们以及生成了SSH公钥 这里我们要获取</p>
+</li>
+<li><p><strong>cat ~&#x2F;.ssh&#x2F;id_rsa.pub</strong> </p>
+</li>
+<li><p>复制这个SSH公钥</p>
+</li>
+<li><p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220128220100844.png" alt="image-20220128220100844"></p>
+</li>
+<li><p>验证是否配置成功 <strong>ssh -T <a href="mailto:&#x67;&#x69;&#116;&#x40;&#103;&#x69;&#116;&#x65;&#101;&#46;&#x63;&#111;&#109;">&#x67;&#x69;&#116;&#x40;&#103;&#x69;&#116;&#x65;&#101;&#46;&#x63;&#111;&#109;</a></strong></p>
+</li>
+</ul>
+<h4 id="操作远程仓库"><a href="#操作远程仓库" class="headerlink" title="操作远程仓库"></a>操作远程仓库</h4><ul>
+<li><p><strong>添加远程仓库</strong> (此操作是先初始化本地仓库,然后与一创建的远程仓库进行对接)</p>
+<ul>
+<li><p><strong>命令: git remote add &lt;远端名称(别名)&gt; &lt;仓库路径(url)&gt;</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin git@gitee.com:Devildyw/spring-mvc.git</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>命令: git remote</strong>(查看已添加的远程仓库)</p>
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220128221118298.png" alt="image-20220128221118298"></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><strong>推送到远程仓库</strong></p>
+<ul>
+<li><p><strong>命令: git push [-f] [–set-upstream] [远端名称[本地分支名 [:远端分支名]]</strong></p>
+<ul>
+<li><pre><code class="sh">git push origin master
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* **-f** 表示强制覆盖</span><br><span class="line"></span><br><span class="line">* **--set-upstream**: 推送到远端的同时并且建立起和远端分支的关联关系</span><br><span class="line"></span><br><span class="line">* ```sh</span><br><span class="line">  git push --set-upstream origin master</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p>如果当前分支已经和远端分支建立关联,则可以省略分支名和远端名 <strong>(git push)</strong></p>
+</li>
+</ul>
+</li>
+<li><p><strong>查看本地分支与远程分支的关联关系</strong></p>
+<ul>
+<li><strong>命令: git brach -vv</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><strong>从远程仓库克隆(一般只有一开始会做一次 后续都会使用pull拉取)</strong><ul>
+<li><strong>命令: git clone &lt;仓库路径&gt; [本地目录]</strong><ul>
+<li>本地目录可以省略,会自动生成一个目录</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>从远程仓库中抓取和拉取</strong><ul>
+<li>远程分支和本地的分支一样，我们可以进行merge操作，只是需要先把远端仓库里的更新都下载到本地，再进行操作。<ul>
+<li><strong>抓取 命令: git fetch [remote name] [branch name]</strong><ul>
+<li><strong>抓取指令就是将仓库里的更新都抓取到本地，不会进行合并</strong></li>
+<li>如果不指定远端名称和分支名，则抓取所有分支。</li>
+</ul>
+</li>
+<li><strong>拉取 命令: git pull [remote name] [branch name]</strong><ul>
+<li>**拉取指令就是将远端仓库的修改拉到本地并自动进行合并，等同于 ** <strong>fetch+merge</strong></li>
+<li>如果不指定远端名称和分支名，则抓取所有并更新当前分支。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><strong>解决合并冲突</strong></p>
+<ul>
+<li><p>在一段时间，A、B用户修改了同一个文件，且修改了同一行位置的代码，此时会发生合并冲突。A用户在本地修改代码后优先推送到远程仓库，此时B用户在本地修订代码，提交到本地仓库后，也需要推送到远程仓库，此时B用户晚于A用户，<strong>故需要先拉取远程仓库的提交，经过合并后才能推送到远端分支</strong></p>
+</li>
+<li><p>在B用户拉取代码时，因为A、B用户同一段时间修改了同一个文件的相同位置代码，故会发生合并冲突。<strong>远程分支也是分支，所以合并时冲突的解决方式也和解决本地分支冲突相同相同</strong></p>
+</li>
+<li><p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220128223521930.png" alt="image-20220128223521930"></p>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+   <a href="/tags/java/" rel="tag"> <i class="fa fa-tag"></i> java</a>
+
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/02/28/MyBatis/" rel="prev" title="Mybatis/Mybatis-Plus">
+                  <i class="fa fa-chevron-left"></i> Mybatis/Mybatis-Plus
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/02/28/RocketMQ/" rel="next" title="RocketMQ">
+                  RocketMQ <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Devil</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">74k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:07</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
