@@ -4,7 +4,14 @@
   <url>
     <loc>http://example.com/tags/index.html</loc>
     
-    <lastmod>2022-02-28T12:33:20.791Z</lastmod>
+    <lastmod>2022-02-28T12:51:50.981Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://example.com/categories/index.html</loc>
+    
+    <lastmod>2022-02-28T12:51:13.271Z</lastmod>
     
   </url>
   
