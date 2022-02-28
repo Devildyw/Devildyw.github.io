@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="每日一记之多线程初识 在这之前我们要搞清楚进程与线程之间的区别。 进程: 是程序执行的一次过程，或是正在运行的一个程序，是一个动态的过程，由它自身的产生，存在和消亡的过程。 线程:  进程可以进一步细化为线程，线程指的是一个进程的执行过程中，同时执行了多项任务  例如：到中午了 我一边吃着饭一边玩着手机一边在聊天， 我在这个进程中同时执行了三个任务（分别是 吃饭、玩手机、聊天）。 注： 对于单核心">
+<meta property="og:type" content="article">
+<meta property="og:title" content="每日一记之多线程初识">
+<meta property="og:url" content="http://example.com/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%88%9D%E8%AF%86/index.html">
+<meta property="og:site_name" content="Devil的个人博客">
+<meta property="og:description" content="每日一记之多线程初识 在这之前我们要搞清楚进程与线程之间的区别。 进程: 是程序执行的一次过程，或是正在运行的一个程序，是一个动态的过程，由它自身的产生，存在和消亡的过程。 线程:  进程可以进一步细化为线程，线程指的是一个进程的执行过程中，同时执行了多项任务  例如：到中午了 我一边吃着饭一边玩着手机一边在聊天， 我在这个进程中同时执行了三个任务（分别是 吃饭、玩手机、聊天）。 注： 对于单核心">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/%22https:/t12.baidu.com/it/u=3350456484,1876742898&fm=55&app=54&fmt=auto?w=1680&h=630%22">
+<meta property="og:image" content="http://example.com/%22https:/t10.baidu.com/it/u=2536294109,1654178484&fm=55&app=54&fmt=auto?w=1680&h=630%22">
+<meta property="og:image" content="http://example.com/%22https:/t10.baidu.com/it/u=2156539333,402435846&fm=55&app=54&fmt=auto?w=1120&h=420%22">
+<meta property="article:published_time" content="2022-02-28T12:58:54.000Z">
+<meta property="article:modified_time" content="2022-02-28T13:13:49.255Z">
+<meta property="article:author" content="Devil">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/%22https:/t12.baidu.com/it/u=3350456484,1876742898&fm=55&app=54&fmt=auto?w=1680&h=630%22">
+
+
+<link rel="canonical" href="http://example.com/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%88%9D%E8%AF%86/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%88%9D%E8%AF%86/","path":"2022/02/28/每日一记之多线程初识/","title":"每日一记之多线程初识"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>每日一记之多线程初识 | Devil的个人博客</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Devil的个人博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">永远详细美好的事情永远发生</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%88%9D%E8%AF%86"><span class="nav-text">每日一记之多线程初识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E7%BB%A7%E6%89%BFThread%E7%B1%BB"><span class="nav-text">方法一：继承Thread类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%E4%B8%80%EF%BC%9A%E7%94%A8%E6%96%B9%E6%B3%95%E4%B8%80%E5%AE%9E%E7%8E%B0%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%97%B6%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87"><span class="nav-text">练习一：用方法一实现多线程同时下载图片</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E5%AE%9E%E7%8E%B0Runnable%E6%8E%A5%E5%8F%A3"><span class="nav-text">方法二：实现Runnable接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%E4%BA%8C%EF%BC%9A%E7%94%A8%E6%96%B9%E6%B3%95%E4%BA%8C%E5%AE%8C%E6%88%90%E7%BB%83%E4%B9%A0%E4%B8%80"><span class="nav-text">练习二：用方法二完成练习一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%E4%B8%89%EF%BC%9A%E9%BE%9F%E5%85%94%E8%B5%9B%E8%B7%91"><span class="nav-text">练习三：龟兔赛跑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%89%EF%BC%9A%E5%AE%9E%E7%8E%B0Callable%E6%8E%A5%E5%8F%A3"><span class="nav-text">方法三：实现Callable接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%80%93end%E2%80%93"><span class="nav-text">–end–</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Devil"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Devil</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Devildyw" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Devildyw" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1842501760@qq.com" title="E-Mail → mailto:1842501760@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+  
+<script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+<div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="250" height="250" id="resCanvas" style="width:100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">12</span></li></ul>
+        </canvas>
+    </div>
+</div>
+
+
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%88%9D%E8%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Devil">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Devil的个人博客">
+      <meta itemprop="description" content="">
+    </span>
+    
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="每日一记之多线程初识 | Devil的个人博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          每日一记之多线程初识
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-02-28 20:58:54 / 修改时间：21:13:49" itemprop="dateCreated datePublished" datetime="2022-02-28T20:58:54+08:00">2022-02-28</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="每日一记之多线程初识"><a href="#每日一记之多线程初识" class="headerlink" title="每日一记之多线程初识"></a>每日一记之多线程初识</h1><hr>
+<p>在这之前我们要搞清楚进程与线程之间的区别。</p>
+<p><strong>进程:</strong> 是程序执行的一次过程，或是正在运行的一个程序，是一个动态的过程，由它自身的产生，存在和消亡的过程。</p>
+<p><strong>线程:</strong>  进程可以进一步细化为线程，线程指的是一个进程的执行过程中，同时执行了多项任务  例如：到中午了 我一边吃着饭一边玩着手机一边在聊天， 我在这个进程中同时执行了三个任务（分别是 吃饭、玩手机、聊天）。</p>
+<p><strong>注：</strong> 对于单核心cpu来说 多线程并不是真正意义上的多线程 而是处理速度太快让你误以为实在同时处理任务。多核心cpu则能带来真正的多线程处理，随着当今科技的发展电脑的cpu也都是多核心的了</p>
+<p>创建多线程的三个方法：</p>
+<ul>
+<li><p>继承<strong>Thread</strong>类 重写**void run()<strong>方法 创建对象(创建线程) 调用</strong>start()**方法启动线程 <strong>注：</strong> <strong>Thrad</strong>类实现了Runnable接口</p>
+</li>
+<li><p>实现<strong>Runnable</strong>接口 实现<strong>void run()<strong>方法 创建对象，再创建一个</strong>Thread</strong>对象将刚刚创建的对象放入(创建线程)，在使用刚刚创建的<strong>Thread</strong>对象调用**start()**方法启动线程</p>
+</li>
+<li><p>实现<strong>Callable</strong>接口(泛型接口 需要返回值类型)，重写<strong>call()<strong>方法，创建目标对象，创建执行服务</strong>ExecutorService ser &#x3D; Executors.newFixedThreadPool(1)</strong> <em>创建线程池 池内线程个数 1</em>，然后提交执行：Futue&lt;?&gt; result &#x3D; set.submit(1), 获取结果 var r1 &#x3D; result.get(), 最后要关闭线程现有的池以关闭服务：ser.shutdownNow();</p>
+</li>
+</ul>
+<hr>
+<h2 id="方法一：继承Thread类"><a href="#方法一：继承Thread类" class="headerlink" title="方法一：继承Thread类"></a>方法一：继承Thread类</h2><p>代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> DEVIL.多线程;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@auther</span> Devil(丁杨维)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@create</span> 2021-10-13-11:47</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">创建线程方式一: 继承Tread类,重写run方法,调用start方法启动线程</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">E_01</span> <span class="keyword">extends</span> <span class="title class_">Thread</span>&#123;<span class="comment">//继承Tread类</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="comment">//重写run方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//run方法线程体</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">20</span>; i++) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;我在学习&quot;</span> + i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//main线程 主线程</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">//创建一个线程对象</span></span><br><span class="line">        <span class="type">E_01</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">E_01</span>();</span><br><span class="line">        <span class="comment">//启动线程</span></span><br><span class="line">        thread.start();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">200</span>; i++) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;我在看代码&quot;</span>+i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*注: 线程开启不一定会立即执行 会根据cpu的安排调度执行</span></span><br><span class="line"><span class="comment">对于单核cpu多线程其实是虚拟多线程 实际上是cpu执行速度很快 让人觉得是一瞬间执行了多个任务实际上还是单个执行</span></span><br><span class="line"><span class="comment">多核则是真正的多线程在同一时间可以真正执行多个任务。</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+<p>控制台:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">我在看代码0</span><br><span class="line">我在学习0</span><br><span class="line">我在看代码1</span><br><span class="line">我在学习1</span><br><span class="line">我在看代码2</span><br><span class="line">我在学习2</span><br><span class="line">我在看代码3</span><br><span class="line">我在学习3</span><br><span class="line">我在看代码4</span><br><span class="line">我在学习4</span><br><span class="line">我在看代码5</span><br><span class="line">我在学习5</span><br><span class="line">我在看代码6</span><br><span class="line">我在学习6</span><br><span class="line">我在看代码7</span><br><span class="line">我在学习7</span><br><span class="line">我在看代码8</span><br><span class="line">我在学习8</span><br><span class="line">我在看代码9</span><br><span class="line">我在学习9</span><br><span class="line">我在看代码10</span><br><span class="line">我在学习10</span><br><span class="line">我在看代码11</span><br><span class="line">我在学习11</span><br><span class="line">我在看代码12</span><br><span class="line">我在学习12</span><br><span class="line">我在看代码13</span><br><span class="line">我在学习13</span><br><span class="line">我在看代码14</span><br><span class="line">我在学习14</span><br><span class="line">我在看代码15</span><br><span class="line">我在学习15</span><br><span class="line">我在看代码16</span><br><span class="line">我在学习16</span><br><span class="line">我在看代码17</span><br><span class="line">我在学习17</span><br><span class="line">我在看代码18</span><br><span class="line">我在学习18</span><br><span class="line">我在看代码19</span><br><span class="line">我在学习19</span><br><span class="line">我在看代码20</span><br><span class="line">我在看代码21</span><br><span class="line">我在看代码22</span><br><span class="line">我在看代码23</span><br><span class="line">我在看代码24</span><br><span class="line">我在看代码25</span><br><span class="line">我在看代码26</span><br><span class="line">我在看代码27</span><br><span class="line">我在看代码28</span><br><span class="line">我在看代码29</span><br><span class="line">我在看代码30</span><br><span class="line">我在看代码31</span><br><span class="line">我在看代码32</span><br><span class="line">我在看代码33</span><br><span class="line">我在看代码34</span><br><span class="line">我在看代码35</span><br><span class="line">我在看代码36</span><br><span class="line">我在看代码37</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.//此处省略 因为创建的线程早已结束</span><br><span class="line">.</span><br><span class="line">我在看代码191</span><br><span class="line">我在看代码192</span><br><span class="line">我在看代码193</span><br><span class="line">我在看代码194</span><br><span class="line">我在看代码195</span><br><span class="line">我在看代码196</span><br><span class="line">我在看代码197</span><br><span class="line">我在看代码198</span><br><span class="line">我在看代码199</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>可以发现我们创建的线程与main线程(主线程)是同时进行的 对这就是多线程</p>
+<hr>
+<h3 id="练习一：用方法一实现多线程同时下载图片"><a href="#练习一：用方法一实现多线程同时下载图片" class="headerlink" title="练习一：用方法一实现多线程同时下载图片"></a>练习一：用方法一实现多线程同时下载图片</h3><p>图片可以在网上通过源码查找图片地址</p>
+<p>下载器则使用了外部引入的包里的类 包为<strong>commonio.jar</strong>。</p>
+<p>使用了其中的<strong>FileUtils</strong>类的<strong>copyURLtoFile</strong>类方法（可以将URL转换为文件存储）</p>
+<p>代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> DEVIL.多线程;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.io.FileUtils;<span class="comment">//引入了一个类</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@auther</span> Devil(丁杨维)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@create</span> 2021-10-13-12:28</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Tread1</span> <span class="keyword">extends</span> <span class="title class_">Thread</span>&#123;<span class="comment">//创建一个线程类 继承Thread类</span></span><br><span class="line">    <span class="keyword">private</span> String URl;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Tread1</span><span class="params">(String URl, String name)</span>&#123;<span class="comment">//初始化 URL用与存储URL name用于存储文件名</span></span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.URl = URl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;<span class="comment">//Thread类run方法重载</span></span><br><span class="line">        <span class="type">webDownLoader</span> <span class="variable">webDownLoader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">webDownLoader</span>();<span class="comment">//创建一个下载器对象</span></span><br><span class="line">        webDownLoader.downLoader(<span class="built_in">this</span>.URl,<span class="built_in">this</span>.name);<span class="comment">//传参</span></span><br><span class="line">        System.out.println(<span class="string">&quot;下载了文件名:&quot;</span>+name);<span class="comment">//输出文件名 用于一会查看线程执行情况</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">//main线程 主线程</span></span><br><span class="line">        <span class="comment">//创建三个线程对象</span></span><br><span class="line">        <span class="type">Tread1</span> <span class="variable">tread1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Tread1</span>(<span class="string">&quot;https://t12.baidu.com/it/u=3350456484,1876742898&amp;fm=55&amp;app=54&amp;fmt=auto?w=1680&amp;h=630&quot;</span>, <span class="string">&quot;1.jpg&quot;</span>);</span><br><span class="line">        <span class="type">Tread1</span> <span class="variable">tread2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Tread1</span>(<span class="string">&quot;https://t10.baidu.com/it/u=2536294109,1654178484&amp;fm=55&amp;app=54&amp;fmt=auto?w=1680&amp;h=630&quot;</span>, <span class="string">&quot;2.jpg&quot;</span>);</span><br><span class="line">        <span class="type">Tread1</span> <span class="variable">tread3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Tread1</span>(<span class="string">&quot;https://t10.baidu.com/it/u=2156539333,402435846&amp;fm=55&amp;app=54&amp;fmt=auto?w=1120&amp;h=420&quot;</span>,<span class="string">&quot;3.jpg&quot;</span>);</span><br><span class="line">        <span class="comment">//对象调用start方法启动线程</span></span><br><span class="line">        tread1.start();</span><br><span class="line">        tread2.start();</span><br><span class="line">        tread3.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">webDownLoader</span> &#123;<span class="comment">//定义一个下载器可以将URL转换为文件 用到了我们刚引入的类</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">downLoader</span><span class="params">(String URl, String name)</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                FileUtils.copyURLToFile(<span class="keyword">new</span> <span class="title class_">URL</span>(URl), <span class="keyword">new</span> <span class="title class_">File</span>(name));<span class="comment">//类方法将URL转换为文件</span></span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">                System.out.println(<span class="string">&quot;IO异常，downLoader方法出现异常&quot;</span>);<span class="comment">//异常提示</span></span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>控制台：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">下载了文件名:3.jpg</span><br><span class="line">下载了文件名:2.jpg</span><br><span class="line">下载了文件名:1.jpg</span><br></pre></td></tr></table></figure>
+
+<p>文件目录中：</p>
+<p><img src="/%22https:/t12.baidu.com/it/u=3350456484,1876742898&fm=55&app=54&fmt=auto?w=1680&h=630%22" alt="1"></p>
+<p><img src="/%22https:/t10.baidu.com/it/u=2536294109,1654178484&fm=55&app=54&fmt=auto?w=1680&h=630%22" alt="2"></p>
+<p><img src="/%22https:/t10.baidu.com/it/u=2156539333,402435846&fm=55&app=54&fmt=auto?w=1120&h=420%22" alt="3"></p>
+<p>可以看出如果不是多线程的情况下下载次序应该是1 2 3 但实际却是3 2 1</p>
+<hr>
+<h2 id="方法二：实现Runnable接口"><a href="#方法二：实现Runnable接口" class="headerlink" title="方法二：实现Runnable接口"></a>方法二：实现Runnable接口</h2><p>代码：</p>
+<p>使用接口可以打破单一继承的局限、灵活方便、方便同一个对象被多个线程使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> DEVIL.多线程;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@auther</span> Devil(丁杨维)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@create</span> 2021-10-13-16:49</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">//方式二：实现接口Runnable具有多线程能力</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">E_02</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="comment">//重写run方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//run方法线程体</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">20</span>; i++) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;我在学习&quot;</span> + i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//main线程 主线程</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">//创建一个线程对象</span></span><br><span class="line">        <span class="type">E_02</span> <span class="variable">runnable</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">E_02</span>();</span><br><span class="line">        <span class="comment">//启动线程：传入目标对象+Thread对象.start()</span></span><br><span class="line"><span class="comment">//      Thread thread1 = new Thread(thread);</span></span><br><span class="line"><span class="comment">//      thread1.start();</span></span><br><span class="line">        <span class="comment">//启动线程</span></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(runnable).start();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">200</span>; i++) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;我在看代码&quot;</span>+i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//注: 推荐使用实现接口Runnable方法创建多线程 避免单线程局限性、灵活方便、方便同一个对象被多个线程使用</span></span><br></pre></td></tr></table></figure>
+
+<p>控制台：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">我在看代码0</span><br><span class="line">我在学习0</span><br><span class="line">我在看代码1</span><br><span class="line">我在学习1</span><br><span class="line">我在看代码2</span><br><span class="line">我在学习2</span><br><span class="line">我在看代码3</span><br><span class="line">我在学习3</span><br><span class="line">我在看代码4</span><br><span class="line">我在学习4</span><br><span class="line">我在看代码5</span><br><span class="line">我在学习5</span><br><span class="line">我在看代码6</span><br><span class="line">我在学习6</span><br><span class="line">我在看代码7</span><br><span class="line">我在学习7</span><br><span class="line">我在看代码8</span><br><span class="line">我在学习8</span><br><span class="line">我在看代码9</span><br><span class="line">我在学习9</span><br><span class="line">我在看代码10</span><br><span class="line">我在学习10</span><br><span class="line">我在看代码11</span><br><span class="line">我在学习11</span><br><span class="line">我在看代码12</span><br><span class="line">我在学习12</span><br><span class="line">我在看代码13</span><br><span class="line">我在学习13</span><br><span class="line">我在看代码14</span><br><span class="line">我在学习14</span><br><span class="line">我在看代码15</span><br><span class="line">我在学习15</span><br><span class="line">我在看代码16</span><br><span class="line">我在学习16</span><br><span class="line">我在看代码17</span><br><span class="line">我在学习17</span><br><span class="line">我在看代码18</span><br><span class="line">我在学习18</span><br><span class="line">我在看代码19</span><br><span class="line">我在学习19</span><br><span class="line">我在看代码20</span><br><span class="line">我在看代码21</span><br><span class="line">我在看代码22</span><br><span class="line">我在看代码23</span><br><span class="line">我在看代码24</span><br><span class="line">我在看代码25</span><br><span class="line">我在看代码26</span><br><span class="line">我在看代码27</span><br><span class="line">我在看代码28</span><br><span class="line">我在看代码29</span><br><span class="line">我在看代码30</span><br><span class="line">我在看代码31</span><br><span class="line">我在看代码32</span><br><span class="line">我在看代码33</span><br><span class="line">我在看代码34</span><br><span class="line">我在看代码35</span><br><span class="line">我在看代码36</span><br><span class="line">我在看代码37</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.//此处省略 因为创建的线程早已结束</span><br><span class="line">.</span><br><span class="line">我在看代码191</span><br><span class="line">我在看代码192</span><br><span class="line">我在看代码193</span><br><span class="line">我在看代码194</span><br><span class="line">我在看代码195</span><br><span class="line">我在看代码196</span><br><span class="line">我在看代码197</span><br><span class="line">我在看代码198</span><br><span class="line">我在看代码199</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出结果与方法一实现的一致。</p>
+<hr>
+<h3 id="练习二：用方法二完成练习一"><a href="#练习二：用方法二完成练习一" class="headerlink" title="练习二：用方法二完成练习一"></a>练习二：用方法二完成练习一</h3><p>代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> DEVIL.多线程;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.io.FileUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@auther</span> Devil(丁杨维)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@create</span> 2021-10-13-17:01</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Runnable1</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String URl;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Runnable1</span><span class="params">(String URl, String name)</span>&#123;<span class="comment">//初始化 URL用与存储URL name用于存储文件名</span></span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.URl = URl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;<span class="comment">//Thread类run方法重载</span></span><br><span class="line">        <span class="type">webDownLoader</span> <span class="variable">webDownLoader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">webDownLoader</span>();<span class="comment">//创建一个下载器对象</span></span><br><span class="line">        webDownLoader.downLoader(<span class="built_in">this</span>.URl,<span class="built_in">this</span>.name);<span class="comment">//传参</span></span><br><span class="line">        System.out.println(<span class="string">&quot;下载了文件名:&quot;</span>+name);<span class="comment">//输出文件名 用于一会查看线程执行情况</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">//main线程 主线程</span></span><br><span class="line">        <span class="comment">//创建三个线程对象</span></span><br><span class="line">        <span class="type">Runnable1</span> <span class="variable">tread1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Runnable1</span>(<span class="string">&quot;https://t12.baidu.com/it/u=3350456484,1876742898&amp;fm=55&amp;app=54&amp;fmt=auto?w=1680&amp;h=630&quot;</span>, <span class="string">&quot;1.jpg&quot;</span>);</span><br><span class="line">        <span class="type">Runnable1</span> <span class="variable">tread2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Runnable1</span>(<span class="string">&quot;https://t10.baidu.com/it/u=2536294109,1654178484&amp;fm=55&amp;app=54&amp;fmt=auto?w=1680&amp;h=630&quot;</span>, <span class="string">&quot;2.jpg&quot;</span>);</span><br><span class="line">        <span class="type">Runnable1</span> <span class="variable">tread3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Runnable1</span>(<span class="string">&quot;https://t10.baidu.com/it/u=2156539333,402435846&amp;fm=55&amp;app=54&amp;fmt=auto?w=1120&amp;h=420&quot;</span>,<span class="string">&quot;3.jpg&quot;</span>);</span><br><span class="line">        <span class="comment">//对象调用start方法启动线程</span></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(tread1).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(tread2).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(tread3).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">webDownLoader</span> &#123;<span class="comment">//定义一个下载器可以将URL转换为文件 用到了我们刚引入的类</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">downLoader</span><span class="params">(String URl, String name)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            FileUtils.copyURLToFile(<span class="keyword">new</span> <span class="title class_">URL</span>(URl), <span class="keyword">new</span> <span class="title class_">File</span>(name));<span class="comment">//类方法将URL转换为文件</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            System.out.println(<span class="string">&quot;IO异常，downLoader方法出现异常&quot;</span>);<span class="comment">//异常提示</span></span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>结果与练习一致</p>
+<hr>
+<h3 id="练习三：龟兔赛跑"><a href="#练习三：龟兔赛跑" class="headerlink" title="练习三：龟兔赛跑"></a>练习三：龟兔赛跑</h3><p>此处使用了<strong>Thread</strong>类的类方法**sleep()**用于模拟延时</p>
+<p>总路程100步 先到即为冠军 兔子每十部休息10毫秒求冠军</p>
+<p>代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> DEVIL.多线程;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@auther</span> Devil(丁杨维)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@create</span> 2021-10-13-17:24</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">E_04</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Race</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String winner;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i&lt;=<span class="number">100</span>; i++)&#123;</span><br><span class="line">            <span class="comment">//模拟兔子睡觉</span></span><br><span class="line">            <span class="keyword">if</span>(Thread.currentThread().getName().equals(<span class="string">&quot;兔子&quot;</span>)&amp;&amp; i%<span class="number">10</span>==<span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">10</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">boolean</span> <span class="variable">flag</span> <span class="operator">=</span> gameOver(i);<span class="comment">//判断比赛是否结束了</span></span><br><span class="line">            <span class="keyword">if</span>(flag)&#123;<span class="comment">//是跳出结束循环</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(Thread.currentThread().getName()+<span class="string">&quot;---&gt;跑了&quot;</span>+i+<span class="string">&quot;步了&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">gameOver</span><span class="params">(<span class="type">int</span> steps)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(winner!=<span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(steps&gt;=<span class="number">100</span>)&#123;</span><br><span class="line">                winner = Thread.currentThread().getName();</span><br><span class="line">                System.out.println(<span class="string">&quot;winner is &quot;</span>+winner);</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Race</span> <span class="variable">race</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Race</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(race,<span class="string">&quot;兔子&quot;</span>).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(race,<span class="string">&quot;乌龟&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>控制台:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line">乌龟---&gt;跑了1步了</span><br><span class="line">兔子---&gt;跑了1步了</span><br><span class="line">兔子---&gt;跑了2步了</span><br><span class="line">乌龟---&gt;跑了2步了</span><br><span class="line">乌龟---&gt;跑了3步了</span><br><span class="line">兔子---&gt;跑了3步了</span><br><span class="line">乌龟---&gt;跑了4步了</span><br><span class="line">乌龟---&gt;跑了5步了</span><br><span class="line">兔子---&gt;跑了4步了</span><br><span class="line">乌龟---&gt;跑了6步了</span><br><span class="line">乌龟---&gt;跑了7步了</span><br><span class="line">乌龟---&gt;跑了8步了</span><br><span class="line">乌龟---&gt;跑了9步了</span><br><span class="line">乌龟---&gt;跑了10步了</span><br><span class="line">乌龟---&gt;跑了11步了</span><br><span class="line">兔子---&gt;跑了5步了</span><br><span class="line">乌龟---&gt;跑了12步了</span><br><span class="line">兔子---&gt;跑了6步了</span><br><span class="line">乌龟---&gt;跑了13步了</span><br><span class="line">乌龟---&gt;跑了14步了</span><br><span class="line">乌龟---&gt;跑了15步了</span><br><span class="line">乌龟---&gt;跑了16步了</span><br><span class="line">兔子---&gt;跑了7步了</span><br><span class="line">乌龟---&gt;跑了17步了</span><br><span class="line">乌龟---&gt;跑了18步了</span><br><span class="line">乌龟---&gt;跑了19步了</span><br><span class="line">乌龟---&gt;跑了20步了</span><br><span class="line">乌龟---&gt;跑了21步了</span><br><span class="line">乌龟---&gt;跑了22步了</span><br><span class="line">乌龟---&gt;跑了23步了</span><br><span class="line">乌龟---&gt;跑了24步了</span><br><span class="line">乌龟---&gt;跑了25步了</span><br><span class="line">乌龟---&gt;跑了26步了</span><br><span class="line">兔子---&gt;跑了8步了</span><br><span class="line">乌龟---&gt;跑了27步了</span><br><span class="line">兔子---&gt;跑了9步了</span><br><span class="line">乌龟---&gt;跑了28步了</span><br><span class="line">乌龟---&gt;跑了29步了</span><br><span class="line">乌龟---&gt;跑了30步了</span><br><span class="line">乌龟---&gt;跑了31步了</span><br><span class="line">乌龟---&gt;跑了32步了</span><br><span class="line">乌龟---&gt;跑了33步了</span><br><span class="line">乌龟---&gt;跑了34步了</span><br><span class="line">乌龟---&gt;跑了35步了</span><br><span class="line">乌龟---&gt;跑了36步了</span><br><span class="line">乌龟---&gt;跑了37步了</span><br><span class="line">乌龟---&gt;跑了38步了</span><br><span class="line">乌龟---&gt;跑了39步了</span><br><span class="line">乌龟---&gt;跑了40步了</span><br><span class="line">乌龟---&gt;跑了41步了</span><br><span class="line">乌龟---&gt;跑了42步了</span><br><span class="line">乌龟---&gt;跑了43步了</span><br><span class="line">乌龟---&gt;跑了44步了</span><br><span class="line">乌龟---&gt;跑了45步了</span><br><span class="line">乌龟---&gt;跑了46步了</span><br><span class="line">乌龟---&gt;跑了47步了</span><br><span class="line">乌龟---&gt;跑了48步了</span><br><span class="line">乌龟---&gt;跑了49步了</span><br><span class="line">乌龟---&gt;跑了50步了</span><br><span class="line">乌龟---&gt;跑了51步了</span><br><span class="line">乌龟---&gt;跑了52步了</span><br><span class="line">乌龟---&gt;跑了53步了</span><br><span class="line">乌龟---&gt;跑了54步了</span><br><span class="line">乌龟---&gt;跑了55步了</span><br><span class="line">乌龟---&gt;跑了56步了</span><br><span class="line">乌龟---&gt;跑了57步了</span><br><span class="line">乌龟---&gt;跑了58步了</span><br><span class="line">乌龟---&gt;跑了59步了</span><br><span class="line">乌龟---&gt;跑了60步了</span><br><span class="line">乌龟---&gt;跑了61步了</span><br><span class="line">乌龟---&gt;跑了62步了</span><br><span class="line">乌龟---&gt;跑了63步了</span><br><span class="line">乌龟---&gt;跑了64步了</span><br><span class="line">乌龟---&gt;跑了65步了</span><br><span class="line">乌龟---&gt;跑了66步了</span><br><span class="line">乌龟---&gt;跑了67步了</span><br><span class="line">乌龟---&gt;跑了68步了</span><br><span class="line">乌龟---&gt;跑了69步了</span><br><span class="line">乌龟---&gt;跑了70步了</span><br><span class="line">乌龟---&gt;跑了71步了</span><br><span class="line">乌龟---&gt;跑了72步了</span><br><span class="line">乌龟---&gt;跑了73步了</span><br><span class="line">乌龟---&gt;跑了74步了</span><br><span class="line">乌龟---&gt;跑了75步了</span><br><span class="line">乌龟---&gt;跑了76步了</span><br><span class="line">乌龟---&gt;跑了77步了</span><br><span class="line">乌龟---&gt;跑了78步了</span><br><span class="line">乌龟---&gt;跑了79步了</span><br><span class="line">乌龟---&gt;跑了80步了</span><br><span class="line">乌龟---&gt;跑了81步了</span><br><span class="line">乌龟---&gt;跑了82步了</span><br><span class="line">乌龟---&gt;跑了83步了</span><br><span class="line">乌龟---&gt;跑了84步了</span><br><span class="line">乌龟---&gt;跑了85步了</span><br><span class="line">乌龟---&gt;跑了86步了</span><br><span class="line">乌龟---&gt;跑了87步了</span><br><span class="line">乌龟---&gt;跑了88步了</span><br><span class="line">乌龟---&gt;跑了89步了</span><br><span class="line">乌龟---&gt;跑了90步了</span><br><span class="line">乌龟---&gt;跑了91步了</span><br><span class="line">乌龟---&gt;跑了92步了</span><br><span class="line">乌龟---&gt;跑了93步了</span><br><span class="line">乌龟---&gt;跑了94步了</span><br><span class="line">乌龟---&gt;跑了95步了</span><br><span class="line">乌龟---&gt;跑了96步了</span><br><span class="line">乌龟---&gt;跑了97步了</span><br><span class="line">乌龟---&gt;跑了98步了</span><br><span class="line">乌龟---&gt;跑了99步了</span><br><span class="line">winner is 乌龟</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="方法三：实现Callable接口"><a href="#方法三：实现Callable接口" class="headerlink" title="方法三：实现Callable接口"></a>方法三：实现Callable接口</h2><p>关联到线程池 以后一定用到很多 现在初学阶段使用少</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> DEVIL.多线程;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Callable;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Future;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@auther</span> Devil(丁杨维)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@create</span> 2021-10-14-0:31</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">E_05</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//创建一个新的线程类 通过实现Callable接口</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Callable1</span> <span class="keyword">implements</span> <span class="title class_">Callable</span>&lt;Boolean&gt;&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>; i&lt;<span class="number">20</span>; i++)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;我在学习多线程&quot;</span>+i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span><span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">//主线程</span></span><br><span class="line">        <span class="comment">//创建目标对象</span></span><br><span class="line">        <span class="type">Callable1</span> <span class="variable">callable1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Callable1</span>();</span><br><span class="line">        <span class="comment">//创建线程池（创建执行服务）</span></span><br><span class="line">        <span class="type">ExecutorService</span> <span class="variable">ser</span> <span class="operator">=</span> Executors.newFixedThreadPool(<span class="number">1</span>);</span><br><span class="line">        <span class="comment">//提交执行</span></span><br><span class="line">        Future&lt;Boolean&gt; result = ser.submit(callable1);</span><br><span class="line">        <span class="comment">//执行主线程</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;主线程&quot;</span>+i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//获取结果</span></span><br><span class="line">        <span class="type">boolean</span> <span class="variable">r1</span> <span class="operator">=</span> result.get();</span><br><span class="line">        <span class="comment">//关闭服务</span></span><br><span class="line">        ser.shutdownNow();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>控制台：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line">我在学习多线程0</span><br><span class="line">我在学习多线程1</span><br><span class="line">主线程0</span><br><span class="line">主线程1</span><br><span class="line">主线程2</span><br><span class="line">主线程3</span><br><span class="line">主线程4</span><br><span class="line">我在学习多线程2</span><br><span class="line">主线程5</span><br><span class="line">主线程6</span><br><span class="line">主线程7</span><br><span class="line">我在学习多线程3</span><br><span class="line">主线程8</span><br><span class="line">主线程9</span><br><span class="line">我在学习多线程4</span><br><span class="line">主线程10</span><br><span class="line">主线程11</span><br><span class="line">主线程12</span><br><span class="line">我在学习多线程5</span><br><span class="line">我在学习多线程6</span><br><span class="line">主线程13</span><br><span class="line">主线程14</span><br><span class="line">我在学习多线程7</span><br><span class="line">主线程15</span><br><span class="line">主线程16</span><br><span class="line">主线程17</span><br><span class="line">主线程18</span><br><span class="line">主线程19</span><br><span class="line">我在学习多线程8</span><br><span class="line">主线程20</span><br><span class="line">主线程21</span><br><span class="line">主线程22</span><br><span class="line">我在学习多线程9</span><br><span class="line">主线程23</span><br><span class="line">主线程24</span><br><span class="line">主线程25</span><br><span class="line">我在学习多线程10</span><br><span class="line">主线程26</span><br><span class="line">主线程27</span><br><span class="line">主线程28</span><br><span class="line">我在学习多线程11</span><br><span class="line">主线程29</span><br><span class="line">主线程30</span><br><span class="line">主线程31</span><br><span class="line">主线程32</span><br><span class="line">主线程33</span><br><span class="line">我在学习多线程12</span><br><span class="line">主线程34</span><br><span class="line">主线程35</span><br><span class="line">我在学习多线程13</span><br><span class="line">主线程36</span><br><span class="line">主线程37</span><br><span class="line">主线程38</span><br><span class="line">我在学习多线程14</span><br><span class="line">主线程39</span><br><span class="line">我在学习多线程15</span><br><span class="line">主线程40</span><br><span class="line">我在学习多线程16</span><br><span class="line">主线程41</span><br><span class="line">我在学习多线程17</span><br><span class="line">主线程42</span><br><span class="line">我在学习多线程18</span><br><span class="line">主线程43</span><br><span class="line">我在学习多线程19</span><br><span class="line">主线程44</span><br><span class="line">主线程45</span><br><span class="line">主线程46</span><br><span class="line">主线程47</span><br><span class="line">主线程48</span><br><span class="line">主线程49</span><br><span class="line">主线程50</span><br><span class="line">主线程51</span><br><span class="line">主线程52</span><br><span class="line">主线程53</span><br><span class="line">主线程54</span><br><span class="line">主线程55</span><br><span class="line">主线程56</span><br><span class="line">主线程57</span><br><span class="line">主线程58</span><br><span class="line">主线程59</span><br><span class="line">主线程60</span><br><span class="line">主线程61</span><br><span class="line">主线程62</span><br><span class="line">主线程63</span><br><span class="line">主线程64</span><br><span class="line">主线程65</span><br><span class="line">主线程66</span><br><span class="line">主线程67</span><br><span class="line">主线程68</span><br><span class="line">主线程69</span><br><span class="line">主线程70</span><br><span class="line">主线程71</span><br><span class="line">主线程72</span><br><span class="line">主线程73</span><br><span class="line">主线程74</span><br><span class="line">主线程75</span><br><span class="line">主线程76</span><br><span class="line">主线程77</span><br><span class="line">主线程78</span><br><span class="line">主线程79</span><br><span class="line">主线程80</span><br><span class="line">主线程81</span><br><span class="line">主线程82</span><br><span class="line">主线程83</span><br><span class="line">主线程84</span><br><span class="line">主线程85</span><br><span class="line">主线程86</span><br><span class="line">主线程87</span><br><span class="line">主线程88</span><br><span class="line">主线程89</span><br><span class="line">主线程90</span><br><span class="line">主线程91</span><br><span class="line">主线程92</span><br><span class="line">主线程93</span><br><span class="line">主线程94</span><br><span class="line">主线程95</span><br><span class="line">主线程96</span><br><span class="line">主线程97</span><br><span class="line">主线程98</span><br><span class="line">主线程99</span><br></pre></td></tr></table></figure>
+
+<p>符合多线程执行</p>
+<hr>
+<h2 id="–end–"><a href="#–end–" class="headerlink" title="–end–"></a>–end–</h2><p>最后 多线程是java中一个很重要的特性 在后面的学习还是项目中都会大量使用 所以加油吧！S🤍</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+   <a href="/tags/java/" rel="tag"> <i class="fa fa-tag"></i> java</a>
+
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/" rel="next" title="每日一记">
+                  每日一记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Devil</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">80k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:13</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

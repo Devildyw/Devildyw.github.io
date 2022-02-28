@@ -23,28 +23,23 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="数据库事务事务的基本要素 4大性质  原子性:事务开始后的所有操作,要么全部成功,要么全部失败回滚,不可能停滞在中间环节.事务执行过程中出错,会回滚到事务开始之前的状态,所有操作就像没有发生一样.也就是说事务是一个不可分割的整体,就像化学中学过的原子,是事务构成的基本单位. 一致性:事务开始前和结束后,数据库的完整性约束没有被破坏,如A向B转张,不可能出现A扣了钱而B却没有加的情况 隔离性:同一时">
-<meta property="og:type" content="article">
-<meta property="og:title" content="数据库事务">
-<meta property="og:url" content="http://example.com/2022/02/28/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/index.html">
+    <meta property="og:type" content="website">
+<meta property="og:title" content="Devil的个人博客">
+<meta property="og:url" content="http://example.com/archives/2022/02/page/2/index.html">
 <meta property="og:site_name" content="Devil的个人博客">
-<meta property="og:description" content="数据库事务事务的基本要素 4大性质  原子性:事务开始后的所有操作,要么全部成功,要么全部失败回滚,不可能停滞在中间环节.事务执行过程中出错,会回滚到事务开始之前的状态,所有操作就像没有发生一样.也就是说事务是一个不可分割的整体,就像化学中学过的原子,是事务构成的基本单位. 一致性:事务开始前和结束后,数据库的完整性约束没有被破坏,如A向B转张,不可能出现A扣了钱而B却没有加的情况 隔离性:同一时">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-02-28T12:58:54.000Z">
-<meta property="article:modified_time" content="2022-02-28T13:07:03.678Z">
 <meta property="article:author" content="Devil">
-<meta property="article:tag" content="database">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2022/02/28/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/">
+<link rel="canonical" href="http://example.com/archives/2022/02/page/2/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/02/28/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/","path":"2022/02/28/数据库事务/","title":"数据库事务"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"archives/2022/02/page/2/index.html","title":""}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>数据库事务 | Devil的个人博客</title>
+<title>归档 | Devil的个人博客</title>
   
 
 
@@ -75,7 +70,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">Devil的个人博客</p>
+      <h1 class="site-title">Devil的个人博客</h1>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">永远详细美好的事情永远发生</p>
@@ -139,7 +134,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+    <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -152,7 +147,6 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1"><span class="nav-text">数据库事务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%A6%81%E7%B4%A0-4%E5%A4%A7%E6%80%A7%E8%B4%A8"><span class="nav-text">事务的基本要素 4大性质</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li></ol></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -223,133 +217,112 @@
 </noscript>
 
 
-    <div class="main-inner post posts-expand">
+    <div class="main-inner archive posts-collapse">
 
 
   
-
-
-<div class="post-block">
   
   
+  <div class="post-block">
+    <div class="post-content">
+      <div class="collection-title">
+        <span class="collection-header">嗯..! 目前共计 14 篇日志。 继续努力。</span>
+      </div>
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/28/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Devil">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Devil的个人博客">
-      <meta itemprop="description" content="">
-    </span>
-    
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="数据库事务 | Devil的个人博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          数据库事务
-        </h1>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
       
-
-      <time title="创建时间：2022-02-28 20:58:54 / 修改时间：21:07:03" itemprop="dateCreated datePublished" datetime="2022-02-28T20:58:54+08:00">2022-02-28</time>
-    </span>
-
-  
-    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span id="busuanzi_value_page_pv"></span>
-    </span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>786</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-        <h1 id="数据库事务"><a href="#数据库事务" class="headerlink" title="数据库事务"></a>数据库事务</h1><h3 id="事务的基本要素-4大性质"><a href="#事务的基本要素-4大性质" class="headerlink" title="事务的基本要素 4大性质"></a><strong>事务的基本要素 4大性质</strong></h3><blockquote>
-<ol>
-<li>原子性:事务开始后的所有操作,要么全部成功,要么全部失败回滚,不可能停滞在中间环节.事务执行过程中出错,会回滚到事务开始之前的状态,所有操作就像没有发生一样.也就是说事务是一个不可分割的整体,就像化学中学过的原子,是事务构成的基本单位.</li>
-<li>一致性:事务开始前和结束后,数据库的完整性约束没有被破坏,如A向B转张,不可能出现A扣了钱而B却没有加的情况</li>
-<li>隔离性:同一时间,只允许一个事务请求同一数据,不同事务之间彼此没有任何干扰,如A正在从一张银行卡中取钱,在A取钱的过程结束前,B不能向这张卡转账.</li>
-<li>持久性:事务完成之后,事务对数据库更新将会被保存写在数据库上,不能回滚.</li>
-</ol>
-</blockquote>
-<h4 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h4><p> <strong>隔离级别定义了一个事务可能受其他并发事务影响的程度。</strong></p>
-<blockquote>
-<p><strong>脏读（Dirty reads）</strong>—— 事务A读取了事务B更新的数据，然后B回滚操作，那么A读取到的数据是脏数据。</p>
-<p><strong>不可重复读（Nonrepeatable read）</strong>—— 事务 A 多次读取同一数据，事务 B 在事务A多次读取的过程中，对数据作了更新并提交，导致事务A多次读取同一数据时，结果不一致。</p>
-<p><strong>幻读（Phantom read）</strong>—— 系统管理员A将数据库中所有学生的成绩从具体分数改为ABCDE等级，但是系统管理员B就在这个时候插入了一条具体分数的记录，当系统管理员A改结束后发现还有一条记录没有改过来，就好像发生了幻觉一样，这就叫幻读。</p>
-</blockquote>
-<p>不可重复读是指在原本有个数据上进行修改导致一个事务一致都是读到不同的数据, 而幻读则是在原来的数据中的插入,删除等操作导致的.<strong>解决不可重复读的问题只需锁住满足条件的行，解决幻读需要锁表</strong></p>
-<hr>
-<p><strong>串行化</strong>隔离规则类型在开发中很少用到。举个很简单的例子。咱们使用了ISOLATION_SERIALIZABLE规则。A,B两个事务操作同一个数据表并发过来了。A先执行。A事务这个时候会把表给锁住，B事务执行的时候直接报错。</p>
-
+    <div class="collection-year">
+      <span class="collection-header">2022</span>
     </div>
 
-    
-    
-    
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <div class="post-meta-container">
+        <time itemprop="dateCreated"
+              datetime="2022-02-28T20:58:54+08:00"
+              content="2022-02-28">
+          02-28
+        </time>
+      </div>
 
-    <footer class="post-footer">
-          <div class="post-tags">
-   <a href="/tags/database/" rel="tag"> <i class="fa fa-tag"></i> database</a>
+      <div class="post-title">
+          <a class="post-title-link" href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--synchronized%E5%85%B3%E9%94%AE%E5%AD%97/" itemprop="url">
+            <span itemprop="name">每日一记--synchronized关键字</span>
+          </a>
+      </div>
 
-          </div>
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--synchronized%E5%85%B3%E9%94%AE%E5%AD%97/" rel="prev" title="每日一记--synchronized关键字">
-                  <i class="fa fa-chevron-left"></i> 每日一记--synchronized关键字
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/2022/02/28/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="next" title="数据库(mysql)">
-                  数据库(mysql) <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
-    </footer>
+      
+    </header>
   </article>
-</div>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <div class="post-meta-container">
+        <time itemprop="dateCreated"
+              datetime="2022-02-28T20:58:54+08:00"
+              content="2022-02-28">
+          02-28
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E7%BB%AD%EF%BC%89/" itemprop="url">
+            <span itemprop="name">每日一记--多线程（续）</span>
+          </a>
+      </div>
+
+      
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <div class="post-meta-container">
+        <time itemprop="dateCreated"
+              datetime="2022-02-28T20:58:54+08:00"
+              content="2022-02-28">
+          02-28
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/" itemprop="url">
+            <span itemprop="name">每日一记</span>
+          </a>
+      </div>
+
+      
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <div class="post-meta-container">
+        <time itemprop="dateCreated"
+              datetime="2022-02-28T20:58:54+08:00"
+              content="2022-02-28">
+          02-28
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%88%9D%E8%AF%86/" itemprop="url">
+            <span itemprop="name">每日一记之多线程初识</span>
+          </a>
+      </div>
+
+      
+    </header>
+  </article>
 
 
-
-
-
+    </div>
+  </div>
+  
+  
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/archives/2022/02/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/archives/2022/02/">1</a><span class="page-number current">2</span>
+  </nav>
 
 </div>
   </main>
