@@ -156,7 +156,7 @@
 </li>
 <li><p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220128220100844.png" alt="image-20220128220100844"></p>
 </li>
-<li><p>验证是否配置成功 <strong>ssh -T <a href="mailto:&#103;&#x69;&#x74;&#64;&#x67;&#x69;&#116;&#101;&#101;&#x2e;&#99;&#111;&#x6d;">&#103;&#x69;&#x74;&#64;&#x67;&#x69;&#116;&#101;&#101;&#x2e;&#99;&#111;&#x6d;</a></strong></p>
+<li><p>验证是否配置成功 <strong>ssh -T <a href="mailto:&#x67;&#105;&#x74;&#64;&#103;&#x69;&#116;&#x65;&#101;&#x2e;&#99;&#111;&#109;">&#x67;&#105;&#x74;&#64;&#103;&#x69;&#116;&#x65;&#101;&#x2e;&#99;&#111;&#109;</a></strong></p>
 </li>
 </ul>
 <h4 id="操作远程仓库"><a href="#操作远程仓库" class="headerlink" title="操作远程仓库"></a>操作远程仓库</h4><ul>
@@ -296,6 +296,33 @@
       </tags>
   </entry>
   <entry>
+    <title>数据库事务</title>
+    <url>/2022/02/28/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/</url>
+    <content><![CDATA[<h1 id="数据库事务"><a href="#数据库事务" class="headerlink" title="数据库事务"></a>数据库事务</h1><h3 id="事务的基本要素-4大性质"><a href="#事务的基本要素-4大性质" class="headerlink" title="事务的基本要素 4大性质"></a><strong>事务的基本要素 4大性质</strong></h3><blockquote>
+<ol>
+<li>原子性:事务开始后的所有操作,要么全部成功,要么全部失败回滚,不可能停滞在中间环节.事务执行过程中出错,会回滚到事务开始之前的状态,所有操作就像没有发生一样.也就是说事务是一个不可分割的整体,就像化学中学过的原子,是事务构成的基本单位.</li>
+<li>一致性:事务开始前和结束后,数据库的完整性约束没有被破坏,如A向B转张,不可能出现A扣了钱而B却没有加的情况</li>
+<li>隔离性:同一时间,只允许一个事务请求同一数据,不同事务之间彼此没有任何干扰,如A正在从一张银行卡中取钱,在A取钱的过程结束前,B不能向这张卡转账.</li>
+<li>持久性:事务完成之后,事务对数据库更新将会被保存写在数据库上,不能回滚.</li>
+</ol>
+</blockquote>
+<span id="more"></span>
+
+<h4 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h4><p> <strong>隔离级别定义了一个事务可能受其他并发事务影响的程度。</strong></p>
+<blockquote>
+<p><strong>脏读（Dirty reads）</strong>—— 事务A读取了事务B更新的数据，然后B回滚操作，那么A读取到的数据是脏数据。</p>
+<p><strong>不可重复读（Nonrepeatable read）</strong>—— 事务 A 多次读取同一数据，事务 B 在事务A多次读取的过程中，对数据作了更新并提交，导致事务A多次读取同一数据时，结果不一致。</p>
+<p><strong>幻读（Phantom read）</strong>—— 系统管理员A将数据库中所有学生的成绩从具体分数改为ABCDE等级，但是系统管理员B就在这个时候插入了一条具体分数的记录，当系统管理员A改结束后发现还有一条记录没有改过来，就好像发生了幻觉一样，这就叫幻读。</p>
+</blockquote>
+<p>不可重复读是指在原本有个数据上进行修改导致一个事务一致都是读到不同的数据, 而幻读则是在原来的数据中的插入,删除等操作导致的.<strong>解决不可重复读的问题只需锁住满足条件的行，解决幻读需要锁表</strong></p>
+<hr>
+<p><strong>串行化</strong>隔离规则类型在开发中很少用到。举个很简单的例子。咱们使用了ISOLATION_SERIALIZABLE规则。A,B两个事务操作同一个数据表并发过来了。A先执行。A事务这个时候会把表给锁住，B事务执行的时候直接报错。</p>
+]]></content>
+      <tags>
+        <tag>database</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据库(mysql)</title>
     <url>/2022/02/28/%E6%95%B0%E6%8D%AE%E5%BA%93/</url>
     <content><![CDATA[<h1 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h1><span id="more"></span>
@@ -342,68 +369,6 @@
 ]]></content>
       <tags>
         <tag>database</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据库事务</title>
-    <url>/2022/02/28/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/</url>
-    <content><![CDATA[<h1 id="数据库事务"><a href="#数据库事务" class="headerlink" title="数据库事务"></a>数据库事务</h1><h3 id="事务的基本要素-4大性质"><a href="#事务的基本要素-4大性质" class="headerlink" title="事务的基本要素 4大性质"></a><strong>事务的基本要素 4大性质</strong></h3><blockquote>
-<ol>
-<li>原子性:事务开始后的所有操作,要么全部成功,要么全部失败回滚,不可能停滞在中间环节.事务执行过程中出错,会回滚到事务开始之前的状态,所有操作就像没有发生一样.也就是说事务是一个不可分割的整体,就像化学中学过的原子,是事务构成的基本单位.</li>
-<li>一致性:事务开始前和结束后,数据库的完整性约束没有被破坏,如A向B转张,不可能出现A扣了钱而B却没有加的情况</li>
-<li>隔离性:同一时间,只允许一个事务请求同一数据,不同事务之间彼此没有任何干扰,如A正在从一张银行卡中取钱,在A取钱的过程结束前,B不能向这张卡转账.</li>
-<li>持久性:事务完成之后,事务对数据库更新将会被保存写在数据库上,不能回滚.</li>
-</ol>
-</blockquote>
-<span id="more"></span>
-
-<h4 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h4><p> <strong>隔离级别定义了一个事务可能受其他并发事务影响的程度。</strong></p>
-<blockquote>
-<p><strong>脏读（Dirty reads）</strong>—— 事务A读取了事务B更新的数据，然后B回滚操作，那么A读取到的数据是脏数据。</p>
-<p><strong>不可重复读（Nonrepeatable read）</strong>—— 事务 A 多次读取同一数据，事务 B 在事务A多次读取的过程中，对数据作了更新并提交，导致事务A多次读取同一数据时，结果不一致。</p>
-<p><strong>幻读（Phantom read）</strong>—— 系统管理员A将数据库中所有学生的成绩从具体分数改为ABCDE等级，但是系统管理员B就在这个时候插入了一条具体分数的记录，当系统管理员A改结束后发现还有一条记录没有改过来，就好像发生了幻觉一样，这就叫幻读。</p>
-</blockquote>
-<p>不可重复读是指在原本有个数据上进行修改导致一个事务一致都是读到不同的数据, 而幻读则是在原来的数据中的插入,删除等操作导致的.<strong>解决不可重复读的问题只需锁住满足条件的行，解决幻读需要锁表</strong></p>
-<hr>
-<p><strong>串行化</strong>隔离规则类型在开发中很少用到。举个很简单的例子。咱们使用了ISOLATION_SERIALIZABLE规则。A,B两个事务操作同一个数据表并发过来了。A先执行。A事务这个时候会把表给锁住，B事务执行的时候直接报错。</p>
-]]></content>
-      <tags>
-        <tag>database</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>每日一记--synchronized关键字</title>
-    <url>/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--synchronized%E5%85%B3%E9%94%AE%E5%AD%97/</url>
-    <content><![CDATA[<h1 id="每日一记–synchronized关键字"><a href="#每日一记–synchronized关键字" class="headerlink" title="每日一记–synchronized关键字"></a>每日一记–synchronized关键字</h1><h2 id="synchronized关键字（隐式的获取和释放锁）"><a href="#synchronized关键字（隐式的获取和释放锁）" class="headerlink" title="synchronized关键字（隐式的获取和释放锁）"></a>synchronized关键字（隐式的获取和释放锁）</h2><p>作用于静态方法：</p>
-<p><strong>对象锁</strong>给对象加锁（可以理解为这个对象的内存上锁，<strong>注意：只是这块内存，其他同类对象都会有各自的内存锁</strong>）这时候在其他一个以上线程中执行该对象的这个同步方法（<strong>注意：是该对象</strong>）就会产生互斥）</p>
-<p>作用于静态方法：</p>
-<p><strong>类锁</strong>：相当于在类上枷锁（*.class位于代码区，静态方法位于静态区域，这个类产生的对象公用这个静态方法，所以这块内存，N个对象来竞争），这时候，只要是这个类产生的对象，在调用这个静态方法时都会产生互斥</p>
-<p><strong>对象锁与类锁区别</strong>：主要就在于内存区域不同 <strong>对象锁</strong>只作用与同类的单个对象的内存区域 <strong>类锁</strong>则作用于同类的所有对象的内存区域 </p>
-<span id="more"></span>
-
-<p>Java线程内存模型：每个线程都用拥有自己的栈、堆内存共享、如下图所示。锁是线程间内存和信息沟通的载体。<img src="https://images2015.cnblogs.com/blog/491378/201607/491378-20160720152209982-808156316.png" alt="img"></p>
-<p>Java中为了保证每个线程中的原子操作，引入了内置锁或者称监视器锁，其中，每个Java对象都可以作为实现锁的对象。</p>
-<p>synchronized关键字修饰的代码块被称为同步代码块 ，线程进入同步代码块自动获取内置锁，退出同步代码块则释放锁，不需要调用者考虑它的创建以及消除而别的线程此时无法获得这把锁，就无法调用这个方法。一个线程想要获得这个锁只能等上一个线程执行结束这个方法将锁释放，下一个线程才能有机会调用这个方法获得该对象的锁（即synchronized关键字可以获得内置锁，同一时间只允许一个线程获得某个锁）。</p>
-<blockquote>
-<p>java的每个对象都有一个锁，不需要显示地去创建。</p>
-<p><strong>java的内置锁</strong>：每个java对象都可以用做一个实现同步的锁，这些锁称为<strong>内置锁</strong>。<strong>线程</strong>进入同步代码块或方法的时候会<strong>自动获得该锁</strong>，在<strong>退出</strong>同步代码块或方法时会<strong>释放</strong>该锁。获得内置锁的<strong>唯一途径就是进入这个锁的保护的同步代码块或方法</strong>。</p>
-<p><strong>java内置锁</strong>是一个<strong>互斥锁</strong>，这就意味着同一时间最多只有一个线程能够获得该锁，当线程A尝试去获得线程B持有的内置锁时，线程A必须<strong>等待或者阻塞</strong>，直到线程B释放这个锁，如果B线程不释放这个锁，那么A线程将永远等待下去。</p>
-</blockquote>
-<p><strong>1.同步方法（粗粒度锁）</strong>：</p>
-<p>即有<strong>synchronized</strong>关键字修饰的方法。</p>
-<p><strong>由于java中每个对象都有一个内置锁，当使用此关键字修饰方法时，内置锁会保护整个方法。在调用该方法前，需要获得内置锁，否则就处于阻塞状态</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">    方法体</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>2.<strong>同步代码块（细粒度锁）</strong>：</p>
-<p>即有<strong>synchronized</strong>关键字修饰的语句块。</p>
-<p>被该关键字修饰的语句块会被自动加上内置锁，从而实现同步。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(object)&#123; </span><br><span class="line">	代码;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>注：同步是一种高开销的操作，因此应该尽量减少同步的内容。 通常没有必要同步整个方法，使用synchronized代码块同步关键代码即可。</strong> 同步会影响一定的多线程性能</p>
-<p><strong>synchronized的缺陷</strong>：当某个线程进入同步方法获得对象锁，那么其他线程访问这里对象的同步方法时，必须等待或者阻塞，这对高并发的系统是致命的，这很容易导致系统的崩溃。如果某个线程在同步方法里面发生了死循环，那么它就永远不会释放这个对象锁，那么其他线程就要永远的等待。这是一个致命的问题。</p>
-]]></content>
-      <tags>
-        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -455,6 +420,41 @@
 <hr>
 <p>–end–</p>
 <p>今天还是摸索学习方法的一天呢。</p>
+]]></content>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>每日一记--synchronized关键字</title>
+    <url>/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--synchronized%E5%85%B3%E9%94%AE%E5%AD%97/</url>
+    <content><![CDATA[<h1 id="每日一记–synchronized关键字"><a href="#每日一记–synchronized关键字" class="headerlink" title="每日一记–synchronized关键字"></a>每日一记–synchronized关键字</h1><h2 id="synchronized关键字（隐式的获取和释放锁）"><a href="#synchronized关键字（隐式的获取和释放锁）" class="headerlink" title="synchronized关键字（隐式的获取和释放锁）"></a>synchronized关键字（隐式的获取和释放锁）</h2><p>作用于静态方法：</p>
+<p><strong>对象锁</strong>给对象加锁（可以理解为这个对象的内存上锁，<strong>注意：只是这块内存，其他同类对象都会有各自的内存锁</strong>）这时候在其他一个以上线程中执行该对象的这个同步方法（<strong>注意：是该对象</strong>）就会产生互斥）</p>
+<p>作用于静态方法：</p>
+<p><strong>类锁</strong>：相当于在类上枷锁（*.class位于代码区，静态方法位于静态区域，这个类产生的对象公用这个静态方法，所以这块内存，N个对象来竞争），这时候，只要是这个类产生的对象，在调用这个静态方法时都会产生互斥</p>
+<p><strong>对象锁与类锁区别</strong>：主要就在于内存区域不同 <strong>对象锁</strong>只作用与同类的单个对象的内存区域 <strong>类锁</strong>则作用于同类的所有对象的内存区域 </p>
+<span id="more"></span>
+
+<p>Java线程内存模型：每个线程都用拥有自己的栈、堆内存共享、如下图所示。锁是线程间内存和信息沟通的载体。<img src="https://images2015.cnblogs.com/blog/491378/201607/491378-20160720152209982-808156316.png" alt="img"></p>
+<p>Java中为了保证每个线程中的原子操作，引入了内置锁或者称监视器锁，其中，每个Java对象都可以作为实现锁的对象。</p>
+<p>synchronized关键字修饰的代码块被称为同步代码块 ，线程进入同步代码块自动获取内置锁，退出同步代码块则释放锁，不需要调用者考虑它的创建以及消除而别的线程此时无法获得这把锁，就无法调用这个方法。一个线程想要获得这个锁只能等上一个线程执行结束这个方法将锁释放，下一个线程才能有机会调用这个方法获得该对象的锁（即synchronized关键字可以获得内置锁，同一时间只允许一个线程获得某个锁）。</p>
+<blockquote>
+<p>java的每个对象都有一个锁，不需要显示地去创建。</p>
+<p><strong>java的内置锁</strong>：每个java对象都可以用做一个实现同步的锁，这些锁称为<strong>内置锁</strong>。<strong>线程</strong>进入同步代码块或方法的时候会<strong>自动获得该锁</strong>，在<strong>退出</strong>同步代码块或方法时会<strong>释放</strong>该锁。获得内置锁的<strong>唯一途径就是进入这个锁的保护的同步代码块或方法</strong>。</p>
+<p><strong>java内置锁</strong>是一个<strong>互斥锁</strong>，这就意味着同一时间最多只有一个线程能够获得该锁，当线程A尝试去获得线程B持有的内置锁时，线程A必须<strong>等待或者阻塞</strong>，直到线程B释放这个锁，如果B线程不释放这个锁，那么A线程将永远等待下去。</p>
+</blockquote>
+<p><strong>1.同步方法（粗粒度锁）</strong>：</p>
+<p>即有<strong>synchronized</strong>关键字修饰的方法。</p>
+<p><strong>由于java中每个对象都有一个内置锁，当使用此关键字修饰方法时，内置锁会保护整个方法。在调用该方法前，需要获得内置锁，否则就处于阻塞状态</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">    方法体</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.<strong>同步代码块（细粒度锁）</strong>：</p>
+<p>即有<strong>synchronized</strong>关键字修饰的语句块。</p>
+<p>被该关键字修饰的语句块会被自动加上内置锁，从而实现同步。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(object)&#123; </span><br><span class="line">	代码;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注：同步是一种高开销的操作，因此应该尽量减少同步的内容。 通常没有必要同步整个方法，使用synchronized代码块同步关键代码即可。</strong> 同步会影响一定的多线程性能</p>
+<p><strong>synchronized的缺陷</strong>：当某个线程进入同步方法获得对象锁，那么其他线程访问这里对象的同步方法时，必须等待或者阻塞，这对高并发的系统是致命的，这很容易导致系统的崩溃。如果某个线程在同步方法里面发生了死循环，那么它就永远不会释放这个对象锁，那么其他线程就要永远的等待。这是一个致命的问题。</p>
 ]]></content>
       <tags>
         <tag>java</tag>
@@ -3910,9 +3910,114 @@ WebApplicationContext：web项目中的使用的容器对象
 <h4 id="使用"><a href="#使用" class="headerlink" title="使用:"></a>使用:</h4><p>添加依赖</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">   // 注意！！当前包未传递依赖 mp 包，需要自己引入</span><br><span class="line">   <span class="comment">&lt;!--模板引擎--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.baomidou<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-plus-generator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
+<p>在工程包下建立一个实体类(启动类)如下 修改相应的信息即可</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Generator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;jdbc:mysql://localhost:3306/my_db&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> <span class="string">&quot;root&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">password</span> <span class="operator">=</span> <span class="string">&quot;devil&quot;</span>;</span><br><span class="line"></span><br><span class="line">        FastAutoGenerator.create(url,name,password)</span><br><span class="line">                <span class="comment">//全局配置</span></span><br><span class="line">                .globalConfig((scanner,builder) -&gt;</span><br><span class="line">                        builder.author(scanner.apply(<span class="string">&quot;Devil&quot;</span>))</span><br><span class="line">                                <span class="comment">//输出目录</span></span><br><span class="line">                                .outputDir(<span class="string">&quot;E:\\MyBatis\\mybatis-puls-07-generator&quot;</span>+<span class="string">&quot;\\src\\main\\java&quot;</span>)</span><br><span class="line">                                <span class="comment">//覆盖已生成的文件</span></span><br><span class="line">                                .fileOverride()</span><br><span class="line">                                <span class="comment">//禁止打开输出目录: 默认true</span></span><br><span class="line">                                .disableOpenDir()</span><br><span class="line">                )</span><br><span class="line">                <span class="comment">//包配置</span></span><br><span class="line">                .packageConfig((scanner,builder)-&gt;</span><br><span class="line">                        builder.parent(<span class="string">&quot;com.dyw.mybatispuls07generator&quot;</span>)</span><br><span class="line">                                <span class="comment">//自定义实体包名</span></span><br><span class="line">                                .entity(<span class="string">&quot;entity&quot;</span>)</span><br><span class="line">                )</span><br><span class="line">                <span class="comment">//策略配置</span></span><br><span class="line">                .strategyConfig((scanner,builder) -&gt;</span><br><span class="line">                        builder.addInclude(<span class="string">&quot;user&quot;</span>)</span><br><span class="line">                                <span class="comment">//控制层配置</span></span><br><span class="line">                                .controllerBuilder().enableRestStyle().enableHyphenStyle()</span><br><span class="line">                                <span class="comment">//服务层配置</span></span><br><span class="line">                                .serviceBuilder()</span><br><span class="line">                                    <span class="comment">//去除服务接口的I前缀 %s表示实体类名:</span></span><br><span class="line">                                    .formatServiceFileName(<span class="string">&quot;%sServcie&quot;</span>)</span><br><span class="line">                                <span class="comment">//实体层配置</span></span><br><span class="line">                                .entityBuilder()</span><br><span class="line">                                .enableLombok()</span><br><span class="line">                                <span class="comment">//主键策略</span></span><br><span class="line">                                .idType(IdType.AUTO)</span><br><span class="line">                                <span class="comment">//时间自动填充</span></span><br><span class="line"><span class="comment">//                                .addTableFills(new Column(&quot;gmt_create&quot;, FieldFill.INSERT))</span></span><br><span class="line"><span class="comment">//                                .addTableFills(new Column(&quot;gmt_modified&quot;, FieldFill.INSERT_UPDATE))</span></span><br><span class="line">                                <span class="comment">//乐观锁</span></span><br><span class="line">                                .versionColumnName(<span class="string">&quot;version&quot;</span>)</span><br><span class="line">                                .versionPropertyName(<span class="string">&quot;version&quot;</span>)</span><br><span class="line">                                <span class="comment">//逻辑删除</span></span><br><span class="line">                                .logicDeleteColumnName(<span class="string">&quot;deleted&quot;</span>)</span><br><span class="line">                                .logicDeletePropertyName(<span class="string">&quot;deleted&quot;</span>)</span><br><span class="line">                ).templateEngine(<span class="keyword">new</span> <span class="title class_">VelocityTemplateEngine</span>()).execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><h3 id="逻辑删除"><a href="#逻辑删除" class="headerlink" title="逻辑删除"></a><a href="https://baomidou.com/pages/6b03c5/#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95">逻辑删除</a></h3><p><strong>简介:</strong> 通过在数据库中设定的逻辑删除字段 达到并未真正删除 而是逻辑删除的效果</p>
+<p><strong>说明:</strong></p>
+<ul>
+<li><p>只针对Mybatis-plus自动注入的sql语句起效(即 自定义的sql不能享受)</p>
+</li>
+<li><p>插入: 不做限制</p>
+</li>
+<li><p>查找: 会在where条件后面过滤掉已删除数据,且使用wrapper.entity生产的where条件会忽略此字段(<strong>如有特殊要求 需要查询历史所有字段 需要自定义sql语句</strong>)</p>
+</li>
+<li><p>更新: 会追加where条件防止更新到已删除的数据, 且使用wrapper.entity生产的where条件会忽略此字段</p>
+</li>
+<li><p>删除: 转变为更新(即将逻辑删除字段设置为逻辑删除属性)</p>
+</li>
+</ul>
+<p><strong>例如:</strong></p>
+<ul>
+<li>删除(实际sql): <code>update user set deleted=1 where id = 1 and deleted = 0 </code></li>
+<li>查找(实际sql): <code>select id,name,deleted from user where deleted = 0</code></li>
+</ul>
+<p><strong>字段类型支持说明:</strong></p>
+<ul>
+<li>支持所有数据类型(推荐使用 <code>Integer</code>,<code>Boolean</code>,<code>LocalDateTime</code>)</li>
+<li>如果数据库字段使用<code>datetime</code>,逻辑未删除值和已删除值支持配置为字符串<code>null</code>,另一个值支持配置为函数来获取值如<code>now()</code></li>
+</ul>
+<p><strong>附录:</strong></p>
+<ul>
+<li>逻辑删除是为了方便数据恢复和保护数据本身价值等等的一种方案，但实际就是删除。</li>
+<li>如果你需要频繁查出来看就不应使用逻辑删除，而是以一个状态去表示。</li>
+</ul>
+<hr>
+<p><strong>使用</strong>(pringBoot):</p>
+<ul>
+<li>配置 application.yml文件</li>
+</ul>
+<blockquote>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">mybatis-plus:</span></span><br><span class="line">  <span class="attr">global-config:</span></span><br><span class="line">    <span class="attr">db-config:</span></span><br><span class="line">      <span class="comment"># logic-delete-field: flag # 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不配置步骤2)</span></span><br><span class="line">      <span class="attr">logic-delete-value:</span> <span class="number">1</span> <span class="comment"># 逻辑已删除值(默认为 1)</span></span><br><span class="line">      <span class="attr">logic-not-delete-value:</span> <span class="number">0</span> <span class="comment"># 逻辑未删除值(默认为 0)</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<ul>
+<li>在实体类的逻辑删除字段上添加@TableLogic注解(加上此字段可以不用配置logic-delete-field)</li>
+</ul>
+<blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 给逻辑删除字段加上<span class="doctag">@TableLogic</span>注解 使其生效</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@TableLogic</span></span><br><span class="line">    <span class="keyword">private</span> Integer deleted;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<ul>
+<li>配置完成后 正常调用mybatis-plus自动注入的sql语句即可</li>
+</ul>
+<hr>
+<p><strong>注意</strong>: 数据库中的逻辑删除字段不要设置为 <strong><code>delete</code></strong> 敏感字段会报错</p>
+<h3 id="通用枚举"><a href="#通用枚举" class="headerlink" title="通用枚举"></a><a href="https://baomidou.com/pages/8390a4/#_1%E3%80%81%E5%A3%B0%E6%98%8E%E9%80%9A%E7%94%A8%E6%9E%9A%E4%B8%BE%E5%B1%9E%E6%80%A7">通用枚举</a></h3><p><strong>简介:</strong> 使用mybatis-plus 通用枚举功能 可以在存储是存储value 查询自动显示为desc</p>
+<hr>
+<p><strong>使用:</strong> </p>
+<blockquote>
+<ul>
+<li>方式一:  使用@EnumValue注解枚举属性</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">GradeEnum</span> &#123;</span><br><span class="line"></span><br><span class="line">    PRIMARY(<span class="number">1</span>, <span class="string">&quot;小学&quot;</span>),  SECONDORY(<span class="number">2</span>, <span class="string">&quot;中学&quot;</span>),  HIGH(<span class="number">3</span>, <span class="string">&quot;高中&quot;</span>);</span><br><span class="line"></span><br><span class="line">    GradeEnum(<span class="type">int</span> code, String descp) &#123;</span><br><span class="line">        <span class="built_in">this</span>.code = code;</span><br><span class="line">        <span class="built_in">this</span>.descp = descp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EnumValue</span><span class="comment">//标记数据库存的值是code</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> code;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String descp;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.descp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方式二: 枚举属性,实现IEnum接口</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">AgeEnum</span> <span class="keyword">implements</span> <span class="title class_">IEnum</span>&lt;Integer&gt; &#123;</span><br><span class="line">    ONE(<span class="number">1</span>, <span class="string">&quot;一岁&quot;</span>),</span><br><span class="line">    TWO(<span class="number">2</span>, <span class="string">&quot;二岁&quot;</span>),</span><br><span class="line">    THREE(<span class="number">3</span>, <span class="string">&quot;三岁&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> value;</span><br><span class="line">    <span class="keyword">private</span> String desc;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Integer <span class="title function_">getValue</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.value;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//一定重写toString</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.desc;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>配置扫描通用枚举(SpringBoot): </p>
+<blockquote>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">mybatis-plus:</span></span><br><span class="line">    <span class="comment"># 支持统配符 * 或者 ; 分割 通用枚举所在包</span></span><br><span class="line">    <span class="attr">typeEnumsPackage:</span> <span class="string">com.baomidou.springboot.entity.enums</span></span><br><span class="line">  <span class="string">....</span></span><br></pre></td></tr></table></figure>
+
+<p>或是使用配置类配置</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MybatisPlusAutoConfiguration</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> MybatisPlusPropertiesCustomizer <span class="title function_">mybatisPlusPropertiesCustomizer</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> properties -&gt; &#123;</span><br><span class="line">            <span class="type">GlobalConfig</span> <span class="variable">globalConfig</span> <span class="operator">=</span> properties.getGlobalConfig();</span><br><span class="line">            globalConfig.setBanner(<span class="literal">false</span>);</span><br><span class="line">            <span class="type">MybatisConfiguration</span> <span class="variable">configuration</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MybatisConfiguration</span>();</span><br><span class="line">            configuration.setDefaultEnumTypeHandler(MybatisEnumTypeHandler.class);</span><br><span class="line">            properties.setConfiguration(configuration);</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<h3 id="自动填充功能"><a href="#自动填充功能" class="headerlink" title="自动填充功能"></a><a href="https://baomidou.com/pages/4c6bcf/">自动填充功能</a></h3><p><strong>原理:</strong></p>
+<ul>
+<li>实现元对象处理器接口：com.baomidou.mybatisplus.core.handlers.MetaObjectHandler</li>
+<li>注解填充字段 <code>@TableField(.. fill = FieldFill.INSERT)</code> 生成器策略部分也可以配置！</li>
+</ul>
+<ul>
+<li><p>自定义实现类 MyMetaObjectHandler</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyMetaObjectHandler</span> <span class="keyword">implements</span> <span class="title class_">MetaObjectHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 在这里配置insert时填充的字段</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> metaObject</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertFill</span><span class="params">(MetaObject metaObject)</span> &#123;</span><br><span class="line">        setFieldValByName(<span class="string">&quot;sex&quot;</span>, UserSexEnum.MAN,metaObject);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 这里配置update时填充的字段</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> metaObject</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">updateFill</span><span class="params">(MetaObject metaObject)</span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>配置好了之后 只要指定字段再插入&#x2F;更新时 为null 就能自动填充</li>
+</ul>
+</li>
+</ul>
+<p><strong>注意:</strong></p>
+<blockquote>
+<ul>
+<li>填充原理是直接给<code>entity</code>的属性设置值!!!</li>
+<li>注解则是指定该属性在对应情况下必有值,如果无值则入库会是<code>null</code></li>
+<li><code>MetaObjectHandler</code>提供的默认方法的策略均为:如果属性有值则不覆盖,如果填充值为<code>null</code>则不填充</li>
+<li>字段必须声明<code>TableField</code>注解,属性<code>fill</code>选择对应策略,该声明告知<code>Mybatis-Plus</code>需要预留注入<code>SQL</code>字段</li>
+<li>填充处理器<code>MyMetaObjectHandler</code>在 Spring Boot 中需要声明<code>@Component</code>或<code>@Bean</code>注入</li>
+<li>要想根据注解<code>FieldFill.xxx</code>和<code>字段名</code>以及<code>字段类型</code>来区分必须使用父类的<code>strictInsertFill</code>或者<code>strictUpdateFill</code>方法</li>
+<li>不需要根据任何来区分可以使用父类的<code>fillStrategy</code>方法</li>
+<li>update(T t,Wrapper updateWrapper)时t不能为空,否则自动填充失效</li>
+</ul>
+</blockquote>
 ]]></content>
       <tags>
-        <tag>java</tag>
+        <tag>databese</tag>
       </tags>
   </entry>
 </search>

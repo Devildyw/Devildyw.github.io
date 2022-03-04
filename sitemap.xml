@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://devildyw.github.io/2022/02/28/MyBatis/</loc>
+    
+    <lastmod>2022-03-04T08:25:21.947Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://devildyw.github.io/2022/02/28/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
     
     <lastmod>2022-02-28T15:05:01.876Z</lastmod>
@@ -75,13 +82,6 @@
     <loc>https://devildyw.github.io/2022/02/28/RocketMQ/</loc>
     
     <lastmod>2022-02-28T15:02:50.353Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://devildyw.github.io/2022/02/28/MyBatis/</loc>
-    
-    <lastmod>2022-02-28T15:02:38.107Z</lastmod>
     
   </url>
   
