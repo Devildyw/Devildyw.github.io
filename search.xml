@@ -156,7 +156,7 @@
 </li>
 <li><p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220128220100844.png" alt="image-20220128220100844"></p>
 </li>
-<li><p>验证是否配置成功 <strong>ssh -T <a href="mailto:&#x67;&#105;&#x74;&#64;&#103;&#x69;&#116;&#x65;&#101;&#x2e;&#99;&#111;&#109;">&#x67;&#105;&#x74;&#64;&#103;&#x69;&#116;&#x65;&#101;&#x2e;&#99;&#111;&#109;</a></strong></p>
+<li><p>验证是否配置成功 <strong>ssh -T <a href="mailto:&#103;&#x69;&#x74;&#64;&#103;&#105;&#x74;&#x65;&#x65;&#x2e;&#99;&#x6f;&#x6d;">&#103;&#x69;&#x74;&#64;&#103;&#105;&#x74;&#x65;&#x65;&#x2e;&#99;&#x6f;&#x6d;</a></strong></p>
 </li>
 </ul>
 <h4 id="操作远程仓库"><a href="#操作远程仓库" class="headerlink" title="操作远程仓库"></a>操作远程仓库</h4><ul>
@@ -235,6 +235,9 @@
 </li>
 </ul>
 ]]></content>
+      <categories>
+        <category>开发工具</category>
+      </categories>
       <tags>
         <tag>java</tag>
       </tags>
@@ -271,6 +274,9 @@
 </ul>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h2><p>简单来说就是 ThreadLocal为每个线程提供了一个ThreadLocalMap对象 这样就避免了线程安全问题 实际开发中可以用于存储用户信息代替session</p>
 ]]></content>
+      <categories>
+        <category>开发工具</category>
+      </categories>
       <tags>
         <tag>java</tag>
       </tags>
@@ -291,6 +297,9 @@
 <p>以上就是原子性、可见性、有序性的概念解释，希望对大家有帮助哦！</p>
 <p><strong>相关资源：</strong><a href="https://download.csdn.net/download/weixin_38575456/12793647?spm=1001.2101.3001.5697"><em>Java</em>高并发三:<em>Java</em>内存模型和线程安全详解_<em>java</em>高并发模型-其它*.<strong>.</strong>.*</a></p>
 ]]></content>
+      <categories>
+        <category>JavaSE</category>
+      </categories>
       <tags>
         <tag>java</tag>
       </tags>
@@ -318,6 +327,9 @@
 <hr>
 <p><strong>串行化</strong>隔离规则类型在开发中很少用到。举个很简单的例子。咱们使用了ISOLATION_SERIALIZABLE规则。A,B两个事务操作同一个数据表并发过来了。A先执行。A事务这个时候会把表给锁住，B事务执行的时候直接报错。</p>
 ]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
       <tags>
         <tag>database</tag>
       </tags>
@@ -367,6 +379,9 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 删除外键</span><br><span class="line">alter table stu1 drop foreign key c_key;</span><br><span class="line"># 添加外键方式一:</span><br><span class="line">alter table stu1 add constraint c_key foreign key(cid) references course(id);</span><br><span class="line"># 添加外键方式二: 创建时就定义 一般格式 constraint 外键名 foreign key(列名) references 表名 (列名);</span><br><span class="line"></span><br><span class="line"># 复制表的结构方式一用 like 模板 create table 新表 like 旧表 会将约束关系一同复制;</span><br><span class="line">create table stu2 like stu1;</span><br><span class="line"></span><br><span class="line"># 复制表的结构方式二用 create table 新表 select* from 旧表 where 1 = 2 但不会将约束关系一同复制;</span><br><span class="line">create table stu3 select * from stu1 where 1 = 2;</span><br><span class="line"># 复制表的结构与数据 create table 新表 select* from 旧表 但不会将约束关系一同复制;</span><br><span class="line">create table stu4 select* from stu1;</span><br><span class="line"></span><br><span class="line"># 主键约束自动增长 不给主键定值的情况下主键会按照主键的上一个值加一</span><br><span class="line"># 添加方式一: alter table 表名 modify 列名 类型 主键约束 auto_increment;</span><br><span class="line"># 添加方式二: 创建表的时候定义;</span><br><span class="line">alter table stu2 modify id int primary key auto_increment;</span><br></pre></td></tr></table></figure>
 
 ]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
       <tags>
         <tag>database</tag>
       </tags>
@@ -421,6 +436,9 @@
 <p>–end–</p>
 <p>今天还是摸索学习方法的一天呢。</p>
 ]]></content>
+      <categories>
+        <category>JavaSE</category>
+      </categories>
       <tags>
         <tag>java</tag>
       </tags>
@@ -456,6 +474,9 @@
 <p><strong>注：同步是一种高开销的操作，因此应该尽量减少同步的内容。 通常没有必要同步整个方法，使用synchronized代码块同步关键代码即可。</strong> 同步会影响一定的多线程性能</p>
 <p><strong>synchronized的缺陷</strong>：当某个线程进入同步方法获得对象锁，那么其他线程访问这里对象的同步方法时，必须等待或者阻塞，这对高并发的系统是致命的，这很容易导致系统的崩溃。如果某个线程在同步方法里面发生了死循环，那么它就永远不会释放这个对象锁，那么其他线程就要永远的等待。这是一个致命的问题。</p>
 ]]></content>
+      <categories>
+        <category>JavaSE</category>
+      </categories>
       <tags>
         <tag>java</tag>
       </tags>
@@ -524,6 +545,9 @@
 <p>今天停电了学的挺少的 呜呜呜~~</p>
 <p>–end–</p>
 ]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
       <tags>
         <tag>java</tag>
       </tags>
@@ -1124,6 +1148,9 @@
 </li>
 </ul>
 <h1 id="——End——"><a href="#——End——" class="headerlink" title="——End——"></a>——End——</h1>]]></content>
+      <categories>
+        <category>中间件</category>
+      </categories>
       <tags>
         <tag>java</tag>
       </tags>
@@ -1996,6 +2023,9 @@ spring:
 <li>所属类&#x2F;接口名：当前显示信息为SpringBoot重写后的信息，名称过长时，简化包名书写为首字母，甚至直接删除</li>
 </ul>
 ]]></content>
+      <categories>
+        <category>spring框架</category>
+      </categories>
       <tags>
         <tag>java</tag>
       </tags>
@@ -2459,19 +2489,12 @@ spring:
 
  private WebApplicationContext context;
  public interface WebApplicationContext extends ApplicationContext
-
-
- ApplicationContext:javase项目中使用的容器对象
-WebApplicationContext：web项目中的使用的容器对象
-
-把创建的容器对象，放入到全局作用域
- key： WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE
-       WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE
- value：this.context
-
- servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, this.context);
 </code></pre>
+<figure class="highlight tex"><table><tr><td class="code"><pre><span class="line"> ApplicationContext:javase项目中使用的容器对象</span><br><span class="line">WebApplicationContext：web项目中的使用的容器对象</span><br><span class="line"></span><br><span class="line">把创建的容器对象，放入到全局作用域</span><br><span class="line"> key： WebApplicationContext.ROOT<span class="built_in">_</span>WEB<span class="built_in">_</span>APPLICATION<span class="built_in">_</span>CONTEXT<span class="built_in">_</span>ATTRIBUTE</span><br><span class="line">       WebApplicationContext.ROOT<span class="built_in">_</span>WEB<span class="built_in">_</span>APPLICATION<span class="built_in">_</span>CONTEXT<span class="built_in">_</span>ATTRIBUTE</span><br><span class="line"> value：this.context</span><br><span class="line"></span><br><span class="line"> servletContext.setAttribute(WebApplicationContext.ROOT<span class="built_in">_</span>WEB<span class="built_in">_</span>APPLICATION<span class="built_in">_</span>CONTEXT<span class="built_in">_</span>ATTRIBUTE, this.context);</span><br></pre></td></tr></table></figure>
 ]]></content>
+      <categories>
+        <category>spring框架</category>
+      </categories>
       <tags>
         <tag>java</tag>
       </tags>
@@ -2496,7 +2519,7 @@ WebApplicationContext：web项目中的使用的容器对象
 <blockquote>
 <ol>
 <li><p>Tomcat 启动，(前提是在&lt;servlet中配置了<load-on-startup>标签 他会告诉tomcat在它启动时实例化该Servlet)对 DispatcherServlet 进行实例化，然后调用它的 init() 进行初始化，在这个初始化过程中完成了：对 web.xml 中初始化参数的加载；建立 WebApplicationContext(SpringMVC的IOC容器)；进行组件的初始化；</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">DispatcherServlet的初始化会执行init()方法.DispatcherServlet在inti()中&#123;</span><br><span class="line">            <span class="comment">//创建SpringMVC的IOC容器,读取配置文件</span></span><br><span class="line">            <span class="type">WebApplicationContext</span> <span class="variable">ctx</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;springmvc.xml&quot;</span>);</span><br><span class="line">            <span class="comment">//把容器对象放到ServletContext中(全局作用域)</span></span><br><span class="line">            getServletContext().getAttribute(key,ctx);</span><br><span class="line">                                                      </span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">DispatcherServlet的初始化会执行init()方法.DispatcherServlet在inti()中&#123;</span><br><span class="line">            <span class="comment">//创建SpringMVC的IOC容器,读取配置文件</span></span><br><span class="line">            <span class="type">WebApplicationContext</span> <span class="variable">ctx</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;springmvc.xml&quot;</span>);</span><br><span class="line">            <span class="comment">//把容器对象放到ServletContext中(全局作用域)</span></span><br><span class="line">            getServletContext().getAttribute(key,ctx);</span><br><span class="line">                                                         </span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
 
 
 </li>
@@ -3004,6 +3027,9 @@ WebApplicationContext：web项目中的使用的容器对象
 <p><strong>拦截器的执行时间：</strong><br>  1）在请求处理之前， 也就是controller类中的方法执行之前先被拦截。<br>  2）在控制器方法执行之后也会执行拦截器。<br>  3）在请求处理完成后也会执行拦截器。</p>
 <p><strong>拦截器：看做是多个Controller中公用的功能，集中到拦截器统一处理。使用的aop的思想</strong></p>
 <h1 id="END"><a href="#END" class="headerlink" title="END"></a>END</h1><h4 id=""><a href="#" class="headerlink" title=""></a></h4>]]></content>
+      <categories>
+        <category>spring框架</category>
+      </categories>
       <tags>
         <tag>java</tag>
       </tags>
@@ -4016,8 +4042,174 @@ WebApplicationContext：web项目中的使用的容器对象
 </ul>
 </blockquote>
 ]]></content>
+      <categories>
+        <category>持久层框架</category>
+      </categories>
       <tags>
         <tag>databese</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Dubbo</title>
+    <url>/2022/02/28/DUBBO/</url>
+    <content><![CDATA[<h1 id="DUBBO"><a href="#DUBBO" class="headerlink" title="DUBBO"></a>DUBBO</h1><h2 id="RPC框架"><a href="#RPC框架" class="headerlink" title="RPC框架"></a><a href="https://github.com/guangxush/SpringBoot_GRPC">RPC框架</a></h2><h3 id="什么是RPC"><a href="#什么是RPC" class="headerlink" title="什么是RPC"></a>什么是RPC</h3><p>RPC（Remote Procedure Call Protocol）远程过程调用协议。一个通俗的描述是：客户端在不知道调用细节的情况下，调用存在于远程计算机上的某个对象，就像调用本地应用程序中的对象一样。</p>
+<p>比较正式的描述是：一种通过网络从远程计算机程序上请求服务，而不需要了解底层网络技术的协议。</p>
+<span id="more"></span>
+
+<p>那么我们至少从这样的描述中挖掘出几个要点：</p>
+<ul>
+<li>RPC是协议：既然是协议就只是一套规范，那么就需要有人遵循这套规范来进行实现。目前典型的RPC实现包括：Dubbo、Thrift、GRPC、Hetty等。</li>
+<li>网络协议和网络IO模型对其透明：既然RPC的客户端认为自己是在调用本地对象。那么传输层使用的是TCP&#x2F;UDP还是HTTP协议，又或者是一些其他的网络协议它就不需要关心了。</li>
+<li>信息格式对其透明：我们知道在本地应用程序中，对于某个对象的调用需要传递一些参数，并且会返回一个调用结果。至于被调用的对象内部是如何使用这些参数，并计算出处理结果的，调用方是不需要关心的。那么对于远程调用来说，这些参数会以某种信息格式传递给网络上的另外一台计算机，这个信息格式是怎样构成的，调用方是不需要关心的。</li>
+<li>应该有跨语言能力：为什么这样说呢？因为调用方实际上也不清楚远程服务器的应用程序是使用什么语言运行的。那么对于调用方来说，无论服务器方使用的是什么语言，本次调用都应该成功，并且返回值也应该按照调用方程序语言所能理解的形式进行描述。</li>
+</ul>
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/640.png" alt="640"></p>
+<hr>
+<h3 id="为什么要用RPC"><a href="#为什么要用RPC" class="headerlink" title="为什么要用RPC"></a>为什么要用RPC</h3><p>其实这是应用开发到一定的阶段的强烈需求驱动的。如果我们开发简单的单一应用，逻辑简单、用户不多、流量不大，那我们用不着。当我们的系统访问量增大、业务增多时，我们会发现一台单机运行此系统已经无法承受。此时，我们可以将业务拆分成几个互不关联的应用，分别部署在各自机器上，以划清逻辑并减小压力。此时，我们也可以不需要RPC，因为应用之间是互不关联的。</p>
+<p>当我们的业务越来越多、应用也越来越多时，自然的，我们会发现有些功能已经不能简单划分开来或者划分不出来。此时，可以将公共业务逻辑抽离出来，将之组成独立的服务Service应用 。而原有的、新增的应用都可以与那些独立的Service应用 交互，以此来完成完整的业务功能。</p>
+<p>所以此时，我们急需一种高效的应用程序之间的通讯手段来完成这种需求，所以你看，RPC大显身手的时候来了！</p>
+<p>其实描述的场景也是服务化 、微服务和分布式系统架构的基础场景。即RPC框架就是实现以上结构的有力方式。</p>
+<h3 id="常用的RPC框架"><a href="#常用的RPC框架" class="headerlink" title="常用的RPC框架"></a>常用的RPC框架</h3><ul>
+<li>Thrift：thrift是一个软件框架，用来进行可扩展且跨语言的服务的开发。它结合了功能强大的软件堆栈和代码生成引擎，以构建在 C++, Java, Python, PHP, Ruby, Erlang, Perl, Haskell, C#, Cocoa, JavaScript, Node.js, Smalltalk, and OCaml 这些编程语言间无缝结合的、高效的服务。</li>
+<li>gRPC：一开始由 google 开发，是一款语言中立、平台中立、开源的远程过程调用(RPC)系统。</li>
+<li><strong>Dubbo</strong>：Dubbo是一个分布式服务框架，以及SOA治理方案。其功能主要包括：高性能NIO通讯及多协议集成，服务动态寻址与路由，软负载均衡与容错，依赖分析与降级等。Dubbo是阿里巴巴内部的SOA服务化治理方案的核心框架，Dubbo自2011年开源后，已被许多非阿里系公司使用。</li>
+<li><strong>Spring Cloud</strong>：Spring Cloud由众多子项目组成，如Spring Cloud Config、Spring Cloud Netflix、Spring Cloud Consul 等，提供了搭建分布式系统及微服务常用的工具，如配置管理、服务发现、断路器、智能路由、微代理、控制总线、一次性token、全局锁、选主、分布式会话和集群状态等，满足了构建微服务所需的所有解决方案。Spring Cloud基于Spring Boot, 使得开发部署极其简单。</li>
+</ul>
+<h2 id="RPC原理"><a href="#RPC原理" class="headerlink" title="RPC原理"></a>RPC原理</h2><h3 id="RPC调用流程"><a href="#RPC调用流程" class="headerlink" title="RPC调用流程"></a>RPC调用流程</h3><p>要让网络通信细节对使用者透明，我们需要对通信细节进行封装，我们先看下一个RPC调用的流程涉及到哪些通信细节：</p>
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220306235426986.png" alt="image-20220306235426986"></p>
+<ol>
+<li>服务消费方（client）调用以本地调用方式调用服务；</li>
+<li>client stub接收到调用后负责将方法、参数等组装成能够进行网络传输的消息体；</li>
+<li>client stub找到服务地址，并将消息发送到服务端；</li>
+<li>server stub收到消息后进行解码；</li>
+<li>server stub根据解码结果调用本地的服务；</li>
+<li>本地服务执行并将结果返回给server stub；</li>
+<li>server stub将返回结果打包成消息并发送至消费方；</li>
+<li>client stub接收到消息，并进行解码；</li>
+<li>服务消费方得到最终结果。</li>
+</ol>
+<p>RPC的目标就是要2~8这些步骤都封装起来，让用户对这些细节透明。</p>
+<p>下面是网上的另外一幅图，感觉一目了然：</p>
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220306235500320.png" alt="image-20220306235500320"></p>
+<h3 id="如何做到透明化远程服务调用"><a href="#如何做到透明化远程服务调用" class="headerlink" title="如何做到透明化远程服务调用"></a>如何做到透明化远程服务调用</h3><p>怎么封装通信细节才能让用户像以本地调用方式调用远程服务呢？对java来说就是使用代理！java代理有两种方式：1） jdk 动态代理；2）字节码生成。尽管字节码生成方式实现的代理更为强大和高效，但代码维护不易，大部分公司实现RPC框架时还是选择动态代理方式。</p>
+<blockquote>
+<p>其实就是通过动态代理模式，在执行该方法的前后对数据进行封装和解码等，让用于感觉就像是直接调用该方法一样，殊不知，我们对方法前后都经过了复杂的处理。(通过代理实现在调用方法前后进行编码和译码)</p>
+</blockquote>
+<h3 id="如何对消息进行编码和解码"><a href="#如何对消息进行编码和解码" class="headerlink" title="如何对消息进行编码和解码"></a>如何对消息进行编码和解码</h3><h4 id="确定消息数据结构"><a href="#确定消息数据结构" class="headerlink" title="确定消息数据结构"></a>确定消息数据结构</h4><p>客户端的请求消息结构一般需要包括以下内容：</p>
+<ul>
+<li>接口名称：在我们的例子里接口名是“HelloWorldService”，如果不传，服务端就不知道调用哪个接口了；</li>
+<li>方法名：一个接口内可能有很多方法，如果不传方法名服务端也就不知道调用哪个方法；</li>
+<li>参数类型&amp;参数值：参数类型有很多，比如有bool、int、long、double、string、map、list，甚至如struct等，以及相应的参数值；</li>
+<li>超时时间 + requestID（标识唯一请求id）</li>
+</ul>
+<p>服务端返回的消息结构一般包括以下内容：</p>
+<ul>
+<li>状态code + 返回值</li>
+<li>requestID(<strong>可以根据requestID去查验调用结果</strong>)</li>
+</ul>
+<h4 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h4><p>一旦确定了消息的数据结构后，下一步就是要考虑序列化与反序列化了。</p>
+<p>什么是序列化？序列化就是将数据结构或对象转换成二进制串的过程，也就是编码的过程。</p>
+<p>什么是反序列化？将在序列化过程中所生成的二进制串转换成数据结构或者对象的过程。</p>
+<p>为什么需要序列化？转换为二进制串后才好进行网络传输嘛！</p>
+<p>为什么需要反序列化？将二进制转换为对象才好进行后续处理！</p>
+<p>现如今序列化的方案越来越多，每种序列化方案都有优点和缺点，它们在设计之初有自己独特的应用场景，那到底选择哪种呢？从RPC的角度上看，主要看三点：</p>
+<ul>
+<li>通用性：比如是否能支持Map等复杂的数据结构；</li>
+<li>性能：包括时间复杂度和空间复杂度，由于RPC框架将会被公司几乎所有服务使用，如果序列化上能节约一点时间，对整个公司的收益都将非常可观，同理如果序列化上能节约一点内存，网络带宽也能省下不少；</li>
+<li>可扩展性：对互联网公司而言，业务变化飞快，如果序列化协议具有良好的可扩展性，支持自动增加新的业务字段，而不影响老的服务，这将大大提供系统的灵活度。</li>
+</ul>
+<p>目前互联网公司广泛使用Protobuf、Thrift、Avro等成熟的序列化解决方案来搭建RPC框架，这些都是久经考验的解决方案。</p>
+<h3 id="如何发布自己的服务"><a href="#如何发布自己的服务" class="headerlink" title="如何发布自己的服务"></a>如何发布自己的服务</h3><p>通过注册中心将生产者和消费者联系起来,将生产者(消息的提供者)注册到注册中心,消费者通过与注册中心的长连接获得生产者的ip去获得服务. <strong>java常用的是zookeeper</strong></p>
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220306235517192.png" alt="image-20220306235517192"></p>
+<hr>
+<h2 id="Dubbo-Architecture"><a href="#Dubbo-Architecture" class="headerlink" title="Dubbo Architecture"></a><a href="https://dubbo.apache.org/zh/docs/">Dubbo Architecture</a></h2><p>Dubbo 提供了构建云原生微服务业务的一站式解决方案，可以使用 Dubbo 快速定义并发布微服务组件，同时基于 Dubbo 开箱即用的丰富特性及超强的扩展能力，构建运维整个微服务体系所需的各项服务治理能力，如 Tracing、Transaction 等，Dubbo 提供的基础能力包括：</p>
+<ul>
+<li>服务发现</li>
+<li>流式通信</li>
+<li>负载均衡</li>
+<li>流量治理</li>
+<li>…..</li>
+</ul>
+<p>Dubbo 计划提供丰富的多语言客户端实现，其中 Java、Golang 版本是当前稳定性、活跃度最好的版本，其他多语言客户端[]正在持续建设中。</p>
+<p><strong>Dubbo的优点</strong>:</p>
+<blockquote>
+<ul>
+<li>开箱即用<ul>
+<li>易用性高，如 Java 版本的面向接口代理特性能实现本地透明调用</li>
+<li>功能丰富，基于原生库或轻量扩展即可实现绝大多数的微服务治理能力</li>
+</ul>
+</li>
+<li>超大规模微服务集群实践<ul>
+<li>高性能的跨进程通信协议</li>
+<li>地址发现、流量治理层面，轻松支持百万规模集群实例</li>
+</ul>
+</li>
+<li>企业级微服务治理能力<ul>
+<li>服务测试</li>
+<li>服务Mock</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>Dubbo3 是在云原生背景下诞生的，使用 Dubbo 构建的微服务遵循云原生思想，能更好的复用底层云原生基础设施、贴合云原生微服务架构。这体现在：</p>
+<ul>
+<li>服务支持部署在容器、Kubernetes平台，服务生命周期可实现与平台调度周期对齐；</li>
+<li>支持经典 Service Mesh 微服务架构，引入了 Proxyless Mesh 架构，进一步简化 Mesh 的落地与迁移成本，提供更灵活的选择；</li>
+<li>作为桥接层，支持与 SpringCloud、gRPC 等异构微服务体系的互调互通</li>
+</ul>
+<hr>
+<h3 id="Dubbo的使用"><a href="#Dubbo的使用" class="headerlink" title="Dubbo的使用"></a>Dubbo的使用</h3><p>对于Dubbo而言一个完整的简单的Dubbo项目应该有如下三个模块 生产者(服务的提供者) 消费者(服务的消费者) API(暴露的接口名称和公共可用的信息)</p>
+<ul>
+<li><p>创建一个简单的Demo Maven工程</p>
+</li>
+<li><p>创建三个子工程分别是**<code>consumer provider dubbo-api</code>**</p>
+</li>
+<li><p>首先编写dubbo-api编写其中的service接口和需要用的其他信息(consumer和provider都能用到的信息 比如实体类 访问的param对象等)注意: 类应当实现序列化</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">MailUserService</span> &#123;</span><br><span class="line">    Result <span class="title function_">save</span><span class="params">(MailUser mailUser)</span>;</span><br><span class="line"></span><br><span class="line">    Result&lt;MailUser&gt; <span class="title function_">selectUserById</span><span class="params">(Integer id)</span>;</span><br><span class="line"></span><br><span class="line">    Result&lt;MailUser&gt; <span class="title function_">selectUserByInfo</span><span class="params">(MailUser mailUser)</span>;</span><br><span class="line"></span><br><span class="line">    Result&lt;List&lt;MailUser&gt;&gt; <span class="title function_">selectUserList</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    Result&lt;String&gt; <span class="title function_">sendMail</span><span class="params">(MailDTO mailDTO)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220306214920772.png" alt="image-20220306214920772"></p>
+<p><strong>然后将其打包上传到本地仓库或是远程仓库供生产者和消费者使用</strong></p>
+</li>
+<li><p>在provider 和 consumer中都加入 </p>
+<blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--这个是dubbo的依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.dubbo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>dubbo-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--这个是注册中心的依赖 这里使用的是zookeeper--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.dubbo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>dubbo-dependencies-zookeeper<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--这个是公用的api依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.dyw<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>Demo-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.0.2-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>在provider中实现dubbo-api中的编写的接口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@DubboService</span> <span class="comment">//使用该注解可以将该服务注册到注册中心 </span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MailUserServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">MailUserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RocketMQTemplate rocketMQTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    UserMapper userMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result <span class="title function_">save</span><span class="params">(MailUser mailUser)</span> &#123;</span><br><span class="line">        userMapper.insert(mailUser);</span><br><span class="line">        <span class="keyword">return</span> R.success();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result&lt;MailUser&gt; <span class="title function_">selectUserById</span><span class="params">(Integer id)</span> &#123;</span><br><span class="line">        LambdaQueryWrapper&lt;MailUser&gt; mailUserLambdaQueryWrapper = <span class="keyword">new</span> <span class="title class_">LambdaQueryWrapper</span>&lt;&gt;();</span><br><span class="line">        mailUserLambdaQueryWrapper.eq(MailUser::getId, id).last(<span class="string">&quot;last 1&quot;</span>);</span><br><span class="line">        <span class="type">MailUser</span> <span class="variable">mailUser</span> <span class="operator">=</span> userMapper.selectOne(mailUserLambdaQueryWrapper);</span><br><span class="line">        <span class="keyword">return</span> R.success(mailUser);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result&lt;MailUser&gt; <span class="title function_">selectUserByInfo</span><span class="params">(MailUser mailUser)</span> &#123;</span><br><span class="line">        <span class="type">MailUser</span> <span class="variable">mailUser1</span> <span class="operator">=</span> userMapper.selectById(mailUser);</span><br><span class="line">        <span class="keyword">return</span> R.success(mailUser1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result&lt;List&lt;MailUser&gt;&gt; <span class="title function_">selectUserList</span><span class="params">()</span> &#123;</span><br><span class="line">        List&lt;MailUser&gt; mailUsers = userMapper.selectList(<span class="keyword">new</span> <span class="title class_">LambdaQueryWrapper</span>&lt;&gt;());</span><br><span class="line">        <span class="keyword">return</span> R.success(mailUsers);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result&lt;String&gt; <span class="title function_">sendMail</span><span class="params">(MailDTO mailDTO)</span> &#123;</span><br><span class="line">        List&lt;Integer&gt; idList = mailDTO.getId();</span><br><span class="line">        <span class="type">String</span> <span class="variable">sendTime</span> <span class="operator">=</span> mailDTO.getSendTime();</span><br><span class="line">        <span class="type">String</span> <span class="variable">subject</span> <span class="operator">=</span> mailDTO.getSubject();</span><br><span class="line">        <span class="type">String</span> <span class="variable">content</span> <span class="operator">=</span> mailDTO.getContent();</span><br><span class="line">        List&lt;MailUser&gt; userList = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isBlank(subject) || StringUtils.isBlank(content)) &#123;</span><br><span class="line">            <span class="keyword">return</span> R.fail(<span class="string">&quot;参数有误&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (idList.size() &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            userList = userMapper.selectList(<span class="keyword">new</span> <span class="title class_">LambdaQueryWrapper</span>&lt;&gt;());</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            userList = userMapper.selectBatchIds(idList);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isBlank(sendTime)) &#123;</span><br><span class="line">            sendTime = <span class="keyword">new</span> <span class="title class_">SimpleDateFormat</span>(<span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>).format(<span class="keyword">new</span> <span class="title class_">Date</span>());</span><br><span class="line">        &#125;</span><br><span class="line">        mailDTO.setUserList(userList);</span><br><span class="line">        mailDTO.setSendTime(sendTime);</span><br><span class="line"></span><br><span class="line">        rocketMQTemplate.asyncSend(<span class="string">&quot;notice:mail&quot;</span>, mailDTO, <span class="keyword">new</span> <span class="title class_">SendCallback</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onSuccess</span><span class="params">(SendResult sendResult)</span> &#123;</span><br><span class="line">                log.info(<span class="string">&quot;发送信息成功&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onException</span><span class="params">(Throwable e)</span> &#123;</span><br><span class="line">                log.error(<span class="string">&quot;发送失败&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> R.success();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>编写实现完所有的接口后 记得将服务注册到注册中心 这里需要配置dubbo 和 服务中心的信息</p>
+<blockquote>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">&gt;dubbo:</span></span><br><span class="line"><span class="attr">application:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">Demo-provider</span> <span class="comment">#应用名称</span></span><br><span class="line"><span class="attr">registry:</span></span><br><span class="line">  <span class="attr">address:</span> <span class="string">zookeeper://localhost:2181</span> <span class="comment">#注册中心地址</span></span><br><span class="line">  <span class="attr">timeout:</span> <span class="number">6000</span> <span class="comment">#获取配置的超时时间</span></span><br><span class="line"><span class="attr">protocol:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">20880</span> <span class="comment">#服务端口</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">dubbo</span> <span class="comment">#协议名称</span></span><br><span class="line"><span class="attr">scan:</span></span><br><span class="line">  <span class="attr">base-packages:</span> <span class="string">com.dyw.demoprovider.service.Impl</span> <span class="comment"># 扫描服务实现的包的位置 使用注解时才使用</span></span><br></pre></td></tr></table></figure>
+
+<p>紧接着就是配置需要注册到注册中心的服务的信息(可以使用注解)如果使用spring-config配置服务的信息</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;<span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">     <span class="attr">xmlns:dubbo</span>=<span class="string">&quot;http://dubbo.apache.org/schema/dubbo&quot;</span></span></span><br><span class="line"><span class="tag">     <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">     <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">     http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dubbo:application</span> <span class="attr">name</span>=<span class="string">&quot;demo-provider&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dubbo:registry</span> <span class="attr">address</span>=<span class="string">&quot;zookeeper://127.0.0.1:2181&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dubbo:protocol</span> <span class="attr">name</span>=<span class="string">&quot;dubbo&quot;</span> <span class="attr">port</span>=<span class="string">&quot;20890&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;demoService&quot;</span> <span class="attr">class</span>=<span class="string">&quot;org.apache.dubbo.samples.basic.impl.DemoServiceImpl&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dubbo:service</span> <span class="attr">interface</span>=<span class="string">&quot;org.apache.dubbo.samples.basic.api.DemoService&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;demoService&quot;</span>/&gt;</span></span><br><span class="line">&gt;<span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+</blockquote>
+</li>
+<li><p>在consumer中也需要配置注册中心的信息 来获取远端信息</p>
+<blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&gt;dubbo:</span><br><span class="line">registry:</span><br><span class="line">  address: zookeeper:<span class="comment">//localhost:2181</span></span><br><span class="line">application:</span><br><span class="line">  name: Demo-Consumer</span><br></pre></td></tr></table></figure>
+
+<p>完成上述配置后 就可以进行接口的调用了</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&gt;<span class="meta">@RestController</span></span><br><span class="line">&gt;<span class="meta">@RequestMapping(&quot;user&quot;)</span></span><br><span class="line">&gt;<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line">  <span class="meta">@DubboReference</span></span><br><span class="line">  MailUserService mailUserService;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@GetMapping</span></span><br><span class="line">  <span class="keyword">public</span> Result&lt;List&lt;MailUser&gt;&gt; <span class="title function_">selectUserList</span><span class="params">()</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> mailUserService.selectUserList();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@PostMapping</span></span><br><span class="line">  <span class="keyword">public</span> Result&lt;MailUser&gt; <span class="title function_">addUser</span><span class="params">(<span class="meta">@RequestBody</span> MailUser mailUser)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> mailUserService.save(mailUser);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@GetMapping(&quot;/&#123;id&#125;&quot;)</span></span><br><span class="line">  <span class="keyword">public</span> Result&lt;MailUser&gt; <span class="title function_">selectUserById</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Integer id)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> mailUserService.selectUserById(id);</span><br><span class="line">  &#125;</span><br><span class="line">&gt;&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&gt;<span class="meta">@RestController</span></span><br><span class="line">&gt;<span class="meta">@RequestMapping(&quot;mail&quot;)</span></span><br><span class="line">&gt;<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MailController</span> &#123;</span><br><span class="line">  <span class="meta">@DubboReference</span></span><br><span class="line">  MailUserService mailUserService;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@PostMapping</span></span><br><span class="line">  <span class="keyword">public</span> Result&lt;String&gt; <span class="title function_">sendMail</span><span class="params">(<span class="meta">@RequestBody</span> MailDTO mailDTO)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> mailUserService.sendMail(mailDTO);</span><br><span class="line">  &#125;</span><br><span class="line">&gt;&#125;</span><br></pre></td></tr></table></figure>
+
+
+</blockquote>
+<p>你会发现一个有意思的事情 比如 我的mybatis log配置在生产者端 但是确实我的消费端看到了日志信息. 这也说明了服务是在消费者端实现的 证明了上述RPC框架的图</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>中间件</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
       </tags>
   </entry>
 </search>

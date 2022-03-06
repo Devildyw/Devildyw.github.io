@@ -30,7 +30,7 @@
 <meta property="og:description" content="Spring介绍spring全家桶：spring ， springmvc ，spring boot , spring cloud    spring: 出现是在2002左右，解决企业开发的难度。减轻对项目模块之间的管理，          类和类之间的管理， 帮助开发人员创建对象，管理对象之间的关系。             spring核心技术 ioc ， aop 。能实现模块之间，类之间的解耦">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-02-28T12:58:54.000Z">
-<meta property="article:modified_time" content="2022-02-28T15:03:04.835Z">
+<meta property="article:modified_time" content="2022-03-06T15:58:25.070Z">
 <meta property="article:author" content="Devil">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
@@ -166,9 +166,14 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
@@ -210,7 +215,7 @@
     <h3 class="widget-title">Tag Cloud</h3>
     <div id="myCanvasContainer" class="widget tagcloud">
         <canvas width="250" height="250" id="resCanvas" style="width:100%">
-            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/databese/" rel="tag">databese</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">10</span></li></ul>
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/databese/" rel="tag">databese</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">11</span></li></ul>
         </canvas>
     </div>
 </div>
@@ -273,9 +278,24 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2022-02-28 20:58:54 / 修改时间：23:03:04" itemprop="dateCreated datePublished" datetime="2022-02-28T20:58:54+08:00">2022-02-28</time>
+      <time title="创建时间：2022-02-28 20:58:54" itemprop="dateCreated datePublished" datetime="2022-02-28T20:58:54+08:00">2022-02-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-03-06 23:58:25" itemprop="dateModified" datetime="2022-03-06T23:58:25+08:00">2022-03-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/spring%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">spring框架</span></a>
+        </span>
     </span>
 
   
@@ -291,7 +311,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>13k</span>
+      <span>12k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -765,18 +785,8 @@
 
  private WebApplicationContext context;
  public interface WebApplicationContext extends ApplicationContext
-
-
- ApplicationContext:javase项目中使用的容器对象
-WebApplicationContext：web项目中的使用的容器对象
-
-把创建的容器对象，放入到全局作用域
- key： WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE
-       WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE
- value：this.context
-
- servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, this.context);
 </code></pre>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> ApplicationContext:javase项目中使用的容器对象</span><br><span class="line">WebApplicationContext：web项目中的使用的容器对象</span><br><span class="line"></span><br><span class="line">把创建的容器对象，放入到全局作用域</span><br><span class="line"> key： WebApplicationContext.ROOT<span class="built_in">_</span>WEB<span class="built_in">_</span>APPLICATION<span class="built_in">_</span>CONTEXT<span class="built_in">_</span>ATTRIBUTE</span><br><span class="line">       WebApplicationContext.ROOT<span class="built_in">_</span>WEB<span class="built_in">_</span>APPLICATION<span class="built_in">_</span>CONTEXT<span class="built_in">_</span>ATTRIBUTE</span><br><span class="line"> value：this.context</span><br><span class="line"></span><br><span class="line"> servletContext.setAttribute(WebApplicationContext.ROOT<span class="built_in">_</span>WEB<span class="built_in">_</span>APPLICATION<span class="built_in">_</span>CONTEXT<span class="built_in">_</span>ATTRIBUTE, this.context);</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -833,13 +843,13 @@ WebApplicationContext：web项目中的使用的容器对象
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">80k</span>
+    <span title="站点总字数">84k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:13</span>
+    <span title="站点阅读时长">1:16</span>
   </span>
 </div>
 <div class="busuanzi-count">

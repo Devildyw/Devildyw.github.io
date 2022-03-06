@@ -48,7 +48,7 @@
 <meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/18868114-97a75714642e9b19.png">
 <meta property="og:image" content="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220110214845745.png">
 <meta property="article:published_time" content="2022-02-28T12:58:54.000Z">
-<meta property="article:modified_time" content="2022-02-28T15:03:19.201Z">
+<meta property="article:modified_time" content="2022-03-06T15:58:43.679Z">
 <meta property="article:author" content="Devil">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
@@ -185,9 +185,14 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
@@ -229,7 +234,7 @@
     <h3 class="widget-title">Tag Cloud</h3>
     <div id="myCanvasContainer" class="widget tagcloud">
         <canvas width="250" height="250" id="resCanvas" style="width:100%">
-            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/databese/" rel="tag">databese</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">10</span></li></ul>
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/databese/" rel="tag">databese</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">11</span></li></ul>
         </canvas>
     </div>
 </div>
@@ -292,9 +297,24 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2022-02-28 20:58:54 / 修改时间：23:03:19" itemprop="dateCreated datePublished" datetime="2022-02-28T20:58:54+08:00">2022-02-28</time>
+      <time title="创建时间：2022-02-28 20:58:54" itemprop="dateCreated datePublished" datetime="2022-02-28T20:58:54+08:00">2022-02-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-03-06 23:58:43" itemprop="dateModified" datetime="2022-03-06T23:58:43+08:00">2022-03-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/spring%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">spring框架</span></a>
+        </span>
     </span>
 
   
@@ -345,7 +365,7 @@
 <blockquote>
 <ol>
 <li><p>Tomcat 启动，(前提是在&lt;servlet中配置了<load-on-startup>标签 他会告诉tomcat在它启动时实例化该Servlet)对 DispatcherServlet 进行实例化，然后调用它的 init() 进行初始化，在这个初始化过程中完成了：对 web.xml 中初始化参数的加载；建立 WebApplicationContext(SpringMVC的IOC容器)；进行组件的初始化；</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DispatcherServlet的初始化会执行init()方法.DispatcherServlet在inti()中&#123;</span><br><span class="line">            <span class="comment">//创建SpringMVC的IOC容器,读取配置文件</span></span><br><span class="line">            <span class="type">WebApplicationContext</span> <span class="variable">ctx</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;springmvc.xml&quot;</span>);</span><br><span class="line">            <span class="comment">//把容器对象放到ServletContext中(全局作用域)</span></span><br><span class="line">            getServletContext().getAttribute(key,ctx);</span><br><span class="line">                                                      </span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DispatcherServlet的初始化会执行init()方法.DispatcherServlet在inti()中&#123;</span><br><span class="line">            <span class="comment">//创建SpringMVC的IOC容器,读取配置文件</span></span><br><span class="line">            <span class="type">WebApplicationContext</span> <span class="variable">ctx</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;springmvc.xml&quot;</span>);</span><br><span class="line">            <span class="comment">//把容器对象放到ServletContext中(全局作用域)</span></span><br><span class="line">            getServletContext().getAttribute(key,ctx);</span><br><span class="line">                                                         </span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
 
 
 </li>
@@ -908,13 +928,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">80k</span>
+    <span title="站点总字数">84k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:13</span>
+    <span title="站点阅读时长">1:16</span>
   </span>
 </div>
 <div class="busuanzi-count">
