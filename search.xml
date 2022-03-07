@@ -4053,9 +4053,9 @@ spring:
     <title>Dubbo</title>
     <url>/2022/02/28/DUBBO/</url>
     <content><![CDATA[<h1 id="DUBBO"><a href="#DUBBO" class="headerlink" title="DUBBO"></a>DUBBO</h1><h2 id="RPC框架"><a href="#RPC框架" class="headerlink" title="RPC框架"></a><a href="https://github.com/guangxush/SpringBoot_GRPC">RPC框架</a></h2><h3 id="什么是RPC"><a href="#什么是RPC" class="headerlink" title="什么是RPC"></a>什么是RPC</h3><p>RPC（Remote Procedure Call Protocol）远程过程调用协议。一个通俗的描述是：客户端在不知道调用细节的情况下，调用存在于远程计算机上的某个对象，就像调用本地应用程序中的对象一样。</p>
-<p>比较正式的描述是：一种通过网络从远程计算机程序上请求服务，而不需要了解底层网络技术的协议。</p>
 <span id="more"></span>
 
+<p>比较正式的描述是：一种通过网络从远程计算机程序上请求服务，而不需要了解底层网络技术的协议。</p>
 <p>那么我们至少从这样的描述中挖掘出几个要点：</p>
 <ul>
 <li>RPC是协议：既然是协议就只是一套规范，那么就需要有人遵循这套规范来进行实现。目前典型的RPC实现包括：Dubbo、Thrift、GRPC、Hetty等。</li>
@@ -4157,6 +4157,47 @@ spring:
 <li>支持经典 Service Mesh 微服务架构，引入了 Proxyless Mesh 架构，进一步简化 Mesh 的落地与迁移成本，提供更灵活的选择；</li>
 <li>作为桥接层，支持与 SpringCloud、gRPC 等异构微服务体系的互调互通</li>
 </ul>
+<h3 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h3><p>服务发现，即消费端自动发现服务地址列表的能力，是微服务框架需要具备的关键能力，借助于自动化的服务发现，微服务之间可以在无需感知对端部署位置与 IP 地址的情况下实现通信。</p>
+<p>Dubbo提供的是一种Client-Based的服务发现机制,通常还需要部署第三方的注册中心来实现,例如Nacos,Consul,Zookeeper等,Dubbo自身也提供了对多种注册中心组件的对接,用户可以灵活选择.</p>
+<p>Dubbo 基于消费端的自动服务发现能力，其基本工作原理如下图：</p>
+<p><img src="https://dubbo.apache.org/imgs/architecture.png" alt="//imgs/architecture.png"></p>
+<p><img src="https://dubbo.apache.org/imgs/v3/concepts/threecenters.png" alt="//imgs/v3/concepts/threecenters.png"></p>
+<p>服务发现的一个核心组件是注册中心,Provider注册ip地址到注册中心,Consumer从注册中心读取和订阅Provider地址列表,因此要启用服务发现需要为Dubbo增加注册中心的配置</p>
+<p><code>dubbo-spring-boot-starter</code>使用方式 增加registry配置</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># application.properties</span></span><br><span class="line"><span class="string">dubbo</span></span><br><span class="line"> <span class="string">registry</span></span><br><span class="line">  <span class="attr">address:</span> <span class="string">zookeeper://127.0.0.1:2181</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Dubbo的协议-RPC-通信协议-Apache-Dubbo"><a href="#Dubbo的协议-RPC-通信协议-Apache-Dubbo" class="headerlink" title="]Dubbo的协议](RPC 通信协议 | Apache Dubbo)"></a>]Dubbo的协议](<a href="https://dubbo.apache.org/zh/docs/concepts/rpc-protocol/">RPC 通信协议 | Apache Dubbo</a>)</h3><ul>
+<li><p><strong>Triple</strong></p>
+<blockquote>
+<p><strong>Triple</strong>是一种兼容 gRPC ，以 HTTP2 作为传输层构建新的协议.</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="Dubbo-服务流量管理-服务流量管理-Apache-Dubbo"><a href="#Dubbo-服务流量管理-服务流量管理-Apache-Dubbo" class="headerlink" title="[Dubbo 服务流量管理](服务流量管理 | Apache Dubbo)"></a>[Dubbo 服务流量管理](<a href="https://dubbo.apache.org/zh/docs/concepts/traffic-management/">服务流量管理 | Apache Dubbo</a>)</h3><h4 id="流量管理"><a href="#流量管理" class="headerlink" title="流量管理"></a>流量管理</h4><p>流量管理的本质是将请求根据制定好的路由规则分发到应用服务上，如下图所示：</p>
+<p><img src="https://dubbo.apache.org/imgs/v3/concepts/what-is-traffic-control.png" alt="What is traffic control"></p>
+<ul>
+<li>路由规则可以有多个，不同的路由规则之间存在优先级。如：<strong>Router(1) -&gt; Router(2) -&gt; …… -&gt; Router(n)</strong></li>
+<li>一个路由规则可以路由到多个不同的应用服务。如：Router(2)既可以路由到Service(1)也可以路由到Service(2)</li>
+<li>多个不同的路由规则可以路由到同一个应用服务。如：Router(1)和Router(2)都可以路由到Service(2)</li>
+<li>路由规则也可以不路由到任何应用服务。如：Router(m)没有路由到任何一个Service上，所有命中Router(m)的请求都会因为没有对应的应用服务处理而导致报错</li>
+<li>应用服务可以是单个的实例，也可以是一个应用集群。</li>
+</ul>
+<h3 id="Dubbo的配置"><a href="#Dubbo的配置" class="headerlink" title="Dubbo的配置"></a>Dubbo的配置</h3><h4 id="XML配置"><a href="#XML配置" class="headerlink" title="XML配置"></a>XML配置</h4><p>即采用xml格式的配置文件 配置Dubbo 详情参数和配置参考官方文档</p>
+<p><a href="https://dubbo.apache.org/zh/docs/references/xml/">Schema 配置参考手册 | Apache Dubbo</a></p>
+<h4 id="注解配置-注解配置-Apache-Dubbo"><a href="#注解配置-注解配置-Apache-Dubbo" class="headerlink" title="[注解配置](注解配置 | Apache Dubbo)"></a>[注解配置](<a href="https://dubbo.apache.org/zh/docs/references/configuration/annotation/#%E5%A2%9E%E5%8A%A0%E5%BA%94%E7%94%A8%E5%85%B1%E4%BA%AB%E9%85%8D%E7%BD%AE">注解配置 | Apache Dubbo</a>)</h4><h5 id="服务提供方"><a href="#服务提供方" class="headerlink" title="服务提供方"></a>服务提供方</h5><p>**<code>@DubboService</code>**注解暴露服务</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@DubboService</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AnnotationServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">AnnotationService</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">sayHello</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;annotation: hello, &quot;</span> + name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="增加应用共享配置"><a href="#增加应用共享配置" class="headerlink" title="增加应用共享配置"></a>增加应用共享配置</h5><figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="comment"># dubbo-provider.properties</span></span><br><span class="line"><span class="attr">dubbo.application.name</span>=<span class="string">annotation-provider</span></span><br><span class="line"><span class="attr">dubbo.registry.address</span>=<span class="string">zookeeper://127.0.0.1:2181</span></span><br><span class="line"><span class="attr">dubbo.protocol.name</span>=<span class="string">dubbo</span></span><br><span class="line"><span class="attr">dubbo.protocol.port</span>=<span class="string">20880</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="增加spring扫描路径"><a href="#增加spring扫描路径" class="headerlink" title="增加spring扫描路径"></a>增加spring扫描路径</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableDubbo(scanBasePackages = &quot;org.apache.dubbo.samples.simple.annotation.impl&quot;)</span><span class="comment">//也可以在启动类上配置 启动类本身也就是一个配置类</span></span><br><span class="line"><span class="meta">@PropertySource(&quot;classpath:/spring/dubbo-provider.properties&quot;)</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProviderConfiguration</span> &#123;</span><br><span class="line">       </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="服务消费方"><a href="#服务消费方" class="headerlink" title="服务消费方"></a>服务消费方</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component(&quot;annotationAction&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AnnotationAction</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@DubboReference</span></span><br><span class="line">    <span class="keyword">private</span> AnnotationService annotationService;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">doSayHello</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> annotationService.sayHello(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="增加应用共享配置-1"><a href="#增加应用共享配置-1" class="headerlink" title="增加应用共享配置"></a>增加应用共享配置</h5><figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="comment"># dubbo-consumer.properties</span></span><br><span class="line"><span class="attr">dubbo.application.name</span>=<span class="string">annotation-consumer</span></span><br><span class="line"><span class="attr">dubbo.registry.address</span>=<span class="string">zookeeper://127.0.0.1:2181</span></span><br><span class="line"><span class="attr">dubbo.consumer.timeout</span>=<span class="string">3000</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="指定Spring扫描路径"><a href="#指定Spring扫描路径" class="headerlink" title="指定Spring扫描路径"></a>指定Spring扫描路径</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableDubbo(scanBasePackages = &quot;org.apache.dubbo.samples.simple.annotation.action&quot;)</span><span class="comment">//同样可以在启动类中配置 也可在配置文件中配置</span></span><br><span class="line"><span class="meta">@PropertySource(&quot;classpath:/spring/dubbo-consumer.properties&quot;)</span></span><br><span class="line"><span class="meta">@ComponentScan(value = &#123;&quot;org.apache.dubbo.samples.simple.annotation.action&quot;&#125;)</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConsumerConfiguration</span> &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="调用服务"><a href="#调用服务" class="headerlink" title="调用服务"></a>调用服务</h4><p>配置完一切就可以(先启动生产者 在启动消费者)像调用本地方法一样去调用远程服务了(不用去考虑底层的传输协议 编码解码之类的繁琐的东西)</p>
 <hr>
 <h3 id="Dubbo的使用"><a href="#Dubbo的使用" class="headerlink" title="Dubbo的使用"></a>Dubbo的使用</h3><p>对于Dubbo而言一个完整的简单的Dubbo项目应该有如下三个模块 生产者(服务的提供者) 消费者(服务的消费者) API(暴露的接口名称和公共可用的信息)</p>
 <ul>
@@ -4204,7 +4245,9 @@ spring:
 <p>你会发现一个有意思的事情 比如 我的mybatis log配置在生产者端 但是确实我的消费端看到了日志信息. 这也说明了服务是在消费者端实现的 证明了上述RPC框架的图</p>
 </li>
 </ul>
-]]></content>
+<h2 id="Dubbo高级用法"><a href="#Dubbo高级用法" class="headerlink" title="Dubbo高级用法"></a>Dubbo高级用法</h2><p>参考官方文档 用法很多</p>
+<p><a href="https://dubbo.apache.org/zh/docs/advanced/">高级用法 | Apache Dubbo</a></p>
+<h1 id="—-END—"><a href="#—-END—" class="headerlink" title="—-END—-"></a>—-END—-</h1>]]></content>
       <categories>
         <category>中间件</category>
       </categories>
