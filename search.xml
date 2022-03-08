@@ -4255,4 +4255,130 @@ spring:
         <tag>java</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Redis</title>
+    <url>/2022/03/28/Redis/</url>
+    <content><![CDATA[<h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a><strong>介绍</strong></h2><p><strong>Redis是一种NOSQL型数据库,即一种非关系型数据库</strong></p>
+<p>我们常见的Mysql是一种SQL型数据库,是一种关系型数据库</p>
+<span id="more"></span>
+
+<h3 id="SQL型数据库"><a href="#SQL型数据库" class="headerlink" title="SQL型数据库"></a><strong>SQL型数据库</strong></h3><h4 id="结构化-Structured"><a href="#结构化-Structured" class="headerlink" title="结构化 Structured"></a>结构化 <strong>Structured</strong></h4><ul>
+<li>下面这张图,我们创建这张表之初就对表的字段做了指定与规定,比如下面这张表只有三个字段,每个字段我们都加上了不同的约束,并且规定了字段的类型和长度,就使得这张表具有很强的结构体系,后续插入修改的数据都必须遵守表的结构</li>
+</ul>
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220307174510020.png" alt="image-20220307174510020"></p>
+<h4 id="关联的-Relational"><a href="#关联的-Relational" class="headerlink" title="关联的(Relational)"></a>关联的(Relational)</h4><ul>
+<li><p>比如一个表中的某个字段被其他表中的字段所关联(外键) 这样表中的数据就会自动维护,当删除某个字段时,就会提示无法删除的情况,除此之外,关联的优点还有可以节省存储空间,不需要记录数据的全部信息,只需要记录一个数据的主键即可.</p>
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220307175758165.png" alt="image-20220307175758165"></p>
+<h4 id="SQL查询"><a href="#SQL查询" class="headerlink" title="SQL查询"></a>SQL查询</h4><ul>
+<li><p>优点:语法固定</p>
+</li>
+<li><p>缺点:需要去学习大量的语法 </p>
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220307180551365.png" alt="image-20220307180551365"></p>
+</li>
+</ul>
+<h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><ul>
+<li><strong>满足ACID(原子性, 一致性, 隔离性, 持久性) 对关系性要求较高的业务采用SQL</strong></li>
+</ul>
+<h4 id="存储方式"><a href="#存储方式" class="headerlink" title="存储方式"></a>存储方式</h4><ul>
+<li><strong>磁盘</strong></li>
+</ul>
+<h4 id="扩展性"><a href="#扩展性" class="headerlink" title="扩展性"></a>扩展性</h4><ul>
+<li><strong>垂直</strong>(即一主多从 数据存储的大小没有改变 只是增强了数据的存储效率(读写分离))</li>
+</ul>
+<h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><ul>
+<li>数据结构稳定</li>
+<li>相关业务对数据安全性,一致性较高.(ACID)</li>
+</ul>
+<hr>
+</li>
+</ul>
+<h3 id="NOSQL"><a href="#NOSQL" class="headerlink" title="NOSQL"></a><strong>NOSQL</strong></h3><h4 id="非结构化"><a href="#非结构化" class="headerlink" title="非结构化"></a>非结构化</h4><p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220307174959275.png" alt="image-20220307174959275"></p>
+<ul>
+<li>NoSQL有三种数据存储格式 分别为<strong>key-value型, Document型, 还有Graph型</strong> 没有SQL那种有很强的结构性 比如<strong>key-value型的存储格式中</strong> 不需要指定数据的类型, 只要是NoSQL支持的数据格式 都可以填入. 对于<strong>Document型中 数据的字段数量也可以不同可以任意增添数据字段</strong> 不需要上一条数据有四个字段 这次就可以只有三种</li>
+</ul>
+<h4 id="无关系的"><a href="#无关系的" class="headerlink" title="无关系的"></a>无关系的</h4><p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220307175732140.png" alt="image-20220307175732140"></p>
+<ul>
+<li>一般通过json(Document)的形式存储,缺点就是这种的数据格式不能自己维护,需要程序员自己通过业务逻辑维护 ,并且可能会出现数据的冗余,比如同一个商品多个用户下单,多个用户的信息的存储中都有相同的订单数据,这需要程序员自己根据不同的业务逻辑来维护.</li>
+</ul>
+<h4 id="非SQL"><a href="#非SQL" class="headerlink" title="非SQL"></a>非SQL</h4><ul>
+<li><p>优点: 不需要去学习大量的语法</p>
+</li>
+<li><p>缺点: 不同的NoSQL语句的格式用法可能不同</p>
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220307180601578.png" alt="image-20220307180601578"></p>
+<h4 id="事务-1"><a href="#事务-1" class="headerlink" title="事务"></a>事务</h4><ul>
+<li><strong>BASE(基本一致或者无事务 无法完全满足ACID) 业务对安全性要求较低的可以采用NoSQL</strong></li>
+</ul>
+<h4 id="存储方式-1"><a href="#存储方式-1" class="headerlink" title="存储方式"></a>存储方式</h4><ul>
+<li><strong>内存</strong></li>
+</ul>
+<h4 id="扩展性-1"><a href="#扩展性-1" class="headerlink" title="扩展性"></a>扩展性</h4><ul>
+<li><strong>水平</strong>(即多主多从 数据存储的大小增加 也增强了数据的存储效率(读写分离))</li>
+</ul>
+<h4 id="使用场景-1"><a href="#使用场景-1" class="headerlink" title="使用场景"></a>使用场景</h4><ul>
+<li>数据结构不稳定</li>
+<li>对一致性,安全性要求不高</li>
+<li>对性能要求高</li>
+</ul>
+<hr>
+<h2 id="认识Redis"><a href="#认识Redis" class="headerlink" title="认识Redis"></a><strong>认识Redis</strong></h2><p>Redis诞生与2009年全程时<strong>Remote Dictionary Server(远程词典服务器)</strong>,是一个基于内存的键值型NoSQL数据库.</p>
+<h3 id="特征"><a href="#特征" class="headerlink" title="特征"></a><strong>特征</strong></h3></li>
+<li><p>键值型(key-value)型, value支持多种不同的数据类型,功能丰富</p>
+</li>
+<li><p>单线程,每个命令具有原子性</p>
+</li>
+<li><p>低延迟,速度快(<strong>基于内存</strong>,IO多路复用,良好的编码)</p>
+</li>
+<li><p>支持数据持久化(持久化到磁盘)</p>
+</li>
+<li><p>支持主从集群,分片集群(将数据分部分存储到多个master中 增加数据存储的上限)</p>
+</li>
+<li><p>支持多语言客户端</p>
+</li>
+</ul>
+<hr>
+<h2 id="Redis常见命令"><a href="#Redis常见命令" class="headerlink" title="Redis常见命令"></a><strong>Redis常见命令</strong></h2><h3 id="Redis数据结构介绍"><a href="#Redis数据结构介绍" class="headerlink" title="Redis数据结构介绍"></a><strong>Redis数据结构介绍</strong></h3><p>Redis是一个key-value的数据库,key一般是String类型,不过value的类型多种多样</p>
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220307191247016.png" alt="image-20220307191247016"></p>
+<p>基本类型: String, Hash, List, Set. SortedSet</p>
+<p>特殊类型: GEO(主要用于存储地理位置信息), BitMap, HyperLog(用来做基数统计的算法), Stream(主要用于消息队列)</p>
+<h3 id="Redis通用命令"><a href="#Redis通用命令" class="headerlink" title="Redis通用命令"></a><a href="http://www.redis.cn/commands.html"><strong>Redis通用命令</strong></a></h3><p>通用指令是部分数据类型的,都可以使用的指令,常见的有 用法详情可以官网查看:</p>
+<ul>
+<li><strong>keys</strong>:查看符合模板的所有key,不建议在生产设备上使用(因为Redis是单线程的 使用keys *命令查看会占用很大资源 导致线程堵塞)</li>
+<li>DEL: 删除可以删除一个或多个key (del key1 key2)</li>
+<li>EXISTS: 判断key是否存在</li>
+<li>EXPIRE: 给一个key设置有效期,有效期到时该key会被自动删除</li>
+<li>TTL: 查看一个key剩余有效期</li>
+</ul>
+<h3 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a><strong>String类型</strong></h3><p>String类型,也就是字符串类型,是Redis中最简单的存储类型.</p>
+<p>其value是字符串,不过根据字符串的格式不同,又可以分为3类</p>
+<ul>
+<li>String:普通字符串</li>
+<li>int: 整数类型,可以做自增,自减操作</li>
+<li>float: 浮点类型,可以做自增,自减操作</li>
+</ul>
+<p>不管是哪种格式,底层都是字节数组形式存储,只不过是编码方式不同,字符串类型的最大的空间不能超过512m(可以存储图片 只需要将图片转为字节数组的格式存储 但这样会耗很大空间 一般不这样用)</p>
+<p>![image-20220308233257985](<a href="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220308233257985.png">https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220308233257985.png</a></p>
+<h4 id="String类型的常见指令"><a href="#String类型的常见指令" class="headerlink" title="String类型的常见指令"></a>String类型的常见指令</h4><p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220308233444257.png" alt="image-20220308233444257"></p>
+<p><strong>SETEX</strong>用法比较特殊: <strong><code>set name jack ex 20(存活时间 单位秒)</code></strong></p>
+<h3 id="key的结构"><a href="#key的结构" class="headerlink" title="key的结构"></a><strong>key的结构</strong></h3><p>Redis的key允许有多个单词形成<strong>层级结构</strong>,多个单词之间用**<code>&#39;:&#39;</code>**隔开,格式如下:</p>
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220308235659340.png" alt="image-20220308235659340"></p>
+<p>这个格式并非固定,也可以根据自己的需求来删除或添加词条</p>
+<p>例如 一个项目下有user和product两种不同类型的数据,我们可以这样定义key:</p>
+<ul>
+<li>user相关的key: project:user:1</li>
+<li>product相关的key: project:producet:1</li>
+</ul>
+<p>这样的格式实际上是以层级结构的形式存储的**(主要是为了区分不同项目中相同的数据 用户的id可以为1 商品的id也可以为1)**</p>
+<p><img src="C:\Users\Devil\AppData\Roaming\Typora\typora-user-images\image-20220309000908161.png" alt="image-20220309000908161"></p>
+<p>如果value是一个java对象,例如要给User对象,则可以将对象序列化为JSON字符串后存储</p>
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220308235948333.png" alt="image-20220308235948333"></p>
+<p>​                    <strong><code>set project:user:1 &#39;&#123;&quot;id&quot;:1,&quot;name&quot;:&quot;ding&quot;&#125;&#39;</code></strong></p>
+<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220309000302102.png" alt="image-20220309000302102"></p>
+]]></content>
+      <categories>
+        <category>NoSQL</category>
+      </categories>
+      <tags>
+        <tag>databese</tag>
+      </tags>
+  </entry>
 </search>
