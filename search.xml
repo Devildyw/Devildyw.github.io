@@ -156,7 +156,7 @@
 </li>
 <li><p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220128220100844.png" alt="image-20220128220100844"></p>
 </li>
-<li><p>验证是否配置成功 <strong>ssh -T <a href="mailto:&#103;&#x69;&#x74;&#64;&#x67;&#x69;&#x74;&#101;&#101;&#x2e;&#x63;&#111;&#109;">&#103;&#x69;&#x74;&#64;&#x67;&#x69;&#x74;&#101;&#101;&#x2e;&#x63;&#111;&#109;</a></strong></p>
+<li><p>验证是否配置成功 <strong>ssh -T <a href="mailto:&#x67;&#105;&#116;&#x40;&#103;&#105;&#x74;&#x65;&#101;&#46;&#99;&#111;&#x6d;">&#x67;&#105;&#116;&#x40;&#103;&#105;&#x74;&#x65;&#101;&#46;&#99;&#111;&#x6d;</a></strong></p>
 </li>
 </ul>
 <h4 id="操作远程仓库"><a href="#操作远程仓库" class="headerlink" title="操作远程仓库"></a>操作远程仓库</h4><ul>
@@ -425,6 +425,63 @@
       </tags>
   </entry>
   <entry>
+    <title>每日一记--多线程（续）</title>
+    <url>/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E7%BB%AD%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="每日一记–多线程（续）"><a href="#每日一记–多线程（续）" class="headerlink" title="每日一记–多线程（续）"></a>每日一记–多线程（续）</h1><hr>
+<p>今天看了看书 更了解了多线程。</p>
+<h2 id="Java中的线程"><a href="#Java中的线程" class="headerlink" title="Java中的线程"></a>Java中的线程</h2><p><strong>程序</strong>：程序是一段静态的代码，他是应用软件执行的蓝本。</p>
+<p><strong>进程</strong>：进程是程序的一次动态执行过程，它对应了从代码加载、执行至完毕的一个完整过程，这个过程也是进程本身从产生、发展至消亡的过程。</p>
+<p><strong>线程</strong>：线程是比进程更小的执行单位。线程之间可以共享相同的内存单元（即内存中的堆区 包括代码和数据）并利用这些共享单元来实现数据交换、实时通信与必要的同步操作。</p>
+<p><strong>进程与线程的关系</strong>：一个进程在其执行的过程中可以产生多个线程，形成多条执行线索，每条线索，即没有线程都有它自身的产生、存在与消亡的过程，也是一个动态的概念。</p>
+<p><strong>多线程原理</strong>：我们知道，操作系统分时管理各个进程，按时间片轮流执行每个进程。Java的多线程就是在操作系统每次分时给Java程序一个时间片的cpu时间内，在若干个独立的可控制的线程之间进行切换。如果机器能有多个cpu处理器，那么JVM就能充分利用这些cpu，使得Java程序在同一时刻能获得多个时间片，Java程序就可以获得真实的线程并发执行效果。</p>
+<p><strong>主线程</strong>：每个Java程序都有一个默认的主线程，这个线程就是当执行主类main方法开始执行时，当JVM加载代码发现main方法之后，就会启动一个线程，这个线程就被称为<strong>“主线程”</strong>，该线程负责执行main方法，如果在main方法的执行过程中再创建的线程 就称为<strong>其他线程</strong>。如果main方法中没有创建其他线程，那么当main方法执行完最后一个语句，JVM就会结束Java应用程序。如果main方法中有创建了其他线程，那么JVM就要在主线程和其他线程之间轮流切换，以保证每个线程都能有机会使用cpu资源。</p>
+<p><strong>注</strong>：main方法即使执行完最后的语句（主线程结束），JVM也不会结束程序，JVM会等待程序中其他线程都结束才会结束Java应用程序。</p>
+<span id="more"></span>
+
+<hr>
+<h3 id="线程的状态与生命周期"><a href="#线程的状态与生命周期" class="headerlink" title="线程的状态与生命周期"></a>线程的状态与生命周期</h3><p><strong>新建状态</strong>：当一个Thread类或其子类的对象被声明并创建时，新生的线程处于NEW状态。此时它已经有了相应的内存空间和其他资源，即此时线程已准备但尚未启动（未调用**start()**方法），此时JVM管理的线程中还没有这个线程。</p>
+<p><strong>可运行状态</strong>：当处于NEW状态的线程调用了Thread类提供的**start()**方法，此时线程就会进入RUNNABLE状态，称为可运行状态，此时JVM就会知道有一个新的线程在等待切换了。</p>
+<p><strong>中断状态</strong>：<strong>BOLOCKED、WAITING、TIMED_WAITING</strong>状态都属于中断状态，当中断的线程重新进入RUNNABLE状态后，一旦JVM将cpu使用权切换给该线程，<strong>run()<strong>方法将</strong>从中断出继续执行</strong>。</p>
+<ul>
+<li>JVM将从cpu资源从当前RUNNABLE线程切换给其他线程，是本线程让出cpu的使用权进入BLOCKED状态，进入BOLOCKED状态的线程必须等待JVM解除它的BLOCKED状态，再次进入RUNNABLE状态，并从中断处继续执行。</li>
+<li>线程使用cpu资源期间，执行了<strong>sleep(int millsecond)</strong>,使得当前线程进入休眠状态。<strong>sleep(int millsecond)<strong>方法是Thread类的类方法，一个线程一旦执行了这个方法，就立刻让出cpu使用权，使当前线程处于</strong>TIMED_WAITING</strong>状态。经过至多参数<strong>millsecond</strong>指定的毫秒数之后，该线程再次进入RUNNABLE状态。</li>
+<li>线程使用cpu资源期间，执行了wait()方法，使得当前线程进入<strong>WAITING</strong>状态。该状态的线程不会主动进入RUNNABLE状态，必须由其他线程调用**notify()**方法通知它，使得它进入RUNNABLE状态。</li>
+</ul>
+<p><strong>死亡状态</strong>：当一个线程执行完<strong>run()<strong>方法，该线程就完成了它的全部工作进入</strong>TERMINATED状态</strong>。</p>
+<p><strong>注</strong>：只有处于NEW状态的线程才可以调用<strong>start()<strong>方法，处于其他状态的线程都不可以调用该方法，否则将会触发</strong>IllegalThreadStateException</strong>异常</p>
+<hr>
+<p>例：用继承Thread的子类创建两个线程，这两个线程在控制台分别输出五句“老虎”和“小猫”；主线程控制台输出6句主人。</p>
+<p>代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> DEVIL.多线程;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@auther</span> Devil(丁杨维)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@create</span> 2021-10-14-22:18</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">E_06</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;<span class="comment">//主线程</span></span><br><span class="line">        <span class="type">Cat</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Cat</span>();<span class="comment">//通过Thread类子类创建一个线程 此时出NEW状态</span></span><br><span class="line">        <span class="type">Tiger</span> <span class="variable">t2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Tiger</span>();<span class="comment">//创建另一个线程</span></span><br><span class="line">        System.out.println(<span class="string">&quot;Tiger线程的状态&quot;</span>+ t1.getState());<span class="comment">//获取线程的状态</span></span><br><span class="line">        System.out.print(<span class="string">&quot;Cat线程的状态&quot;</span>+ t2.getState());</span><br><span class="line">        t1.start();<span class="comment">//启动线程 是现成进入RUNNABLE状态</span></span><br><span class="line">        t2.start();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">6</span>; i++) &#123;</span><br><span class="line">            System.out.printf(<span class="string">&quot;\n%s&quot;</span>,<span class="string">&quot;Tiger线程的状态&quot;</span>+ t1.getState());<span class="comment">//获取线程执行时状态</span></span><br><span class="line">            System.out.printf(<span class="string">&quot;\n%s&quot;</span>,<span class="string">&quot;Cat线程的状态&quot;</span>+t2.getState());</span><br><span class="line">            System.out.printf(<span class="string">&quot;\n%s&quot;</span>,<span class="string">&quot;主人&quot;</span>+i);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;\nTiger线程的状态&quot;</span>+ t1.getState());<span class="comment">//获取线程执行结束时状态</span></span><br><span class="line">        System.out.println(<span class="string">&quot;Cat线程的状态&quot;</span>+ t2.getState());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Cat</span> <span class="keyword">extends</span> <span class="title class_">Thread</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">5</span>; i++) &#123;</span><br><span class="line">            System.out.print(<span class="string">&quot;|小猫&quot;</span>+i);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Tiger</span> <span class="keyword">extends</span> <span class="title class_">Thread</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">5</span>; i++) &#123;</span><br><span class="line">            System.out.print(<span class="string">&quot;|老虎&quot;</span>+i);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);<span class="comment">//延时1秒 使其进入TIMED_WAITING状态</span></span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>控制台输出</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Tiger线程的状态NEW</span><br><span class="line">Cat线程的状态NEW</span><br><span class="line">Tiger线程的状态RUNNABLE|老虎1|小猫1|小猫2|小猫3|小猫4|小猫5</span><br><span class="line"></span><br><span class="line">Cat线程的状态BLOCKED</span><br><span class="line">主人1</span><br><span class="line">Tiger线程的状态TERMINATED</span><br><span class="line">Cat线程的状态TIMED_WAITING</span><br><span class="line">主人2</span><br><span class="line">Tiger线程的状态TERMINATED</span><br><span class="line">Cat线程的状态TIMED_WAITING</span><br><span class="line">主人3</span><br><span class="line">Tiger线程的状态TERMINATED</span><br><span class="line">Cat线程的状态TIMED_WAITING</span><br><span class="line">主人4</span><br><span class="line">Tiger线程的状态TERMINATED</span><br><span class="line">Cat线程的状态TIMED_WAITING</span><br><span class="line">主人5</span><br><span class="line">Tiger线程的状态TERMINATED</span><br><span class="line">Cat线程的状态TIMED_WAITING</span><br><span class="line">主人6</span><br><span class="line">Tiger线程的状态TERMINATED</span><br><span class="line">Cat线程的状态TIMED_WAITING</span><br><span class="line">|老虎2|老虎3|老虎4|老虎5</span><br></pre></td></tr></table></figure>
+
+<p><strong>注</strong>：程序在不同的计算机运行或在同一台计算机上反复运行的结果不尽相同，输出结果依赖于当前cpu使用情况。当其他线程的<strong>run()<strong>方法都结束了，线程进入</strong>死亡状态</strong>，只留下一个线程时，<strong>JVM</strong>不再将cpu资源切给主线程，等到最后一个线程也结束了，<strong>JVM</strong>就将java程序退出虚拟机，即java程序的结束。</p>
+<hr>
+<h3 id="线程的调度与优先级"><a href="#线程的调度与优先级" class="headerlink" title="线程的调度与优先级"></a>线程的调度与优先级</h3><blockquote>
+<p>处于就绪状态的线程首先进入就绪队列排队等候cpu资源，同一时刻再就绪队列中的线程可能由多个。Java虚拟机（JVM）中的<strong>线程调度器</strong>负责管理线程，调度器把线程的的优先级分为了10个级别，分别用<strong>Thread类</strong>中的类常量表示。每个Java线程的优先级都为常数1~10，即<strong>Thread.MIN_PRIORITY和Thread.MAX_PRIORITY</strong>之间。<em><strong>如果没有明确第设置线程的优先级别，每个线程的优先级都默认为常数5</strong></em>，即<strong>Thread.NORM_PRIORITY</strong>。</p>
+<p>线程的优先级可以通过<strong>setPriority(int grade)<strong>方法调整，该方法需要一个int参数代表设置线程的等级，如果该参数不在1~10的范围内，那么</strong>setPriority</strong>便会产生一个<strong>IllegalArgumentException</strong>异常。如果参数正常该方法会返回所设置的线程的优先级。（ <strong>注</strong>：有些操作系统只能识别3个级别，即1、5和10。）</p>
+<p><strong>java线程调度器</strong>的任务就是使高优先级的线程能始终运行，一旦时间片有空闲，则使具有同等优先级的线程以轮流D这四个线程，且A和B的级别高于C和D，那么，Java调度器首先以轮流的方式执行A和B，一直等到A、B都执行完毕进入死亡状态，才会再C、D之间轮流切换。）</p>
+<p><strong>注</strong>：在实际编程时，不提倡使用线程的优先级来保证算法的正确执行。如果要编写正确、跨平台的多线程代码，必须假设线程在任何时刻都有可能被剥夺cpu资源的使用权</p>
+</blockquote>
+<hr>
+<h2 id="Java程序内存的简单分析"><a href="#Java程序内存的简单分析" class="headerlink" title="Java程序内存的简单分析"></a>Java程序内存的简单分析</h2><ul>
+<li><strong>栈：</strong>一般来说，<strong>基本数据类型</strong>直接在栈中分配空间，<strong>局部变量</strong>（在方法代码段中定义的变量）也在栈中直接分配空间，<strong>当局部变量所在方法执行完成之后该空间便立刻被JVM回收</strong>，还有一种是<strong>引用数据类型</strong>，即我们通常所说的需要用<strong>关键字new创建出来的对象所对应的引用</strong>也是在栈空间中，此时，JVM在栈空间中给对象引用分配了一个地址空间（相当于一个门牌号，通过这个门牌号就可以找到你家），在堆空间中给该引用的对象分配一个空间，栈空间中的地址引用指向了堆空间中的对象区（通过门牌号找住址）；</li>
+<li><strong>堆：</strong>一般用来存放用<strong>关键字new出来的数据</strong>。</li>
+</ul>
+<hr>
+<p>–end–</p>
+<p>今天还是摸索学习方法的一天呢。</p>
+]]></content>
+      <categories>
+        <category>JavaSE</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>每日一记</title>
     <url>/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="每日一记"><a href="#每日一记" class="headerlink" title="每日一记"></a>每日一记</h1><hr>
@@ -490,63 +547,6 @@
 ]]></content>
       <categories>
         <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>每日一记--多线程（续）</title>
-    <url>/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E7%BB%AD%EF%BC%89/</url>
-    <content><![CDATA[<h1 id="每日一记–多线程（续）"><a href="#每日一记–多线程（续）" class="headerlink" title="每日一记–多线程（续）"></a>每日一记–多线程（续）</h1><hr>
-<p>今天看了看书 更了解了多线程。</p>
-<h2 id="Java中的线程"><a href="#Java中的线程" class="headerlink" title="Java中的线程"></a>Java中的线程</h2><p><strong>程序</strong>：程序是一段静态的代码，他是应用软件执行的蓝本。</p>
-<p><strong>进程</strong>：进程是程序的一次动态执行过程，它对应了从代码加载、执行至完毕的一个完整过程，这个过程也是进程本身从产生、发展至消亡的过程。</p>
-<p><strong>线程</strong>：线程是比进程更小的执行单位。线程之间可以共享相同的内存单元（即内存中的堆区 包括代码和数据）并利用这些共享单元来实现数据交换、实时通信与必要的同步操作。</p>
-<p><strong>进程与线程的关系</strong>：一个进程在其执行的过程中可以产生多个线程，形成多条执行线索，每条线索，即没有线程都有它自身的产生、存在与消亡的过程，也是一个动态的概念。</p>
-<p><strong>多线程原理</strong>：我们知道，操作系统分时管理各个进程，按时间片轮流执行每个进程。Java的多线程就是在操作系统每次分时给Java程序一个时间片的cpu时间内，在若干个独立的可控制的线程之间进行切换。如果机器能有多个cpu处理器，那么JVM就能充分利用这些cpu，使得Java程序在同一时刻能获得多个时间片，Java程序就可以获得真实的线程并发执行效果。</p>
-<p><strong>主线程</strong>：每个Java程序都有一个默认的主线程，这个线程就是当执行主类main方法开始执行时，当JVM加载代码发现main方法之后，就会启动一个线程，这个线程就被称为<strong>“主线程”</strong>，该线程负责执行main方法，如果在main方法的执行过程中再创建的线程 就称为<strong>其他线程</strong>。如果main方法中没有创建其他线程，那么当main方法执行完最后一个语句，JVM就会结束Java应用程序。如果main方法中有创建了其他线程，那么JVM就要在主线程和其他线程之间轮流切换，以保证每个线程都能有机会使用cpu资源。</p>
-<p><strong>注</strong>：main方法即使执行完最后的语句（主线程结束），JVM也不会结束程序，JVM会等待程序中其他线程都结束才会结束Java应用程序。</p>
-<span id="more"></span>
-
-<hr>
-<h3 id="线程的状态与生命周期"><a href="#线程的状态与生命周期" class="headerlink" title="线程的状态与生命周期"></a>线程的状态与生命周期</h3><p><strong>新建状态</strong>：当一个Thread类或其子类的对象被声明并创建时，新生的线程处于NEW状态。此时它已经有了相应的内存空间和其他资源，即此时线程已准备但尚未启动（未调用**start()**方法），此时JVM管理的线程中还没有这个线程。</p>
-<p><strong>可运行状态</strong>：当处于NEW状态的线程调用了Thread类提供的**start()**方法，此时线程就会进入RUNNABLE状态，称为可运行状态，此时JVM就会知道有一个新的线程在等待切换了。</p>
-<p><strong>中断状态</strong>：<strong>BOLOCKED、WAITING、TIMED_WAITING</strong>状态都属于中断状态，当中断的线程重新进入RUNNABLE状态后，一旦JVM将cpu使用权切换给该线程，<strong>run()<strong>方法将</strong>从中断出继续执行</strong>。</p>
-<ul>
-<li>JVM将从cpu资源从当前RUNNABLE线程切换给其他线程，是本线程让出cpu的使用权进入BLOCKED状态，进入BOLOCKED状态的线程必须等待JVM解除它的BLOCKED状态，再次进入RUNNABLE状态，并从中断处继续执行。</li>
-<li>线程使用cpu资源期间，执行了<strong>sleep(int millsecond)</strong>,使得当前线程进入休眠状态。<strong>sleep(int millsecond)<strong>方法是Thread类的类方法，一个线程一旦执行了这个方法，就立刻让出cpu使用权，使当前线程处于</strong>TIMED_WAITING</strong>状态。经过至多参数<strong>millsecond</strong>指定的毫秒数之后，该线程再次进入RUNNABLE状态。</li>
-<li>线程使用cpu资源期间，执行了wait()方法，使得当前线程进入<strong>WAITING</strong>状态。该状态的线程不会主动进入RUNNABLE状态，必须由其他线程调用**notify()**方法通知它，使得它进入RUNNABLE状态。</li>
-</ul>
-<p><strong>死亡状态</strong>：当一个线程执行完<strong>run()<strong>方法，该线程就完成了它的全部工作进入</strong>TERMINATED状态</strong>。</p>
-<p><strong>注</strong>：只有处于NEW状态的线程才可以调用<strong>start()<strong>方法，处于其他状态的线程都不可以调用该方法，否则将会触发</strong>IllegalThreadStateException</strong>异常</p>
-<hr>
-<p>例：用继承Thread的子类创建两个线程，这两个线程在控制台分别输出五句“老虎”和“小猫”；主线程控制台输出6句主人。</p>
-<p>代码：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> DEVIL.多线程;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@auther</span> Devil(丁杨维)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@create</span> 2021-10-14-22:18</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">E_06</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;<span class="comment">//主线程</span></span><br><span class="line">        <span class="type">Cat</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Cat</span>();<span class="comment">//通过Thread类子类创建一个线程 此时出NEW状态</span></span><br><span class="line">        <span class="type">Tiger</span> <span class="variable">t2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Tiger</span>();<span class="comment">//创建另一个线程</span></span><br><span class="line">        System.out.println(<span class="string">&quot;Tiger线程的状态&quot;</span>+ t1.getState());<span class="comment">//获取线程的状态</span></span><br><span class="line">        System.out.print(<span class="string">&quot;Cat线程的状态&quot;</span>+ t2.getState());</span><br><span class="line">        t1.start();<span class="comment">//启动线程 是现成进入RUNNABLE状态</span></span><br><span class="line">        t2.start();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">6</span>; i++) &#123;</span><br><span class="line">            System.out.printf(<span class="string">&quot;\n%s&quot;</span>,<span class="string">&quot;Tiger线程的状态&quot;</span>+ t1.getState());<span class="comment">//获取线程执行时状态</span></span><br><span class="line">            System.out.printf(<span class="string">&quot;\n%s&quot;</span>,<span class="string">&quot;Cat线程的状态&quot;</span>+t2.getState());</span><br><span class="line">            System.out.printf(<span class="string">&quot;\n%s&quot;</span>,<span class="string">&quot;主人&quot;</span>+i);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;\nTiger线程的状态&quot;</span>+ t1.getState());<span class="comment">//获取线程执行结束时状态</span></span><br><span class="line">        System.out.println(<span class="string">&quot;Cat线程的状态&quot;</span>+ t2.getState());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Cat</span> <span class="keyword">extends</span> <span class="title class_">Thread</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">5</span>; i++) &#123;</span><br><span class="line">            System.out.print(<span class="string">&quot;|小猫&quot;</span>+i);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Tiger</span> <span class="keyword">extends</span> <span class="title class_">Thread</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">5</span>; i++) &#123;</span><br><span class="line">            System.out.print(<span class="string">&quot;|老虎&quot;</span>+i);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);<span class="comment">//延时1秒 使其进入TIMED_WAITING状态</span></span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>控制台输出</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Tiger线程的状态NEW</span><br><span class="line">Cat线程的状态NEW</span><br><span class="line">Tiger线程的状态RUNNABLE|老虎1|小猫1|小猫2|小猫3|小猫4|小猫5</span><br><span class="line"></span><br><span class="line">Cat线程的状态BLOCKED</span><br><span class="line">主人1</span><br><span class="line">Tiger线程的状态TERMINATED</span><br><span class="line">Cat线程的状态TIMED_WAITING</span><br><span class="line">主人2</span><br><span class="line">Tiger线程的状态TERMINATED</span><br><span class="line">Cat线程的状态TIMED_WAITING</span><br><span class="line">主人3</span><br><span class="line">Tiger线程的状态TERMINATED</span><br><span class="line">Cat线程的状态TIMED_WAITING</span><br><span class="line">主人4</span><br><span class="line">Tiger线程的状态TERMINATED</span><br><span class="line">Cat线程的状态TIMED_WAITING</span><br><span class="line">主人5</span><br><span class="line">Tiger线程的状态TERMINATED</span><br><span class="line">Cat线程的状态TIMED_WAITING</span><br><span class="line">主人6</span><br><span class="line">Tiger线程的状态TERMINATED</span><br><span class="line">Cat线程的状态TIMED_WAITING</span><br><span class="line">|老虎2|老虎3|老虎4|老虎5</span><br></pre></td></tr></table></figure>
-
-<p><strong>注</strong>：程序在不同的计算机运行或在同一台计算机上反复运行的结果不尽相同，输出结果依赖于当前cpu使用情况。当其他线程的<strong>run()<strong>方法都结束了，线程进入</strong>死亡状态</strong>，只留下一个线程时，<strong>JVM</strong>不再将cpu资源切给主线程，等到最后一个线程也结束了，<strong>JVM</strong>就将java程序退出虚拟机，即java程序的结束。</p>
-<hr>
-<h3 id="线程的调度与优先级"><a href="#线程的调度与优先级" class="headerlink" title="线程的调度与优先级"></a>线程的调度与优先级</h3><blockquote>
-<p>处于就绪状态的线程首先进入就绪队列排队等候cpu资源，同一时刻再就绪队列中的线程可能由多个。Java虚拟机（JVM）中的<strong>线程调度器</strong>负责管理线程，调度器把线程的的优先级分为了10个级别，分别用<strong>Thread类</strong>中的类常量表示。每个Java线程的优先级都为常数1~10，即<strong>Thread.MIN_PRIORITY和Thread.MAX_PRIORITY</strong>之间。<em><strong>如果没有明确第设置线程的优先级别，每个线程的优先级都默认为常数5</strong></em>，即<strong>Thread.NORM_PRIORITY</strong>。</p>
-<p>线程的优先级可以通过<strong>setPriority(int grade)<strong>方法调整，该方法需要一个int参数代表设置线程的等级，如果该参数不在1~10的范围内，那么</strong>setPriority</strong>便会产生一个<strong>IllegalArgumentException</strong>异常。如果参数正常该方法会返回所设置的线程的优先级。（ <strong>注</strong>：有些操作系统只能识别3个级别，即1、5和10。）</p>
-<p><strong>java线程调度器</strong>的任务就是使高优先级的线程能始终运行，一旦时间片有空闲，则使具有同等优先级的线程以轮流D这四个线程，且A和B的级别高于C和D，那么，Java调度器首先以轮流的方式执行A和B，一直等到A、B都执行完毕进入死亡状态，才会再C、D之间轮流切换。）</p>
-<p><strong>注</strong>：在实际编程时，不提倡使用线程的优先级来保证算法的正确执行。如果要编写正确、跨平台的多线程代码，必须假设线程在任何时刻都有可能被剥夺cpu资源的使用权</p>
-</blockquote>
-<hr>
-<h2 id="Java程序内存的简单分析"><a href="#Java程序内存的简单分析" class="headerlink" title="Java程序内存的简单分析"></a>Java程序内存的简单分析</h2><ul>
-<li><strong>栈：</strong>一般来说，<strong>基本数据类型</strong>直接在栈中分配空间，<strong>局部变量</strong>（在方法代码段中定义的变量）也在栈中直接分配空间，<strong>当局部变量所在方法执行完成之后该空间便立刻被JVM回收</strong>，还有一种是<strong>引用数据类型</strong>，即我们通常所说的需要用<strong>关键字new创建出来的对象所对应的引用</strong>也是在栈空间中，此时，JVM在栈空间中给对象引用分配了一个地址空间（相当于一个门牌号，通过这个门牌号就可以找到你家），在堆空间中给该引用的对象分配一个空间，栈空间中的地址引用指向了堆空间中的对象区（通过门牌号找住址）；</li>
-<li><strong>堆：</strong>一般用来存放用<strong>关键字new出来的数据</strong>。</li>
-</ul>
-<hr>
-<p>–end–</p>
-<p>今天还是摸索学习方法的一天呢。</p>
-]]></content>
-      <categories>
-        <category>JavaSE</category>
       </categories>
       <tags>
         <tag>java</tag>

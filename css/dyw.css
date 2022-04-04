@@ -1,33 +1,33 @@
 /*Lete个人博客颜色修改*/
 
 #page-header #site_title {
-    color: #80bdab;
+    color: #0c1111;
 }
 /*页脚a标签字体颜色*/
 
 #footer-wrap a {
-    color: #00c4b6;
+    color: #0c1111;
 }
 /*页脚自定义字段字体颜色*/
 
 .footer_custom_text {
-    color: #000000;
+    color: #0c1111;
 }
 /*a标签颜色*/
 
 a {
-    color: #00c4b6;
+    color: #0c1111;
 }
 /*头部文字颜色*/
 
 #nav a {
-    color: #f9f2f4;
+    color: #0c1111;
 }
 
 /*文章透明*/
 
 .layout_post>#post {
-    background: rgba(180, 234, 231, 0.9);
+    background: rgba(255, 255, 255, 0.9);
 }
 /*移动端优化：去除归档、标签、最新文章、公告、、只保留网站统计*/
 
@@ -45,7 +45,7 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #e58a8a;
+    background-color: #5eac98;
     background-image: -webkit-linear-gradient( 45deg, rgba(255, 255, 255, 0.4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.4) 75%, transparent 75%, transparent);
     border-radius: 2em;
 }
@@ -56,5 +56,5 @@ a {
 
 ::-moz-selection {
     color: #fff;
-    background-color: #e58a8a;
+    background-color: #3e8560;
 }

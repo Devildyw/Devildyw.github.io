@@ -3192,6 +3192,7 @@ h1.page-title + .tag-cloud-list {
 }
 #footer {
   position: relative;
+  background: #86c5da;
   background-attachment: scroll;
   background-position: bottom;
   -webkit-background-size: cover;

@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://devildyw.github.io/myself/index.html</loc>
+    
+    <lastmod>2022-04-04T16:59:04.833Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://devildyw.github.io/about/index.html</loc>
     
     <lastmod>2022-04-04T15:53:41.499Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>https://devildyw.github.io/messageboard/index.html</loc>
     
     <lastmod>2022-04-04T15:53:27.045Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://devildyw.github.io/myself/index.html</loc>
-    
-    <lastmod>2022-04-04T10:30:30.849Z</lastmod>
     
   </url>
   
