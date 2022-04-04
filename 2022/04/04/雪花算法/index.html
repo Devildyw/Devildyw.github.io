@@ -22,25 +22,31 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"devildyw.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="活到老 学到老">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Devil的个人博客">
-<meta property="og:url" content="https://devildyw.github.io/index.html">
+    <meta name="description" content="[TOC] 雪花算法简介:  雪花算法是Twitter开源的分布式ID生成算法 Github仓库地址  雪花算法主要用于分布式系统中,数据库的ID生成  在自然界中并不存在两片完全一样的雪花,每一片雪花都拥有自己漂亮独特的形状,独一无二.雪花算法也表示生成的分布式id如雪花般独一无二.   分布式ID随着业务被使用的人越来越多, 单机的数据库已经很难保证业务能够流畅稳定的运行了, 这是我们需要对数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="雪花算法">
+<meta property="og:url" content="https://devildyw.github.io/2022/04/04/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="Devil的个人博客">
-<meta property="og:description" content="活到老 学到老">
+<meta property="og:description" content="[TOC] 雪花算法简介:  雪花算法是Twitter开源的分布式ID生成算法 Github仓库地址  雪花算法主要用于分布式系统中,数据库的ID生成  在自然界中并不存在两片完全一样的雪花,每一片雪花都拥有自己漂亮独特的形状,独一无二.雪花算法也表示生成的分布式id如雪花般独一无二.   分布式ID随着业务被使用的人越来越多, 单机的数据库已经很难保证业务能够流畅稳定的运行了, 这是我们需要对数">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-6d694779c7d47e3573939f21993318df_720w.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/22531124-e47b04a4e5b26623.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1021/format/webp">
+<meta property="article:published_time" content="2022-04-04T09:34:54.000Z">
+<meta property="article:modified_time" content="2022-04-04T09:38:31.687Z">
 <meta property="article:author" content="Devil">
+<meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic4.zhimg.com/80/v2-6d694779c7d47e3573939f21993318df_720w.jpg">
 
 
-<link rel="canonical" href="https://devildyw.github.io/">
+<link rel="canonical" href="https://devildyw.github.io/2022/04/04/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://devildyw.github.io/2022/04/04/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/","path":"2022/04/04/雪花算法/","title":"雪花算法"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Devil的个人博客</title>
+<title>雪花算法 | Devil的个人博客</title>
   
 
 
@@ -71,7 +77,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">Devil的个人博客</h1>
+      <p class="site-title">Devil的个人博客</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">永远相信美好的事情即将发生</p>
@@ -135,7 +141,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -148,6 +154,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95"><span class="nav-text">雪花算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8FID"><span class="nav-text">分布式ID</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8FID%E9%9C%80%E8%A6%81%E6%BB%A1%E8%B6%B3%E7%9A%84%E8%A6%81%E6%B1%82"><span class="nav-text">分布式ID需要满足的要求</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80"><span class="nav-text">全局唯一:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AB%98%E6%80%A7%E8%83%BD"><span class="nav-text">高性能:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">高可用:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E4%BE%BF%E6%98%93%E7%94%A8"><span class="nav-text">方便易用:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E5%85%A8"><span class="nav-text">安全:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%89%E5%BA%8F%E9%80%92%E5%A2%9E"><span class="nav-text">有序递增:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A6%81%E6%B1%82%E5%85%B7%E4%BD%93%E7%9A%84%E4%B8%9A%E5%8A%A1%E5%90%AB%E4%B9%89"><span class="nav-text">要求具体的业务含义:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8B%AC%E7%AB%8B%E9%83%A8%E7%BD%B2"><span class="nav-text">独立部署:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E6%88%90"><span class="nav-text">组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-text">Java代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0"><span class="nav-text">Go语言实现</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -235,16 +242,17 @@
 </noscript>
 
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://devildyw.github.io/2022/04/04/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -258,13 +266,13 @@
     </span>
     
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Devil的个人博客">
+      <meta itemprop="name" content="雪花算法 | Devil的个人博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/04/04/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">雪花算法</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          雪花算法
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -288,6 +296,13 @@
     </span>
 
   
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
     <span class="post-meta-item" title="本文字数">
       <span class="post-meta-item-icon">
         <i class="far fa-file-word"></i>
@@ -311,7 +326,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>[TOC]</p>
+        <p>[TOC]</p>
 <h1 id="雪花算法"><a href="#雪花算法" class="headerlink" title="雪花算法"></a>雪花算法</h1><p><strong>简介:</strong></p>
 <ul>
 <li><p>雪花算法是Twitter开源的分布式ID生成算法 <a target="_blank" rel="noopener" href="https://github.com/twitter-archive/snowflake.git">Github仓库地址</a></p>
@@ -366,7 +381,6 @@
 <h3 id="Go语言实现"><a href="#Go语言实现" class="headerlink" title="Go语言实现"></a><strong>Go语言实现</strong></h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> al</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;errors&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;sync&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> mutex = sync.Mutex&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	<span class="comment">//初始时间戳</span></span><br><span class="line">	twEpoch <span class="type">int64</span> = <span class="number">1288834974657</span></span><br><span class="line">	<span class="comment">//长度为5位</span></span><br><span class="line">	workerIdBits     <span class="type">int64</span> = <span class="number">5</span></span><br><span class="line">	datacenterIdBits <span class="type">int64</span> = <span class="number">5</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//最大值</span></span><br><span class="line">	maxWorkerId     <span class="type">int64</span> = <span class="number">-1</span> ^ (<span class="number">-1</span> &lt;&lt; workerIdBits)</span><br><span class="line">	maxDatacenterId <span class="type">int64</span> = <span class="number">-1</span> ^ (<span class="number">-1</span> &lt;&lt; datacenterIdBits)</span><br><span class="line"></span><br><span class="line">	<span class="comment">//序列号id长度</span></span><br><span class="line">	sequenceBits <span class="type">int64</span> = <span class="number">12</span></span><br><span class="line">	sequenceMask       = <span class="number">-1</span> ^ (<span class="number">-1</span> &lt;&lt; sequenceBits)</span><br><span class="line"></span><br><span class="line">	<span class="comment">//工作id需要左移的位数, 12位(序列号的位长)</span></span><br><span class="line">	workerIdShift = sequenceBits</span><br><span class="line"></span><br><span class="line">	<span class="comment">//数据中心id需要左移的位数 序列号长+工作id长</span></span><br><span class="line">	datacenterIdShift = sequenceBits + workerIdBits</span><br><span class="line"></span><br><span class="line">	<span class="comment">//时间戳左移位数 = 序列号长+工作id长+工作位长</span></span><br><span class="line">	timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//上次时间戳, 初始值位负值</span></span><br><span class="line"><span class="keyword">var</span> lastTimestamp <span class="type">int64</span> = <span class="number">-1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> IDWorker <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="comment">//十位的工作机器码</span></span><br><span class="line">	workerId     <span class="type">int64</span> <span class="comment">//工作id 五位</span></span><br><span class="line">	datacenterId <span class="type">int64</span> <span class="comment">//数据中心id 五位</span></span><br><span class="line">	<span class="comment">//12位序列号</span></span><br><span class="line">	sequence <span class="type">int64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">InitIDWorker</span><span class="params">(workerId, datacenterId <span class="type">int64</span>)</span></span> (*IDWorker, <span class="type">error</span>) &#123;</span><br><span class="line">	<span class="comment">//检查参数合法性</span></span><br><span class="line">	<span class="keyword">if</span> workerId &gt; maxWorkerId || workerId &lt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">var</span> err = errors.New(fmt.Sprintf(<span class="string">&quot;worker Id can&#x27;t be greater than %d or less than 0&quot;</span>, maxWorkerId))</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> datacenterId &gt; maxDatacenterId || datacenterId &lt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">var</span> err = errors.New(fmt.Sprintf(<span class="string">&quot;datacenter Id can&#x27;t be greater than %d or less than 0&quot;</span>, maxDatacenterId))</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;worker starting. timestamp left shift %d, datacenter id bits %d, worker id bits %d, sequence bits %d, workerid %d&quot;</span>,</span><br><span class="line">		timestampLeftShift, datacenterIdBits, workerIdBits, sequenceBits, workerId)</span><br><span class="line">	<span class="keyword">return</span> &amp;IDWorker&#123;</span><br><span class="line">		datacenterId: datacenterId,</span><br><span class="line">		workerId:     workerId,</span><br><span class="line">	&#125;, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	下一个ID生成算法</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(i *IDWorker)</span></span> NextId() (id <span class="type">int64</span>, err <span class="type">error</span>) &#123;</span><br><span class="line">	<span class="comment">//上锁</span></span><br><span class="line">	mutex.Lock()</span><br><span class="line">	<span class="comment">//程序结束 释放锁</span></span><br><span class="line">	<span class="keyword">defer</span> mutex.Unlock()</span><br><span class="line">	<span class="comment">//先获取当前系统时间</span></span><br><span class="line">	<span class="keyword">var</span> timestamp = timeGen()</span><br><span class="line">	<span class="comment">//如果当前系统时间比上次获取id时间戳小就抛出异常 时钟往后移动可能会出现同样id所以这里必须抛异常结束执行</span></span><br><span class="line">	<span class="keyword">if</span> timestamp &lt; lastTimestamp &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;clock is moving backwards.  Rejecting requests until %d.&quot;</span>, lastTimestamp)</span><br><span class="line">		err = errors.New(fmt.Sprintf(<span class="string">&quot;Clock moved backwards.  Refusing to generate id for %d milliseconds&quot;</span>,</span><br><span class="line">			lastTimestamp-timestamp))</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//获取当前时间戳如果等于上次时间戳(同一毫秒内),则在序列号加一,否则序列号赋值为0, 从零开始</span></span><br><span class="line">	<span class="keyword">if</span> timestamp == lastTimestamp &#123;</span><br><span class="line">		<span class="comment">//这是使用&amp;sequenceMask是为了防止sequence溢出12位(前面要求了sequence的长度只能是12位)</span></span><br><span class="line">		i.sequence = (i.sequence + <span class="number">1</span>) &amp; sequenceMask</span><br><span class="line">		<span class="comment">//如果防止刚好移除经过&amp;sequenceMask后 会变成0 可能会发生重复的情况</span></span><br><span class="line">		<span class="comment">//所以此时需要再次获取时间戳,并于上次时间戳作比较 直到与上次时间戳不一致返回当前时间戳避免重复</span></span><br><span class="line">		<span class="keyword">if</span> i.sequence == <span class="number">0</span> &#123;</span><br><span class="line">			timestamp = tilNextMillis(lastTimestamp)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="comment">//如果不在同一个时间戳中 代表该序列刚开始计数所以初始为0</span></span><br><span class="line">		i.sequence = <span class="number">0</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//将上次时间戳值更新</span></span><br><span class="line">	lastTimestamp = timestamp</span><br><span class="line"></span><br><span class="line">	<span class="comment">//返回雪花算法生成的id</span></span><br><span class="line">	id = ((timestamp - twEpoch) &lt;&lt; timestampLeftShift) |</span><br><span class="line">		(i.datacenterId &lt;&lt; datacenterIdShift) |</span><br><span class="line">		(i.workerId &lt;&lt; workerIdShift) |</span><br><span class="line">		i.sequence</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(i IDWorker)</span></span> WorkerId() <span class="type">int64</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> i.workerId</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(i IDWorker)</span></span> DatacenterId() <span class="type">int64</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> i.datacenterId</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(i IDWorker)</span></span> Sequence() <span class="type">int64</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> i.sequence</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	获取系统时间戳</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">timeGen</span><span class="params">()</span></span> <span class="type">int64</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> time.Now().UnixMilli()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	获取时间戳,并于上次时间戳作比较</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">tilNextMillis</span><span class="params">(lastTimestamp <span class="type">int64</span>)</span></span> <span class="type">int64</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> timestamp = timeGen()</span><br><span class="line">	<span class="keyword">for</span> timestamp &lt;= lastTimestamp &#123;</span><br><span class="line">		timestamp = timeGen()</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> timestamp</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
-      
     </div>
 
     
@@ -374,344 +388,22 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
+          <div class="post-tags">
+   <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"> <i class="fa fa-tag"></i> 算法</a>
 
+          </div>
 
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://devildyw.github.io/2022/03/28/Redis/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Devil">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Devil的个人博客">
-      <meta itemprop="description" content="活到老 学到老">
-    </span>
-    
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Devil的个人博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/28/Redis/" class="post-title-link" itemprop="url">Redis</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-03-28 20:58:54" itemprop="dateCreated datePublished" datetime="2022-03-28T20:58:54+08:00">2022-03-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-03-12 21:00:09" itemprop="dateModified" datetime="2022-03-12T21:00:09+08:00">2022-03-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/NoSQL/" itemprop="url" rel="index"><span itemprop="name">NoSQL</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>8.9k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>8 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1cr4y1671t?p=63&spm_id_from=pageDriver">Redis</a></h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a><strong>介绍</strong></h2><p><strong>Redis是一种NOSQL型数据库,即一种非关系型数据库</strong></p>
-<p>我们常见的Mysql是一种SQL型数据库,是一种关系型数据库</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/03/28/Redis/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://devildyw.github.io/2022/02/28/Git%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Devil">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Devil的个人博客">
-      <meta itemprop="description" content="活到老 学到老">
-    </span>
-    
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Devil的个人博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/02/28/Git%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">Git分布式版本控制工具</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-02-28 20:58:54" itemprop="dateCreated datePublished" datetime="2022-02-28T20:58:54+08:00">2022-02-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-03-06 23:57:12" itemprop="dateModified" datetime="2022-03-06T23:57:12+08:00">2022-03-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">开发工具</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>2.4k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Git分布式版本控制工具"><a href="#Git分布式版本控制工具" class="headerlink" title="Git分布式版本控制工具"></a><a href="D:\BaiduNetdiskDownload\Git讲义.pdf">Git分布式版本控制工具</a></h1><p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220127230403996.png" alt="image-20220127230403996"></p>
-<p><strong>命令如下：</strong></p>
-<ol>
-<li><strong>clone（克隆）</strong>: 从远程仓库中克隆代码到本地仓库</li>
-<li><strong>checkout （检出）</strong>:从本地仓库中检出一个仓库分支然后进行修订</li>
-<li><strong>add（添加）</strong>: 在提交前先将代码提交到暂存区</li>
-<li><strong>commit（提交）</strong>: 提交到本地仓库。本地仓库中保存修改的各个历史版本</li>
-<li><strong>fetch (抓取)</strong> ： 从远程库，抓取到本地仓库，不进行任何的合并动作，一般操作比较少。</li>
-<li><strong>pull (拉取)</strong> ： 从远程库拉到本地库，自动进行合并(merge)，然后放到到工作区，相当于fetch+merge</li>
-<li><strong>push（推送）</strong> : 修改完成后，需要和团队成员共享代码时，将代码推送到远程仓库</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/02/28/Git%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/28/Redis/" rel="prev" title="Redis">
+                  <i class="fa fa-chevron-left"></i> Redis
+                </a>
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://devildyw.github.io/2022/02/28/ThreadLocal/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Devil">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Devil的个人博客">
-      <meta itemprop="description" content="活到老 学到老">
-    </span>
-    
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Devil的个人博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/02/28/ThreadLocal/" class="post-title-link" itemprop="url">ThreadLocal</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-02-28 20:58:54" itemprop="dateCreated datePublished" datetime="2022-02-28T20:58:54+08:00">2022-02-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-03-06 23:59:02" itemprop="dateModified" datetime="2022-03-06T23:59:02+08:00">2022-03-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">开发工具</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>948</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="ThreadLocal-ThreadLocal-简书-jianshu-com"><a href="#ThreadLocal-ThreadLocal-简书-jianshu-com" class="headerlink" title="[ThreadLocal](ThreadLocal - 简书 (jianshu.com))"></a>[ThreadLocal](<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/3c5d7f09dfbd">ThreadLocal - 简书 (jianshu.com)</a>)</h1><h4 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h4><p>threadlocal使用方法很简单</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;T&gt; sThreadLocal = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;T&gt;();</span><br><span class="line">sThreadLocal.set()</span><br><span class="line">sThreadLocal.get()</span><br></pre></td></tr></table></figure>
-
-<p>threadlocal而是一个线程内部的存储类，可以在指定线程内存储数据，数据存储以后，只有指定线程可以得到存储数据，官方解释如下。</p>
-<p><img src="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220211183419286.png" alt="image-20220211183419286"></p>
-<p>大致意思就是ThreadLocal提供了线程内存储变量的能力，这些变量不同之处在于每一个线程读取的变量是对应的互相独立的。通过get和set方法就可以得到当前线程对应的值。</p>
-<p>做个不恰当的比喻，从表面上看ThreadLocal相当于维护了一个map，key就是当前的线程，value就是需要存储的对象。</p>
-<p><strong>这里的这个比喻是不恰当的，实际上是ThreadLocal的静态内部类ThreadLocalMap为每个Thread都维护了一个数组table，ThreadLocal确定了一个数组下标，而这个下标就是value存储的对应位置。</strong></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/02/28/ThreadLocal/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
+            <div class="post-nav-item">
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          </div>
     </footer>
   </article>
 </div>
@@ -719,666 +411,7 @@
 
 
 
-    
 
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://devildyw.github.io/2022/02/28/%E5%8E%9F%E5%AD%90%E2%80%BB%E3%80%81%E5%8F%AF%E8%A7%81%E6%80%A7%E3%80%81%E6%9C%89%E5%BA%8F%E6%80%A7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Devil">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Devil的个人博客">
-      <meta itemprop="description" content="活到老 学到老">
-    </span>
-    
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Devil的个人博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/02/28/%E5%8E%9F%E5%AD%90%E2%80%BB%E3%80%81%E5%8F%AF%E8%A7%81%E6%80%A7%E3%80%81%E6%9C%89%E5%BA%8F%E6%80%A7/" class="post-title-link" itemprop="url">java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-02-28 20:58:54" itemprop="dateCreated datePublished" datetime="2022-02-28T20:58:54+08:00">2022-02-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-03-07 00:00:25" itemprop="dateModified" datetime="2022-03-07T00:00:25+08:00">2022-03-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>1k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="java原子性是什么-中级Java应该清楚的概念：原子性、可见性、有序性是什么？"><a href="#java原子性是什么-中级Java应该清楚的概念：原子性、可见性、有序性是什么？" class="headerlink" title="java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？"></a>java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？</h1><p>原子性、可见性、有序性是多线程编程中最重要的几个知识点，由于多线程情况复杂，如何让每个线程能看到正确的结果，这是非常重要的，下面和千锋广州小编一起来看看吧！</p>
-<p><a href="%5B(4%E6%9D%A1%E6%B6%88%E6%81%AF">原网站</a> java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？…_我才是Guido的博客-CSDN博客](<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42460182/article/details/114101352">https://blog.csdn.net/weixin_42460182/article/details/114101352</a>))</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/02/28/%E5%8E%9F%E5%AD%90%E2%80%BB%E3%80%81%E5%8F%AF%E8%A7%81%E6%80%A7%E3%80%81%E6%9C%89%E5%BA%8F%E6%80%A7/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://devildyw.github.io/2022/02/28/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Devil">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Devil的个人博客">
-      <meta itemprop="description" content="活到老 学到老">
-    </span>
-    
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Devil的个人博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/02/28/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/" class="post-title-link" itemprop="url">数据库事务</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-02-28 20:58:54" itemprop="dateCreated datePublished" datetime="2022-02-28T20:58:54+08:00">2022-02-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-03-07 00:00:15" itemprop="dateModified" datetime="2022-03-07T00:00:15+08:00">2022-03-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>786</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="数据库事务"><a href="#数据库事务" class="headerlink" title="数据库事务"></a>数据库事务</h1><h3 id="事务的基本要素-4大性质"><a href="#事务的基本要素-4大性质" class="headerlink" title="事务的基本要素 4大性质"></a><strong>事务的基本要素 4大性质</strong></h3><blockquote>
-<ol>
-<li>原子性:事务开始后的所有操作,要么全部成功,要么全部失败回滚,不可能停滞在中间环节.事务执行过程中出错,会回滚到事务开始之前的状态,所有操作就像没有发生一样.也就是说事务是一个不可分割的整体,就像化学中学过的原子,是事务构成的基本单位.</li>
-<li>一致性:事务开始前和结束后,数据库的完整性约束没有被破坏,如A向B转张,不可能出现A扣了钱而B却没有加的情况</li>
-<li>隔离性:同一时间,只允许一个事务请求同一数据,不同事务之间彼此没有任何干扰,如A正在从一张银行卡中取钱,在A取钱的过程结束前,B不能向这张卡转账.</li>
-<li>持久性:事务完成之后,事务对数据库更新将会被保存写在数据库上,不能回滚.</li>
-</ol>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/02/28/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://devildyw.github.io/2022/02/28/%E6%95%B0%E6%8D%AE%E5%BA%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Devil">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Devil的个人博客">
-      <meta itemprop="description" content="活到老 学到老">
-    </span>
-    
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Devil的个人博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/02/28/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-title-link" itemprop="url">数据库(mysql)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-02-28 20:58:54" itemprop="dateCreated datePublished" datetime="2022-02-28T20:58:54+08:00">2022-02-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-03-07 00:00:04" itemprop="dateModified" datetime="2022-03-07T00:00:04+08:00">2022-03-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>328</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/02/28/%E6%95%B0%E6%8D%AE%E5%BA%93/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://devildyw.github.io/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E7%BB%AD%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Devil">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Devil的个人博客">
-      <meta itemprop="description" content="活到老 学到老">
-    </span>
-    
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Devil的个人博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E7%BB%AD%EF%BC%89/" class="post-title-link" itemprop="url">每日一记--多线程（续）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-02-28 20:58:54" itemprop="dateCreated datePublished" datetime="2022-02-28T20:58:54+08:00">2022-02-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-03-06 23:59:43" itemprop="dateModified" datetime="2022-03-06T23:59:43+08:00">2022-03-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>2.7k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="每日一记–多线程（续）"><a href="#每日一记–多线程（续）" class="headerlink" title="每日一记–多线程（续）"></a>每日一记–多线程（续）</h1><hr>
-<p>今天看了看书 更了解了多线程。</p>
-<h2 id="Java中的线程"><a href="#Java中的线程" class="headerlink" title="Java中的线程"></a>Java中的线程</h2><p><strong>程序</strong>：程序是一段静态的代码，他是应用软件执行的蓝本。</p>
-<p><strong>进程</strong>：进程是程序的一次动态执行过程，它对应了从代码加载、执行至完毕的一个完整过程，这个过程也是进程本身从产生、发展至消亡的过程。</p>
-<p><strong>线程</strong>：线程是比进程更小的执行单位。线程之间可以共享相同的内存单元（即内存中的堆区 包括代码和数据）并利用这些共享单元来实现数据交换、实时通信与必要的同步操作。</p>
-<p><strong>进程与线程的关系</strong>：一个进程在其执行的过程中可以产生多个线程，形成多条执行线索，每条线索，即没有线程都有它自身的产生、存在与消亡的过程，也是一个动态的概念。</p>
-<p><strong>多线程原理</strong>：我们知道，操作系统分时管理各个进程，按时间片轮流执行每个进程。Java的多线程就是在操作系统每次分时给Java程序一个时间片的cpu时间内，在若干个独立的可控制的线程之间进行切换。如果机器能有多个cpu处理器，那么JVM就能充分利用这些cpu，使得Java程序在同一时刻能获得多个时间片，Java程序就可以获得真实的线程并发执行效果。</p>
-<p><strong>主线程</strong>：每个Java程序都有一个默认的主线程，这个线程就是当执行主类main方法开始执行时，当JVM加载代码发现main方法之后，就会启动一个线程，这个线程就被称为<strong>“主线程”</strong>，该线程负责执行main方法，如果在main方法的执行过程中再创建的线程 就称为<strong>其他线程</strong>。如果main方法中没有创建其他线程，那么当main方法执行完最后一个语句，JVM就会结束Java应用程序。如果main方法中有创建了其他线程，那么JVM就要在主线程和其他线程之间轮流切换，以保证每个线程都能有机会使用cpu资源。</p>
-<p><strong>注</strong>：main方法即使执行完最后的语句（主线程结束），JVM也不会结束程序，JVM会等待程序中其他线程都结束才会结束Java应用程序。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E7%BB%AD%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://devildyw.github.io/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--synchronized%E5%85%B3%E9%94%AE%E5%AD%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Devil">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Devil的个人博客">
-      <meta itemprop="description" content="活到老 学到老">
-    </span>
-    
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Devil的个人博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--synchronized%E5%85%B3%E9%94%AE%E5%AD%97/" class="post-title-link" itemprop="url">每日一记--synchronized关键字</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-02-28 20:58:54" itemprop="dateCreated datePublished" datetime="2022-02-28T20:58:54+08:00">2022-02-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-03-06 23:59:33" itemprop="dateModified" datetime="2022-03-06T23:59:33+08:00">2022-03-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>1.3k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="每日一记–synchronized关键字"><a href="#每日一记–synchronized关键字" class="headerlink" title="每日一记–synchronized关键字"></a>每日一记–synchronized关键字</h1><h2 id="synchronized关键字（隐式的获取和释放锁）"><a href="#synchronized关键字（隐式的获取和释放锁）" class="headerlink" title="synchronized关键字（隐式的获取和释放锁）"></a>synchronized关键字（隐式的获取和释放锁）</h2><p>作用于静态方法：</p>
-<p><strong>对象锁</strong>给对象加锁（可以理解为这个对象的内存上锁，<strong>注意：只是这块内存，其他同类对象都会有各自的内存锁</strong>）这时候在其他一个以上线程中执行该对象的这个同步方法（<strong>注意：是该对象</strong>）就会产生互斥）</p>
-<p>作用于静态方法：</p>
-<p><strong>类锁</strong>：相当于在类上枷锁（*.class位于代码区，静态方法位于静态区域，这个类产生的对象公用这个静态方法，所以这块内存，N个对象来竞争），这时候，只要是这个类产生的对象，在调用这个静态方法时都会产生互斥</p>
-<p><strong>对象锁与类锁区别</strong>：主要就在于内存区域不同 <strong>对象锁</strong>只作用与同类的单个对象的内存区域 <strong>类锁</strong>则作用于同类的所有对象的内存区域 </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--synchronized%E5%85%B3%E9%94%AE%E5%AD%97/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://devildyw.github.io/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Devil">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Devil的个人博客">
-      <meta itemprop="description" content="活到老 学到老">
-    </span>
-    
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Devil的个人博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/" class="post-title-link" itemprop="url">每日一记</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-02-28 20:58:54" itemprop="dateCreated datePublished" datetime="2022-02-28T20:58:54+08:00">2022-02-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-03-06 23:59:20" itemprop="dateModified" datetime="2022-03-06T23:59:20+08:00">2022-03-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>537</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="每日一记"><a href="#每日一记" class="headerlink" title="每日一记"></a>每日一记</h1><hr>
-<h2 id="栈简单应用之符号匹配"><a href="#栈简单应用之符号匹配" class="headerlink" title="栈简单应用之符号匹配"></a>栈简单应用之符号匹配</h2><p><strong>关键：</strong>读括号时，如果时括号的左半部分（正常情况下，括号的左半部分总是先读到）,如果遇到括号的右半部分，获取栈顶元素，如果匹配则弹出栈，如果不匹配依旧弹栈且哨兵flag记为FALSE,最后如果flag为TRUE且栈不为空或是flag为FALSE且栈为空则符号不匹配，如果栈为空且flag为TRUE则符号匹配。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
 
 </div>
   </main>
