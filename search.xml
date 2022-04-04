@@ -5180,16 +5180,14 @@ spring:
   <entry>
     <title>雪花算法</title>
     <url>/2022/04/04/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="雪花算法"><a href="#雪花算法" class="headerlink" title="雪花算法"></a>雪花算法</h1><p><strong>简介:</strong></p>
+    <content><![CDATA[<h1 id="雪花算法"><a href="#雪花算法" class="headerlink" title="雪花算法"></a>雪花算法</h1><p><strong>简介:</strong></p>
 <ul>
-<li><p>雪花算法是Twitter开源的分布式ID生成算法 <a href="https://github.com/twitter-archive/snowflake.git">Github仓库地址</a></p>
-</li>
-<li><p>雪花算法主要用于分布式系统中,数据库的ID生成</p>
-</li>
-<li><p>在自然界中并不存在两片完全一样的雪花,每一片雪花都拥有自己漂亮独特的形状,独一无二.雪花算法也表示生成的分布式id如雪花般独一无二.</p>
-</li>
+<li>雪花算法是Twitter开源的分布式ID生成算法 <a href="https://github.com/twitter-archive/snowflake.git">Github仓库地址</a></li>
+<li>雪花算法主要用于分布式系统中,数据库的ID生成</li>
+<li>在自然界中并不存在两片完全一样的雪花,每一片雪花都拥有自己漂亮独特的形状,独一无二.雪花算法也表示生成的分布式id如雪花般独一无二.</li>
 </ul>
+<span id="more"></span>
+
 <h2 id="分布式ID"><a href="#分布式ID" class="headerlink" title="分布式ID"></a>分布式ID</h2><p>随着业务被使用的人越来越多, 单机的数据库已经很难保证业务能够流畅稳定的运行了, 这是我们需要对数据库进行分库分表存储, 使用分布式集群, 但是这样每个表的数据怎么保证ID唯一呢? 如果使用主键递增肯定发生ID不唯一的冲突情况, 所以急需一种可以生成全局唯一ID的算法来解决这个囧境.</p>
 <p><img src="https://pic4.zhimg.com/80/v2-6d694779c7d47e3573939f21993318df_720w.jpg" alt="img"></p>
 <hr>
