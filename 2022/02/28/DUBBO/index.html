@@ -1,0 +1,347 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Dubbo | Devil的个人博客</title><meta name="keywords" content="java"><meta name="author" content="Devil"><meta name="copyright" content="Devil"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="DUBBORPC框架什么是RPCRPC（Remote Procedure Call Protocol）远程过程调用协议。一个通俗的描述是：客户端在不知道调用细节的情况下，调用存在于远程计算机上的某个对象，就像调用本地应用程序中的对象一样。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dubbo">
+<meta property="og:url" content="https://devildyw.github.io/2022/02/28/DUBBO/index.html">
+<meta property="og:site_name" content="Devil的个人博客">
+<meta property="og:description" content="DUBBORPC框架什么是RPCRPC（Remote Procedure Call Protocol）远程过程调用协议。一个通俗的描述是：客户端在不知道调用细节的情况下，调用存在于远程计算机上的某个对象，就像调用本地应用程序中的对象一样。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg">
+<meta property="article:published_time" content="2022-02-28T12:58:54.000Z">
+<meta property="article:modified_time" content="2022-03-07T05:31:52.324Z">
+<meta property="article:author" content="Devil">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2022/02/28/DUBBO/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Dubbo',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-03-07 13:31:52'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/loading.gif" data-original="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">17</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Dubbo</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-02-28T12:58:54.000Z" title="发表于 2022-02-28 20:58:54">2022-02-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-03-07T05:31:52.324Z" title="更新于 2022-03-07 13:31:52">2022-03-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Dubbo"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="DUBBO"><a href="#DUBBO" class="headerlink" title="DUBBO"></a>DUBBO</h1><h2 id="RPC框架"><a href="#RPC框架" class="headerlink" title="RPC框架"></a><a target="_blank" rel="noopener" href="https://github.com/guangxush/SpringBoot_GRPC">RPC框架</a></h2><h3 id="什么是RPC"><a href="#什么是RPC" class="headerlink" title="什么是RPC"></a>什么是RPC</h3><p>RPC（Remote Procedure Call Protocol）远程过程调用协议。一个通俗的描述是：客户端在不知道调用细节的情况下，调用存在于远程计算机上的某个对象，就像调用本地应用程序中的对象一样。</p>
+<span id="more"></span>
+
+<p>比较正式的描述是：一种通过网络从远程计算机程序上请求服务，而不需要了解底层网络技术的协议。</p>
+<p>那么我们至少从这样的描述中挖掘出几个要点：</p>
+<ul>
+<li>RPC是协议：既然是协议就只是一套规范，那么就需要有人遵循这套规范来进行实现。目前典型的RPC实现包括：Dubbo、Thrift、GRPC、Hetty等。</li>
+<li>网络协议和网络IO模型对其透明：既然RPC的客户端认为自己是在调用本地对象。那么传输层使用的是TCP&#x2F;UDP还是HTTP协议，又或者是一些其他的网络协议它就不需要关心了。</li>
+<li>信息格式对其透明：我们知道在本地应用程序中，对于某个对象的调用需要传递一些参数，并且会返回一个调用结果。至于被调用的对象内部是如何使用这些参数，并计算出处理结果的，调用方是不需要关心的。那么对于远程调用来说，这些参数会以某种信息格式传递给网络上的另外一台计算机，这个信息格式是怎样构成的，调用方是不需要关心的。</li>
+<li>应该有跨语言能力：为什么这样说呢？因为调用方实际上也不清楚远程服务器的应用程序是使用什么语言运行的。那么对于调用方来说，无论服务器方使用的是什么语言，本次调用都应该成功，并且返回值也应该按照调用方程序语言所能理解的形式进行描述。</li>
+</ul>
+<p><img src="/img/loading.gif" data-original="https://gitee.com/Devildyw/blogimage/raw/master/img/640.png" alt="640"></p>
+<hr>
+<h3 id="为什么要用RPC"><a href="#为什么要用RPC" class="headerlink" title="为什么要用RPC"></a>为什么要用RPC</h3><p>其实这是应用开发到一定的阶段的强烈需求驱动的。如果我们开发简单的单一应用，逻辑简单、用户不多、流量不大，那我们用不着。当我们的系统访问量增大、业务增多时，我们会发现一台单机运行此系统已经无法承受。此时，我们可以将业务拆分成几个互不关联的应用，分别部署在各自机器上，以划清逻辑并减小压力。此时，我们也可以不需要RPC，因为应用之间是互不关联的。</p>
+<p>当我们的业务越来越多、应用也越来越多时，自然的，我们会发现有些功能已经不能简单划分开来或者划分不出来。此时，可以将公共业务逻辑抽离出来，将之组成独立的服务Service应用 。而原有的、新增的应用都可以与那些独立的Service应用 交互，以此来完成完整的业务功能。</p>
+<p>所以此时，我们急需一种高效的应用程序之间的通讯手段来完成这种需求，所以你看，RPC大显身手的时候来了！</p>
+<p>其实描述的场景也是服务化 、微服务和分布式系统架构的基础场景。即RPC框架就是实现以上结构的有力方式。</p>
+<h3 id="常用的RPC框架"><a href="#常用的RPC框架" class="headerlink" title="常用的RPC框架"></a>常用的RPC框架</h3><ul>
+<li>Thrift：thrift是一个软件框架，用来进行可扩展且跨语言的服务的开发。它结合了功能强大的软件堆栈和代码生成引擎，以构建在 C++, Java, Python, PHP, Ruby, Erlang, Perl, Haskell, C#, Cocoa, JavaScript, Node.js, Smalltalk, and OCaml 这些编程语言间无缝结合的、高效的服务。</li>
+<li>gRPC：一开始由 google 开发，是一款语言中立、平台中立、开源的远程过程调用(RPC)系统。</li>
+<li><strong>Dubbo</strong>：Dubbo是一个分布式服务框架，以及SOA治理方案。其功能主要包括：高性能NIO通讯及多协议集成，服务动态寻址与路由，软负载均衡与容错，依赖分析与降级等。Dubbo是阿里巴巴内部的SOA服务化治理方案的核心框架，Dubbo自2011年开源后，已被许多非阿里系公司使用。</li>
+<li><strong>Spring Cloud</strong>：Spring Cloud由众多子项目组成，如Spring Cloud Config、Spring Cloud Netflix、Spring Cloud Consul 等，提供了搭建分布式系统及微服务常用的工具，如配置管理、服务发现、断路器、智能路由、微代理、控制总线、一次性token、全局锁、选主、分布式会话和集群状态等，满足了构建微服务所需的所有解决方案。Spring Cloud基于Spring Boot, 使得开发部署极其简单。</li>
+</ul>
+<h2 id="RPC原理"><a href="#RPC原理" class="headerlink" title="RPC原理"></a>RPC原理</h2><h3 id="RPC调用流程"><a href="#RPC调用流程" class="headerlink" title="RPC调用流程"></a>RPC调用流程</h3><p>要让网络通信细节对使用者透明，我们需要对通信细节进行封装，我们先看下一个RPC调用的流程涉及到哪些通信细节：</p>
+<p><img src="/img/loading.gif" data-original="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220306235426986.png" alt="image-20220306235426986"></p>
+<ol>
+<li>服务消费方（client）调用以本地调用方式调用服务；</li>
+<li>client stub接收到调用后负责将方法、参数等组装成能够进行网络传输的消息体；</li>
+<li>client stub找到服务地址，并将消息发送到服务端；</li>
+<li>server stub收到消息后进行解码；</li>
+<li>server stub根据解码结果调用本地的服务；</li>
+<li>本地服务执行并将结果返回给server stub；</li>
+<li>server stub将返回结果打包成消息并发送至消费方；</li>
+<li>client stub接收到消息，并进行解码；</li>
+<li>服务消费方得到最终结果。</li>
+</ol>
+<p>RPC的目标就是要2~8这些步骤都封装起来，让用户对这些细节透明。</p>
+<p>下面是网上的另外一幅图，感觉一目了然：</p>
+<p><img src="/img/loading.gif" data-original="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220306235500320.png" alt="image-20220306235500320"></p>
+<h3 id="如何做到透明化远程服务调用"><a href="#如何做到透明化远程服务调用" class="headerlink" title="如何做到透明化远程服务调用"></a>如何做到透明化远程服务调用</h3><p>怎么封装通信细节才能让用户像以本地调用方式调用远程服务呢？对java来说就是使用代理！java代理有两种方式：1） jdk 动态代理；2）字节码生成。尽管字节码生成方式实现的代理更为强大和高效，但代码维护不易，大部分公司实现RPC框架时还是选择动态代理方式。</p>
+<blockquote>
+<p>其实就是通过动态代理模式，在执行该方法的前后对数据进行封装和解码等，让用于感觉就像是直接调用该方法一样，殊不知，我们对方法前后都经过了复杂的处理。(通过代理实现在调用方法前后进行编码和译码)</p>
+</blockquote>
+<h3 id="如何对消息进行编码和解码"><a href="#如何对消息进行编码和解码" class="headerlink" title="如何对消息进行编码和解码"></a>如何对消息进行编码和解码</h3><h4 id="确定消息数据结构"><a href="#确定消息数据结构" class="headerlink" title="确定消息数据结构"></a>确定消息数据结构</h4><p>客户端的请求消息结构一般需要包括以下内容：</p>
+<ul>
+<li>接口名称：在我们的例子里接口名是“HelloWorldService”，如果不传，服务端就不知道调用哪个接口了；</li>
+<li>方法名：一个接口内可能有很多方法，如果不传方法名服务端也就不知道调用哪个方法；</li>
+<li>参数类型&amp;参数值：参数类型有很多，比如有bool、int、long、double、string、map、list，甚至如struct等，以及相应的参数值；</li>
+<li>超时时间 + requestID（标识唯一请求id）</li>
+</ul>
+<p>服务端返回的消息结构一般包括以下内容：</p>
+<ul>
+<li>状态code + 返回值</li>
+<li>requestID(<strong>可以根据requestID去查验调用结果</strong>)</li>
+</ul>
+<h4 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h4><p>一旦确定了消息的数据结构后，下一步就是要考虑序列化与反序列化了。</p>
+<p>什么是序列化？序列化就是将数据结构或对象转换成二进制串的过程，也就是编码的过程。</p>
+<p>什么是反序列化？将在序列化过程中所生成的二进制串转换成数据结构或者对象的过程。</p>
+<p>为什么需要序列化？转换为二进制串后才好进行网络传输嘛！</p>
+<p>为什么需要反序列化？将二进制转换为对象才好进行后续处理！</p>
+<p>现如今序列化的方案越来越多，每种序列化方案都有优点和缺点，它们在设计之初有自己独特的应用场景，那到底选择哪种呢？从RPC的角度上看，主要看三点：</p>
+<ul>
+<li>通用性：比如是否能支持Map等复杂的数据结构；</li>
+<li>性能：包括时间复杂度和空间复杂度，由于RPC框架将会被公司几乎所有服务使用，如果序列化上能节约一点时间，对整个公司的收益都将非常可观，同理如果序列化上能节约一点内存，网络带宽也能省下不少；</li>
+<li>可扩展性：对互联网公司而言，业务变化飞快，如果序列化协议具有良好的可扩展性，支持自动增加新的业务字段，而不影响老的服务，这将大大提供系统的灵活度。</li>
+</ul>
+<p>目前互联网公司广泛使用Protobuf、Thrift、Avro等成熟的序列化解决方案来搭建RPC框架，这些都是久经考验的解决方案。</p>
+<h3 id="如何发布自己的服务"><a href="#如何发布自己的服务" class="headerlink" title="如何发布自己的服务"></a>如何发布自己的服务</h3><p>通过注册中心将生产者和消费者联系起来,将生产者(消息的提供者)注册到注册中心,消费者通过与注册中心的长连接获得生产者的ip去获得服务. <strong>java常用的是zookeeper</strong></p>
+<p><img src="/img/loading.gif" data-original="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220306235517192.png" alt="image-20220306235517192"></p>
+<hr>
+<h2 id="Dubbo-Architecture"><a href="#Dubbo-Architecture" class="headerlink" title="Dubbo Architecture"></a><a target="_blank" rel="noopener" href="https://dubbo.apache.org/zh/docs/">Dubbo Architecture</a></h2><p>Dubbo 提供了构建云原生微服务业务的一站式解决方案，可以使用 Dubbo 快速定义并发布微服务组件，同时基于 Dubbo 开箱即用的丰富特性及超强的扩展能力，构建运维整个微服务体系所需的各项服务治理能力，如 Tracing、Transaction 等，Dubbo 提供的基础能力包括：</p>
+<ul>
+<li>服务发现</li>
+<li>流式通信</li>
+<li>负载均衡</li>
+<li>流量治理</li>
+<li>…..</li>
+</ul>
+<p>Dubbo 计划提供丰富的多语言客户端实现，其中 Java、Golang 版本是当前稳定性、活跃度最好的版本，其他多语言客户端[]正在持续建设中。</p>
+<p><strong>Dubbo的优点</strong>:</p>
+<blockquote>
+<ul>
+<li>开箱即用<ul>
+<li>易用性高，如 Java 版本的面向接口代理特性能实现本地透明调用</li>
+<li>功能丰富，基于原生库或轻量扩展即可实现绝大多数的微服务治理能力</li>
+</ul>
+</li>
+<li>超大规模微服务集群实践<ul>
+<li>高性能的跨进程通信协议</li>
+<li>地址发现、流量治理层面，轻松支持百万规模集群实例</li>
+</ul>
+</li>
+<li>企业级微服务治理能力<ul>
+<li>服务测试</li>
+<li>服务Mock</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>Dubbo3 是在云原生背景下诞生的，使用 Dubbo 构建的微服务遵循云原生思想，能更好的复用底层云原生基础设施、贴合云原生微服务架构。这体现在：</p>
+<ul>
+<li>服务支持部署在容器、Kubernetes平台，服务生命周期可实现与平台调度周期对齐；</li>
+<li>支持经典 Service Mesh 微服务架构，引入了 Proxyless Mesh 架构，进一步简化 Mesh 的落地与迁移成本，提供更灵活的选择；</li>
+<li>作为桥接层，支持与 SpringCloud、gRPC 等异构微服务体系的互调互通</li>
+</ul>
+<h3 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h3><p>服务发现，即消费端自动发现服务地址列表的能力，是微服务框架需要具备的关键能力，借助于自动化的服务发现，微服务之间可以在无需感知对端部署位置与 IP 地址的情况下实现通信。</p>
+<p>Dubbo提供的是一种Client-Based的服务发现机制,通常还需要部署第三方的注册中心来实现,例如Nacos,Consul,Zookeeper等,Dubbo自身也提供了对多种注册中心组件的对接,用户可以灵活选择.</p>
+<p>Dubbo 基于消费端的自动服务发现能力，其基本工作原理如下图：</p>
+<p><img src="/img/loading.gif" data-original="https://dubbo.apache.org/imgs/architecture.png" alt="//imgs/architecture.png"></p>
+<p><img src="/img/loading.gif" data-original="https://dubbo.apache.org/imgs/v3/concepts/threecenters.png" alt="//imgs/v3/concepts/threecenters.png"></p>
+<p>服务发现的一个核心组件是注册中心,Provider注册ip地址到注册中心,Consumer从注册中心读取和订阅Provider地址列表,因此要启用服务发现需要为Dubbo增加注册中心的配置</p>
+<p><code>dubbo-spring-boot-starter</code>使用方式 增加registry配置</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># application.properties</span></span><br><span class="line"><span class="string">dubbo</span></span><br><span class="line"> <span class="string">registry</span></span><br><span class="line">  <span class="attr">address:</span> <span class="string">zookeeper://127.0.0.1:2181</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Dubbo的协议-RPC-通信协议-Apache-Dubbo"><a href="#Dubbo的协议-RPC-通信协议-Apache-Dubbo" class="headerlink" title="]Dubbo的协议](RPC 通信协议 | Apache Dubbo)"></a>]Dubbo的协议](<a target="_blank" rel="noopener" href="https://dubbo.apache.org/zh/docs/concepts/rpc-protocol/">RPC 通信协议 | Apache Dubbo</a>)</h3><ul>
+<li><p><strong>Triple</strong></p>
+<blockquote>
+<p><strong>Triple</strong>是一种兼容 gRPC ，以 HTTP2 作为传输层构建新的协议.</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="Dubbo-服务流量管理-服务流量管理-Apache-Dubbo"><a href="#Dubbo-服务流量管理-服务流量管理-Apache-Dubbo" class="headerlink" title="[Dubbo 服务流量管理](服务流量管理 | Apache Dubbo)"></a>[Dubbo 服务流量管理](<a target="_blank" rel="noopener" href="https://dubbo.apache.org/zh/docs/concepts/traffic-management/">服务流量管理 | Apache Dubbo</a>)</h3><h4 id="流量管理"><a href="#流量管理" class="headerlink" title="流量管理"></a>流量管理</h4><p>流量管理的本质是将请求根据制定好的路由规则分发到应用服务上，如下图所示：</p>
+<p><img src="/img/loading.gif" data-original="https://dubbo.apache.org/imgs/v3/concepts/what-is-traffic-control.png" alt="What is traffic control"></p>
+<ul>
+<li>路由规则可以有多个，不同的路由规则之间存在优先级。如：<strong>Router(1) -&gt; Router(2) -&gt; …… -&gt; Router(n)</strong></li>
+<li>一个路由规则可以路由到多个不同的应用服务。如：Router(2)既可以路由到Service(1)也可以路由到Service(2)</li>
+<li>多个不同的路由规则可以路由到同一个应用服务。如：Router(1)和Router(2)都可以路由到Service(2)</li>
+<li>路由规则也可以不路由到任何应用服务。如：Router(m)没有路由到任何一个Service上，所有命中Router(m)的请求都会因为没有对应的应用服务处理而导致报错</li>
+<li>应用服务可以是单个的实例，也可以是一个应用集群。</li>
+</ul>
+<h3 id="Dubbo的配置"><a href="#Dubbo的配置" class="headerlink" title="Dubbo的配置"></a>Dubbo的配置</h3><h4 id="XML配置"><a href="#XML配置" class="headerlink" title="XML配置"></a>XML配置</h4><p>即采用xml格式的配置文件 配置Dubbo 详情参数和配置参考官方文档</p>
+<p><a target="_blank" rel="noopener" href="https://dubbo.apache.org/zh/docs/references/xml/">Schema 配置参考手册 | Apache Dubbo</a></p>
+<h4 id="注解配置-注解配置-Apache-Dubbo"><a href="#注解配置-注解配置-Apache-Dubbo" class="headerlink" title="[注解配置](注解配置 | Apache Dubbo)"></a>[注解配置](<a target="_blank" rel="noopener" href="https://dubbo.apache.org/zh/docs/references/configuration/annotation/#%E5%A2%9E%E5%8A%A0%E5%BA%94%E7%94%A8%E5%85%B1%E4%BA%AB%E9%85%8D%E7%BD%AE">注解配置 | Apache Dubbo</a>)</h4><h5 id="服务提供方"><a href="#服务提供方" class="headerlink" title="服务提供方"></a>服务提供方</h5><p>**<code>@DubboService</code>**注解暴露服务</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@DubboService</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AnnotationServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">AnnotationService</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">sayHello</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;annotation: hello, &quot;</span> + name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="增加应用共享配置"><a href="#增加应用共享配置" class="headerlink" title="增加应用共享配置"></a>增加应用共享配置</h5><figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="comment"># dubbo-provider.properties</span></span><br><span class="line"><span class="attr">dubbo.application.name</span>=<span class="string">annotation-provider</span></span><br><span class="line"><span class="attr">dubbo.registry.address</span>=<span class="string">zookeeper://127.0.0.1:2181</span></span><br><span class="line"><span class="attr">dubbo.protocol.name</span>=<span class="string">dubbo</span></span><br><span class="line"><span class="attr">dubbo.protocol.port</span>=<span class="string">20880</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="增加spring扫描路径"><a href="#增加spring扫描路径" class="headerlink" title="增加spring扫描路径"></a>增加spring扫描路径</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableDubbo(scanBasePackages = &quot;org.apache.dubbo.samples.simple.annotation.impl&quot;)</span><span class="comment">//也可以在启动类上配置 启动类本身也就是一个配置类</span></span><br><span class="line"><span class="meta">@PropertySource(&quot;classpath:/spring/dubbo-provider.properties&quot;)</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProviderConfiguration</span> &#123;</span><br><span class="line">       </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="服务消费方"><a href="#服务消费方" class="headerlink" title="服务消费方"></a>服务消费方</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component(&quot;annotationAction&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AnnotationAction</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@DubboReference</span></span><br><span class="line">    <span class="keyword">private</span> AnnotationService annotationService;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">doSayHello</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> annotationService.sayHello(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="增加应用共享配置-1"><a href="#增加应用共享配置-1" class="headerlink" title="增加应用共享配置"></a>增加应用共享配置</h5><figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="comment"># dubbo-consumer.properties</span></span><br><span class="line"><span class="attr">dubbo.application.name</span>=<span class="string">annotation-consumer</span></span><br><span class="line"><span class="attr">dubbo.registry.address</span>=<span class="string">zookeeper://127.0.0.1:2181</span></span><br><span class="line"><span class="attr">dubbo.consumer.timeout</span>=<span class="string">3000</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="指定Spring扫描路径"><a href="#指定Spring扫描路径" class="headerlink" title="指定Spring扫描路径"></a>指定Spring扫描路径</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableDubbo(scanBasePackages = &quot;org.apache.dubbo.samples.simple.annotation.action&quot;)</span><span class="comment">//同样可以在启动类中配置 也可在配置文件中配置</span></span><br><span class="line"><span class="meta">@PropertySource(&quot;classpath:/spring/dubbo-consumer.properties&quot;)</span></span><br><span class="line"><span class="meta">@ComponentScan(value = &#123;&quot;org.apache.dubbo.samples.simple.annotation.action&quot;&#125;)</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConsumerConfiguration</span> &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="调用服务"><a href="#调用服务" class="headerlink" title="调用服务"></a>调用服务</h4><p>配置完一切就可以(先启动生产者 在启动消费者)像调用本地方法一样去调用远程服务了(不用去考虑底层的传输协议 编码解码之类的繁琐的东西)</p>
+<hr>
+<h3 id="Dubbo的使用"><a href="#Dubbo的使用" class="headerlink" title="Dubbo的使用"></a>Dubbo的使用</h3><p>对于Dubbo而言一个完整的简单的Dubbo项目应该有如下三个模块 生产者(服务的提供者) 消费者(服务的消费者) API(暴露的接口名称和公共可用的信息)</p>
+<ul>
+<li><p>创建一个简单的Demo Maven工程</p>
+</li>
+<li><p>创建三个子工程分别是**<code>consumer provider dubbo-api</code>**</p>
+</li>
+<li><p>首先编写dubbo-api编写其中的service接口和需要用的其他信息(consumer和provider都能用到的信息 比如实体类 访问的param对象等)注意: 类应当实现序列化</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">MailUserService</span> &#123;</span><br><span class="line">    Result <span class="title function_">save</span><span class="params">(MailUser mailUser)</span>;</span><br><span class="line"></span><br><span class="line">    Result&lt;MailUser&gt; <span class="title function_">selectUserById</span><span class="params">(Integer id)</span>;</span><br><span class="line"></span><br><span class="line">    Result&lt;MailUser&gt; <span class="title function_">selectUserByInfo</span><span class="params">(MailUser mailUser)</span>;</span><br><span class="line"></span><br><span class="line">    Result&lt;List&lt;MailUser&gt;&gt; <span class="title function_">selectUserList</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    Result&lt;String&gt; <span class="title function_">sendMail</span><span class="params">(MailDTO mailDTO)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/img/loading.gif" data-original="https://gitee.com/Devildyw/blogimage/raw/master/img/image-20220306214920772.png" alt="image-20220306214920772"></p>
+<p><strong>然后将其打包上传到本地仓库或是远程仓库供生产者和消费者使用</strong></p>
+</li>
+<li><p>在provider 和 consumer中都加入 </p>
+<blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--这个是dubbo的依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.dubbo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>dubbo-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--这个是注册中心的依赖 这里使用的是zookeeper--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.dubbo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>dubbo-dependencies-zookeeper<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--这个是公用的api依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.dyw<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>Demo-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.0.2-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>在provider中实现dubbo-api中的编写的接口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@DubboService</span> <span class="comment">//使用该注解可以将该服务注册到注册中心 </span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MailUserServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">MailUserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RocketMQTemplate rocketMQTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    UserMapper userMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result <span class="title function_">save</span><span class="params">(MailUser mailUser)</span> &#123;</span><br><span class="line">        userMapper.insert(mailUser);</span><br><span class="line">        <span class="keyword">return</span> R.success();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result&lt;MailUser&gt; <span class="title function_">selectUserById</span><span class="params">(Integer id)</span> &#123;</span><br><span class="line">        LambdaQueryWrapper&lt;MailUser&gt; mailUserLambdaQueryWrapper = <span class="keyword">new</span> <span class="title class_">LambdaQueryWrapper</span>&lt;&gt;();</span><br><span class="line">        mailUserLambdaQueryWrapper.eq(MailUser::getId, id).last(<span class="string">&quot;last 1&quot;</span>);</span><br><span class="line">        <span class="type">MailUser</span> <span class="variable">mailUser</span> <span class="operator">=</span> userMapper.selectOne(mailUserLambdaQueryWrapper);</span><br><span class="line">        <span class="keyword">return</span> R.success(mailUser);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result&lt;MailUser&gt; <span class="title function_">selectUserByInfo</span><span class="params">(MailUser mailUser)</span> &#123;</span><br><span class="line">        <span class="type">MailUser</span> <span class="variable">mailUser1</span> <span class="operator">=</span> userMapper.selectById(mailUser);</span><br><span class="line">        <span class="keyword">return</span> R.success(mailUser1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result&lt;List&lt;MailUser&gt;&gt; <span class="title function_">selectUserList</span><span class="params">()</span> &#123;</span><br><span class="line">        List&lt;MailUser&gt; mailUsers = userMapper.selectList(<span class="keyword">new</span> <span class="title class_">LambdaQueryWrapper</span>&lt;&gt;());</span><br><span class="line">        <span class="keyword">return</span> R.success(mailUsers);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result&lt;String&gt; <span class="title function_">sendMail</span><span class="params">(MailDTO mailDTO)</span> &#123;</span><br><span class="line">        List&lt;Integer&gt; idList = mailDTO.getId();</span><br><span class="line">        <span class="type">String</span> <span class="variable">sendTime</span> <span class="operator">=</span> mailDTO.getSendTime();</span><br><span class="line">        <span class="type">String</span> <span class="variable">subject</span> <span class="operator">=</span> mailDTO.getSubject();</span><br><span class="line">        <span class="type">String</span> <span class="variable">content</span> <span class="operator">=</span> mailDTO.getContent();</span><br><span class="line">        List&lt;MailUser&gt; userList = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isBlank(subject) || StringUtils.isBlank(content)) &#123;</span><br><span class="line">            <span class="keyword">return</span> R.fail(<span class="string">&quot;参数有误&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (idList.size() &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            userList = userMapper.selectList(<span class="keyword">new</span> <span class="title class_">LambdaQueryWrapper</span>&lt;&gt;());</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            userList = userMapper.selectBatchIds(idList);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isBlank(sendTime)) &#123;</span><br><span class="line">            sendTime = <span class="keyword">new</span> <span class="title class_">SimpleDateFormat</span>(<span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>).format(<span class="keyword">new</span> <span class="title class_">Date</span>());</span><br><span class="line">        &#125;</span><br><span class="line">        mailDTO.setUserList(userList);</span><br><span class="line">        mailDTO.setSendTime(sendTime);</span><br><span class="line"></span><br><span class="line">        rocketMQTemplate.asyncSend(<span class="string">&quot;notice:mail&quot;</span>, mailDTO, <span class="keyword">new</span> <span class="title class_">SendCallback</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onSuccess</span><span class="params">(SendResult sendResult)</span> &#123;</span><br><span class="line">                log.info(<span class="string">&quot;发送信息成功&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onException</span><span class="params">(Throwable e)</span> &#123;</span><br><span class="line">                log.error(<span class="string">&quot;发送失败&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> R.success();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>编写实现完所有的接口后 记得将服务注册到注册中心 这里需要配置dubbo 和 服务中心的信息</p>
+<blockquote>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">&gt;dubbo:</span></span><br><span class="line"><span class="attr">application:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">Demo-provider</span> <span class="comment">#应用名称</span></span><br><span class="line"><span class="attr">registry:</span></span><br><span class="line">  <span class="attr">address:</span> <span class="string">zookeeper://localhost:2181</span> <span class="comment">#注册中心地址</span></span><br><span class="line">  <span class="attr">timeout:</span> <span class="number">6000</span> <span class="comment">#获取配置的超时时间</span></span><br><span class="line"><span class="attr">protocol:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">20880</span> <span class="comment">#服务端口</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">dubbo</span> <span class="comment">#协议名称</span></span><br><span class="line"><span class="attr">scan:</span></span><br><span class="line">  <span class="attr">base-packages:</span> <span class="string">com.dyw.demoprovider.service.Impl</span> <span class="comment"># 扫描服务实现的包的位置 使用注解时才使用</span></span><br></pre></td></tr></table></figure>
+
+<p>紧接着就是配置需要注册到注册中心的服务的信息(可以使用注解)如果使用spring-config配置服务的信息</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;<span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">     <span class="attr">xmlns:dubbo</span>=<span class="string">&quot;http://dubbo.apache.org/schema/dubbo&quot;</span></span></span><br><span class="line"><span class="tag">     <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">     <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">     http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dubbo:application</span> <span class="attr">name</span>=<span class="string">&quot;demo-provider&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dubbo:registry</span> <span class="attr">address</span>=<span class="string">&quot;zookeeper://127.0.0.1:2181&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dubbo:protocol</span> <span class="attr">name</span>=<span class="string">&quot;dubbo&quot;</span> <span class="attr">port</span>=<span class="string">&quot;20890&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;demoService&quot;</span> <span class="attr">class</span>=<span class="string">&quot;org.apache.dubbo.samples.basic.impl.DemoServiceImpl&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dubbo:service</span> <span class="attr">interface</span>=<span class="string">&quot;org.apache.dubbo.samples.basic.api.DemoService&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;demoService&quot;</span>/&gt;</span></span><br><span class="line">&gt;<span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+</blockquote>
+</li>
+<li><p>在consumer中也需要配置注册中心的信息 来获取远端信息</p>
+<blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&gt;dubbo:</span><br><span class="line">registry:</span><br><span class="line">  address: zookeeper:<span class="comment">//localhost:2181</span></span><br><span class="line">application:</span><br><span class="line">  name: Demo-Consumer</span><br></pre></td></tr></table></figure>
+
+<p>完成上述配置后 就可以进行接口的调用了</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&gt;<span class="meta">@RestController</span></span><br><span class="line">&gt;<span class="meta">@RequestMapping(&quot;user&quot;)</span></span><br><span class="line">&gt;<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line">  <span class="meta">@DubboReference</span></span><br><span class="line">  MailUserService mailUserService;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@GetMapping</span></span><br><span class="line">  <span class="keyword">public</span> Result&lt;List&lt;MailUser&gt;&gt; <span class="title function_">selectUserList</span><span class="params">()</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> mailUserService.selectUserList();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@PostMapping</span></span><br><span class="line">  <span class="keyword">public</span> Result&lt;MailUser&gt; <span class="title function_">addUser</span><span class="params">(<span class="meta">@RequestBody</span> MailUser mailUser)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> mailUserService.save(mailUser);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@GetMapping(&quot;/&#123;id&#125;&quot;)</span></span><br><span class="line">  <span class="keyword">public</span> Result&lt;MailUser&gt; <span class="title function_">selectUserById</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Integer id)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> mailUserService.selectUserById(id);</span><br><span class="line">  &#125;</span><br><span class="line">&gt;&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&gt;<span class="meta">@RestController</span></span><br><span class="line">&gt;<span class="meta">@RequestMapping(&quot;mail&quot;)</span></span><br><span class="line">&gt;<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MailController</span> &#123;</span><br><span class="line">  <span class="meta">@DubboReference</span></span><br><span class="line">  MailUserService mailUserService;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@PostMapping</span></span><br><span class="line">  <span class="keyword">public</span> Result&lt;String&gt; <span class="title function_">sendMail</span><span class="params">(<span class="meta">@RequestBody</span> MailDTO mailDTO)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> mailUserService.sendMail(mailDTO);</span><br><span class="line">  &#125;</span><br><span class="line">&gt;&#125;</span><br></pre></td></tr></table></figure>
+
+
+</blockquote>
+<p>你会发现一个有意思的事情 比如 我的mybatis log配置在生产者端 但是确实我的消费端看到了日志信息. 这也说明了服务是在消费者端实现的 证明了上述RPC框架的图</p>
+</li>
+</ul>
+<h2 id="Dubbo高级用法"><a href="#Dubbo高级用法" class="headerlink" title="Dubbo高级用法"></a>Dubbo高级用法</h2><p>参考官方文档 用法很多</p>
+<p><a target="_blank" rel="noopener" href="https://dubbo.apache.org/zh/docs/advanced/">高级用法 | Apache Dubbo</a></p>
+<h1 id="—-END—"><a href="#—-END—" class="headerlink" title="—-END—-"></a>—-END—-</h1></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2022/02/28/DUBBO/">https://devildyw.github.io/2022/02/28/DUBBO/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/java/">java</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/"><img class="prev-cover" src="/img/loading.gif" data-original="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-l3dvqp.jpg" onerror="onerror=null;src='https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/friend_404.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">每日一记</div></div></a></div><div class="next-post pull-right"><a href="/2022/02/28/RocketMQ/"><img class="next-cover" src="/img/loading.gif" data-original="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-1kpxgw.jpg" onerror="onerror=null;src='https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/friend_404.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">RocketMQ</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/02/28/Git%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7/" title="Git分布式版本控制工具"><img class="cover" src="/img/loading.gif" data-original="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-k7zdqm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">Git分布式版本控制工具</div></div></a></div><div><a href="/2022/02/28/ThreadLocal/" title="ThreadLocal"><img class="cover" src="/img/loading.gif" data-original="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">ThreadLocal</div></div></a></div><div><a href="/2022/02/28/%E5%8E%9F%E5%AD%90%E2%80%BB%E3%80%81%E5%8F%AF%E8%A7%81%E6%80%A7%E3%80%81%E6%9C%89%E5%BA%8F%E6%80%A7/" title="java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？"><img class="cover" src="/img/loading.gif" data-original="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-pk9eye.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？</div></div></a></div><div><a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--synchronized%E5%85%B3%E9%94%AE%E5%AD%97/" title="每日一记--synchronized关键字"><img class="cover" src="/img/loading.gif" data-original="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-57kw88.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">每日一记--synchronized关键字</div></div></a></div><div><a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E7%BB%AD%EF%BC%89/" title="每日一记--多线程（续）"><img class="cover" src="/img/loading.gif" data-original="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/tag.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">每日一记--多线程（续）</div></div></a></div><div><a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/" title="每日一记"><img class="cover" src="/img/loading.gif" data-original="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-l3dvqp.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">每日一记</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="this.onerror=null;this.src='https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Devil</div><div class="author-info__description">活到老 学到老</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">17</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DUBBO"><span class="toc-number">1.</span> <span class="toc-text">DUBBO</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#RPC%E6%A1%86%E6%9E%B6"><span class="toc-number">1.1.</span> <span class="toc-text">RPC框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFRPC"><span class="toc-number">1.1.1.</span> <span class="toc-text">什么是RPC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8RPC"><span class="toc-number">1.1.2.</span> <span class="toc-text">为什么要用RPC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84RPC%E6%A1%86%E6%9E%B6"><span class="toc-number">1.1.3.</span> <span class="toc-text">常用的RPC框架</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RPC%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">RPC原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RPC%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">RPC调用流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%81%9A%E5%88%B0%E9%80%8F%E6%98%8E%E5%8C%96%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8"><span class="toc-number">1.2.2.</span> <span class="toc-text">如何做到透明化远程服务调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%AF%B9%E6%B6%88%E6%81%AF%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81%E5%92%8C%E8%A7%A3%E7%A0%81"><span class="toc-number">1.2.3.</span> <span class="toc-text">如何对消息进行编码和解码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A1%AE%E5%AE%9A%E6%B6%88%E6%81%AF%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">确定消息数据结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">序列化</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83%E8%87%AA%E5%B7%B1%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.2.4.</span> <span class="toc-text">如何发布自己的服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dubbo-Architecture"><span class="toc-number">1.3.</span> <span class="toc-text">Dubbo Architecture</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="toc-number">1.3.1.</span> <span class="toc-text">服务发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dubbo%E7%9A%84%E5%8D%8F%E8%AE%AE-RPC-%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE-Apache-Dubbo"><span class="toc-number">1.3.2.</span> <span class="toc-text">]Dubbo的协议](RPC 通信协议 | Apache Dubbo)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dubbo-%E6%9C%8D%E5%8A%A1%E6%B5%81%E9%87%8F%E7%AE%A1%E7%90%86-%E6%9C%8D%E5%8A%A1%E6%B5%81%E9%87%8F%E7%AE%A1%E7%90%86-Apache-Dubbo"><span class="toc-number">1.3.3.</span> <span class="toc-text">[Dubbo 服务流量管理](服务流量管理 | Apache Dubbo)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E9%87%8F%E7%AE%A1%E7%90%86"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">流量管理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dubbo%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.4.</span> <span class="toc-text">Dubbo的配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#XML%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">XML配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AE-%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AE-Apache-Dubbo"><span class="toc-number">1.3.4.2.</span> <span class="toc-text">[注解配置](注解配置 | Apache Dubbo)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E6%96%B9"><span class="toc-number">1.3.4.2.1.</span> <span class="toc-text">服务提供方</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E5%BA%94%E7%94%A8%E5%85%B1%E4%BA%AB%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.4.2.2.</span> <span class="toc-text">增加应用共享配置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0spring%E6%89%AB%E6%8F%8F%E8%B7%AF%E5%BE%84"><span class="toc-number">1.3.4.2.3.</span> <span class="toc-text">增加spring扫描路径</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9%E6%96%B9"><span class="toc-number">1.3.4.2.4.</span> <span class="toc-text">服务消费方</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E5%BA%94%E7%94%A8%E5%85%B1%E4%BA%AB%E9%85%8D%E7%BD%AE-1"><span class="toc-number">1.3.4.2.5.</span> <span class="toc-text">增加应用共享配置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8C%87%E5%AE%9ASpring%E6%89%AB%E6%8F%8F%E8%B7%AF%E5%BE%84"><span class="toc-number">1.3.4.2.6.</span> <span class="toc-text">指定Spring扫描路径</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.3.4.3.</span> <span class="toc-text">调用服务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dubbo%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.3.5.</span> <span class="toc-text">Dubbo的使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dubbo%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95"><span class="toc-number">1.4.</span> <span class="toc-text">Dubbo高级用法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E2%80%94-END%E2%80%94"><span class="toc-number">2.</span> <span class="toc-text">—-END—-</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/04/04/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/" title="雪花算法"><img src="/img/loading.gif" data-original="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-x87m9z.jpg" onerror="this.onerror=null;this.src='https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/friend_404.gif'" alt="雪花算法"/></a><div class="content"><a class="title" href="/2022/04/04/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/" title="雪花算法">雪花算法</a><time datetime="2022-04-04T09:34:54.000Z" title="发表于 2022-04-04 17:34:54">2022-04-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/28/Redis/" title="Redis"><img src="/img/loading.gif" data-original="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-x87m9z.jpg" onerror="this.onerror=null;this.src='https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/friend_404.gif'" alt="Redis"/></a><div class="content"><a class="title" href="/2022/03/28/Redis/" title="Redis">Redis</a><time datetime="2022-03-28T12:58:54.000Z" title="发表于 2022-03-28 20:58:54">2022-03-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/28/Git%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7/" title="Git分布式版本控制工具"><img src="/img/loading.gif" data-original="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-k7zdqm.png" onerror="this.onerror=null;this.src='https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/friend_404.gif'" alt="Git分布式版本控制工具"/></a><div class="content"><a class="title" href="/2022/02/28/Git%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7/" title="Git分布式版本控制工具">Git分布式版本控制工具</a><time datetime="2022-02-28T12:58:54.000Z" title="发表于 2022-02-28 20:58:54">2022-02-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/28/ThreadLocal/" title="ThreadLocal"><img src="/img/loading.gif" data-original="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg" onerror="this.onerror=null;this.src='https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/friend_404.gif'" alt="ThreadLocal"/></a><div class="content"><a class="title" href="/2022/02/28/ThreadLocal/" title="ThreadLocal">ThreadLocal</a><time datetime="2022-02-28T12:58:54.000Z" title="发表于 2022-02-28 20:58:54">2022-02-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/28/%E5%8E%9F%E5%AD%90%E2%80%BB%E3%80%81%E5%8F%AF%E8%A7%81%E6%80%A7%E3%80%81%E6%9C%89%E5%BA%8F%E6%80%A7/" title="java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？"><img src="/img/loading.gif" data-original="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-pk9eye.jpg" onerror="this.onerror=null;this.src='https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/friend_404.gif'" alt="java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？"/></a><div class="content"><a class="title" href="/2022/02/28/%E5%8E%9F%E5%AD%90%E2%80%BB%E3%80%81%E5%8F%AF%E8%A7%81%E6%80%A7%E3%80%81%E6%9C%89%E5%BA%8F%E6%80%A7/" title="java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？">java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？</a><time datetime="2022-02-28T12:58:54.000Z" title="发表于 2022-02-28 20:58:54">2022-02-28</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>
