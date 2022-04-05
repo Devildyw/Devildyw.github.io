@@ -593,7 +593,7 @@
 </ul>
 <hr>
 <h2 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h2><p>雪花算法生成的ID是一个<strong>64bit</strong>的<strong>long</strong>型的数字且<strong>按时间趋势递增</strong>.大致有首位符号位(无效位), 时间戳插值, 机器编码, 序列号四部分组成.</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/22531124-e47b04a4e5b26623.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1021/format/webp" alt="img"></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/22531124-e47b04a4e5b26623.png" alt="img"></p>
 <p>如图: </p>
 <ul>
 <li><strong>首位无效符:</strong> 主要用做为符号位,因为一般都是生成正数,所以符号位统一都是0</li>
