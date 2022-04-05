@@ -1,33 +1,6 @@
-/*Lete个人博客颜色修改*/
-
-#page-header #site_title {
-    color: #0c1111;
-}
-/*页脚a标签字体颜色*/
-
-#footer-wrap a {
-    color: #0c1111;
-}
-/*页脚自定义字段字体颜色*/
-
-.footer_custom_text {
-    color: #0c1111;
-}
-/*a标签颜色*/
-
-a {
-    color: #0c1111;
-}
-/*头部文字颜色*/
-
-#nav a {
-    color: #0c1111;
-}
-
-/*文章透明*/
 
 .layout_post>#post {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.1);
 }
 /*移动端优化：去除归档、标签、最新文章、公告、、只保留网站统计*/
 
