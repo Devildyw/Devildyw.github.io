@@ -1358,7 +1358,7 @@ canvas:not(#ribbon-canvas),
   --tab-button-active-bg: #fff;
   --card-bg: #fff;
   --sidebar-bg: #f6f8fa;
-  --btn-hover-color: 8dbd;
+  --btn-hover-color: #7ab8cc;
   --btn-color: #fff;
   --btn-bg: #60726f;
   --text-bg-hover: rgba(96,114,111,0.7);
@@ -1372,7 +1372,7 @@ canvas:not(#ribbon-canvas),
   --toc-link-color: #666261;
   --card-box-shadow: 0 3px 8px 6px rgba(7,17,27,0.05);
   --card-hover-box-shadow: 0 3px 8px 6px rgba(7,17,27,0.09);
-  --pseudo-hover: 8dbd;
+  --pseudo-hover: #7ab8cc;
   --headline-presudo: #a0a0a0;
   --scrollbar-color: #49b1f5;
 }
@@ -4760,7 +4760,7 @@ h1.page-title + .tag-cloud-list {
 #waline-wrap {
   --waline-font-size: 1.1em;
   --waline-theme-color: #60726f;
-  --waline-active-color: 8dbd;
+  --waline-active-color: #7ab8cc;
 }
 #waline-wrap .vuser {
   -webkit-transition: all 0.5s;
