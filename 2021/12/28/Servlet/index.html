@@ -1,0 +1,1303 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Servlet | Devil的个人博客</title><meta name="keywords" content="java"><meta name="author" content="Devil"><meta name="copyright" content="Devil"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Servlet关于系统架构 系统架构包括什么形式？ C&#x2F;S架构 B&#x2F;S架构   C&#x2F;S架构？ Client &#x2F; Server（客户端 &#x2F; 服务器） C&#x2F;S架构的软件或者说系统有哪些呢？ QQ（先去腾讯官网下载一个QQ软件，几十MB，然后把这个客户端软件安装上去，然后输入QQ号以及密码，登录之后，就可以和你的朋友聊天了，就可以使用这个软件了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Servlet">
+<meta property="og:url" content="https://devildyw.github.io/2021/12/28/Servlet/index.html">
+<meta property="og:site_name" content="Devil的个人博客">
+<meta property="og:description" content="Servlet关于系统架构 系统架构包括什么形式？ C&#x2F;S架构 B&#x2F;S架构   C&#x2F;S架构？ Client &#x2F; Server（客户端 &#x2F; 服务器） C&#x2F;S架构的软件或者说系统有哪些呢？ QQ（先去腾讯官网下载一个QQ软件，几十MB，然后把这个客户端软件安装上去，然后输入QQ号以及密码，登录之后，就可以和你的朋友聊天了，就可以使用这个软件了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-l3dvqp.jpg">
+<meta property="article:published_time" content="2021-12-28T12:58:54.000Z">
+<meta property="article:modified_time" content="2022-04-06T13:57:09.637Z">
+<meta property="article:author" content="Devil">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-l3dvqp.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2021/12/28/Servlet/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Servlet',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-04-06 21:57:09'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/dyw.css"><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-l3dvqp.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Servlet</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-28T12:58:54.000Z" title="发表于 2021-12-28 20:58:54">2021-12-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-04-06T13:57:09.637Z" title="更新于 2022-04-06 21:57:09">2022-04-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/JavaEE/">JavaEE</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Servlet"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h1><h2 id="关于系统架构"><a href="#关于系统架构" class="headerlink" title="关于系统架构"></a>关于系统架构</h2><ol>
+<li>系统架构包括什么形式？<ul>
+<li>C&#x2F;S架构</li>
+<li>B&#x2F;S架构</li>
+</ul>
+</li>
+<li>C&#x2F;S架构？<ul>
+<li>Client &#x2F; Server（客户端 &#x2F; 服务器）</li>
+<li>C&#x2F;S架构的软件或者说系统有哪些呢？<ul>
+<li>QQ（先去腾讯官网下载一个QQ软件，几十MB，然后把这个客户端软件安装上去，然后输入QQ号以及密码，登录之后，就可以和你的朋友聊天了，就可以使用这个软件了。）</li>
+</ul>
+</li>
+<li>C&#x2F;S架构的特点：需要安装特定的客户端软件。</li>
+<li>C&#x2F;S架构的系统优点和缺点分别是什么？<ul>
+<li>优点：<ul>
+<li>速度快（软件中的数据大部分都是集成到客户端软件当中的，很少量的数据从服务器端传送过来，所以C&#x2F;S结构的系统速度快）</li>
+<li>体验好（速度又快，界面又酷炫，当然体验好了。）</li>
+<li>界面酷炫（专门的语言去实现界面的，更加灵活。）</li>
+<li>服务器压力小（因为大量的数据都是集成在客户端软件当中，所以服务器只需要传送很少的数据量，当然服务器压力小。）</li>
+<li>安全（因为大量的数据是集成在客户端软件当中的，并且客户端有很多个，服务器虽然只有一个，就算服务器那边地震了，火灾了，服务器受损了，问题也不大，因为大量的数据在多个客户端上有缓存，有存储，所以从这个方面来说，C&#x2F;S结构的系统比较安全。）</li>
+<li>…..</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>升级维护比较差劲。（升级维护比较麻烦。成本比较高。每一个客户端软件都需要升级。有一些软件不是那么容易安装的。）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>B&#x2F;S架构？<ul>
+<li>B&#x2F;S（Browser &#x2F; Server，浏览器 &#x2F; 服务器）</li>
+<li><a target="_blank" rel="noopener" href="http://www.baidu.com/">http://www.baidu.com</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.jd.com/">http://www.jd.com</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.126.com/">http://www.126.com</a></li>
+<li>B&#x2F;S结构的系统是不是一个特殊的C&#x2F;S系统？<ul>
+<li>实际上B&#x2F;S结构的系统还是一个C&#x2F;S，只不过这个C比较特殊，这个Client是一个固定不变浏览器软件。</li>
+</ul>
+</li>
+<li>B&#x2F;S结构的系统优点和缺点是：<ul>
+<li>优点：<ul>
+<li>升级维护方便，成本比较低。（只需要升级服务器端即可。）</li>
+<li>不需要安装特定的客户端软件，用户操作极其方便。只需要打开浏览器，输入网址即可。</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>速度慢（不是因为带宽低的问题，是因为所有的数据都是在服务器上，用户发送的每一个请求都是需要服务器全身心的响应数据，所以B&#x2F;S结构的系统在网络中传送的数据量比较大。）</li>
+<li>体验差（界面不是那么酷炫，因为浏览器只支持三个语言HTML CSS JavaScript。在加上速度慢。）</li>
+<li>不安全（所有的数据都在服务器上，只要服务器发生火灾，地震等不可抗力，最终数据全部丢失。）</li>
+<li>….</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>C&#x2F;S和B&#x2F;S结构的系统，哪个好，哪个不好？<ul>
+<li>这个问题问的没有水平。并不是哪个好，哪个不好。不同结构的系统在不同的业务场景下有不同的适用场景。</li>
+<li>娱乐性软件建议使用？<ul>
+<li>C&#x2F;S 结构</li>
+</ul>
+</li>
+<li>公司内部使用的一些业务软件建议使用？<ul>
+<li>公司内部使用的系统，需要维护成本低。</li>
+<li>公司内部使用的系统，不需要很酷炫。</li>
+<li>公司内部使用的企业级系统主要是能够进行数据的维护即可。</li>
+<li>B&#x2F;S 结构。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>注意了：开发B&#x2F;S结构的系统，其实就是开发网站，其实就是开发一个WEB系统。<ul>
+<li>开发一个WEB系统你需要会哪些技术？<ul>
+<li>WEB前端（运行在浏览器上的程序。）<ul>
+<li>HTML</li>
+<li>CSS</li>
+<li>JavaScript</li>
+</ul>
+</li>
+<li>WEB后端（WEB服务器端的程序。）<ul>
+<li>Java可以（Java做WEB开发我们称为JavaWEB开发。JavaWEB开发最核心的规范：Servlet【Server Applet服务器端的Java小程序。】）</li>
+<li>C语言也可以</li>
+<li>C++也可以</li>
+<li>Python也行</li>
+<li>PHP也可以</li>
+<li>….</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>JavaEE是什么？<ul>
+<li>Java包括三大块：<ul>
+<li>JavaSE<ul>
+<li>Java标准版（一套类库：别人写好的一套类库，只不过这个类库是标准类库，走EE，或者走ME，这个SE一定是基础，先学。）</li>
+</ul>
+</li>
+<li>JavaEE（WEB方向，WEB系统。）<ul>
+<li>Java企业版（也是一套类库：也是别人写好的一套类库，只不过这套类库可以帮助我们完成企业级项目的开发，专门为企业内部提供解决方案的一套（多套）类库。）</li>
+<li>别人写好的，你用就行了，用它可以开发企业级项目。</li>
+<li>可以开发web系统。</li>
+<li>Java比较火爆的就是这个JavaEE方向。</li>
+</ul>
+</li>
+<li>JavaME<ul>
+<li>Java微型版（还是一套类库，只不过这套类库帮助我们进行电子微型设备内核程序的开发）</li>
+<li>机顶盒内核程序，吸尘器内核程序，电冰箱内核程序，电饭煲内核程序。。。。。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>JavaEE实际上包括很多种规范，13种规范，其中Servlet就是JavaEE规范之一。学Servlet还是Java语言。</li>
+</ul>
+</li>
+</ol>
+<h2 id="B-x2F-S结构的系统通信原理（没有涉及到Java小程序）"><a href="#B-x2F-S结构的系统通信原理（没有涉及到Java小程序）" class="headerlink" title="B&#x2F;S结构的系统通信原理（没有涉及到Java小程序）"></a>B&#x2F;S结构的系统通信原理（没有涉及到Java小程序）</h2><ul>
+<li>WEB系统的访问过程<ul>
+<li>第一步：打开浏览器</li>
+<li>第二步：找到地址栏</li>
+<li>第三步：输入一个合法的网址</li>
+<li>第四步：回车</li>
+<li>第五步：在浏览器上会展示响应的结果。</li>
+</ul>
+</li>
+<li>关于域名：<ul>
+<li><a target="_blank" rel="noopener" href="https://www.baidu.com/">https://www.baidu.com/</a> （网址）</li>
+<li><a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a> 是一个域名</li>
+<li>在浏览器地址栏上输入域名，回车之后，域名解析器会将域名解析出来一个具体的IP地址和端口号等。</li>
+<li>解析结果也许是：<a target="_blank" rel="noopener" href="http://110.242.68.3/index.html">http://110.242.68.3:80/index.html</a></li>
+</ul>
+</li>
+<li>IP地址是啥？<ul>
+<li>计算机在网络当中的一个身份证号。在同一个网络当中，IP地址是唯一的。</li>
+<li>A计算机要想和B计算机通信，首先你需要知道B计算机的IP地址，有了IP地址才能建立连接。</li>
+</ul>
+</li>
+<li>端口号是啥？<ul>
+<li>一个端口代表一个软件（一个端口代表一个应用，一个端口仅代表一个服务）。</li>
+<li>一个计算机当中有很多软件，每一个软件启动之后都有一个端口号。</li>
+<li>在同一个计算机上，端口号具有唯一性。</li>
+</ul>
+</li>
+<li>一个WEB系统的通信原理？通信步骤：<ul>
+<li>第一步：用户输入网址（URL）</li>
+<li>第二步：域名解析器进行域名解析：<a target="_blank" rel="noopener" href="http://110.242.68.3/index.html">http://110.242.68.3:80/index.html</a></li>
+<li>第三步：浏览器软件在网络中搜索110.242.68.3这一台主机，直到找到这台主机。</li>
+<li>第四步：定位110.242.68.3这台主机上的服务器软件，因为是80端口，可以很轻松的定位到80端口对应的服务器软件。</li>
+<li>第五步：80端口对应的服务器软件得知浏览器想要的资源名是：index.html</li>
+<li>第六步：服务器软件找到index.html文件，并且将index.html文件中的内容直接输出响应到浏览器上。</li>
+<li>第七步：浏览器接收到来自服务器的代码（HTML CSS JS）</li>
+<li>第八步：浏览器渲染，执行HTML CSS JS代码，展示效果。</li>
+</ul>
+</li>
+<li>什么是URL？<ul>
+<li>统一资源定位符（<a target="_blank" rel="noopener" href="http://www.baidu.com)/">http://www.baidu.com）</a></li>
+</ul>
+</li>
+<li>什么是请求，什么是响应？<ul>
+<li>请求和响应实际上说的是数据的流向不同。</li>
+<li>从Browser端发送数据到Server端，我们称为请求。英语单词：request</li>
+<li>从Server端向浏览器Browser端发送数据，我们称为响应。英语单词：response</li>
+<li>B –&gt; S （请求request）</li>
+<li>S –&gt; B （响应response）</li>
+</ul>
+</li>
+</ul>
+<h2 id="关于WEB服务器软件"><a href="#关于WEB服务器软件" class="headerlink" title="关于WEB服务器软件"></a>关于WEB服务器软件</h2><ul>
+<li><p>WEB服务器软件都有哪些呢？（这些软件都是提前开发好的。）</p>
+<ul>
+<li>Tomcat（WEB服务器）</li>
+<li>jetty（WEB服务器）</li>
+<li>JBOSS（应用服务器）</li>
+<li>WebLogic（应用服务器）</li>
+<li>WebSphere（应用服务器）</li>
+</ul>
+</li>
+<li><p>应用服务器和WEB服务器的关系？</p>
+<ul>
+<li>应用服务器实现了JavaEE的所有规范。(JavaEE有13个不同的规范。)</li>
+<li>WEB服务器只实现了JavaEE中的Servlet + JSP两个核心的规范。</li>
+<li>通过这个讲解说明了：应用服务器是包含WEB服务器的。</li>
+<li>用过JBOSS服务器的同学应该很清楚，JBOSS中内嵌了一个Tomcat服务器。</li>
+</ul>
+</li>
+<li><p>Tomcat下载</p>
+<ul>
+<li>apache官网地址：<a target="_blank" rel="noopener" href="https://www.apache.org/">https://www.apache.org/</a></li>
+<li>tomcat官网地址：<a target="_blank" rel="noopener" href="https://tomcat.apache.org/">https://tomcat.apache.org</a></li>
+<li>tomcat开源免费的轻量级WEB服务器。</li>
+<li>tomcat还有另外一个名字：catalina（catalina是美国的一个岛屿，风景秀丽，据说作者是在这个风景秀丽的小岛上开发了一个轻量级的WEB服务器，体积小，运行速度快，因此tomcat又被称为catalina）</li>
+<li>tomcat的logo是一只公猫（寓意表示Tomcat服务器是轻巧的，小巧的，果然，体积小，运行速度快，只实现了Servlet+JSP规范）</li>
+<li>tomcat是java语言写的。</li>
+<li>tomcat服务器要想运行，必须先又jre（Java的运行时环境）</li>
+</ul>
+</li>
+<li><p>Tomcat服务器要想运行，需要先有jre，所以要先安装JDK，配置java运行环境。</p>
+<ul>
+<li>JAVA_HOME&#x3D;C:\Program Files\Java\jdk-17.0.1</li>
+<li>PATH&#x3D;%JAVA_HOME%\bin</li>
+<li>目前JAVA_HOME没有配置，思考一个问题，这样行不行呢？目前只运行java程序是没问题的。真的没问题吗？</li>
+</ul>
+</li>
+<li><p>Tomcat服务器的安装：</p>
+<ul>
+<li>绿色版本的安装很简单，直接zip包解压即可。解压就是安装。</li>
+<li>我有一个好习惯，在C盘的根目录下新建一个dev目录，java开发所有相关的工具都安装到dev目录下，这样比较方便管理。（你随意）</li>
+<li>启动Tomcat<ul>
+<li>bin目录下有一个文件：startup.bat,通过它可以启动Tomcat服务器。<ul>
+<li>xxx.bat文件是个什么文件？bat文件是windows操作系统专用的，bat文件是批处理文件，这种文件中可以编写大量的windows的dos命令，然后执行bat文件就相当于批量的执行dos命令。</li>
+<li>startup.sh，这个文件在windows当中无法执行，在Linux环境当中可以使用。在Linux环境下能够执行的是shell命令，大量的shell命令编写在shell文件当中，然后执行这个shell文件可以批量的执行shell命令。</li>
+<li>tomcat服务器提供了bat和sh文件，说明了这个tomcat服务器的通用性。</li>
+<li>分析startup.bat文件得出，执行这个命令，实际上最后是执行：catalina.bat文件。</li>
+<li>catalina.bat文件中有这样一行配置：MAINCLASS&#x3D;org.apache.catalina.startup.Bootstrap （这个类就是main方法所在的类。）</li>
+<li>tomcat服务器就是Java语言写的，既然是java语言写的，那么启动Tomcat服务器就是执行main方法。</li>
+</ul>
+</li>
+<li>我们尝试打开dos命令窗口，在dos命令窗口中输入startup.bat来启动tomcat服务器。</li>
+<li>启动Tomcat服务器只配置path对应的bin目录是不行的。有两个环境变量需要配置：<ul>
+<li>JAVA_HOME&#x3D;JDK的根</li>
+<li>CATALINA_HOME&#x3D;Tomcat服务器的根</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>关于Tomcat服务器的目录</p>
+<ul>
+<li>bin ： 这个目录是Tomcat服务器的命令文件存放的目录，比如：启动Tomcat，关闭Tomcat等。</li>
+<li>conf： 这个目录是Tomcat服务器的配置文件存放目录。（server.xml文件中可以配置端口号，默认Tomcat端口是8080）</li>
+<li>lib ：这个目录是Tomcat服务器的核心程序目录，因为Tomcat服务器是Java语言编写的，这里的jar包里面都是class文件。</li>
+<li>logs: Tomcat服务器的日志目录，Tomcat服务器启动等信息都会在这个目录下生成日志文件。</li>
+<li>temp：Tomcat服务器的临时目录。存储临时文件。</li>
+<li>webapps：这个目录当中就是用来存放大量的webapp（web application：web应用）</li>
+<li>work：这个目录是用来存放JSP文件翻译之后的java文件以及编译之后的class文件。</li>
+</ul>
+</li>
+<li><p>配置Tomcat服务器需要哪些环境变量？</p>
+<ul>
+<li>JAVA_HOME&#x3D;JDK的根</li>
+<li>CATALINA_HOME&#x3D;Tomcat服务器的根</li>
+<li>PATH&#x3D;%JAVA_HOME%\bin;%CATALINA_HOME%\bin</li>
+</ul>
+</li>
+<li><p>启动Tomcat： startup</p>
+</li>
+<li><p>关闭Tomcat：stop （shutdown.bat文件重命名为stop.bat，为什么？原因是shutdown命令和windows中的关机命令冲突。所以修改一下。）</p>
+</li>
+<li><p>怎么测试Tomcat服务器有没有启动成功呢？</p>
+<ul>
+<li>打开浏览器，在浏览器的地址栏上输入URL即可：<ul>
+<li><a href="http://ip地址:端口号">http://ip地址:端口号</a></li>
+<li>ip地址是什么？端口号我知道，是8080</li>
+<li>本机的IP地址是：127.0.0.1，或者是localhost，都行。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="实现一个最基本的web应用（这个web应用中没有java小程序）"><a href="#实现一个最基本的web应用（这个web应用中没有java小程序）" class="headerlink" title="实现一个最基本的web应用（这个web应用中没有java小程序）"></a>实现一个最基本的web应用（这个web应用中没有java小程序）</h2><ul>
+<li><p>第一步：找到CATALINA_HOME\webapps目录</p>
+<ul>
+<li>因为所有的webapp要放到webapps目录下。（没有为什么，这是Tomcat服务器的要求。如果不放到这里，Tomcat服务器找不到你的应用。）</li>
+</ul>
+</li>
+<li><p>第二步：在CATALINA_HOME\webapps目录下新建一个子目录，起名：oa</p>
+<ul>
+<li>这个目录名oa就是你这个webapp的名字。</li>
+</ul>
+</li>
+<li><p>第三步：在oa目录下新建资源文件，例如：index.html</p>
+<ul>
+<li>编写index.html文件的内容。</li>
+</ul>
+</li>
+<li><p>第四步：启动Tomcat服务器</p>
+</li>
+<li><p>第五步：打开浏览器，在浏览器地址栏上输入这样的URL：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://127.0.0.1:8080/oa/index.html">http://127.0.0.1:8080/oa/index.html</a></li>
+</ul>
+</li>
+<li><p>思考一个问题：</p>
+<ul>
+<li><p>我们在浏览器上直接输入一个URL，然后回车。这个动作和超链接一样吗？既然是一样的，我们完全可以使用超链接。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--注意以下的路径，以/开始，带项目名，是一个绝对路径。不需要添加：http://127.0.0.1:8080--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;/oa/login.html&quot;</span>&gt;</span>user login2<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--多个层级也没有关系，正常访问即可。--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--注意：我们目前前端上的路径都以“/”开始的，都是加项目名的。--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;/oa/test/debug/d.html&quot;</span>&gt;</span>d page<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://127.0.0.1:8080/oa/userList.html">http://127.0.0.1:8080/oa/userList.html</a> </p>
+<ul>
+<li>访问这个地址，可以展示一个用户列表页面。但是这个用户列表页面是写死在HTML文件当中的。这种资源我们称为静态资源。怎么能变成动态资源。显然需要连接数据库。</li>
+<li>连接数据库需要JDBC程序，也就是说需要编写Java程序连接数据库，数据库中有多少条记录，页面上就显示多少条记录，这种技术被称为动态网页技术。（动态网页技术并不是说页面中有flash动画。动态网页技术是说页面中的数据是动态的，根据数据库中数据的变化而变化。）</li>
+</ul>
+</li>
+</ul>
+<h2 id="对于一个动态的web应用来说，一个请求和响应的过程有多少个角色参与，角色和角色之间有多少个协议"><a href="#对于一个动态的web应用来说，一个请求和响应的过程有多少个角色参与，角色和角色之间有多少个协议" class="headerlink" title="对于一个动态的web应用来说，一个请求和响应的过程有多少个角色参与，角色和角色之间有多少个协议"></a>对于一个动态的web应用来说，一个请求和响应的过程有多少个角色参与，角色和角色之间有多少个协议</h2><ul>
+<li><p>有哪些角色（在整个BS结构的系统当中，有哪些人参与进去了）</p>
+<ul>
+<li>浏览器软件的开发团队（浏览器软件太多了：谷歌浏览器、火狐浏览器、IE浏览器….）</li>
+<li>WEB Server的开发团队（WEB Server这个软件也是太多了：Tomcat、Jetty、WebLogic、JBOSS、WebSphere….）</li>
+<li>DB Server的开发团队（DB Server这个软件也是太多了：Oracle、MySQL…..）</li>
+<li>webapp的开发团队（WEB应用是我们做为JavaWEB程序员开发的）</li>
+</ul>
+</li>
+<li><p>角色和角色之间需要遵守哪些规范，哪些协议</p>
+<ul>
+<li>webapp的开发团队   和    WEB Server的开发团队  之间有一套规范: JavaEE规范之一Servlet规范。<ul>
+<li>Servlet规范的作用是什么？<ul>
+<li>WEB Server   和   webapp解耦合。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Browser  和   WebServer之间有一套传输协议：HTTP协议。（超文本传输协议。）</li>
+<li>webapp开发团队  和  DB Server的开发团队之间有一套规范：JDBC规范。</li>
+</ul>
+</li>
+<li><p>Servlet规范是一个什么规范？</p>
+<ul>
+<li>遵循Servlet规范的webapp，这个webapp就可以放在不同的WEB服务器中运行。（因为这个webapp是遵循Servlet规范的。）</li>
+<li>Servlet规范包括什么呢？<ul>
+<li>规范了哪些接口</li>
+<li>规范了哪些类</li>
+<li>规范了一个web应用中应该有哪些配置文件</li>
+<li>规范了一个web应用中配置文件的名字</li>
+<li>规范了一个web应用中配置文件存放的路径</li>
+<li>规范了一个web应用中配置文件的内容</li>
+<li>规范了一个合法有效的web应用它的目录结构应该是怎样的。</li>
+<li>…..</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="开发一个带有Servlet（Java小程序）的webapp（重点）"><a href="#开发一个带有Servlet（Java小程序）的webapp（重点）" class="headerlink" title="开发一个带有Servlet（Java小程序）的webapp（重点）"></a>开发一个带有Servlet（Java小程序）的webapp（重点）</h2><ul>
+<li><p>开发步骤是怎样的？</p>
+<ul>
+<li><p>第一步：在webapps目录下新建一个目录，起名crm（这个crm就是webapp的名字）。当然，也可以是其它项目，比如银行项目，可以创建一个目录bank，办公系统可以创建一个oa。</p>
+<ul>
+<li>注意：crm就是这个webapp的根</li>
+</ul>
+</li>
+<li><p>第二步：在webapp的根下新建一个目录：WEB-INF</p>
+<ul>
+<li>注意：这个目录的名字是Servlet规范中规定的，必须全部大写，必须一模一样。必须的必须。</li>
+</ul>
+</li>
+<li><p>第三步：在WEB-INF目录下新建一个目录：classes</p>
+<ul>
+<li>注意：这个目录的名字必须是全部小写的classes。这也是Servlet规范中规定的。另外这个目录下一定存放的是Java程序编译之后的class文件（这里存放的是字节码文件）。</li>
+</ul>
+</li>
+<li><p>第四步：在WEB-INF目录下新建一个目录：lib</p>
+<ul>
+<li>注意：这个目录不是必须的。但如果一个webapp需要第三方的jar包的话，这个jar包要放到这个lib目录下，这个目录的名字也不能随意编写，必须是全部小写的lib。例如java语言连接数据库需要数据库的驱动jar包。那么这个jar包就一定要放到lib目录下。这Servlet规范中规定的。</li>
+</ul>
+</li>
+<li><p>第五步：在WEB-INF目录下新建一个文件：web.xml</p>
+<ul>
+<li>注意：这个文件是必须的，这个文件名必须叫做web.xml。这个文件必须放在这里。一个合法的webapp，web.xml文件是必须的，这个web.xml文件就是一个配置文件，在这个配置文件中描述了请求路径和Servlet类之间的对照关系。</li>
+</ul>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/5291509-01ac23b210d5e6df.webp" alt="5291509-01ac23b210d5e6df"></p>
+<ul>
+<li><p><strong>以上图说明</strong>：</p>
+<ul>
+<li>bbs目录代表一个web应用</li>
+<li>bbs目录下的html,jsp文件可以直接被浏览器访问</li>
+<li><strong>WEB-INF目录下的资源是不能直接被浏览器访问的(默认安全的一个目录)</strong></li>
+<li>web.xml文件是web程序的主要配置文件</li>
+<li>所有的classes文件都放在classes目录下</li>
+<li>jar文件放在lib目录下</li>
+</ul>
+</li>
+<li><p>这个文件最好从其他的webapp中拷贝，最好别手写。没必要。复制粘贴</p>
+</li>
+<li><p>&#96;&#96;&#96;xml</p>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<p><web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                  https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+  version="5.0"
+  metadata-complete="true"></p>
+</web-app>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- 第六步：编写一个Java程序，这个小Java程序也不能随意开发，这个小java程序必须实现Servlet接口。</span><br><span class="line"></span><br><span class="line">  - 这个Servlet接口不在JDK当中。（因为Servlet不是JavaSE了。Servlet属于JavaEE，是另外的一套类库。）</span><br><span class="line">  - Servlet接口（Servlet.class文件）是Oracle提供的。（最原始的是sun公司提供的。）</span><br><span class="line">  - Servlet接口是JavaEE的规范中的一员。</span><br><span class="line">  - Tomcat服务器实现了Servlet规范，所以Tomcat服务器也需要使用Servlet接口。Tomcat服务器中应该有这个接口，Tomcat服务器的CATALINA_HOME\lib目录下有一个servlet-api.jar，解压这个servlet-api.jar之后，你会看到里面有一个Servlet.class文件。</span><br><span class="line">  - 重点：从JakartaEE9开始，Servlet接口的全名变了：jakarta.servlet.Servlet</span><br><span class="line">  - 注意：编写这个Java小程序的时候，java源代码你愿意在哪里就在哪里，位置无所谓，你只需要将java源代码编译之后的class文件放到classes目录下即可。</span><br><span class="line"></span><br><span class="line">- 第七步：编译我们编写的HelloServlet</span><br><span class="line"></span><br><span class="line">  - 重点：你怎么能让你的HelloServlet编译通过呢？配置环境变量CLASSPATH</span><br><span class="line"></span><br><span class="line">    CLASSPATH=.;C:\dev\apache-tomcat-10.0.12\lib\servlet-api.jar</span><br><span class="line"></span><br><span class="line">  - 思考问题：以上配置的CLASSPATH和Tomcat服务器运行有没有关系？</span><br><span class="line"></span><br><span class="line">    - 没有任何关系，以上配置这个环境变量只是为了让你的HelloServlet能够正常编译生成class文件。</span><br><span class="line"></span><br><span class="line">- 第八步：将以上编译之后的HelloServlet.class文件拷贝到WEB-INF\classes目录下。</span><br><span class="line"></span><br><span class="line">- 第九步：在web.xml文件中编写配置信息，让“请求路径”和“Servlet类名”关联在一起。</span><br><span class="line"></span><br><span class="line">  - 这一步用专业术语描述：在web.xml文件中注册Servlet类。</span><br><span class="line"></span><br><span class="line">  - ```xml</span><br><span class="line">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;web-app xmlns=&quot;https://jakarta.ee/xml/ns/jakartaee&quot;</span><br><span class="line">      xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">      xsi:schemaLocation=&quot;https://jakarta.ee/xml/ns/jakartaee</span><br><span class="line">                          https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd&quot;</span><br><span class="line">      version=&quot;5.0&quot;</span><br><span class="line">      metadata-complete=&quot;true&quot;&gt;</span><br><span class="line">    </span><br><span class="line">    	&lt;!--servlet描述信息--&gt;</span><br><span class="line">    	&lt;!--任何一个servlet都对应一个servlet-mapping --&gt;</span><br><span class="line">    	&lt;servlet&gt;</span><br><span class="line">    		&lt;servlet-name&gt;fdsafdsagfdsafdsa&lt;/servlet-name&gt;</span><br><span class="line">    		&lt;!--这个位置必须是带有包名的全限定类名--&gt;</span><br><span class="line">    		&lt;servlet-class&gt;com.bjpowernode.servlet.HelloServlet&lt;/servlet-class&gt;</span><br><span class="line">    	&lt;/servlet&gt;</span><br><span class="line">    </span><br><span class="line">    	&lt;!--servlet映射信息--&gt;</span><br><span class="line">    	&lt;servlet-mapping&gt;</span><br><span class="line">    		&lt;!--这个也是随便的，不过这里写的内容要和上面的一样。--&gt;</span><br><span class="line">    		&lt;servlet-name&gt;fdsafdsagfdsafdsa&lt;/servlet-name&gt;</span><br><span class="line">    		&lt;!--这里需要一个路径--&gt;</span><br><span class="line">    		&lt;!--这个路径唯一的要求是必须以 / 开始--&gt;</span><br><span class="line">    		&lt;!--当前这个路径可以随便写--&gt;</span><br><span class="line">    		&lt;url-pattern&gt;/fdsa/fd/saf/d/sa/fd/sa/fd&lt;/url-pattern&gt;</span><br><span class="line">    	&lt;/servlet-mapping&gt;</span><br><span class="line">    	</span><br><span class="line">    &lt;/web-app&gt;</span><br><span class="line">    </span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>第十步：启动Tomcat服务器</p>
+</li>
+<li><p>第十一步：打开浏览器，在浏览器地址栏上输入一个url，这个URL必须是：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://127.0.0.1:8080/crm/fdsa/fd/saf/d/sa/fd/sa/fd">http://127.0.0.1:8080/crm/fdsa/fd/saf/d/sa/fd/sa/fd</a>   </li>
+<li>非常重要的一件事：浏览器上的请求路径不能随便写，这个请求路径必须和web.xml文件中的url-pattern一致。</li>
+<li>注意：浏览器上的请求路径和web.xml文件中的url-pattern的唯一区别就是：浏览器上的请求路径带项目名：&#x2F;crm</li>
+</ul>
+</li>
+<li><p>浏览器上编写的路径太复杂，可以使用超链接。（<strong>非常重要：html页面只能放到WEB-INF目录外面。</strong>）</p>
+</li>
+<li><p>以后不需要我们编写main方法了。tomcat服务器负责调用main方法，Tomcat服务器启动的时候执行的就是main方法。我们javaweb程序员只需要编写Servlet接口的实现类，然后将其注册到web.xml文件中，即可。</p>
+</li>
+<li><p><strong>总结一下</strong>：一个合法的webapp目录结构应该是怎样的？</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">webapproot</span><br><span class="line">     |------WEB-INF</span><br><span class="line">     		  |------classes(存放字节码)</span><br><span class="line">     		  |------lib(第三方jar包)</span><br><span class="line">     		  |------web.xml(注册Servlet)</span><br><span class="line">     |------html</span><br><span class="line">     |------css</span><br><span class="line">     |------javascript</span><br><span class="line">     |------image</span><br><span class="line">     ....</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>浏览器发送请求，到最终服务器调用Servlet中的方法，是怎样的一个过程？（以下这个过程描述的很粗糙。其中还有很多步骤我省略了。）</p>
+<ul>
+<li>用户输入URL，或者直接点击超链接：<a target="_blank" rel="noopener" href="http://127.0.0.1:8080/crm/fdsa/fd/saf/d/sa/fd/sa/fd">http://127.0.0.1:8080/crm/fdsa/fd/saf/d/sa/fd/sa/fd</a>  </li>
+<li>然后Tomcat服务器接收到请求，截取路径：&#x2F;crm&#x2F;fdsa&#x2F;fd&#x2F;saf&#x2F;d&#x2F;sa&#x2F;fd&#x2F;sa&#x2F;fd  </li>
+<li>Tomcat服务器找到crm项目</li>
+<li>Tomcat服务器在web.xml文件中查找&#x2F;fdsa&#x2F;fd&#x2F;saf&#x2F;d&#x2F;sa&#x2F;fd&#x2F;sa&#x2F;fd  对应的Servlet是：com.bjpowernode.servlet.HelloServlet</li>
+<li>Tomcat服务器通过反射机制，创建com.bjpowernode.servlet.HelloServlet的对象。</li>
+<li>Tomcat服务器调用com.bjpowernode.servlet.HelloServlet对象的service方法。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="关于JavaEE的版本"><a href="#关于JavaEE的版本" class="headerlink" title="关于JavaEE的版本"></a>关于JavaEE的版本</h2><ul>
+<li>JavaEE目前最高版本是 JavaEE8</li>
+<li>JavaEE被Oracle捐献了，Oracle将JavaEE规范捐献给Apache了。</li>
+<li>Apache把JavaEE换名了，以后不叫JavaEE了，以后叫做 jakarta EE。</li>
+<li>以后没有JavaEE了。以后都叫做Jakarta EE。</li>
+<li>JavaEE8版本升级之后的”JavaEE 9”，不再是”JavaEE9”这个名字了，叫做JakartaEE9</li>
+<li>JavaEE8的时候对应的Servlet类名是：javax.servlet.Servlet</li>
+<li>JakartaEE9的时候对应的Servlet类名是：jakarta.servlet.Servlet （包名都换了）</li>
+<li>如果你之前的项目还是在使用javax.servlet.Servlet，那么你的项目无法直接部署到Tomcat10+版本上。你只能部署到Tomcat9-版本上。在Tomcat9以及Tomcat9之前的版本中还是能够识别javax.servlet这个包。</li>
+</ul>
+<h2 id="解决Tomcat服务器在DOS命令窗口中的乱码问题（控制台乱码）"><a href="#解决Tomcat服务器在DOS命令窗口中的乱码问题（控制台乱码）" class="headerlink" title="解决Tomcat服务器在DOS命令窗口中的乱码问题（控制台乱码）"></a>解决Tomcat服务器在DOS命令窗口中的乱码问题（控制台乱码）</h2><p>将CATALINA_HOME&#x2F;conf&#x2F;logging.properties文件中的内容修改如下：</p>
+<p>java.util.logging.ConsoleHandler.encoding &#x3D; GBK</p>
+<h2 id="向浏览器响应一段HTML代码"><a href="#向浏览器响应一段HTML代码" class="headerlink" title="向浏览器响应一段HTML代码"></a>向浏览器响应一段HTML代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">service</span><span class="params">(ServletRequest request, ServletResponse response)</span>&#123;</span><br><span class="line">    response.setContentType(<span class="string">&quot;text/html&quot;</span>);</span><br><span class="line">    <span class="type">PrintWriter</span> <span class="variable">out</span> <span class="operator">=</span> response.getWriter();</span><br><span class="line">    out.print(<span class="string">&quot;&lt;h1&gt;hello servlet!&lt;/h1&gt;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="在Servlet中连接数据库，怎么做？"><a href="#在Servlet中连接数据库，怎么做？" class="headerlink" title="在Servlet中连接数据库，怎么做？"></a>在Servlet中连接数据库，怎么做？</h2><ul>
+<li>Servlet是Java程序，所以在Servlet中完全可以编写JDBC代码连接数据库。</li>
+<li>在一个webapp中去连接数据库，需要将驱动jar包放到WEB-INF&#x2F;lib目录下。（com.mysql.cj.jdbc.Driver 这个类就在驱动jar包当中。）</li>
+</ul>
+<h2 id="在集成开发环境当中开发Servlet程序"><a href="#在集成开发环境当中开发Servlet程序" class="headerlink" title="在集成开发环境当中开发Servlet程序"></a>在集成开发环境当中开发Servlet程序</h2><ul>
+<li><p>集成开发工具很多，其中目前使用比较多的是：</p>
+<ul>
+<li>IntelliJ IDEA（这个居多，IDEA在提示功能方面要强于Eclipse，也就是说IDEA使用起来比Eclipse更加智能，更好用。JetBrain公司开发的。收费的。）</li>
+<li>Eclipse（这个少一些），Eclipse目前还是有团队使用，只不过处于减少的趋势，自己从事工作之后，可能会遇到。Eclipse是IBM团队开发的。Eclipse寓意是“日食”。“日食”表示将太阳吃掉。太阳是SUN。IBM团队开发Eclipse的寓意是吞并SUN公司，但是2009年的时候SUN公司被Oracle公司并购了。IBM并没有成功并购SUN公司。</li>
+</ul>
+</li>
+<li><p>使用IDEA集成开发工具开发Servlet</p>
+<ul>
+<li>第一步：New Project（我比较习惯先创建一个Empty Project【空工程】，然后在空工程下新建Module【模块】，这不是必须的，只是一种习惯，你可以直接新建非空的Project），这个Empty Project起名为：javaweb（不是必须的，只是一个名字而已。一般情况下新建的Project的名字最好和目录的名字一致。）</li>
+<li>第二步：新建模块（File –&gt; new –&gt; Module…）<ul>
+<li>这里新建的是一个普通的JavaSE模块（这里先不要新建Java Enterprise模块）</li>
+<li>这个Module自动会被放在javaweb的project下面。</li>
+<li>这个Module起名：servlet01</li>
+</ul>
+</li>
+<li>第三步：让Module变成JavaEE的模块。（让Module变成webapp的模块。符合webapp规范。符合Servlet规范的Module）<ul>
+<li>在Module上点击右键：Add Framework Support…（添加框架支持）</li>
+<li>在弹出的窗口中，选择Web Application（选择的是webapp的支持）</li>
+<li>选择了这个webapp的支持之后，IDEA会自动给你生成一个符合Servlet规范的webpp目录结构。</li>
+<li><strong>重点，需要注意的：在IDEA工具中根据Web Application模板生成的目录中有一个web目录，这个目录就代表webapp的根</strong></li>
+</ul>
+</li>
+<li>第四步（非必须）：根据Web Application生成的资源中有index.jsp文件，这里我选择删除这个index.jsp文件。</li>
+<li>第五步：编写Servlet（StudentServlet）<ul>
+<li>class StudentServlet implements Servlet</li>
+<li>这个时候发现Servlet.class文件没有。怎么办？将CATALINA_HOME&#x2F;lib&#x2F;servlet-api.jar和jsp-api.jar添加到classpath当中（这里的classpath说的是IDEA的classpath）<ul>
+<li>File –&gt; Project Structrue –&gt; Modules –&gt; + 加号 –&gt; Add JARS….</li>
+</ul>
+</li>
+<li>实现jakarta.servlet.Servlet接口中的5个方法。</li>
+</ul>
+</li>
+<li>第六步：在Servlet当中的service方法中编写业务代码（我们这里连接数据库了。）</li>
+<li>第七步：在WEB-INF目录下新建了一个子目录：lib（这个目录名可不能随意，必须是全部小写的lib），并且将连接数据库的驱动jar包放到lib目录下。</li>
+<li>第八步：在web.xml文件中完成StudentServlet类的注册。（请求路径和Servlet之间对应起来）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span><br><span class="line">&lt;web-app xmlns=<span class="string">&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;</span></span><br><span class="line">         xmlns:xsi=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span><br><span class="line">         xsi:schemaLocation=<span class="string">&quot;http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd&quot;</span></span><br><span class="line">         version=<span class="string">&quot;4.0&quot;</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;servlet&gt;</span><br><span class="line">        &lt;servlet-name&gt;studentServlet&lt;/servlet-name&gt;</span><br><span class="line">        &lt;servlet-class&gt;com.bjpowernode.javaweb.servlet.StudentServlet&lt;/servlet-class&gt;</span><br><span class="line">    &lt;/servlet&gt;</span><br><span class="line">    &lt;servlet-mapping&gt;</span><br><span class="line">        &lt;servlet-name&gt;studentServlet&lt;/servlet-name&gt;</span><br><span class="line">        &lt;url-pattern&gt;/servlet/student&lt;/url-pattern&gt;</span><br><span class="line">    &lt;/servlet-mapping&gt;</span><br><span class="line">    </span><br><span class="line">&lt;/web-app&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><p>第九步：给一个html页面，在HTML页面中编写一个超链接，用户点击这个超链接，发送请求，Tomcat执行后台的StudentServlet。</p>
+<ul>
+<li><p>student.html</p>
+</li>
+<li><p>这个文件不能放到WEB-INF目录里面，只能放到WEB-INF目录外面。</p>
+</li>
+<li><p>student.html文件的内容</p>
+</li>
+<li><p>&#96;&#96;&#96;html</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>student page</title>
+</head>
+<body>
+    <!--这里的项目名是 /xmm ，无法动态获取，先写死-->
+    <a href="/xmm/servlet/student">student list</a>
+</body>
+</html>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      </span><br><span class="line"></span><br><span class="line">  - 第十步：让IDEA工具去关联Tomcat服务器。关联的过程当中将webapp部署到Tomcat服务器当中。</span><br><span class="line"></span><br><span class="line">    - IDEA工具右上角，绿色小锤子右边有一个：Add Configuration</span><br><span class="line">    - 左上角加号，点击Tomcat Server --&gt; local</span><br><span class="line">    - 在弹出的界面中设置服务器Server的参数（基本上不用动）</span><br><span class="line">    - 在当前窗口中有一个Deployment（点击这个用来部署webapp），继续点击加号，部署即可。</span><br><span class="line">    - 修改 Application context为：/xmm</span><br><span class="line"></span><br><span class="line">  - 第十一步：启动Tomcat服务器</span><br><span class="line"></span><br><span class="line">    - 在右上角有绿色的箭头，或者绿色的小虫子，点击这个绿色的小虫子，可以采用debug的模式启动Tomcat服务器。</span><br><span class="line">    - 我们开发中建议适用debug模式启动Tomcat</span><br><span class="line"></span><br><span class="line">  - 第十二步：打开浏览器，在浏览器地址栏上输入：http://localhost:8080/xmm/student.html</span><br><span class="line"></span><br><span class="line">## Servlet对象的生命周期</span><br><span class="line"></span><br><span class="line">- 什么是Servlet对象生命周期？</span><br><span class="line"></span><br><span class="line">  - Servlet对象什么时候被创建。</span><br><span class="line">  - Servlet对象什么时候被销毁。</span><br><span class="line">  - Servlet对象创建了几个？</span><br><span class="line">  - Servlet对象的生命周期表示：一个Servlet对象从出生在最后的死亡，整个过程是怎样的。</span><br><span class="line"></span><br><span class="line">- Servlet对象是由谁来维护的？</span><br><span class="line"></span><br><span class="line">  - Servlet对象的创建，对象上方法的调用，对象最终的销毁，Javaweb程序员是无权干预的。</span><br><span class="line">  - Servlet对象的生命周期是由Tomcat服务器（WEB Server）全权负责的。</span><br><span class="line">  - Tomcat服务器通常我们又称为：WEB容器。（这个叫法你要知道【WEB Container】）</span><br><span class="line">  - WEB容器来管理Servlet对象的死活。</span><br><span class="line"></span><br><span class="line">- 思考：我们自己new的Servlet对象受WEB容器的管理吗？</span><br><span class="line"></span><br><span class="line">  - 我们自己new的Servlet对象是不受WEB容器管理的。</span><br><span class="line"></span><br><span class="line">  - WEB容器创建的Servlet对象，这些Servlet对象都会被放到一个集合当中（HashMap），只有放到这个HashMap集合中的Servlet才能够被WEB容器管理，自己new的Servlet对象不会被WEB容器管理。（自己new的Servlet对象不在容器当中）</span><br><span class="line"></span><br><span class="line">  - web容器底层应该有一个HashMap这样的集合，在这个集合当中存储了Servlet对象和请求路径之间的关系</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">- 研究：服务器在启动的Servlet对象有没有被创建出来（默认情况下）？</span><br><span class="line"></span><br><span class="line">  - 在Servlet中提供一个无参数的构造方法，启动服务器的时候看看构造方法是否执行。</span><br><span class="line">  - 经过测试得出结论：默认情况下，服务器在启动的时候Servlet对象并不会被实例化。</span><br><span class="line">  - 这个设计是合理的。用户没有发送请求之前，如果提前创建出来所有的Servlet对象，必然是耗费内存的，并且创建出来的Servlet如果一直没有用户访问，显然这个Servlet对象是一个废物，没必要先创建。</span><br><span class="line"></span><br><span class="line">- 怎么让服务器启动的时候创建Servlet对象呢？</span><br><span class="line"></span><br><span class="line">  - 在servlet标签中添加&lt;load-on-startup&gt;子标签，在该子标签中填写整数，越小的整数优先级越高。</span><br><span class="line"></span><br><span class="line">  - ```xml</span><br><span class="line">    &lt;servlet&gt;</span><br><span class="line">        &lt;servlet-name&gt;aservlet&lt;/servlet-name&gt;</span><br><span class="line">        &lt;servlet-class&gt;com.bjpowernode.javaweb.servlet.AServlet&lt;/servlet-class&gt;</span><br><span class="line">        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</span><br><span class="line">    &lt;/servlet&gt;</span><br><span class="line">    &lt;servlet-mapping&gt;</span><br><span class="line">        &lt;servlet-name&gt;aservlet&lt;/servlet-name&gt;</span><br><span class="line">        &lt;url-pattern&gt;/a&lt;/url-pattern&gt;</span><br><span class="line">    &lt;/servlet-mapping&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Servlet对象生命周期</p>
+<ul>
+<li><p>默认情况下服务器启动的时候AServlet对象并没有被实例化</p>
+</li>
+<li><p>用户发送第一次请求的时候，控制台输出了以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AServlet无参数构造方法执行了</span><br><span class="line">AServlet&#x27;s init method execute!</span><br><span class="line">AServlet&#x27;s service method execute!</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>根据以上输出内容得出结论：</p>
+<ul>
+<li>用户在发送第一次请求的时候Servlet对象被实例化（AServlet的构造方法被执行了。并且执行的是无参数构造方法。）</li>
+<li>AServlet对象被创建出来之后，Tomcat服务器马上调用了AServlet对象的init方法。（init方法在执行的时候，AServlet对象已经存在了。已经被创建出来了。）</li>
+<li>用户发送第一次请求的时候，init方法执行之后，Tomcat服务器马上调用AServlet对象的service方法。</li>
+</ul>
+</li>
+<li><p>用户继续发送第二次请求，控制台输出了以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AServlet&#x27;s service method execute!</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>根据以上输出结果得知，用户在发送第二次，或者第三次，或者第四次请求的时候，Servlet对象并没有新建，还是使用之前创建好的Servlet对象，直接调用该Servlet对象的service方法，这说明：</p>
+<ul>
+<li>第一：Servlet对象是单例的（单实例的。但是要注意：Servlet对象是单实例的，但是Servlet类并不符合单例模式。我们称之为假单例。之所以单例是因为Servlet对象的创建我们javaweb程序员管不着，这个对象的创建只能是Tomcat来说了算，Tomcat只创建了一个，所以导致了单例，但是属于假单例。真单例模式，构造方法是私有化的。）</li>
+<li>第二：无参数构造方法、init方法只在第一次用户发送请求的时候执行。也就是说无参数构造方法只执行一次。init方法也只被Tomcat服务器调用一次。</li>
+<li>第三：只要用户发送一次请求：service方法必然会被Tomcat服务器调用一次。发送100次请求，service方法会被调用100次。</li>
+</ul>
+</li>
+<li><p>关闭服务器的时候，控制台输出了以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AServlet&#x27;s destroy method execute!</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过以上输出内容，可以得出以下结论：</p>
+<ul>
+<li>Servlet的destroy方法只被Tomcat服务器调用一次。</li>
+<li>destroy方法是在什么时候被调用的？<ul>
+<li>在服务器关闭的时候。</li>
+<li>因为服务器关闭的时候要销毁AServlet对象的内存。</li>
+<li>服务器在销毁AServlet对象内存之前，Tomcat服务器会自动调用AServlet对象的destroy方法。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>请问：destroy方法调用的时候，对象销毁了还是没有销毁呢？</p>
+<ul>
+<li>destroy方法执行的时候AServlet对象还在，没有被销毁。destroy方法执行结束之后，AServlet对象的内存才会被Tomcat释放。</li>
+</ul>
+</li>
+<li><p>Servlet对象更像一个人的一生：</p>
+<ul>
+<li>Servlet的无参数构造方法执行：标志着你出生了。</li>
+<li>Servlet对象的init方法的执行：标志着你正在接受教育。</li>
+<li>Servlet对象的service方法的执行：标志着你已经开始工作了，已经开始为人类提供服务了。</li>
+<li>Servlet对象的destroy方法的执行：标志着临终。有什么遗言，抓紧的。要不然，来不及了。</li>
+</ul>
+</li>
+<li><p>关于Servlet类中方法的调用次数？</p>
+<ul>
+<li>构造方法只执行一次。</li>
+<li>init方法只执行一次。</li>
+<li>service方法：用户发送一次请求则执行一次，发送N次请求则执行N次。</li>
+<li>destroy方法只执行一次。</li>
+</ul>
+</li>
+<li><p>当我们Servlet类中编写一个有参数的构造方法，如果没有手动编写无参数构造方法会出现什么问题？</p>
+<ul>
+<li>报错了：500错误。</li>
+<li>注意：500是一个HTTP协议的错误状态码。</li>
+<li>500一般情况下是因为服务器端的Java程序出现了异常。（服务器端的错误都是500错误：服务器内部错误。）</li>
+<li>如果没有无参数的构造方法，会导致出现500错误，无法实例化Servlet对象。</li>
+<li>所以，一定要注意：在Servlet开发当中，不建议程序员来定义构造方法，因为定义不当，一不小心就会导致无法实例化Servlet对象。</li>
+</ul>
+</li>
+<li><p>思考：Servlet的无参数构造方法是在对象第一次创建的时候执行，并且只执行一次。init方法也是在对象第一次创建的时候执行，并且只执行一次。那么这个无参数构造方法可以代替掉init方法吗？</p>
+<ul>
+<li>不能。</li>
+<li>Servlet规范中有要求，作为javaweb程序员，编写Servlet类的时候，不建议手动编写构造方法，因为编写构造方法，很容易让无参数构造方法消失，这个操作可能会导致Servlet对象无法实例化。所以init方法是有存在的必要的。</li>
+</ul>
+</li>
+<li><p>init、service、destroy方法中使用最多的是哪个方法？</p>
+<ul>
+<li>使用最多就是service方法，service方法是一定要实现的，因为service方法是处理用户请求的核心方法。</li>
+<li>什么时候使用init方法呢？<ul>
+<li>init方法很少用。</li>
+<li>通常在init方法当中做初始化操作，并且这个初始化操作只需要执行一次。例如：初始化数据库连接池，初始化线程池….</li>
+</ul>
+</li>
+<li>什么时候使用destroy方法呢？<ul>
+<li>destroy方法也很少用。</li>
+<li>通常在destroy方法当中，进行资源的关闭。马上对象要被销毁了，还有什么没有关闭的，抓紧时间关闭资源。还有什么资源没保存的，抓紧时间保存一下。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="总结-Servlet生命周期可分为5个步骤"><a href="#总结-Servlet生命周期可分为5个步骤" class="headerlink" title="总结:Servlet生命周期可分为5个步骤"></a>总结:Servlet生命周期可分为5个步骤</h4><ol>
+<li><strong>加载Servlet</strong>。当Tomcat第一次访问Servlet的时候，<strong>Tomcat会负责创建Servlet的实例</strong></li>
+<li><strong>初始化</strong>。当Servlet被实例化后，Tomcat会<strong>调用init()方法初始化这个对象</strong></li>
+<li><strong>处理服务</strong>。当浏览器<strong>访问Servlet</strong>的时候，Servlet <strong>会调用service()方法处理请求</strong></li>
+<li><strong>销毁</strong>。当Tomcat关闭时或者检测到Servlet要从Tomcat删除的时候会自动调用destroy()方法，<strong>让该实例释放掉所占的资源</strong>。一个Servlet如果长时间不被使用的话，也会被Tomcat自动销毁</li>
+<li><strong>卸载</strong>。当Servlet调用完destroy()方法后，等待垃圾回收。如果<strong>有需要再次使用这个Servlet，会重新调用init()方法进行初始化操作</strong>。</li>
+</ol>
+<ul>
+<li>简单总结：<strong>只要访问Servlet，service()就会被调用。init()只有第一次访问Servlet的时候才会被调用。<br> destroy()只有在Tomcat关闭的时候才会被调用。</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="GenericServlet"><a href="#GenericServlet" class="headerlink" title="GenericServlet"></a>GenericServlet</h2><ul>
+<li><p>我们编写一个Servlet类直接实现Servlet接口有什么缺点？</p>
+<ul>
+<li>我们只需要service方法，其他方法大部分情况下是不需要使用的。代码很丑陋。</li>
+</ul>
+</li>
+<li><p>适配器设计模式Adapter</p>
+<ul>
+<li>手机直接插到220V的电压上，手机直接就报废了。怎么办？可以找一个充电器。这个充电器就是一个适配器。手机连接适配器。适配器连接220V的电压。这样问题就解决了。</li>
+</ul>
+</li>
+<li><p>编写一个GenericServlet类，这个类是一个抽象类，其中有一个抽象方法service。</p>
+<ul>
+<li>GenericServlet实现Servlet接口。</li>
+<li>GenericServlet是一个适配器。</li>
+<li>以后编写的所有Servlet类继承GenericServlet，重写service方法即可。</li>
+</ul>
+</li>
+<li><p>思考：GenericServlet类是否需要改造一下？怎么改造？更利于子类程序的编写？</p>
+<ul>
+<li><p>思考第一个问题：我提供了一个GenericServlet之后，init方法还会执行吗？</p>
+<ul>
+<li>还会执行。会执行GenericServlet类中的init方法。</li>
+</ul>
+</li>
+<li><p>思考第二个问题：init方法是谁调用的？</p>
+<ul>
+<li>Tomcat服务器调用的。</li>
+</ul>
+</li>
+<li><p>思考第三个问题：init方法中的ServletConfig对象是谁创建的？是谁传过来的？</p>
+<ul>
+<li>都是Tomcat干的。</li>
+<li>Tomcat服务器先创建了ServletConfig对象，然后调用init方法，将ServletConfig对象传给了init方法。</li>
+</ul>
+</li>
+<li><p>思考一下Tomcat服务器伪代码：</p>
+<ul>
+<li>&#96;&#96;&#96;java<br>public class Tomcat {<br>public static void main(String[] args){<br>    &#x2F;&#x2F; …..<br>    &#x2F;&#x2F; Tomcat服务器伪代码<br>    &#x2F;&#x2F; 创建LoginServlet对象（通过反射机制，调用无参数构造方法来实例化LoginServlet对象）<br>    Class clazz &#x3D; Class.forName(“com.bjpowernode.javaweb.servlet.LoginServlet”);<br>    Object obj &#x3D; clazz.newInstance();<br><br>    &#x2F;&#x2F; 向下转型<br>    Servlet servlet &#x3D; (Servlet)obj;<br><br>    &#x2F;&#x2F; 创建ServletConfig对象<br>    &#x2F;&#x2F; Tomcat服务器负责将ServletConfig对象实例化出来。<br>    &#x2F;&#x2F; 多态（Tomcat服务器完全实现了Servlet规范）<br>    ServletConfig servletConfig &#x3D; new org.apache.catalina.core.StandardWrapperFacade();<br><br>    &#x2F;&#x2F; 调用Servlet的init方法<br>    servlet.init(servletConfig);<br><br>    &#x2F;&#x2F; 调用Servlet的service方法<br>    &#x2F;&#x2F; ….<br><br>}<br>}<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## ServletConfig</span><br><span class="line"></span><br><span class="line">- 什么是ServletConfig？</span><br><span class="line"></span><br><span class="line">  - Servlet对象的配置信息对象。</span><br><span class="line">  - ServletConfig对象中封装了&lt;servlet&gt;&lt;/servlet&gt;标签中的配置信息。（web.xml文件中servlet的配置信息）</span><br><span class="line"></span><br><span class="line">- 一个Servlet对应一个ServletConfig对象。</span><br><span class="line"></span><br><span class="line">- Servlet对象是Tomcat服务器创建，并且ServletConfig对象也是Tomcat服务器创建。并且默认情况下，他们都是在用户发送第一次请求的时候创建。</span><br><span class="line"></span><br><span class="line">- Tomcat服务器调用Servlet对象的init方法的时候需要传一个ServletConfig对象的参数给init方法。</span><br><span class="line"></span><br><span class="line">- ServletConfig接口的实现类是Tomcat服务器给实现的。（Tomcat服务器说的就是WEB服务器。）</span><br><span class="line"></span><br><span class="line">- ServletConfig接口有哪些常用的方法？</span><br><span class="line"></span><br><span class="line">  - ```java</span><br><span class="line">    public String getInitParameter(String name); // 通过初始化参数的name获取value</span><br><span class="line">    public Enumeration&lt;String&gt; getInitParameterNames(); // 获取所有的初始化参数的name</span><br><span class="line">    public ServletContext getServletContext(); // 获取ServletContext对象</span><br><span class="line">    public String getServletName(); // 获取Servlet的name</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>以上方法在Servlet类当中，都可以使用this去调用。因为GenericServlet实现了ServletConfig接口。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="ServletContext"><a href="#ServletContext" class="headerlink" title="ServletContext"></a>ServletContext</h2><ul>
+<li><p>一个Servlet对象对应一个ServletConfig。100个Servlet对象则对应100个ServletConfig对象。</p>
+</li>
+<li><p>只要在同一个webapp当中，只要在同一个应用当中，所有的Servlet对象都是共享同一个ServletContext对象的。</p>
+</li>
+<li><p>ServletContext对象在服务器启动阶段创建，在服务器关闭的时候销毁。这就是ServletContext对象的生命周期。ServletContext对象是应用级对象。</p>
+</li>
+<li><p>Tomcat服务器中有一个webapps，这个webapps下可以存放webapp，可以存放多个webapp，假设有100个webapp，那么就有100个ServletContext对象。但是，总之，一个应用，一个webapp肯定是只有一个ServletContext对象。</p>
+</li>
+<li><p>ServletContext被称为Servlet上下文对象。（Servlet对象的四周环境对象。）</p>
+</li>
+<li><p>一个ServletContext对象通常对应的是一个web.xml文件。</p>
+</li>
+<li><p>ServletContext对应显示生活中的什么例子呢？</p>
+<ul>
+<li>一个教室里有多个学生，那么每一个学生就是一个Servlet，这些学生都在同一个教室当中，那么我们可以把这个教室叫做ServletContext对象。那么也就是说放在这个ServletContext对象（环境）当中的数据，在同一个教室当中，物品都是共享的。比如：教室中有一个空调，所有的学生都可以操作。可见，空调是共享的。因为空调放在教室当中。教室就是ServletContext对象。</li>
+</ul>
+</li>
+<li><p>ServletContext是一个接口，Tomcat服务器对ServletContext接口进行了实现。</p>
+<ul>
+<li>ServletContext对象的创建也是Tomcat服务器来完成的。启动webapp的时候创建的。</li>
+</ul>
+</li>
+<li><p>ServletContext接口中有哪些常用的方法？</p>
+<ul>
+<li><pre><code class="java">public String getInitParameter(String name); // 通过初始化参数的name获取value
+public Enumeration&lt;String&gt; getInitParameterNames(); // 获取所有的初始化参数的name
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- ```xml</span><br><span class="line">  &lt;!--以上两个方法是ServletContext对象的方法，这个方法获取的是什么信息？是以下的配置信息--&gt;</span><br><span class="line">  &lt;context-param&gt;</span><br><span class="line">      &lt;param-name&gt;pageSize&lt;/param-name&gt;</span><br><span class="line">      &lt;param-value&gt;10&lt;/param-value&gt;</span><br><span class="line">  &lt;/context-param&gt;</span><br><span class="line">  &lt;context-param&gt;</span><br><span class="line">      &lt;param-name&gt;startIndex&lt;/param-name&gt;</span><br><span class="line">      &lt;param-value&gt;0&lt;/param-value&gt;</span><br><span class="line">  &lt;/context-param&gt;</span><br><span class="line">  &lt;!--注意：以上的配置信息属于应用级的配置信息，一般一个项目中共享的配置信息会放到以上的标签当中。--&gt;</span><br><span class="line">  &lt;!--如果你的配置信息只是想给某一个servlet作为参考，那么你配置到servlet标签当中即可，使用ServletConfig对象来获取。--&gt;</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><pre><code class="java">// 获取应用的根路径（非常重要），因为在java源代码当中有一些地方可能会需要应用的根路径，这个方法可以动态获取应用的根路径
+// 在java源码当中，不要将应用的根路径写死，因为你永远都不知道这个应用在最终部署的时候，起一个什么名字。
+public String getContextPath();
+//String contextPath = application.getContextPath();
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- ```java</span><br><span class="line">  // 获取文件的绝对路径（真实路径）</span><br><span class="line">  public String getRealPath(String path);</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p>&#96;&#96;&#96;java<br>&#x2F;&#x2F; 通过ServletContext对象也是可以记录日志的<br>public void log(String message);<br>public void log(String message, Throwable t);<br>&#x2F;&#x2F; 这些日志信息记录到哪里了？<br>&#x2F;&#x2F; localhost.2021-11-05.log</p>
+<p>&#x2F;&#x2F; Tomcat服务器的logs目录下都有哪些日志文件？<br>&#x2F;&#x2F;catalina.2021-11-05.log 服务器端的java程序运行的控制台信息。<br>&#x2F;&#x2F;localhost.2021-11-05.log ServletContext对象的log方法记录的日志信息存储到这个文件中。<br>&#x2F;&#x2F;localhost_access_log.2021-11-05.txt 访问日志</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- ```java</span><br><span class="line">  // ServletContext对象还有另一个名字：应用域（后面还有其他域，例如：请求域、会话域）</span><br><span class="line">  </span><br><span class="line">  // 如果所有的用户共享一份数据，并且这个数据很少的被修改，并且这个数据量很少，可以将这些数据放到ServletContext这个应用域中</span><br><span class="line">  </span><br><span class="line">  // 为什么是所有用户共享的数据？ 不是共享的没有意义。因为ServletContext这个对象只有一个。只有共享的数据放进去才有意义。</span><br><span class="line">  </span><br><span class="line">  // 为什么数据量要小？ 因为数据量比较大的话，太占用堆内存，并且这个对象的生命周期比较长，服务器关闭的时候，这个对象才会被销毁。大数据量会影响服务器的性能。占用内存较小的数据量可以考虑放进去。</span><br><span class="line">  </span><br><span class="line">  // 为什么这些共享数据很少的修改，或者说几乎不修改？</span><br><span class="line">  // 所有用户共享的数据，如果涉及到修改操作，必然会存在线程并发所带来的安全问题。所以放在ServletContext对象中的数据一般都是只读的。</span><br><span class="line">  </span><br><span class="line">  // 数据量小、所有用户共享、又不修改，这样的数据放到ServletContext这个应用域当中，会大大提升效率。因为应用域相当于一个缓存，放到缓存中的数据，下次在用的时候，不需要从数据库中再次获取，大大提升执行效率。</span><br><span class="line">  </span><br><span class="line">  // 存（怎么向ServletContext应用域中存数据）</span><br><span class="line">  public void setAttribute(String name, Object value); // map.put(k, v)</span><br><span class="line">  // 取（怎么从ServletContext应用域中取数据）</span><br><span class="line">  public Object getAttribute(String name); // Object v = map.get(k)</span><br><span class="line">  // 删（怎么删除ServletContext应用域中的数据）</span><br><span class="line">  public void removeAttribute(String name); // map.remove(k)</span><br><span class="line">  </span><br><span class="line">  </span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>注意：以后我们编写Servlet类的时候，实际上是不会去直接继承GenericServlet类的，因为我们是B&#x2F;S结构的系统，这种系统是基于HTTP超文本传输协议的，在Servlet规范当中，提供了一个类叫做HttpServlet，它是专门为HTTP协议准备的一个Servlet类。我们编写的Servlet类要继承HttpServlet。（HttpServlet是HTTP协议专用的。）使用HttpServlet处理HTTP协议更便捷。但是你需要直到它的继承结构：</p>
+<ul>
+<li><pre><code>jakarta.servlet.Servlet（接口）【爷爷】
+jakarta.servlet.GenericServlet implements Servlet（抽象类）【儿子】
+jakarta.servlet.http.HttpServlet extends GenericServlet（抽象类）【孙子】
+
+我们以后编写的Servlet要继承HttpServlet类。
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- 大家到目前为止都接触过哪些缓存机制了？</span><br><span class="line"></span><br><span class="line">  - 堆内存当中的字符串常量池。</span><br><span class="line">    - &quot;abc&quot; 先在字符串常量池中查找，如果有，直接拿来用。如果没有则新建，然后再放入字符串常量池。</span><br><span class="line">  - 堆内存当中的整数型常量池。</span><br><span class="line">    - [-128 ~ 127] 一共256个Integer类型的引用，放在整数型常量池中。没有超出这个范围的话，直接从常量池中取。</span><br><span class="line">  - 连接池(Connection Cache)</span><br><span class="line">    - 这里所说的连接池中的连接是java语言连接数据库的连接对象：java.sql.Connection对象。</span><br><span class="line">    - JVM是一个进程。MySQL数据库是一个进程。进程和进程之间建立连接，打开通道是很费劲的。是很耗费资源的。怎么办？可以提前先创建好N个Connection连接对象，将连接对象放到一个集合当中，我们把这个放有Connection对象的集合称为连接池。每一次用户连接的时候不需要再新建连接对象，省去了新建的环节，直接从连接池中获取连接对象，大大提升访问效率。</span><br><span class="line">    - 连接池</span><br><span class="line">      - 最小连接数</span><br><span class="line">      - 最大连接数</span><br><span class="line">      - 连接池可以提高用户的访问效率。当然也可以保证数据库的安全性。</span><br><span class="line">  - 线程池</span><br><span class="line">    - Tomcat服务器本身就是支持多线程的。</span><br><span class="line">    - Tomcat服务器是在用户发送一次请求，就新建一个Thread线程对象吗？</span><br><span class="line">      - 当然不是，实际上是在Tomcat服务器启动的时候，会先创建好N多个线程Thread对象，然后将线程对象放到集合当中，称为线程池。用户发送请求过来之后，需要有一个对应的线程来处理这个请求，这个时候线程对象就会直接从线程池中拿，效率比较高。</span><br><span class="line">      - 所有的WEB服务器，或者应用服务器，都是支持多线程的，都有线程池机制。</span><br><span class="line">  - redis</span><br><span class="line">    - NoSQL数据库。非关系型数据库。缓存数据库。</span><br><span class="line">  - 向ServletContext应用域中存储数据，也等于是将数据存放到缓存cache当中了。</span><br><span class="line"></span><br><span class="line">## HTTP协议</span><br><span class="line"></span><br><span class="line">- 什么是协议？</span><br><span class="line"></span><br><span class="line">  - 协议实际上是某些人，或者某些组织提前制定好的一套规范，大家都按照这个规范来，这样可以做到沟通无障碍。</span><br><span class="line">  - 协议就是一套规范，就是一套标准。由其他人或其他组织来负责制定的。</span><br><span class="line">  - 我说的话你能听懂，你说的话，我也能听懂，这说明我们之间是有一套规范的，一套协议的，这套协议就是：中国普通话协议。我们都遵守这套协议，我们之间就可以沟通无障碍。</span><br><span class="line"></span><br><span class="line">- 什么是HTTP协议？</span><br><span class="line"></span><br><span class="line">  - HTTP协议：是W3C制定的一种超文本传输协议。（通信协议：发送消息的模板提前被制定好。）</span><br><span class="line">  - W3C：</span><br><span class="line">    - 万维网联盟组织</span><br><span class="line">    - 负责制定标准的：HTTP HTML4.0 HTML5 XML DOM等规范都是W3C制定的。</span><br><span class="line">    - 万维网之父：蒂姆·伯纳斯·李</span><br><span class="line">  - 什么是超文本？</span><br><span class="line">    - 超文本说的就是：不是普通文本，比如流媒体：声音、视频、图片等。</span><br><span class="line">    - HTTP协议支持：不但可以传送普通字符串，同样支持传递声音、视频、图片等流媒体信息。</span><br><span class="line">  - 这种协议游走在B和S之间。B向S发数据要遵循HTTP协议。S向B发数据同样需要遵循HTTP协议。这样B和S才能解耦合。</span><br><span class="line">  - 什么是解耦合？</span><br><span class="line">    - B不依赖S。</span><br><span class="line">    - S也不依赖B。</span><br><span class="line">  - B/S表示：B/S结构的系统（浏览器访问WEB服务器的系统）</span><br><span class="line">  - 浏览器   向   WEB服务器发送数据，叫做：请求（request)</span><br><span class="line">  - WEB服务器   向   浏览器发送数据，叫做：响应（response）</span><br><span class="line">  - HTTP协议包括：</span><br><span class="line">    - 请求协议</span><br><span class="line">      - 浏览器  向   WEB服务器发送数据的时候，这个发送的数据需要遵循一套标准，这套标准中规定了发送的数据具体格式。</span><br><span class="line">    - 响应协议</span><br><span class="line">      - WEB服务器  向  浏览器发送数据的时候，这个发送的数据需要遵循一套标准，这套标准中规定了发送的数据具体格式。</span><br><span class="line">  - HTTP协议就是提前制定好的一种消息模板。</span><br><span class="line">    - 不管你是哪个品牌的浏览器，都是这么发。</span><br><span class="line">    - 不管你是哪个品牌的WEB服务器，都是这么发。</span><br><span class="line">    - FF浏览器  可以向 Tomcat发送请求，也可以向Jetty服务器发送请求。浏览器不依赖具体的服务器品牌。</span><br><span class="line">    - WEB服务器也不依赖具体的浏览器品牌。可以是FF浏览器，也可以是Chrome浏览器，可以是IE，都行。</span><br><span class="line"></span><br><span class="line">- HTTP的请求协议（B --&gt; S）</span><br><span class="line"></span><br><span class="line">  - HTTP的请求协议包括：4部分</span><br><span class="line"></span><br><span class="line">    - 请求行</span><br><span class="line">    - 请求头</span><br><span class="line">    - 空白行</span><br><span class="line">    - 请求体</span><br><span class="line"></span><br><span class="line">  - HTTP请求协议的具体报文：GET请求</span><br><span class="line"></span><br><span class="line">    - ```</span><br><span class="line">      GET /servlet05/getServlet?username=lucy&amp;userpwd=1111 HTTP/1.1                           请求行</span><br><span class="line">      Host: localhost:8080                                                                    请求头</span><br><span class="line">      Connection: keep-alive</span><br><span class="line">      sec-ch-ua: &quot;Google Chrome&quot;;v=&quot;95&quot;, &quot;Chromium&quot;;v=&quot;95&quot;, &quot;;Not A Brand&quot;;v=&quot;99&quot;</span><br><span class="line">      sec-ch-ua-mobile: ?0</span><br><span class="line">      sec-ch-ua-platform: &quot;Windows&quot;</span><br><span class="line">      Upgrade-Insecure-Requests: 1</span><br><span class="line">      User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36</span><br><span class="line">      Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span><br><span class="line">      Sec-Fetch-Site: same-origin</span><br><span class="line">      Sec-Fetch-Mode: navigate</span><br><span class="line">      Sec-Fetch-User: ?1</span><br><span class="line">      Sec-Fetch-Dest: document</span><br><span class="line">      Referer: http://localhost:8080/servlet05/index.html</span><br><span class="line">      Accept-Encoding: gzip, deflate, br</span><br><span class="line">      Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">                                                                                              空白行</span><br><span class="line">                                                                                              请求体</span><br></pre></td></tr></table></figure>
+
+</code></pre>
+</li>
+<li><p>HTTP请求协议的具体报文：POST请求</p>
+<ul>
+<li>&#96;&#96;&#96;<br>POST &#x2F;servlet05&#x2F;postServlet HTTP&#x2F;1.1                                                  请求行<br>Host: localhost:8080                                                                  请求头<br>Connection: keep-alive<br>Content-Length: 25<br>Cache-Control: max-age&#x3D;0<br>sec-ch-ua: “Google Chrome”;v&#x3D;”95”, “Chromium”;v&#x3D;”95”, “;Not A Brand”;v&#x3D;”99”<br>sec-ch-ua-mobile: ?0<br>sec-ch-ua-platform: “Windows”<br>Upgrade-Insecure-Requests: 1<br>Origin: <a target="_blank" rel="noopener" href="http://localhost:8080/">http://localhost:8080</a><br>Content-Type: application&#x2F;x-www-form-urlencoded<br>User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;95.0.4638.54 Safari&#x2F;537.36<br>Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;avif,image&#x2F;webp,image&#x2F;apng,<em>&#x2F;</em>;q&#x3D;0.8,application&#x2F;signed-exchange;v&#x3D;b3;q&#x3D;0.9<br>Sec-Fetch-Site: same-origin<br>Sec-Fetch-Mode: navigate<br>Sec-Fetch-User: ?1<br>Sec-Fetch-Dest: document<br>Referer: <a target="_blank" rel="noopener" href="http://localhost:8080/servlet05/index.html">http://localhost:8080/servlet05/index.html</a><br>Accept-Encoding: gzip, deflate, br<br>Accept-Language: zh-CN,zh;q&#x3D;0.9<br>                                                                                  空白行<br>username&#x3D;lisi&amp;userpwd&#x3D;123                                                             请求体<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">  - 请求行</span><br><span class="line"></span><br><span class="line">    - 包括三部分：</span><br><span class="line">      - 第一部分：请求方式（7种）</span><br><span class="line">        - get（常用的）</span><br><span class="line">        - post（常用的）</span><br><span class="line">        - delete</span><br><span class="line">        - put</span><br><span class="line">        - head</span><br><span class="line">        - options</span><br><span class="line">        - trace</span><br><span class="line">      - 第二部分：URI</span><br><span class="line">        - 什么是URI？ 统一资源标识符。代表网络中某个资源的名字。但是通过URI是无法定位资源的。</span><br><span class="line">        - 什么是URL？统一资源定位符。代表网络中某个资源，同时，通过URL是可以定位到该资源的。</span><br><span class="line">        - URI和URL什么关系，有什么区别？</span><br><span class="line">          - URL包括URI</span><br><span class="line">          - http://localhost:8080/servlet05/index.html 这是URL。</span><br><span class="line">          - /servlet05/index.html 这是URI。</span><br><span class="line">      - 第三部分：HTTP协议版本号</span><br><span class="line"></span><br><span class="line">  - 请求头</span><br><span class="line"></span><br><span class="line">    - 请求的主机</span><br><span class="line">    - 主机的端口</span><br><span class="line">    - 浏览器信息</span><br><span class="line">    - 平台信息</span><br><span class="line">    - cookie等信息</span><br><span class="line">    - ....</span><br><span class="line"></span><br><span class="line">  - 空白行</span><br><span class="line"></span><br><span class="line">    - 空白行是用来区分“请求头”和“请求体”</span><br><span class="line"></span><br><span class="line">  - 请求体</span><br><span class="line"></span><br><span class="line">    - 向服务器发送的具体数据。</span><br><span class="line"></span><br><span class="line">- HTTP的响应协议（S --&gt; B）</span><br><span class="line"></span><br><span class="line">  - HTTP的响应协议包括：4部分</span><br><span class="line"></span><br><span class="line">    - 状态行</span><br><span class="line">    - 响应头</span><br><span class="line">    - 空白行</span><br><span class="line">    - 响应体</span><br><span class="line"></span><br><span class="line">  - HTTP响应协议的具体报文：</span><br><span class="line"></span><br><span class="line">    - ```</span><br><span class="line">      HTTP/1.1 200 ok                                     状态行</span><br><span class="line">      Content-Type: text/html;charset=UTF-8               响应头</span><br><span class="line">      Content-Length: 160</span><br><span class="line">      Date: Mon, 08 Nov 2021 13:19:32 GMT</span><br><span class="line">      Keep-Alive: timeout=20</span><br><span class="line">      Connection: keep-alive</span><br><span class="line">                                                          空白行</span><br><span class="line">      &lt;!doctype html&gt;                                     响应体</span><br><span class="line">      &lt;html&gt;</span><br><span class="line">          &lt;head&gt;</span><br><span class="line">              &lt;title&gt;from get servlet&lt;/title&gt;</span><br><span class="line">          &lt;/head&gt;</span><br><span class="line">          &lt;body&gt;</span><br><span class="line">              &lt;h1&gt;from get servlet&lt;/h1&gt;</span><br><span class="line">          &lt;/body&gt;</span><br><span class="line">      &lt;/html&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>状态行</p>
+<ul>
+<li>三部分组成<ul>
+<li>第一部分：协议版本号（HTTP&#x2F;1.1）</li>
+<li>第二部分：状态码（HTTP协议中规定的响应状态号。不同的响应结果对应不同的号码。）<ul>
+<li>200 表示请求响应成功，正常结束。</li>
+<li>404表示访问的资源不存在，通常是因为要么是你路径写错了，要么是路径写对了，但是服务器中对应的资源并没有启动成功。总之404错误是前端错误。</li>
+<li>405表示前端发送的请求方式与后端请求的处理方式不一致时发生：<ul>
+<li>比如：前端是POST请求，后端的处理方式按照get方式进行处理时，发生405</li>
+<li>比如：前端是GET请求，后端的处理方式按照post方式进行处理时，发生405</li>
+</ul>
+</li>
+<li>500表示服务器端的程序出现了异常。一般会认为是服务器端的错误导致的。</li>
+<li>以4开始的，一般是浏览器端的错误导致的。</li>
+<li>以5开始的，一般是服务器端的错误导致的。</li>
+</ul>
+</li>
+<li>第三部分：状态的描述信息<ul>
+<li>ok 表示正常成功结束。</li>
+<li>not found 表示资源找不到。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>响应头：</p>
+<ul>
+<li>响应的内容类型</li>
+<li>响应的内容长度</li>
+<li>响应的时间</li>
+<li>….</li>
+</ul>
+</li>
+<li><p>空白行：</p>
+<ul>
+<li>用来分隔“响应头”和“响应体”的。</li>
+</ul>
+</li>
+<li><p>响应体：</p>
+<ul>
+<li>响应体就是响应的正文，这些内容是一个长的字符串，这个字符串被浏览器渲染，解释并执行，最终展示出效果。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>怎么查看的协议内容？</p>
+<ul>
+<li>使用chrome浏览器：F12。然后找到network，通过这个面板可以查看协议的具体内容。</li>
+</ul>
+</li>
+<li><p>怎么向服务器发送GET请求，怎么向服务器发送POST请求？</p>
+<ul>
+<li>到目前为止，只有一种情况可以发送POST请求：使用form表单，并且form标签中的method属性值为：method&#x3D;”post”。</li>
+<li>其他所有情况一律都是get请求：<ul>
+<li>在浏览器地址栏上直接输入URL，敲回车，属于get请求。</li>
+<li>在浏览器上直接点击超链接，属于get请求。</li>
+<li>使用form表单提交数据时，form标签中没有写method属性，默认就是get</li>
+<li>或者使用form的时候，form标签中method属性值为：method&#x3D;”get”</li>
+<li>….</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>GET请求和POST请求有什么区别？</p>
+<ul>
+<li>get请求发送数据的时候，数据会挂在URI的后面，并且在URI后面添加一个“?”，”?”后面是数据。这样会导致发送的数据回显在浏览器的地址栏上。（get请求在“请求行”上发送数据）<ul>
+<li><a target="_blank" rel="noopener" href="http://localhost:8080/servlet05/getServlet?username=zhangsan&amp;userpwd=1111">http://localhost:8080/servlet05/getServlet?username=zhangsan&amp;userpwd=1111</a></li>
+</ul>
+</li>
+<li>post请求发送数据的时候，在请求体当中发送。不会回显到浏览器的地址栏上。也就是说post发送的数据，在浏览器地址栏上看不到。（post在“请求体”当中发送数据）</li>
+<li>get请求只能发送普通的字符串。并且发送的字符串长度有限制，不同的浏览器限制不同。这个没有明确的规范。</li>
+<li>get请求无法发送大数据量。</li>
+<li>post请求可以发送任何类型的数据，包括普通字符串，流媒体等信息：视频、声音、图片。</li>
+<li>post请求可以发送大数据量，理论上没有长度限制。</li>
+<li>get请求在W3C中是这样说的：get请求比较适合从服务器端获取数据。</li>
+<li>post请求在W3C中是这样说的：post请求比较适合向服务器端传送数据。</li>
+<li>get请求是安全的。get请求是绝对安全的。为什么？因为get请求只是为了从服务器上获取数据。不会对服务器造成威胁。（get本身是安全的，你不要用错了。用错了之后又冤枉人家get不安全，你这样不好（太坏了），那是你自己的问题，不是get请求的问题。）</li>
+<li>post请求是危险的。为什么？因为post请求是向服务器提交数据，如果这些数据通过后门的方式进入到服务器当中，服务器是很危险的。另外post是为了提交数据，所以一般情况下拦截请求的时候，大部分会选择拦截（监听）post请求。</li>
+<li>get请求支持缓存。<ul>
+<li><a target="_blank" rel="noopener" href="https://n.sinaimg.cn/finance/590/w240h350/20211101/b40c-b425eb67cabc342ff5b9dc018b4b00cc.jpg">https://n.sinaimg.cn/finance/590/w240h350/20211101/b40c-b425eb67cabc342ff5b9dc018b4b00cc.jpg</a></li>
+<li>任何一个get请求最终的“响应结果”都会被浏览器缓存起来。在浏览器缓存当中：<ul>
+<li>一个get请求的路径a  对应  一个资源。</li>
+<li>一个get请求的路径b  对应  一个资源。</li>
+<li>一个get请求的路径c  对应  一个资源。</li>
+<li>……</li>
+</ul>
+</li>
+<li>实际上，你只要发送get请求，浏览器做的第一件事都是先从本地浏览器缓存中找，找不到的时候才会去服务器上获取。这种缓存机制目的是为了提高用户的体验。</li>
+<li>有没有这样一个需求：我们不希望get请求走缓存，怎么办？怎么避免走缓存？我希望每一次这个get请求都去服务器上找资源，我不想从本地浏览器的缓存中取。<ul>
+<li>只要每一次get请求的请求路径不同即可。</li>
+<li><a target="_blank" rel="noopener" href="https://n.sinaimg.cn/finance/590/w240h350/20211101/7cabc342ff5b9dc018b4b00cc.jpg?t=789789787897898">https://n.sinaimg.cn/finance/590/w240h350/20211101/7cabc342ff5b9dc018b4b00cc.jpg?t=789789787897898</a></li>
+<li><a target="_blank" rel="noopener" href="https://n.sinaimg.cn/finance/590/w240h350/20211101/7cabc342ff5b9dc018b4b00cc.jpg?t=789789787897899">https://n.sinaimg.cn/finance/590/w240h350/20211101/7cabc342ff5b9dc018b4b00cc.jpg?t=789789787897899</a></li>
+<li><a target="_blank" rel="noopener" href="https://n.sinaimg.cn/finance/590/w240h350/20211101/7cabc342ff5b9dc018b4b00cc.jpg?t=%E7%B3%BB%E7%BB%9F%E6%AF%AB%E7%A7%92%E6%95%B0">https://n.sinaimg.cn/finance/590/w240h350/20211101/7cabc342ff5b9dc018b4b00cc.jpg?t=系统毫秒数</a></li>
+<li>怎么解决？可以在路径的后面添加一个每时每刻都在变化的“时间戳”，这样，每一次的请求路径都不一样，浏览器就不走缓存了。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>post请求不支持缓存。（POST是用来修改服务器端的资源的。）<ul>
+<li>post请求之后，服务器“响应的结果”不会被浏览器缓存起来。因为这个缓存没有意义。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>GET请求和POST请求如何选择，什么时候使用GET请求，什么时候使用POST请求？</p>
+<ul>
+<li>怎么选择GET请求和POST请求呢？衡量标准是什么呢？你这个请求是想获取服务器端的数据，还是想向服务器发送数据。如果你是想从服务器上获取资源，建议使用GET请求，如果你这个请求是为了向服务器提交数据，建议使用POST请求。</li>
+<li>大部分的form表单提交，都是post方式，因为form表单中要填写大量的数据，这些数据是收集用户的信息，一般是需要传给服务器，服务器将这些数据保存&#x2F;修改等。</li>
+<li>如果表单中有敏感信息，还是建议适用post请求，因为get请求会回显敏感信息到浏览器地址栏上。（例如：密码信息）</li>
+<li>做文件上传，一定是post请求。要传的数据不是普通文本。</li>
+<li>其他情况都可以使用get请求。</li>
+</ul>
+</li>
+<li><p>不管你是get请求还是post请求，发送的请求数据格式是完全相同的，只不过位置不同，格式都是统一的：</p>
+<ul>
+<li>name&#x3D;value&amp;name&#x3D;value&amp;name&#x3D;value&amp;name&#x3D;value</li>
+<li>name是什么？<ul>
+<li>以form表单为例：form表单中input标签的name。</li>
+</ul>
+</li>
+<li>value是什么？<ul>
+<li>以form表单为例：form表单中input标签的value。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="模板方法设计模式"><a href="#模板方法设计模式" class="headerlink" title="模板方法设计模式"></a>模板方法设计模式</h2><ul>
+<li>什么是设计模式？<ul>
+<li>某个问题的固定的解决方案。(可以被重复使用。)</li>
+</ul>
+</li>
+<li>你知道哪些设计模式？<ul>
+<li>GoF设计模式：<ul>
+<li>通常我们所说的23种设计模式。（Gang of Four：4人组提出的设计模式）</li>
+<li>单例模式</li>
+<li>工厂模式</li>
+<li>代理模式</li>
+<li>门面模式</li>
+<li>责任链设计模式</li>
+<li>观察者模式</li>
+<li>模板方法设计模式</li>
+<li>…..</li>
+</ul>
+</li>
+<li>JavaEE设计模式：<ul>
+<li>DAO</li>
+<li>DTO</li>
+<li>VO</li>
+<li>PO</li>
+<li>pojo</li>
+<li>….</li>
+</ul>
+</li>
+<li>….</li>
+</ul>
+</li>
+<li>什么是模板方法设计模式？<ul>
+<li>在模板类的模板方法当中定义核心算法骨架，具体的实现步骤可以延迟到子类当中完成。</li>
+</ul>
+</li>
+<li>模板类通常是一个抽象类，模板类当中的模板方法定义核心算法，这个方法通常是final的（但也可以不是final的）</li>
+<li>模板类当中的抽象方法就是不确定实现的方法，这个不确定怎么实现的事儿交给子类去做。</li>
+</ul>
+<h2 id="HttpServlet源码分析"><a href="#HttpServlet源码分析" class="headerlink" title="HttpServlet源码分析"></a>HttpServlet源码分析</h2><ul>
+<li>HttpServlet类是专门为HTTP协议准备的。比GenericServlet更加适合HTTP协议下的开发。</li>
+<li>HttpServlet在哪个包下？<ul>
+<li>jakarta.servlet.http.HttpServlet</li>
+</ul>
+</li>
+<li>到目前为止我们接触了servlet规范中哪些接口？<ul>
+<li>jakarta.servlet.Servlet  核心接口（接口）</li>
+<li>jakarta.servlet.ServletConfig Servlet配置信息接口（接口）</li>
+<li>jakarta.servlet.ServletContext Servlet上下文接口（接口）</li>
+<li>jakarta.servlet.ServletRequest Servlet请求接口（接口）</li>
+<li>jakarta.servlet.ServletResponse Servlet响应接口（接口）</li>
+<li>jakarta.servlet.ServletException Servlet异常（类）</li>
+<li>jakarta.servlet.GenericServlet 标准通用的Servlet类（抽象类）</li>
+</ul>
+</li>
+<li>http包下都有哪些类和接口呢？jakarta.servlet.http.*;<ul>
+<li>jakarta.servlet.http.HttpServlet （HTTP协议专用的Servlet类，抽象类）</li>
+<li>jakarta.servlet.http.HttpServletRequest （HTTP协议专用的请求对象）</li>
+<li>jakarta.servlet.http.HttpServletResponse （HTTP协议专用的响应对象）</li>
+</ul>
+</li>
+<li>HttpServletRequest对象中封装了什么信息？<ul>
+<li>HttpServletRequest，简称request对象。</li>
+<li>HttpServletRequest中封装了请求协议的全部内容。</li>
+<li>Tomcat服务器（WEB服务器）将“请求协议”中的数据全部解析出来，然后将这些数据全部封装到request对象当中了。</li>
+<li>也就是说，我们只要面向HttpServletRequest，就可以获取请求协议中的数据。</li>
+</ul>
+</li>
+<li>HttpServletResponse对象是专门用来响应HTTP协议到浏览器的。</li>
+<li>回忆Servlet生命周期？<ul>
+<li>用户第一次请求<ul>
+<li>Tomcat服务器通过反射机制，调用无参数构造方法。创建Servlet对象。(web.xml文件中配置的Servlet类对应的对象。)</li>
+<li>Tomcat服务器调用Servlet对象的init方法完成初始化。</li>
+<li>Tomcat服务器调用Servlet对象的service方法处理请求。</li>
+</ul>
+</li>
+<li>用户第二次请求<ul>
+<li>Tomcat服务器调用Servlet对象的service方法处理请求。</li>
+</ul>
+</li>
+<li>用户第三次请求<ul>
+<li>Tomcat服务器调用Servlet对象的service方法处理请求。</li>
+</ul>
+</li>
+<li>….<ul>
+<li>Tomcat服务器调用Servlet对象的service方法处理请求。</li>
+</ul>
+</li>
+<li>服务器关闭<ul>
+<li>Tomcat服务器调用Servlet对象的destroy方法，做销毁之前的准备工作。</li>
+<li>Tomcat服务器销毁Servlet对象。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>HttpServlet源码分析：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloServlet</span> <span class="keyword">extends</span> <span class="title class_">HttpServlet</span> &#123;</span><br><span class="line">	<span class="comment">// 用户第一次请求，创建HelloServlet对象的时候，会执行这个无参数构造方法。</span></span><br><span class="line">	<span class="keyword">public</span> <span class="title function_">HelloServlet</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//override 重写 doGet方法</span></span><br><span class="line">    <span class="comment">//override 重写 doPost方法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">GenericServlet</span> <span class="keyword">implements</span> <span class="title class_">Servlet</span>, ServletConfig,</span><br><span class="line">        java.io.Serializable &#123;</span><br><span class="line">           </span><br><span class="line">	<span class="comment">// 用户第一次请求的时候，HelloServlet对象第一次被创建之后，这个init方法会执行。</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">init</span><span class="params">(ServletConfig config)</span> <span class="keyword">throws</span> ServletException &#123;</span><br><span class="line">        <span class="built_in">this</span>.config = config;</span><br><span class="line">        <span class="built_in">this</span>.init();</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">// 用户第一次请求的时候，带有参数的init(ServletConfig config)执行之后，会执行这个没有参数的init()</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">init</span><span class="params">()</span> <span class="keyword">throws</span> ServletException &#123;</span><br><span class="line">        <span class="comment">// NOOP by default</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// HttpServlet模板类。</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">HttpServlet</span> <span class="keyword">extends</span> <span class="title class_">GenericServlet</span> &#123;</span><br><span class="line">    <span class="comment">// 用户发送第一次请求的时候这个service会执行</span></span><br><span class="line">    <span class="comment">// 用户发送第N次请求的时候，这个service方法还是会执行。</span></span><br><span class="line">    <span class="comment">// 用户只要发送一次请求，这个service方法就会执行一次。</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">service</span><span class="params">(ServletRequest req, ServletResponse res)</span></span><br><span class="line">        <span class="keyword">throws</span> ServletException, IOException &#123;</span><br><span class="line"></span><br><span class="line">        HttpServletRequest  request;</span><br><span class="line">        HttpServletResponse response;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 将ServletRequest和ServletResponse向下转型为带有Http的HttpServletRequest和HttpServletResponse</span></span><br><span class="line">            request = (HttpServletRequest) req;</span><br><span class="line">            response = (HttpServletResponse) res;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassCastException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">ServletException</span>(lStrings.getString(<span class="string">&quot;http.non_http&quot;</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 调用重载的service方法。</span></span><br><span class="line">        service(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 这个service方法的两个参数都是带有Http的。</span></span><br><span class="line">    <span class="comment">// 这个service是一个模板方法。</span></span><br><span class="line">    <span class="comment">// 在该方法中定义核心算法骨架，具体的实现步骤延迟到子类中去完成。</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">service</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span></span><br><span class="line">        <span class="keyword">throws</span> ServletException, IOException &#123;</span><br><span class="line">        <span class="comment">// 获取请求方式</span></span><br><span class="line">        <span class="comment">// 这个请求方式最终可能是：&quot;&quot;</span></span><br><span class="line">        <span class="comment">// 注意：request.getMethod()方法获取的是请求方式，可能是七种之一：</span></span><br><span class="line">        <span class="comment">// GET POST PUT DELETE HEAD OPTIONS TRACE</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">method</span> <span class="operator">=</span> req.getMethod();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 如果请求方式是GET请求，则执行doGet方法。</span></span><br><span class="line">        <span class="keyword">if</span> (method.equals(METHOD_GET)) &#123;</span><br><span class="line">            <span class="type">long</span> <span class="variable">lastModified</span> <span class="operator">=</span> getLastModified(req);</span><br><span class="line">            <span class="keyword">if</span> (lastModified == -<span class="number">1</span>) &#123;</span><br><span class="line">                <span class="comment">// servlet doesn&#x27;t support if-modified-since, no reason</span></span><br><span class="line">                <span class="comment">// to go through further expensive logic</span></span><br><span class="line">                doGet(req, resp);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="type">long</span> ifModifiedSince;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    ifModifiedSince = req.getDateHeader(HEADER_IFMODSINCE);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IllegalArgumentException iae) &#123;</span><br><span class="line">                    <span class="comment">// Invalid date header - proceed as if none was set</span></span><br><span class="line">                    ifModifiedSince = -<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (ifModifiedSince &lt; (lastModified / <span class="number">1000</span> * <span class="number">1000</span>)) &#123;</span><br><span class="line">                    <span class="comment">// If the servlet mod time is later, call doGet()</span></span><br><span class="line">                    <span class="comment">// Round down to the nearest second for a proper compare</span></span><br><span class="line">                    <span class="comment">// A ifModifiedSince of -1 will always be less</span></span><br><span class="line">                    maybeSetLastModified(resp, lastModified);</span><br><span class="line">                    doGet(req, resp);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    resp.setStatus(HttpServletResponse.SC_NOT_MODIFIED);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_HEAD)) &#123;</span><br><span class="line">            <span class="type">long</span> <span class="variable">lastModified</span> <span class="operator">=</span> getLastModified(req);</span><br><span class="line">            maybeSetLastModified(resp, lastModified);</span><br><span class="line">            doHead(req, resp);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_POST)) &#123;</span><br><span class="line">            <span class="comment">// 如果请求方式是POST请求，则执行doPost方法。</span></span><br><span class="line">            doPost(req, resp);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_PUT)) &#123;</span><br><span class="line">            doPut(req, resp);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_DELETE)) &#123;</span><br><span class="line">            doDelete(req, resp);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_OPTIONS)) &#123;</span><br><span class="line">            doOptions(req,resp);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_TRACE)) &#123;</span><br><span class="line">            doTrace(req,resp);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//</span></span><br><span class="line">            <span class="comment">// Note that this means NO servlet supports whatever</span></span><br><span class="line">            <span class="comment">// method was requested, anywhere on this server.</span></span><br><span class="line">            <span class="comment">//</span></span><br><span class="line"></span><br><span class="line">            <span class="type">String</span> <span class="variable">errMsg</span> <span class="operator">=</span> lStrings.getString(<span class="string">&quot;http.method_not_implemented&quot;</span>);</span><br><span class="line">            Object[] errArgs = <span class="keyword">new</span> <span class="title class_">Object</span>[<span class="number">1</span>];</span><br><span class="line">            errArgs[<span class="number">0</span>] = method;</span><br><span class="line">            errMsg = MessageFormat.format(errMsg, errArgs);</span><br><span class="line"></span><br><span class="line">            resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED, errMsg);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span></span><br><span class="line">        <span class="keyword">throws</span> ServletException, IOException&#123;</span><br><span class="line">        <span class="comment">// 报405错误</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span> lStrings.getString(<span class="string">&quot;http.method_get_not_supported&quot;</span>);</span><br><span class="line">        sendMethodNotAllowed(req, resp, msg);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">doPost</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span></span><br><span class="line">        <span class="keyword">throws</span> ServletException, IOException &#123;</span><br><span class="line">        <span class="comment">// 报405错误</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span> lStrings.getString(<span class="string">&quot;http.method_post_not_supported&quot;</span>);</span><br><span class="line">        sendMethodNotAllowed(req, resp, msg);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">通过以上源代码分析：</span></span><br><span class="line"><span class="comment">	假设前端发送的请求是get请求，后端程序员重写的方法是doPost</span></span><br><span class="line"><span class="comment">	假设前端发送的请求是post请求，后端程序员重写的方法是doGet</span></span><br><span class="line"><span class="comment">	会发生什么呢？</span></span><br><span class="line"><span class="comment">		发生405这样的一个错误。</span></span><br><span class="line"><span class="comment">		405表示前端的错误，发送的请求方式不对。和服务器不一致。不是服务器需要的请求方式。</span></span><br><span class="line"><span class="comment">	</span></span><br><span class="line"><span class="comment">	通过以上源代码可以知道：只要HttpServlet类中的doGet方法或doPost方法执行了，必然405.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">怎么避免405的错误呢？</span></span><br><span class="line"><span class="comment">	后端重写了doGet方法，前端一定要发get请求。</span></span><br><span class="line"><span class="comment">	后端重写了doPost方法，前端一定要发post请求。</span></span><br><span class="line"><span class="comment">	这样可以避免405错误。</span></span><br><span class="line"><span class="comment">	</span></span><br><span class="line"><span class="comment">	这种前端到底需要发什么样的请求，其实应该后端说了算。后端让发什么方式，前端就得发什么方式。</span></span><br><span class="line"><span class="comment">	</span></span><br><span class="line"><span class="comment">有的人，你会看到为了避免405错误，在Servlet类当中，将doGet和doPost方法都进行了重写。</span></span><br><span class="line"><span class="comment">这样，确实可以避免405的发生，但是不建议，405错误还是有用的。该报错的时候就应该让他报错。</span></span><br><span class="line"><span class="comment">如果你要是同时重写了doGet和doPost，那还不如你直接重写service方法好了。这样代码还能</span></span><br><span class="line"><span class="comment">少写一点。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>我们编写的HelloServlet直接继承HttpServlet，直接重写HttpServlet类中的service()方法行吗？</p>
+<ul>
+<li>可以，只不过你享受不到405错误。享受不到HTTP协议专属的东西。</li>
+</ul>
+</li>
+<li><p>到今天我们终于得到了最终的一个Servlet类的开发步骤：</p>
+<ul>
+<li>第一步：编写一个Servlet类，直接继承HttpServlet</li>
+<li>第二步：重写doGet方法或者重写doPost方法，到底重写谁，javaweb程序员说了算。</li>
+<li>第三步：将Servlet类配置到web.xml文件当中。</li>
+<li>第四步：准备前端的页面（form表单），form表单中指定请求路径即可。</li>
+</ul>
+</li>
+</ul>
+<h2 id="关于一个web站点的欢迎页面"><a href="#关于一个web站点的欢迎页面" class="headerlink" title="关于一个web站点的欢迎页面"></a>关于一个web站点的欢迎页面</h2><ul>
+<li><p>什么是一个web站点的欢迎页面？</p>
+<ul>
+<li>对于一个webapp来说，我们是可以设置它的欢迎页面的。</li>
+<li>设置了欢迎页面之后，当你访问这个webapp的时候，或者访问这个web站点的时候，没有指定任何“资源路径”，这个时候会默认访问你的欢迎页面。</li>
+<li>我们一般的访问方式是：<ul>
+<li><a target="_blank" rel="noopener" href="http://localhost:8080/servlet06/login.html">http://localhost:8080/servlet06/login.html</a> 这种方式是指定了要访问的就是login.html资源。</li>
+</ul>
+</li>
+<li>如果我们访问的方式是：<ul>
+<li><a target="_blank" rel="noopener" href="http://localhost:8080/servlet06">http://localhost:8080/servlet06</a> 如果我们访问的就是这个站点，没有指定具体的资源路径。它默认会访问谁呢？</li>
+<li>默认会访问你设置的欢迎页面。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>怎么设置欢迎页面呢？</p>
+<ul>
+<li><p>第一步：我在IDEA工具的web目录下新建了一个文件login.html</p>
+</li>
+<li><p>第二步：在web.xml文件中进行了以下的配置</p>
+<ul>
+<li><pre><code class="xml">&lt;welcome-file-list&gt;
+        &lt;welcome-file&gt;login.html&lt;/welcome-file&gt;
+    &lt;/welcome-file-list&gt;
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">    - 注意：设置欢迎页面的时候，这个路径不需要以“/”开始。并且这个路径默认是从webapp的根下开始查找。</span><br><span class="line"></span><br><span class="line">  - 第三步：启动服务器，浏览器地址栏输入地址</span><br><span class="line"></span><br><span class="line">    - http://localhost:8080/servlet07</span><br><span class="line"></span><br><span class="line">- 如果在webapp的根下新建一个目录，目录中再给一个文件，那么这个欢迎页该如何设置呢？</span><br><span class="line"></span><br><span class="line">  - 在webapp根下新建page1</span><br><span class="line"></span><br><span class="line">  - 在page1下新建page2目录</span><br><span class="line"></span><br><span class="line">  - 在page2目录下新建page.html页面</span><br><span class="line"></span><br><span class="line">  - 在web.xml文件中应该这样配置</span><br><span class="line"></span><br><span class="line">    - ```</span><br><span class="line">      &lt;welcome-file-list&gt;</span><br><span class="line">          &lt;welcome-file&gt;page1/page2/page.html&lt;/welcome-file&gt;</span><br><span class="line">      &lt;/welcome-file-list&gt;</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p>注意：路径不需要以“&#x2F;”开始，并且路径默认从webapp的根下开始找。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>一个webapp是可以设置多个欢迎页面的</p>
+<ul>
+<li>&#96;&#96;&#96;xml<welcome-file-list>
+    <welcome-file>page1/page2/page.html</welcome-file>
+    <welcome-file>login.html</welcome-file>
+</welcome-file-list>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">  - 注意：越靠上的优先级越高。找不到的继续向下找。</span><br><span class="line"></span><br><span class="line">- 你有没有注意一件事：当我的文件名设置为index.html的时候，不需要在web.xml文件中进行配置欢迎页面。这是为什么？</span><br><span class="line"></span><br><span class="line">  - 这是因为小猫咪Tomcat服务器已经提前配置好了。</span><br><span class="line"></span><br><span class="line">  - 实际上配置欢迎页面有两个地方可以配置：</span><br><span class="line"></span><br><span class="line">    - 一个是在webapp内部的web.xml文件中。（在这个地方配置的属于局部配置）</span><br><span class="line"></span><br><span class="line">    - 一个是在CATALINA_HOME/conf/web.xml文件中进行配置。（在这个地方配置的属于全局配置）</span><br><span class="line"></span><br><span class="line">      - ```xml</span><br><span class="line">        &lt;welcome-file-list&gt;</span><br><span class="line">            &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;</span><br><span class="line">            &lt;welcome-file&gt;index.htm&lt;/welcome-file&gt;</span><br><span class="line">            &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;</span><br><span class="line">        &lt;/welcome-file-list&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Tomcat服务器的全局欢迎页面是：index.html index.htm index.jsp。如果你一个web站点没有设置局部的欢迎页面，Tomcat服务器就会以index.html index.htm index.jsp作为一个web站点的欢迎页面。</p>
+</li>
+<li><p>注意原则：局部优先原则。（就近原则）</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>欢迎页可以是一个Servlet吗？</p>
+<ul>
+<li><p>当然可以。</p>
+</li>
+<li><p>你不要多想，欢迎页就是一个资源，既然是一个资源，那么可以是静态资源，也可以是动态资源。</p>
+</li>
+<li><p>静态资源：index.html welcome.html …..</p>
+</li>
+<li><p>动态资源：Servlet类。</p>
+</li>
+<li><p>步骤：</p>
+<ul>
+<li><p>第一步：写一个Servlet</p>
+<ul>
+<li>&#96;&#96;&#96;java<br>public class WelcomeServlet extends HttpServlet {<br>@Override<br>protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {<br>    response.setContentType(“text&#x2F;html”);<br>    PrintWriter out &#x3D; response.getWriter();<br>    out.print(“<h1>welcome to bjpowernode!</h1>“);<br>}<br>}<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">- 第二步：在web.xml文件中配置servlet</span><br><span class="line"></span><br><span class="line">  - ```xml</span><br><span class="line">        &lt;servlet&gt;</span><br><span class="line">            &lt;servlet-name&gt;welcomeServlet&lt;/servlet-name&gt;</span><br><span class="line">            &lt;servlet-class&gt;com.bjpowernode.javaweb.servlet.WelcomeServlet&lt;/servlet-class&gt;</span><br><span class="line">        &lt;/servlet&gt;</span><br><span class="line">        &lt;servlet-mapping&gt;</span><br><span class="line">            &lt;servlet-name&gt;welcomeServlet&lt;/servlet-name&gt;</span><br><span class="line">            &lt;url-pattern&gt;/fdsa/fds/a/fds/af/ds/af/dsafdsafdsa&lt;/url-pattern&gt;</span><br><span class="line">        &lt;/servlet-mapping&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>第三步：在web.xml文件中配置欢迎页</p>
+<ul>
+<li>&#96;&#96;&#96;xml<br><welcome-file-list><br>    <welcome-file>fdsa&#x2F;fds&#x2F;a&#x2F;fds&#x2F;af&#x2F;ds&#x2F;af&#x2F;dsafdsafdsa</welcome-file><br></welcome-file-list><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">## 关于WEB-INF目录</span><br><span class="line"></span><br><span class="line">- 在WEB-INF目录下新建了一个文件：welcome.html</span><br><span class="line">- 打开浏览器访问：http://localhost:8080/servlet07/WEB-INF/welcome.html 出现了404错误。</span><br><span class="line">- 注意：放在WEB-INF目录下的资源是受保护的。在浏览器上不能够通过路径直接访问。所以像HTML、CSS、JS、image等静态资源一定要放到WEB-INF目录之外。</span><br><span class="line"></span><br><span class="line">## HttpServletRequest接口详解</span><br><span class="line"></span><br><span class="line">- HttpServletRequest是一个接口，全限定名称：jakarta.servlet.http.HttpServletRequest</span><br><span class="line"></span><br><span class="line">- HttpServletRequest接口是Servlet规范中的一员。</span><br><span class="line"></span><br><span class="line">- HttpServletRequest接口的父接口：ServletRequest</span><br><span class="line"></span><br><span class="line">  - ```java</span><br><span class="line">    public interface HttpServletRequest extends ServletRequest &#123;&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>HttpServletRequest接口的实现类谁写的? HttpServletRequest对象是谁给创建的？</p>
+<ul>
+<li><p>通过测试：org.apache.catalina.connector.RequestFacade 实现了 HttpServletRequest接口</p>
+<ul>
+<li><pre><code class="java">public class RequestFacade implements HttpServletRequest &#123;&#125;
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">  - 测试结果说明：Tomcat服务器（WEB服务器、WEB容器）实现了HttpServletRequest接口，还是说明了Tomcat服务器实现了Servlet规范。而对于我们javaweb程序员来说，实际上不需要关心这个，我们只需要面向接口编程即可。我们关心的是HttpServletRequest接口中有哪些方法，这些方法可以完成什么功能！！！！</span><br><span class="line"></span><br><span class="line">- HttpServletRequest对象中都有什么信息？都包装了什么信息？</span><br><span class="line"></span><br><span class="line">  - HttpServletRequest对象是Tomcat服务器负责创建的。这个对象中封装了什么信息？封装了HTTP的请求协议。</span><br><span class="line">  - 实际上是用户发送请求的时候，遵循了HTTP协议，发送的是HTTP的请求协议，Tomcat服务器将HTTP协议中的信息以及数据全部解析出来，然后Tomcat服务器把这些信息封装到HttpServletRequest对象当中，传给了我们javaweb程序员。</span><br><span class="line">  - javaweb程序员面向HttpServletRequest接口编程，调用方法就可以获取到请求的信息了。</span><br><span class="line"></span><br><span class="line">- request和response对象的生命周期？</span><br><span class="line"></span><br><span class="line">  - request对象和response对象，一个是请求对象，一个是响应对象。这两个对象只在当前请求中有效。</span><br><span class="line">  - 一次请求对应一个request。</span><br><span class="line">  - 两次请求则对应两个request。</span><br><span class="line">  - .....</span><br><span class="line"></span><br><span class="line">- HttpServletRequest接口中有哪些常用的方法？</span><br><span class="line"></span><br><span class="line">  - 怎么获取前端浏览器用户提交的数据？</span><br><span class="line"></span><br><span class="line">    - ```java</span><br><span class="line">      Map&lt;String,String[]&gt; getParameterMap() 这个是获取Map</span><br><span class="line">      Enumeration&lt;String&gt; getParameterNames() 这个是获取Map集合中所有的key</span><br><span class="line">      String[] getParameterValues(String name) 根据key获取Map集合的value</span><br><span class="line">      String getParameter(String name)  获取value这个一维数组当中的第一个元素。这个方法最常用。</span><br><span class="line">      // 以上的4个方法，和获取用户提交的数据有关系。</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p>思考：如果是你，前端的form表单提交了数据之后，你准备怎么存储这些数据，你准备采用什么样的数据结构去存储这些数据呢？</p>
+<ul>
+<li><p>前端提交的数据格式：username&#x3D;abc&amp;userpwd&#x3D;111&amp;aihao&#x3D;s&amp;aihao&#x3D;d&amp;aihao&#x3D;tt</p>
+</li>
+<li><p>我会采用Map集合来存储：</p>
+<ul>
+<li>&#96;&#96;&#96;java<br>Map&lt;String,String&gt;<br>key存储String<br>value存储String<br>这种想法对吗？不对。<br>如果采用以上的数据结构存储会发现key重复的时候value覆盖。<br>key         value<br>———————<br>username    abc<br>userpwd     111<br>aihao       s<br>aihao       d<br>aihao       tt<br>这样是不行的，因为map的key不能重复。<br>Map&lt;String, String[]&gt;<br>key存储String<br>value存储String[]<br>key                value<br>——————————-<br>username        {“abc”}<br>userpwd            {“111”}<br>aihao            {“s”,”d”,”tt”}<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">    - 注意：前端表单提交数据的时候，假设提交了120这样的“数字”，其实是以字符串&quot;120&quot;的方式提交的，所以服务器端获取到的一定是一个字符串的&quot;120&quot;，而不是一个数字。（前端永远提交的是字符串，后端获取的也永远是字符串。）</span><br><span class="line">  </span><br><span class="line">- 手工开发一个webapp。测试HttpServletRequest接口中的相关方法。</span><br><span class="line"></span><br><span class="line">  - 先测试了4个常用的方法，获取请求参数的四个方法。</span><br><span class="line"></span><br><span class="line">    - ```java</span><br><span class="line">      	Map&lt;String,String[]&gt; parameterMap = request.getParameterMap();</span><br><span class="line">      	Enumeration&lt;String&gt; names = request.getParameterNames();</span><br><span class="line">      	String[] values = request.getParameterValues(&quot;name&quot;);</span><br><span class="line">      	String value = request.getParameter(&quot;name&quot;);</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>request对象实际上又称为“请求域”对象。</p>
+<ul>
+<li><p>应用域对象是什么？</p>
+<ul>
+<li><p>ServletContext （Servlet上下文对象。）</p>
+</li>
+<li><p>什么情况下会考虑向ServletContext这个应用域当中绑定数据呢？</p>
+<ul>
+<li>第一：所有用户共享的数据。</li>
+<li>第二：这个共享的数据量很小。</li>
+<li>第三：这个共享的数据很少的修改操作。</li>
+<li>在以上三个条件都满足的情况下，使用这个应用域对象，可以大大提高我们程序执行效率。</li>
+<li>实际上向应用域当中绑定数据，就相当于把数据放到了缓存（Cache）当中，然后用户访问的时候直接从缓存中取，减少IO的操作，大大提升系统的性能，所以缓存技术是提高系统性能的重要手段。</li>
+</ul>
+</li>
+<li><p>你见过哪些缓存技术呢？</p>
+<ul>
+<li>字符串常量池</li>
+<li>整数型常量池 [-128~127]，但凡是在这个范围当中的Integer对象不再创建新对象，直接从这个整数型常量池中获取。大大提升系统性能。</li>
+<li>数据库连接池（提前创建好N个连接对象，将连接对象放到集合当中，使用连接对象的时候，直接从缓存中拿。省去了连接对象的创建过程。效率提升。）</li>
+<li>线程池（Tomcat服务器就是支持多线程的。所谓的线程池就是提前先创建好N个线程对象，将线程对象存储到集合中，然后用户请求过来之后，直接从线程池中获取线程对象，直接拿来用。提升系统性能）</li>
+<li>后期你还会学习更多的缓存技术，例如：redis、mongoDB…..</li>
+</ul>
+</li>
+<li><p>ServletContext当中有三个操作域的方法：</p>
+<ul>
+<li><p>&#96;&#96;&#96;java<br>void setAttribute(String name, Object obj); &#x2F;&#x2F; 向域当中绑定数据。<br>Object getAttribute(String name); &#x2F;&#x2F; 从域当中根据name获取数据。<br>void removeAttribute(String name); &#x2F;&#x2F; 将域当中绑定的数据移除</p>
+<p>&#x2F;&#x2F; 以上的操作类似于Map集合的操作。<br>Map&lt;String, Object&gt; map;<br>map.put(“name”, obj); &#x2F;&#x2F; 向map集合中放key和value<br>Object obj &#x3D; map.get(“name”); &#x2F;&#x2F; 通过map集合的key获取value<br>map.remove(“name”); &#x2F;&#x2F; 通过Map集合的key删除key和value这个键值对。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- “请求域”对象</span><br><span class="line"></span><br><span class="line">  - “请求域”对象要比“应用域”对象范围小很多。生命周期短很多。请求域只在一次请求内有效。</span><br><span class="line"></span><br><span class="line">  - 一个请求对象request对应一个请求域对象。一次请求结束之后，这个请求域就销毁了。</span><br><span class="line"></span><br><span class="line">  - 请求域对象也有这三个方法：</span><br><span class="line"></span><br><span class="line">    - ```java</span><br><span class="line">      void setAttribute(String name, Object obj); // 向域当中绑定数据。</span><br><span class="line">      Object getAttribute(String name); // 从域当中根据name获取数据。</span><br><span class="line">      void removeAttribute(String name); // 将域当中绑定的数据移除</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>请求域和应用域的选用原则？</p>
+<ul>
+<li>尽量使用小的域对象，因为小的域对象占用的资源较少。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>跳转</p>
+<ul>
+<li><p>转发（一次请求）</p>
+<ul>
+<li><p>&#96;&#96;&#96;java<br>&#x2F;&#x2F; 第一步：获取请求转发器对象<br>RequestDispatcher dispatcher &#x3D; request.getRequestDispatcher(“&#x2F;b”);<br>&#x2F;&#x2F; 第二步：调用转发器的forward方法完成跳转&#x2F;转发<br>dispatcher.forward(request,response);</p>
+<p>&#x2F;&#x2F; 第一步和第二步代码可以联合在一起。<br>request.getRequestDispatcher(“&#x2F;b”).forward(request,response);</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- 两个Servlet怎么共享数据？</span><br><span class="line"></span><br><span class="line">  - 将数据放到ServletContext应用域当中，当然是可以的，但是应用域范围太大，占用资源太多。不建议使用。</span><br><span class="line">  - 可以将数据放到request域当中，然后AServlet转发到BServlet，保证AServlet和BServlet在同一次请求当中，这样就可以做到两个Servlet，或者多个Servlet共享同一份数据。</span><br><span class="line"></span><br><span class="line">- 转发的下一个资源必须是一个Servlet吗？</span><br><span class="line"></span><br><span class="line">  - 不一定，只要是Tomcat服务器当中的合法资源，都是可以转发的。例如：html....</span><br><span class="line">  - 注意：转发的时候，路径的写法要注意，转发的路径以“/”开始，不加项目名。</span><br><span class="line"></span><br><span class="line">- 关于request对象中两个非常容易混淆的方法：</span><br><span class="line"></span><br><span class="line">  - ```java</span><br><span class="line">    </span><br><span class="line">    // uri?username=zhangsan&amp;userpwd=123&amp;sex=1</span><br><span class="line">    String username = request.getParameter(&quot;username&quot;);</span><br><span class="line">    </span><br><span class="line">    // 之前一定是执行过：request.setAttribute(&quot;name&quot;, new Object())</span><br><span class="line">    Object obj = request.getAttribute(&quot;name&quot;);</span><br><span class="line">    </span><br><span class="line">    // 以上两个方法的区别是什么？</span><br><span class="line">    // 第一个方法：获取的是用户在浏览器上提交的数据。</span><br><span class="line">    // 第二个方法：获取的是请求域当中绑定的数据。</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>HttpServletRequest接口的其他常用方法：</p>
+<ul>
+<li><pre><code class="java">// 获取客户端的IP地址
+String remoteAddr = request.getRemoteAddr();
+
+// get请求在请求行上提交数据。
+// post请求在请求体中提交数据。
+// 设置请求体的字符集。（显然这个方法是处理POST请求的乱码问题。这种方式并不能解决get请求的乱码问题。）
+// Tomcat10之后，request请求体当中的字符集默认就是UTF-8，不需要设置字符集，不会出现乱码问题。
+// Tomcat9前（包括9在内），如果前端请求体提交的是中文，后端获取之后出现乱码，怎么解决这个乱码？执行以下代码。
+request.setCharacterEncoding(&quot;UTF-8&quot;);
+
+// 在Tomcat9之前（包括9），响应中文也是有乱码的，怎么解决这个响应的乱码？
+response.setContentType(&quot;text/html;charset=UTF-8&quot;);
+// 在Tomcat10之后，包括10在内，响应中文的时候就不在出现乱码问题了。以上代码就不需要设置UTF-8了。
+
+// 注意一个细节
+// 在Tomcat10包括10在内之后的版本，中文将不再出现乱码。（这也体现了中文地位的提升。）
+
+// get请求乱码问题怎么解决？
+// get请求发送的时候，数据是在请求行上提交的，不是在请求体当中提交的。
+// get请求乱码怎么解决
+// 方案：修改CATALINA_HOME/conf/server.xml配置文件
+&lt;Connector URIEncoding=&quot;UTF-8&quot; /&gt;
+// 注意：从Tomcat8之后，URIEncoding的默认值就是UTF-8，所以GET请求也没有乱码问题了。
+    
+// 获取应用的根路径
+String contextPath = request.getContextPath();
+
+// 获取请求方式
+String method = request.getMethod();
+
+// 获取请求的URI
+String uri = request.getRequestURI();  // /aaa/testRequest
+
+// 获取servlet path
+String servletPath = request.getServletPath(); //   /testRequest
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a><strong>Cookie</strong></h2><p>…</p>
+<h2 id="Session"><a href="#Session" class="headerlink" title="Session"></a><strong>Session</strong></h2><p>…</p>
+<h1 id="END"><a href="#END" class="headerlink" title="-END-"></a>-END-</h1></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2021/12/28/Servlet/">https://devildyw.github.io/2021/12/28/Servlet/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/java/">java</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-l3dvqp.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/02/28/%E5%AE%9E%E9%99%85%E5%BC%80%E5%8F%91%E4%B8%AD%E5%B8%B8%E5%B8%B8%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%20%E6%88%96%E6%98%AF%20%E9%81%B5%E5%AE%88%E7%9A%84%E8%A7%84%E5%88%99/"><img class="prev-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-l3dvqp.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">实际开发中常常遇到的问题 或是 遵守的规则</div></div></a></div><div class="next-post pull-right"><a href="/2021/10/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%88%9D%E8%AF%86/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">多线程初识</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/02/28/Git%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7/" title="Git分布式版本控制工具"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-k7zdqm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">Git分布式版本控制工具</div></div></a></div><div><a href="/2022/02/28/ThreadLocal/" title="ThreadLocal"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-57kw88.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">ThreadLocal</div></div></a></div><div><a href="/2022/02/28/%E5%8E%9F%E5%AD%90%E2%80%BB%E3%80%81%E5%8F%AF%E8%A7%81%E6%80%A7%E3%80%81%E6%9C%89%E5%BA%8F%E6%80%A7/" title="java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/tag.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？</div></div></a></div><div><a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--synchronized%E5%85%B3%E9%94%AE%E5%AD%97/" title="每日一记--synchronized关键字"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">每日一记--synchronized关键字</div></div></a></div><div><a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E7%BB%AD%EF%BC%89/" title="每日一记--多线程（续）"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-l3dvqp.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">每日一记--多线程（续）</div></div></a></div><div><a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/" title="每日一记"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-3zzkdv.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">每日一记</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Servlet"><span class="toc-number">1.</span> <span class="toc-text">Servlet</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">关于系统架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-x2F-S%E7%BB%93%E6%9E%84%E7%9A%84%E7%B3%BB%E7%BB%9F%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86%EF%BC%88%E6%B2%A1%E6%9C%89%E6%B6%89%E5%8F%8A%E5%88%B0Java%E5%B0%8F%E7%A8%8B%E5%BA%8F%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">B&#x2F;S结构的系统通信原理（没有涉及到Java小程序）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EWEB%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">关于WEB服务器软件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E6%9C%80%E5%9F%BA%E6%9C%AC%E7%9A%84web%E5%BA%94%E7%94%A8%EF%BC%88%E8%BF%99%E4%B8%AAweb%E5%BA%94%E7%94%A8%E4%B8%AD%E6%B2%A1%E6%9C%89java%E5%B0%8F%E7%A8%8B%E5%BA%8F%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">实现一个最基本的web应用（这个web应用中没有java小程序）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E4%BA%8E%E4%B8%80%E4%B8%AA%E5%8A%A8%E6%80%81%E7%9A%84web%E5%BA%94%E7%94%A8%E6%9D%A5%E8%AF%B4%EF%BC%8C%E4%B8%80%E4%B8%AA%E8%AF%B7%E6%B1%82%E5%92%8C%E5%93%8D%E5%BA%94%E7%9A%84%E8%BF%87%E7%A8%8B%E6%9C%89%E5%A4%9A%E5%B0%91%E4%B8%AA%E8%A7%92%E8%89%B2%E5%8F%82%E4%B8%8E%EF%BC%8C%E8%A7%92%E8%89%B2%E5%92%8C%E8%A7%92%E8%89%B2%E4%B9%8B%E9%97%B4%E6%9C%89%E5%A4%9A%E5%B0%91%E4%B8%AA%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.5.</span> <span class="toc-text">对于一个动态的web应用来说，一个请求和响应的过程有多少个角色参与，角色和角色之间有多少个协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E5%B8%A6%E6%9C%89Servlet%EF%BC%88Java%E5%B0%8F%E7%A8%8B%E5%BA%8F%EF%BC%89%E7%9A%84webapp%EF%BC%88%E9%87%8D%E7%82%B9%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">开发一个带有Servlet（Java小程序）的webapp（重点）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EJavaEE%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-number">1.7.</span> <span class="toc-text">关于JavaEE的版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3Tomcat%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%9C%A8DOS%E5%91%BD%E4%BB%A4%E7%AA%97%E5%8F%A3%E4%B8%AD%E7%9A%84%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98%EF%BC%88%E6%8E%A7%E5%88%B6%E5%8F%B0%E4%B9%B1%E7%A0%81%EF%BC%89"><span class="toc-number">1.8.</span> <span class="toc-text">解决Tomcat服务器在DOS命令窗口中的乱码问题（控制台乱码）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%91%E6%B5%8F%E8%A7%88%E5%99%A8%E5%93%8D%E5%BA%94%E4%B8%80%E6%AE%B5HTML%E4%BB%A3%E7%A0%81"><span class="toc-number">1.9.</span> <span class="toc-text">向浏览器响应一段HTML代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8Servlet%E4%B8%AD%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%8C%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F"><span class="toc-number">1.10.</span> <span class="toc-text">在Servlet中连接数据库，怎么做？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E9%9B%86%E6%88%90%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E5%BD%93%E4%B8%AD%E5%BC%80%E5%8F%91Servlet%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.11.</span> <span class="toc-text">在集成开发环境当中开发Servlet程序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-Servlet%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%8F%AF%E5%88%86%E4%B8%BA5%E4%B8%AA%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.11.0.1.</span> <span class="toc-text">总结:Servlet生命周期可分为5个步骤</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GenericServlet"><span class="toc-number">1.12.</span> <span class="toc-text">GenericServlet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ServletContext"><span class="toc-number">1.13.</span> <span class="toc-text">ServletContext</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.14.</span> <span class="toc-text">模板方法设计模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HttpServlet%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">1.15.</span> <span class="toc-text">HttpServlet源码分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E4%B8%80%E4%B8%AAweb%E7%AB%99%E7%82%B9%E7%9A%84%E6%AC%A2%E8%BF%8E%E9%A1%B5%E9%9D%A2"><span class="toc-number">1.16.</span> <span class="toc-text">关于一个web站点的欢迎页面</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">welcome to bjpowernode!</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cookie"><span class="toc-number">2.1.</span> <span class="toc-text">Cookie</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Session"><span class="toc-number">2.2.</span> <span class="toc-text">Session</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#END"><span class="toc-number">3.</span> <span class="toc-text">-END-</span></a></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

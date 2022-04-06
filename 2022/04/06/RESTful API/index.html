@@ -1,0 +1,302 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>RESTful API | Devil的个人博客</title><meta name="keywords" content="java"><meta name="author" content="Devil"><meta name="copyright" content="Devil"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="RESTful API正式学习RESTful API之前,我们需要把什么是API搞懂. 什么是API?API（Application Programming Interface） 翻译过来是应用程序编程接口的意思。 相信大家对于API这个此已经不陌生了, 比如”我调用了某某的API”等 又比如我们在进行后端开发的时候，主要的工作就是为前端或者其他后端服务提供 API 比如查询用户数据的 API.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RESTful API">
+<meta property="og:url" content="https://devildyw.github.io/2022/04/06/RESTful%20API/index.html">
+<meta property="og:site_name" content="Devil的个人博客">
+<meta property="og:description" content="RESTful API正式学习RESTful API之前,我们需要把什么是API搞懂. 什么是API?API（Application Programming Interface） 翻译过来是应用程序编程接口的意思。 相信大家对于API这个此已经不陌生了, 比如”我调用了某某的API”等 又比如我们在进行后端开发的时候，主要的工作就是为前端或者其他后端服务提供 API 比如查询用户数据的 API.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-9mo7kw.jpg">
+<meta property="article:published_time" content="2022-04-06T12:58:54.000Z">
+<meta property="article:modified_time" content="2022-04-06T13:31:27.864Z">
+<meta property="article:author" content="Devil">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-9mo7kw.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2022/04/06/RESTful%20API/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'RESTful API',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-04-06 21:31:27'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/dyw.css"><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-9mo7kw.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">RESTful API</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-06T12:58:54.000Z" title="发表于 2022-04-06 20:58:54">2022-04-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-04-06T13:31:27.864Z" title="更新于 2022-04-06 21:31:27">2022-04-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/">开发规范</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="RESTful API"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="RESTful-API"><a href="#RESTful-API" class="headerlink" title="RESTful API"></a>RESTful API</h1><p>正式学习RESTful API之前,我们需要把什么是API搞懂.</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/v2-1564b88f4461d69b90cd1ab50411f61b_b.jpg" alt="查看源图像"></h2><h2 id="什么是API"><a href="#什么是API" class="headerlink" title="什么是API?"></a>什么是API?</h2><p><strong>API（Application Programming Interface）</strong> 翻译过来是应用程序编程接口的意思。</p>
+<p>相信大家对于API这个此已经不陌生了, 比如”我调用了某某的API”等 又比如我们在进行后端开发的时候，主要的工作就是为前端或者其他后端服务提供 API 比如查询用户数据的 API. </p>
+<ul>
+<li><p>API不仅仅代表了后端系统暴露出的接口, 像框架中提供的方法也属于是API的范畴.</p>
+<p>例如: </p>
+<ul>
+<li>你写的程序需要由支付功能,需要微信支付,就需要去调用微信提供支付的相关API</li>
+<li>使用JDK开发Java程序, 需要获取当前系统时间,需要使用JDK提供的Date相关的API</li>
+<li>….</li>
+</ul>
+</li>
+<li><p>API可以理解为程序与程序之间通信的桥梁, 其本质就是一个函数或者一个方法(函数和方法还是不同的)而已. 另外, API的使用也不是没有章法了, 它的相关规则或是使用协议由API的提供者制订.</p>
+</li>
+</ul>
+<hr>
+<h2 id="什么是RESTful-API"><a href="#什么是RESTful-API" class="headerlink" title="什么是RESTful API?"></a>什么是RESTful API?</h2><p><strong>RESTful API</strong> 经常也被叫做 <strong>REST API</strong>，它是基于 REST 构建的 API.</p>
+<p>举个例子，如果我给你下面两个 API 你是不是立马能知道它们是干什么用的！这就是 RESTful API 的强大之处！</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">GET  /XXXX/classes: 查询列出所有班级</span><br><span class="line">POST  /XXXX/classes: 创建一个新的班级</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>由上述例子可以看出 RESTful API可以让人很清楚的知道每个API的目的与作用(前提是它有一定的基础 这个似乎不是什么问题).</li>
+<li><strong>RESTful API</strong>可以让人看到URL+Http Method 就知道这个方法是干什么的, 让你看到HTTP状态码(status code)就知道请求结果如何</li>
+</ul>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">http动作(请求方式) + url [动作+url合起来保证唯一性]</span><br></pre></td></tr></table></figure>
+
+<p>我们在开发过程中设计API时也应当满足RESTful API的最基本要求(RESTful API 不是协议</p>
+<p>规定, 但是提倡这样设计) <strong>接口中尽量使用名词</strong>, 例如<code>GET /notes/id</code>：获取某个指定 id 的笔记的信息）毕竟是使用Http Method(动词)操作的应当是名词才对.</p>
+<h2 id="解读REST-了解内容"><a href="#解读REST-了解内容" class="headerlink" title="解读REST(了解内容)"></a>解读REST(了解内容)</h2><p><strong>REST</strong> 是 <code>REpresentational State Transfer</code> 的缩写。这个词组的翻译过来就是“<strong>表现层状态转化</strong>”。</p>
+<p>实际上 REST 的全称是 <strong>Resource Representational State Transfer</strong> ，直白地翻译过来就是 <strong>“资源”在网络传输中以某种“表现形式”进行“状态转移”</strong> 。</p>
+<ul>
+<li><strong>资源(Resource):</strong> 任何东西都可以是资源, 图片,甚至是对象, 资源可以是一个集合,也可以是一个个体. 每一种资源都有特定的URL(统一资源标识符)与之对应, 如果我们需要访问这个资源只需要访问这个URI就可以访问.</li>
+<li><strong>表现形式(Representational):</strong>“资源”是一个信息实体,它可以有多种外在表现形式.通常我们把资源具体呈现出来的形式有:<code>json</code>、<code>xml</code>、<code>image</code>、<code>txt</code>等等叫做它的**”表现形式”**。</li>
+<li>**状态转移(State Transfer):**指的就是你的行为对于资源的操作(通过HTTP动词实现)引起资源的状态发生了变化.(ps:互联网通讯协议HTTP协议，是一个无状态协议，所有的资源状态都保存在服务器端.)</li>
+</ul>
+<p>综合总结:</p>
+<blockquote>
+<ul>
+<li>每一个URI代表一种资源；</li>
+<li>客户端与服务器之间,传递这种资源的某种表现形式比如<code>json</code>、<code>xml</code>、 <code>txt</code>、 <code>image</code>等；</li>
+<li>客户端通过特定的HTTP动词，对服务器资源进行操作，实现”表现层状态转化”。</li>
+</ul>
+</blockquote>
+<h2 id="RESTful-API-规范"><a href="#RESTful-API-规范" class="headerlink" title="RESTful API 规范"></a>RESTful API 规范</h2><p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6db537c4f5274fc098ed9bf710b41cc4~tplv-k3u1fbpfcp-zoom-crop-mark:1304:1304:1304:734.awebp" alt="RESTful API 设计规范"></p>
+<p><strong>动作：</strong></p>
+<blockquote>
+<ul>
+<li><strong><code>GET</code>：</strong>请求从服务器获取特定资源。举个例子：<code>GET /classes</code>（获取所有班级）</li>
+<li><strong><code>POST</code> ：</strong>在服务器上创建一个新的资源。举个例子：<code>POST /classes</code>（创建班级）</li>
+<li><strong><code>PUT</code> ：</strong>更新服务器上的资源（客户端提供更新后的整个资源）。举个例子：<code>PUT /classes/12</code>（更新编号为 12 的班级）</li>
+<li><strong><code>DELETE</code> ：</strong>从服务器删除特定的资源。举个例子：<code>DELETE /classes/12</code>（删除编号为 12 的班级）</li>
+<li><code>PATCH</code> ：更新服务器上的资源（客户端提供更改的属性，可以看做作是部分更新），使用的比较少，这里就不举例子了。</li>
+</ul>
+</blockquote>
+<p><strong>路劲(接口命名)：</strong></p>
+<p>路劲又称”终点”(endpoint), 表示API的具体网址。实际开发中的常见规范如下：</p>
+<blockquote>
+<ul>
+<li><strong>网址中不能出现动词，只能都是名词，API中的名词也应该使用复数。</strong> 因为REST中的资源往往和数据库中的表相对应，而数据库中的表都是同种记录的”集合”（collection）。<strong>如果API调用并不涉及资源（如登录、运算等操作）可以使用动词。</strong>比如：**<code>GET /sign-login</code>**</li>
+<li><strong>不用大写，建议用中杠<code>-</code>而不用下划线<code>_</code></strong> 。比如：**<code>GET /signLogin</code>**</li>
+<li><strong>善用版本化API。</strong>当我们的API发生了重大改变而不兼容前期版本的时候，我们可以通过URL来实现版本化，比如**<code>/github.com/kataras/iris/v12</code>**。版本不必非要数字，只是数字使用最多，日期、季节都可以作为版本的标识符，项目团队达成共识即可。</li>
+<li><strong>接口尽量使用名词，避免使用名词。</strong>RESTful API操作(HTTP Method)的是资源（名词）而不是动作（动词）。</li>
+</ul>
+</blockquote>
+<p>现在有这样的一个API提供班级大学班级（class）的信息，还包括学生、老师的信息，则应该设计呈现吗这样。</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">GET    /classes：列出所有班级</span><br><span class="line">POST   /classes：新建一个班级</span><br><span class="line">GET	   /classes/&#123;classId&#125;:获取某个指定班级的信息</span><br><span class="line">PUT	   /classes/&#123;classId&#125;:更新某个指定班级的信息(一般倾向于整体更新)</span><br><span class="line">PATCH  /classes/&#123;classId&#125;：更新某个指定班级的信息（一般倾向部分更新）</span><br><span class="line">GET    /classes/&#123;classId&#125;/teachers：列出某个指定班级的所有老师的信息</span><br><span class="line">GET    /classes/&#123;classId&#125;/students：列出某个指定班级的所有学生的信息</span><br><span class="line">DELETE /classes/&#123;classId&#125;/teachers/&#123;ID&#125;：删除某个指定班级下的指定的老师的信息</span><br></pre></td></tr></table></figure>
+
+<p><strong>反例:</strong></p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">/getAllclasses</span><br><span class="line">/createNewclass</span><br><span class="line">/deleteAllActiveclasses</span><br></pre></td></tr></table></figure>
+
+<p>清理资源的层次结构,比如业务针对的范围是学校,那么学校会是一级资源:<code>/schools</code>、老师：<code>/shcools/teachers</code>、学生：<code>/shcools/students</code>就是二级资源。</p>
+<h3 id="信息过滤"><a href="#信息过滤" class="headerlink" title="信息过滤"></a>信息过滤</h3><p>如果我们在查询的时候需要添加特定的条件的话，建议使用url中添加参数的形式。比如我们要查询state状态位active并且name为guideege的班级：</p>
+<figure class="highlight tex"><table><tr><td class="code"><pre><span class="line">GET		/classes?state=active<span class="built_in">&amp;</span>name=guigege</span><br></pre></td></tr></table></figure>
+
+<p>如果要实现分页查询：</p>
+<figure class="highlight tex"><table><tr><td class="code"><pre><span class="line">GET		/classes?page=1<span class="built_in">&amp;</span>size=10 //指定第几页，每页十条数据</span><br></pre></td></tr></table></figure>
+
+<h3 id="状态码（Status-Codes）"><a href="#状态码（Status-Codes）" class="headerlink" title="状态码（Status Codes）"></a>状态码（Status Codes）</h3><p><strong>状态码范围：</strong></p>
+<table>
+<thead>
+<tr>
+<th>2xx：成功</th>
+<th>3xx：重定向</th>
+<th>4xx：客户端错误</th>
+<th>5xx：服务器错误</th>
+<th></th>
+<th align="right"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>200 成功</td>
+<td>301 永久重定向</td>
+<td>400 错误请求</td>
+<td>500 服务器错误</td>
+<td></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>201 创建</td>
+<td>304 资源未修改</td>
+<td>401 未授权</td>
+<td>502 网关错误</td>
+<td></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>403 禁止访问</td>
+<td>504 网关超时</td>
+<td></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>404 未找到</td>
+<td></td>
+<td></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>405 请求方法不对</td>
+<td></td>
+<td></td>
+<td align="right"></td>
+</tr>
+</tbody></table>
+<h2 id="RESTful-的极致-HATEOAS"><a href="#RESTful-的极致-HATEOAS" class="headerlink" title="RESTful 的极致 HATEOAS"></a>RESTful 的极致 HATEOAS</h2><blockquote>
+<p>RESTful的极致是hateoas，但是这个基本不会在实际项目中用到。</p>
+</blockquote>
+<p>在 Spring 中有一个叫做 HATEOAS 的 API 库，通过它我们可以更轻松的创建出符合 HATEOAS 设计的 API。相关文章(可以参考)：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.aisensiy.me/2017/06/04/spring-boot-and-hateoas/">在 Spring Boot 中使用 HATEOASopen in new window</a></li>
+<li><a target="_blank" rel="noopener" href="https://spring.io/guides/tutorials/rest/">Building REST services with Springopen in new window</a> (Spring 官网 )</li>
+<li><a target="_blank" rel="noopener" href="https://www.baeldung.com/spring-hateoas-tutorial">An Intro to Spring HATEOASopen in new window</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/spring-projects/spring-hateoas-examples/tree/master/hypermedia">spring-hateoas-examplesopen in new window</a></li>
+<li><a target="_blank" rel="noopener" href="https://spring.io/projects/spring-hateoas#learn">Spring HATEOASopen in new window</a> (Spring 官网)</li>
+</ul>
+<p>参考：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://javaguide.cn/system-design/basis/RESTfulAPI.html#%E4%BD%95%E4%B8%BA-api">RestFul API | JavaGuide</a></p>
+</blockquote>
+<h1 id="END"><a href="#END" class="headerlink" title="-END-"></a>-END-</h1></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2022/04/06/RESTful%20API/">https://devildyw.github.io/2022/04/06/RESTful%20API/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/java/">java</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-9mo7kw.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/04/04/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-3zzkdv.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">雪花算法</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/02/28/Git%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7/" title="Git分布式版本控制工具"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-k7zdqm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">Git分布式版本控制工具</div></div></a></div><div><a href="/2022/02/28/ThreadLocal/" title="ThreadLocal"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-57kw88.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">ThreadLocal</div></div></a></div><div><a href="/2022/02/28/%E5%8E%9F%E5%AD%90%E2%80%BB%E3%80%81%E5%8F%AF%E8%A7%81%E6%80%A7%E3%80%81%E6%9C%89%E5%BA%8F%E6%80%A7/" title="java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/tag.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？</div></div></a></div><div><a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--synchronized%E5%85%B3%E9%94%AE%E5%AD%97/" title="每日一记--synchronized关键字"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">每日一记--synchronized关键字</div></div></a></div><div><a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E7%BB%AD%EF%BC%89/" title="每日一记--多线程（续）"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-l3dvqp.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">每日一记--多线程（续）</div></div></a></div><div><a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/" title="每日一记"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-3zzkdv.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">每日一记</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RESTful-API"><span class="toc-number">1.</span> <span class="toc-text">RESTful API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFAPI"><span class="toc-number">1.2.</span> <span class="toc-text">什么是API?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFRESTful-API"><span class="toc-number">1.3.</span> <span class="toc-text">什么是RESTful API?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E8%AF%BBREST-%E4%BA%86%E8%A7%A3%E5%86%85%E5%AE%B9"><span class="toc-number">1.4.</span> <span class="toc-text">解读REST(了解内容)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RESTful-API-%E8%A7%84%E8%8C%83"><span class="toc-number">1.5.</span> <span class="toc-text">RESTful API 规范</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E8%BF%87%E6%BB%A4"><span class="toc-number">1.5.1.</span> <span class="toc-text">信息过滤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E7%A0%81%EF%BC%88Status-Codes%EF%BC%89"><span class="toc-number">1.5.2.</span> <span class="toc-text">状态码（Status Codes）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RESTful-%E7%9A%84%E6%9E%81%E8%87%B4-HATEOAS"><span class="toc-number">1.6.</span> <span class="toc-text">RESTful 的极致 HATEOAS</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#END"><span class="toc-number">2.</span> <span class="toc-text">-END-</span></a></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
