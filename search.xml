@@ -6646,7 +6646,7 @@ String servletPath = request.getServletPath(); //   /testRequest
   <entry>
     <title>Annotation</title>
     <url>/2022/04/07/Annotation/</url>
-    <content><![CDATA[<h1 id="Java-Annotation"><a href="#Java-Annotation" class="headerlink" title="Java Annotation"></a>Java Annotation</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>​    **<code>Annotation</code>**（注解）是JDK5开始引入的新特性，可以看作是一种特殊的注释，主要用于修饰类，方法或者变量，在框架中大量使用（如 Spring、Mybatis等）</p>
+    <content><![CDATA[<h1 id="Java-Annotation"><a href="#Java-Annotation" class="headerlink" title="Java Annotation"></a>Java Annotation</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>​    <code>Annotation</code>（注解）是JDK5开始引入的新特性，可以看作是一种特殊的注释，主要用于修饰类，方法或者变量，在框架中大量使用（如 Spring、Mybatis等）</p>
 <blockquote>
 <p>注解是一种能被添加到java代码中的元数据，类、方法、变量、参数和包都可以用注解来修饰。注解对于它所修饰的代码并没有直接的影响。</p>
 </blockquote>
