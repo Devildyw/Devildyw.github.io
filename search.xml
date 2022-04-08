@@ -6646,7 +6646,7 @@ String servletPath = request.getServletPath(); //   /testRequest
   <entry>
     <title>Annotation</title>
     <url>/2022/04/07/Annotation/</url>
-    <content><![CDATA[<h1 id="Java-Annotation"><a href="#Java-Annotation" class="headerlink" title="Java Annotation"></a>Java Annotation</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>​    <code>Annotation</code>（注解）是JDK5开始引入的新特性，可以看作是一种特殊的注释，主要用于修饰类，方法或者变量，在框架中大量使用（如 Spring、Mybatis等）</p>
+    <content><![CDATA[<h1 id="Annotation"><a href="#Annotation" class="headerlink" title="Annotation"></a>Annotation</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>​    <code>Annotation</code>（注解）是JDK5开始引入的新特性，可以看作是一种特殊的注释，主要用于修饰类，方法或者变量，在框架中大量使用（如 Spring、Mybatis等）</p>
 <blockquote>
 <p>注解是一种能被添加到java代码中的元数据，类、方法、变量、参数和包都可以用注解来修饰。注解对于它所修饰的代码并没有直接的影响。</p>
 </blockquote>
@@ -6964,10 +6964,29 @@ String servletPath = request.getServletPath(); //   /testRequest
 <p>​    <strong>注意：</strong>如果接口声明了一个覆盖<code>java.lang.Object</code>的公共方法之一的抽象方法，这也不会计入接口的抽象方法计数</p>
 <p>得出结论：<code>@FunctionalInterface</code>只是告诉编译器去检查这个接口是不是函数式接口，保证该接口只能包含一个抽象方法，否者就会出现编译错误。</p>
 <hr>
+<h2 id="写一个自己的注解"><a href="#写一个自己的注解" class="headerlink" title="写一个自己的注解"></a>写一个自己的注解</h2><p>注解的格式就是</p>
+<blockquote>
+<ul>
+<li>元注解</li>
+<li><code>public @interface 注解名</code></li>
+<li>注解内容体</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Documented</span> <span class="comment">//这里我希望我的注解能够生成在JavaDoc生成的文档中</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.CLASS)</span> <span class="comment">//这里我希望我的注解能够在字节码文件中保留</span></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE,ElementType.METHOD&#125;)</span> <span class="comment">//这里我希望我的注解可以修饰于类、接口、抽象类和方法上</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyAnnotation &#123; <span class="comment">//我声明了一个名为MyAnnotation的注解</span></span><br><span class="line">    <span class="comment">//定义带两个成员变量的注解</span></span><br><span class="line">    <span class="comment">//注解中的成员以方法的形式命名（注解的本质是接口） 并且可以带有默认值</span></span><br><span class="line">    String <span class="title function_">name</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">age</span><span class="params">()</span> <span class="keyword">default</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    想要获取注解中的成员变量需要使用反射的知识、首先需要获取类的Class对象，我们就可以通过的这个Class对象反射得到注解的成员变量了。</p>
+<p>​    反射相关的可以参考这篇博客<a href="https://blog.csdn.net/D1842501760/article/details/120714043?spm=1001.2014.3001.5502">反射</a></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> NoSuchMethodException &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Test</span>().testMyAnnotation();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>&#123;</span><br><span class="line">    <span class="meta">@MyAnnotation(name = &quot;dyw&quot;,age = 20)</span><span class="comment">//这里我们使用了我们刚才自定义的注解</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testMyAnnotation</span><span class="params">()</span> <span class="keyword">throws</span> NoSuchMethodException &#123;</span><br><span class="line">        <span class="comment">//这里获取Test类的Class对象 当类被编译后会当jvm加载时会生成该class文件的Class对象 通过这个Class对象可以完成反射相关的操作</span></span><br><span class="line">        <span class="type">Method</span> <span class="variable">testMyAnnotation</span> <span class="operator">=</span> <span class="built_in">this</span>.getClass().getMethod(<span class="string">&quot;testMyAnnotation&quot;</span>);</span><br><span class="line">        <span class="comment">//通过Class对象的getAnnotation()方法反射得到我们的MyAnnotation对象</span></span><br><span class="line">        <span class="type">MyAnnotation</span> <span class="variable">annotation</span> <span class="operator">=</span> testMyAnnotation.getAnnotation(MyAnnotation.class);</span><br><span class="line">        <span class="comment">//通过该对象可以获取注解类的成员</span></span><br><span class="line">        System.out.println(<span class="string">&quot;name :&quot;</span>+annotation.name());</span><br><span class="line">        System.out.println(<span class="string">&quot;age :&quot;</span>+annotation.age());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220408151357416.png" alt="image-20220408151357416"></p>
+<p>​    这里只介绍了自定义注解类的简单用法，但是却完美展现了注解搭配反射可以碰撞出的巨大火花。熟悉掌握注解与反射后就有一定能力去学习那些大佬开发的框架的底层代码了。</p>
+<hr>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://c.biancheng.net/java/java/135/">Java注解 (biancheng.net)</a></p>
 <p><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/annotation/package-summary.html">java.lang.annotation (Java Platform SE 8 ) (oracle.com)</a></p>
 <p><a href="https://juejin.cn/post/6844903776088752141">理解注解中的@Inherited - 掘金 (juejin.cn)</a></p>
 <p><a href="https://blog.csdn.net/qq_34576220/article/details/105731364">java元注解@Native &amp;&amp; @Repeatable （java8 新增）_似火似水的博客-CSDN博客_native注解</a></p>
+<p><a href="%5D(https://blog.csdn.net/qq_34576220/article/details/105731364">反射</a></p>
 <h1 id="END"><a href="#END" class="headerlink" title="-END-"></a>-END-</h1>]]></content>
       <categories>
         <category>JavaSE</category>
