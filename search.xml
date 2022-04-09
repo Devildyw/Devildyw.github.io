@@ -1411,7 +1411,7 @@
         <category>NoSQL</category>
       </categories>
       <tags>
-        <tag>databese</tag>
+        <tag>database</tag>
       </tags>
   </entry>
   <entry>
@@ -5230,7 +5230,7 @@ spring:
         <category>持久层框架</category>
       </categories>
       <tags>
-        <tag>databese</tag>
+        <tag>database</tag>
       </tags>
   </entry>
   <entry>
@@ -6993,6 +6993,25 @@ String servletPath = request.getServletPath(); //   /testRequest
       </categories>
       <tags>
         <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>事务的嵌套</title>
+    <url>/2022/04/09/%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%B5%8C%E5%A5%97/</url>
+    <content><![CDATA[<h1 id="事务的嵌套"><a href="#事务的嵌套" class="headerlink" title="事务的嵌套"></a>事务的嵌套</h1><p><strong>什么是嵌套事务？</strong><br>       嵌套是子事务在父事务中执行，子事务是父事务的一部分，在进入子事务之前，父事务建立一个回滚点，叫save point，然后执行子事务，这个子事务的执行也算是父事务的一部分，然后子事务执行结束，父事务继续执行。</p>
+<p><strong>可以通过下述的问答进一步去熟悉嵌套事务？</strong></p>
+<ol>
+<li>如果子事务回滚，会发生什么？<br>      父事务会回滚到进入子事务前建立的save point，然后尝试其他的事务或者其他的业务逻辑，父事务之前的操作不会受到影响，更不会自动回滚。</li>
+<li>如果父事务回滚，会发生什么？<br>      父事务回滚，子事务也会跟着回滚！为什么呢，因为父事务结束之前，子事务是不会提交的，我们说子事务是父事务的一部分，正是这个道理。</li>
+<li>事务的提交，是什么情况？<br>      父事务先提交，然后子事务提交，还是子事务先提交，父事务再提交？答案是第二种情况，还是那句话，子事务是父事务的一部分，由父事务统一提交。</li>
+</ol>
+<p>原文链接：<a href="https://blog.csdn.net/javashareauthor/article/details/82842177">https://blog.csdn.net/javashareauthor/article/details/82842177</a></p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>database</tag>
       </tags>
   </entry>
 </search>
