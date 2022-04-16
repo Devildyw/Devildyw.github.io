@@ -7087,7 +7087,8 @@ String servletPath = request.getServletPath(); //   /testRequest
   <entry>
     <title>restTemplate</title>
     <url>/2022/04/16/restTemplate/</url>
-    <content><![CDATA[<h1 id="RestTemplate"><a href="#RestTemplate" class="headerlink" title="RestTemplate"></a>RestTemplate</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-8oky1j.jpg" alt="General 1920x1080 Gordon Zuchhold (Artstation) digital art science fiction pixel art city cyberpunk animation futuristic city ArtStation artwork futuristic">简介</h2><ul>
+    <content><![CDATA[<h1 id="RestTemplate"><a href="#RestTemplate" class="headerlink" title="RestTemplate"></a>RestTemplate</h1><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-8oky1j.jpg" alt="General 1920x1080 Gordon Zuchhold (Artstation) digital art science fiction pixel art city cyberpunk animation futuristic city ArtStation artwork futuristic"></p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ul>
 <li><code>RestTemplate</code>是由<code>Spring</code>框架提供的一个可用于应用中调用<code>rest</code>服务的类它简化了与<code>http</code>服务的通信方式，统一了<code>RESTFul</code>的标准，封装了<code>http</code>连接，我们只需要传入<code>url</code>及其返回值类型即可。相较于之前常用的<code>HttpClient</code>，<code>RestTemplate</code>是一种更为优雅的调用<code>RESTFul</code>服务的方式。</li>
 <li>在<code>Spring</code>应用程序中访问第三方<code>REST服务</code>与使用<code>Spring RestTemplate</code>类有关。<code>RestTemplate</code>类的设计原则与许多其他<code>Spring</code>的模板类(例如<code>JdbcTemplate</code>)相同，为执行复杂任务提供了一种具有默认行为的简化方法。</li>
 <li><code>RestTemplate</code>默认依赖JDK提供了<code>http</code>连接的能力（<code>HttpURLConnection</code>），如果有需要的话也可以通过<code>setRequestFactory</code>方法替换为例如<code>Apache HttpCompoent、Netty或OKHttp</code>等其他<code>Http libaray</code>。</li>
