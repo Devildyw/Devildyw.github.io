@@ -1,0 +1,427 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>restTemplate | Devil的个人博客</title><meta name="keywords" content="Java"><meta name="author" content="Devil"><meta name="copyright" content="Devil"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="RestTemplate简介 RestTemplate是由Spring框架提供的一个可用于应用中调用rest服务的类它简化了与http服务的通信方式，统一了RESTFul的标准，封装了http连接，我们只需要传入url及其返回值类型即可。相较于之前常用的HttpClient，RestTemplate是一种更为优雅的调用RESTFul服务的方式。 在Spring应用程序中访问第三方REST服务与使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="restTemplate">
+<meta property="og:url" content="https://devildyw.github.io/2022/04/16/restTemplate/index.html">
+<meta property="og:site_name" content="Devil的个人博客">
+<meta property="og:description" content="RestTemplate简介 RestTemplate是由Spring框架提供的一个可用于应用中调用rest服务的类它简化了与http服务的通信方式，统一了RESTFul的标准，封装了http连接，我们只需要传入url及其返回值类型即可。相较于之前常用的HttpClient，RestTemplate是一种更为优雅的调用RESTFul服务的方式。 在Spring应用程序中访问第三方REST服务与使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/archive.jpg">
+<meta property="article:published_time" content="2022-04-16T08:50:04.000Z">
+<meta property="article:modified_time" content="2022-04-16T08:51:40.826Z">
+<meta property="article:author" content="Devil">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/archive.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2022/04/16/restTemplate/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'restTemplate',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-04-16 16:51:40'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/dyw.css"><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">25</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/archive.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">restTemplate</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-16T08:50:04.000Z" title="发表于 2022-04-16 16:50:04">2022-04-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-04-16T08:51:40.826Z" title="更新于 2022-04-16 16:51:40">2022-04-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="restTemplate"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="RestTemplate"><a href="#RestTemplate" class="headerlink" title="RestTemplate"></a>RestTemplate</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-8oky1j.jpg" alt="General 1920x1080 Gordon Zuchhold (Artstation) digital art science fiction pixel art city cyberpunk animation futuristic city ArtStation artwork futuristic">简介</h2><ul>
+<li><code>RestTemplate</code>是由<code>Spring</code>框架提供的一个可用于应用中调用<code>rest</code>服务的类它简化了与<code>http</code>服务的通信方式，统一了<code>RESTFul</code>的标准，封装了<code>http</code>连接，我们只需要传入<code>url</code>及其返回值类型即可。相较于之前常用的<code>HttpClient</code>，<code>RestTemplate</code>是一种更为优雅的调用<code>RESTFul</code>服务的方式。</li>
+<li>在<code>Spring</code>应用程序中访问第三方<code>REST服务</code>与使用<code>Spring RestTemplate</code>类有关。<code>RestTemplate</code>类的设计原则与许多其他<code>Spring</code>的模板类(例如<code>JdbcTemplate</code>)相同，为执行复杂任务提供了一种具有默认行为的简化方法。</li>
+<li><code>RestTemplate</code>默认依赖JDK提供了<code>http</code>连接的能力（<code>HttpURLConnection</code>），如果有需要的话也可以通过<code>setRequestFactory</code>方法替换为例如<code>Apache HttpCompoent、Netty或OKHttp</code>等其他<code>Http libaray</code>。</li>
+<li>考虑到了<code>RestTemplate</code>类是为了调用REST服务而设计的，因此它的主要方法与<code>REST</code>的基础紧密相连就不足为奇了，后者时<code>HTTP</code>协议的方法：<code>HEAD、GET、POST、PUT、DELETE、OPTIONS</code>例如，<code>RestTemplate</code>类具有<code>headForHeaders()、getForObject()、putForObject()，put()和delete()</code>等方法。</li>
+</ul>
+<h2 id="创建RestTemplate"><a href="#创建RestTemplate" class="headerlink" title="创建RestTemplate"></a>创建<code>RestTemplate</code></h2><p>​    因为<code>RestTemplate</code>是<code>Spirng</code>框架提供的所以只要是一个<code>Springboot</code>项目就不用考虑导包的问题，这些都是提供好的。</p>
+<p>​    但是<code>Spring</code>并没有将其加入<code>SpringBean</code>容器中，需要我们手动加入，因为我们首先创建一个<code>Springboot</code>配置类，再在配置类中将我们的<code>RestTemlate</code>注册到<code>Bean</code>容器中</p>
+<h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><p>​    使用<code>Springboot</code>提供的<code>RestTemplateBuilder</code>构造类来构造一个<code>RestTemplate</code>，可以自定义一些连接参数，如：连接超时时间，读取超时时间，还有认证信息等</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220415202710768.png" alt="image-20220415202710768"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WebConfiguration</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> RestTemplate <span class="title function_">restTemplate</span><span class="params">(RestTemplateBuilder builder)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> builder</span><br><span class="line">                <span class="comment">//设置连接超时时间</span></span><br><span class="line">                .setConnectTimeout(Duration.ofSeconds(<span class="number">5000</span>))</span><br><span class="line">                <span class="comment">//设置读取超时时间</span></span><br><span class="line">                .setReadTimeout(Duration.ofSeconds(<span class="number">5000</span>))</span><br><span class="line">                <span class="comment">//设置认证信息</span></span><br><span class="line">                .basicAuthentication(<span class="string">&quot;username&quot;</span>,<span class="string">&quot;password&quot;</span>)</span><br><span class="line">                <span class="comment">//设置根路径</span></span><br><span class="line">                .rootUri(<span class="string">&quot;https://api.test.com/&quot;</span>)</span><br><span class="line">                <span class="comment">//构建</span></span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="添加自定义的拦截器"><a href="#添加自定义的拦截器" class="headerlink" title="添加自定义的拦截器"></a>添加自定义的拦截器</h4><p>​    自定义拦截器示例</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CustomClientHttpRequestInterceptor</span> <span class="keyword">implements</span> <span class="title class_">ClientHttpRequestInterceptor</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> ClientHttpResponse <span class="title function_">intercept</span><span class="params">(HttpRequest request, <span class="type">byte</span>[] body, ClientHttpRequestExecution execution)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//打印请求明细</span></span><br><span class="line">        logRequestDetails(request,body);</span><br><span class="line">        <span class="type">ClientHttpResponse</span> <span class="variable">response</span> <span class="operator">=</span> execution.execute(request, body);</span><br><span class="line">        <span class="comment">//打印响应明细</span></span><br><span class="line">        logResponseDetails(response);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> response;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">logRequestDetails</span><span class="params">(HttpRequest request, <span class="type">byte</span>[] body)</span>&#123;</span><br><span class="line">        log.debug(<span class="string">&quot;Headers:&#123;&#125;&quot;</span>,request.getHeaders());</span><br><span class="line">        log.debug(<span class="string">&quot;body:&#123;&#125;&quot;</span>,<span class="keyword">new</span> <span class="title class_">String</span>(body, StandardCharsets.UTF_8));</span><br><span class="line">        log.debug(<span class="string">&quot;&#123;&#125;:&#123;&#125;&quot;</span>,request.getMethod(),request.getMethodValue());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">logResponseDetails</span><span class="params">(ClientHttpResponse response)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        log.debug(<span class="string">&quot;Status code : &#123;&#125;&quot;</span>,response.getStatusCode());</span><br><span class="line">        log.debug(<span class="string">&quot;Status text : &#123;&#125;&quot;</span>,response.getStatusText());</span><br><span class="line">        log.debug(<span class="string">&quot;Headers : &#123;&#125;&quot;</span>,response.getHeaders());</span><br><span class="line">        log.debug(<span class="string">&quot;Response body: &#123;&#125;&quot;</span>, StreamUtils.copyToString(response.getBody(),StandardCharsets.UTF_8));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    使用<code>RestTemplateBuilder</code>构造类，添加自定义拦截器，构造带有自定义拦截器的<code>RestTemplate</code>实例</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WebConfiguration</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> RestTemplate <span class="title function_">restTemplate</span><span class="params">(RestTemplateBuilder builder)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> builder</span><br><span class="line">                .additionalInterceptors(<span class="keyword">new</span> <span class="title class_">CustomClientHttpRequestInterceptor</span>())</span><br><span class="line">                <span class="comment">//构建</span></span><br><span class="line">                .build();</span><br><span class="line">    &#125;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    测试请求确实经过了拦截器，注册成功（注意请求和响应的流只会被读取一次，这里我们读取了response后返回的response就读取不到刚刚读过的内容了）</p>
+<p>​    <img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220415204816204.png" alt="image-20220415204816204"></p>
+<hr>
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>​    使用<code>RestTemplate</code>构造方法构造一个<code>RestTemlate</code>，虽然不能像<code>RestTemplate</code>构造类那样更详细、更多样的配置参数，但是<code>RestTemplate</code>构造方法在一般情况是够用的。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220415195208601.png" alt="image-20220415195208601"></p>
+<ul>
+<li>无参构造 全部参数默认</li>
+<li>指定<code>ClientHttpRequestFactory</code> 的构造方法可以指定自己实现的<code>ClientHttpRequestFactory</code>（客户端<code>http</code>请求工厂）其他的与无参构造相同。<ul>
+<li><code>ClientHttpRequestFactory</code></li>
+</ul>
+</li>
+<li>指定<code>List&lt;HttpMessageConverter&lt;?&gt;&gt;</code>的构造方法可以指定自己是实现的<code>HttpMessageConverter</code>（<code>Http</code>消息转换器）传入其他与无参构造相同。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WebConfiguration</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> RestTemplate <span class="title function_">restTemplate</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RestTemplate</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>​    两者方法都可使用，前者提供了多样的自定义参数的选择，可以将<code>RestTemplate</code>配置的更为完善，后者则简化了配置虽然配置多样性不如前者，但是日常使用调用些<code>API</code>还是足以使用</p>
+<h2 id="RestTemplate-API使用"><a href="#RestTemplate-API使用" class="headerlink" title="RestTemplate API使用"></a><code>RestTemplate API</code>使用</h2><p>​    在使用<code>RestTemplate</code>前先让我们看看<code>RestTemplate</code>有哪些<code>API</code></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220415205801633.png" alt="image-20220415205801633"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220415205831801.png" alt="image-20220415205831801"></p>
+<p>​    相信大家看到这么多方法，一定很头大，但是我们仔细看上述的方法，我们可以提取出主要的几种方法是(这里只讨论Http请求的)：</p>
+<ul>
+<li><strong><code>GET</code></strong></li>
+<li><strong><code>POST</code></strong></li>
+<li><strong><code>PUT</code></strong></li>
+<li><strong><code>DELETE</code></strong></li>
+<li><strong><code>HEAD</code></strong></li>
+<li><strong><code>OPTIONS</code></strong></li>
+<li><strong><code>EXCHANGE</code></strong></li>
+<li><strong><code>EXECUTE</code></strong></li>
+</ul>
+<p>​    <strong>这里我给大家安利一个一个网站，它提供免费的RESTFul api的样例测试。</strong><a target="_blank" rel="noopener" href="http://httpbin.org/">httpbin A simple HTTP Request &amp; Response Service.</a></p>
+<hr>
+<h3 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h3><p>​    通过上图我们可以发现<code>RestTemlate</code>发送<code>GET</code>请求的方法有两种</p>
+<blockquote>
+<ul>
+<li><code>public &lt;T&gt; T getForObject(...)</code></li>
+<li><code>public &lt;T&gt; ResponseEntity&lt;T&gt; getForEntity(...)</code></li>
+</ul>
+</blockquote>
+<h4 id="getForEntity"><a href="#getForEntity" class="headerlink" title="getForEntity()"></a><strong><code>getForEntity()</code></strong></h4><p>​    后缀带有<code>Entity</code>的方法都代表返回一个<code>ResponseEntity&lt;T&gt;</code>，<code>ResponseEntity&lt;T&gt;</code>是Spring对<code>HTTP</code>请求响应的封装，包括了几个重要的元素，如响应码，<code>contentType、contentLength</code>、响应消息体等</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220415211830207.png" alt="image-20220415211830207"></p>
+<p>​    通过它继承父类(<code>HttpEntity&lt;T&gt;</code>)的<code>getHeader()</code>方法我们可以获取<code>contentType、contentLength</code>、响应消息体等。比如下面这个例子。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">queryWeather</span><span class="params">()</span> &#123;</span><br><span class="line"></span><br><span class="line">        ResponseEntity&lt;Object&gt; forEntity = restTemplate.getForEntity(<span class="string">&quot;https://restapi.amap.com/v3/weather/weatherInfo?city=510100&amp;key=e7a5fa943f706602033b6b329c49fbc6&quot;</span>, Object.class);</span><br><span class="line">        System.out.println(<span class="string">&quot;状态码:&quot;</span>+forEntity.getStatusCode());</span><br><span class="line">        System.out.println(<span class="string">&quot;状态码内容:&quot;</span>+forEntity.getStatusCodeValue());</span><br><span class="line">        <span class="type">HttpHeaders</span> <span class="variable">headers</span> <span class="operator">=</span> forEntity.getHeaders();</span><br><span class="line">        System.out.println(<span class="string">&quot;响应头:&quot;</span>+headers);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">body</span> <span class="operator">=</span> forEntity.getBody();</span><br><span class="line">        System.out.println(<span class="string">&quot;响应内容:&quot;</span>+body);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    该例子中<code>getForEntity()</code>方法的第一个参数为我要调用服务的<code>URL</code>，第二个参数则为响应内容的类的类型（Java嘛 万物皆对象）还可以添加第三个参数，第三个参数为一个可变参数 代表着调用服务时的传参。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220415212800839.png" alt="image-20220415212800839">    <strong>第三个参数可以使用key-value的map来传入参数</strong></p>
+<p>​    <strong>get请求也可通过向在url上添加查询参数来发送带有请求的参数</strong></p>
+<hr>
+<h4 id="getForObject"><a href="#getForObject" class="headerlink" title="getForObject()"></a><strong><code>getForObject()</code></strong></h4><p>​    相比于前者<code>getForEntity()</code>该方法则是，更偏向于直接获取响应内容的，因为他直接返回响应实体的<code>body</code>（响应内容），。比如下面这个例子</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">queryWeather</span><span class="params">()</span> &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="type">Object</span> <span class="variable">body</span> <span class="operator">=</span> restTemplate.getForObject(<span class="string">&quot;https://restapi.amap.com/v3/weather/weatherInfo?city=510100&amp;key=e7a5fa943f706602033b6b329c49fbc6&quot;</span>, Object.class);</span><br><span class="line">        System.out.println(body);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<pre><code> 方法参数签名与`getForEntity()`基本一致。
+</code></pre>
+<hr>
+<p>​    当你只需要返回的响应内容时，使用<code>getForObject()</code>是一个很好的选择，但当你需要获得更详细的响应信息，如响应头中的信息，你就只能选择<code>getForEntity()</code>了。</p>
+<hr>
+<h3 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h3><p>​    <code>POST</code>请求有如下三种方法</p>
+<blockquote>
+<ul>
+<li><code>public URI postForLocation(...)</code></li>
+<li><code>public &lt;T&gt; T postForObject(...)</code></li>
+<li><code>public &lt;T&gt; ResponseEntity&lt;T&gt; postForEntity(...)</code></li>
+</ul>
+</blockquote>
+<p>​    后两种用法与<code>GET</code>基本一致不做详细介绍，这里着重介绍<code>postForLocation()</code></p>
+<hr>
+<h4 id="postForEntity"><a href="#postForEntity" class="headerlink" title="postForEntity()"></a><code>postForEntity()</code></h4><p>​    该方法有三个参数，第一个为调用服务的地址（URL）</p>
+<p>​    第二个参数表示上传的参数(json格式提交)</p>
+<p>​    第三个表示返回响应内容的具体类型</p>
+<p>​    第四个参数也用于指定参数（在URL中添加）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">queryWeather</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">        user.setName(<span class="string">&quot;鲁大师&quot;</span>);</span><br><span class="line">        ResponseEntity&lt;Object&gt; objectResponseEntity = restTemplate.postForEntity(<span class="string">&quot;https://restapi.amap.com/v3/weather/weatherInfo?city=510100&amp;key=e7a5fa943f706602033b6b329c49fbc6&quot;</span>, user, Object.class);</span><br><span class="line">        System.out.println(<span class="string">&quot;消息响应内容:&quot;</span>+objectResponseEntity.getBody());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="postForObject"><a href="#postForObject" class="headerlink" title="postForObject()"></a><code>postForObject()</code></h4><p>​    使用方法与<code>getForObject</code>类似只是多了一个传入对象参数（传入方式与<code>postForEntity()</code>相同）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">queryWeather</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">        user.setName(<span class="string">&quot;鲁大师&quot;</span>);</span><br><span class="line">        ResponseEntity&lt;Object&gt; objectResponseEntity = restTemplate.postForEntity(<span class="string">&quot;https://httpbin.org/post&quot;</span>, user, Object.class);</span><br><span class="line">        <span class="type">MediaType</span> <span class="variable">contentType</span> <span class="operator">=</span> objectResponseEntity.getHeaders().getContentType();</span><br><span class="line">        System.out.println(contentType);</span><br><span class="line">        System.out.println(<span class="string">&quot;消息响应内容:&quot;</span>+objectResponseEntity.getBody());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h4 id="postForLocation"><a href="#postForLocation" class="headerlink" title="postForLocation()"></a><code>postForLocation()</code></h4><p>​    <code>postForLocation</code>传参用法与前两者一致，只不过返回从实体变成了一个<code>URL</code>，因此它不需要指定返回响应内容的类型。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">queryWeather</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">        user.setName(<span class="string">&quot;鲁大师&quot;</span>);</span><br><span class="line">        <span class="type">URI</span> <span class="variable">uri</span> <span class="operator">=</span> restTemplate.postForLocation(<span class="string">&quot;https://httpbin.org/post&quot;</span>, user);</span><br><span class="line">        System.out.println(uri);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个只需要服务提供者返回一个 URI 即可，该<code>URI</code>返回值体现的是：用于提交完成数据之后的页面跳转，或数据提交完成之后的下一步数据操作<code>URI</code>。</p>
+<h4 id="使用POST以表单方式提交"><a href="#使用POST以表单方式提交" class="headerlink" title="使用POST以表单方式提交"></a>使用POST以表单方式提交</h4><p>​    这里我们着重说一下，如何自己封装一个请求体。</p>
+<p>​    我们需要用到如下几个类</p>
+<blockquote>
+<ul>
+<li><code>HttpHeaders</code></li>
+<li><code>MultiValueMap&lt;K,V&gt;</code></li>
+<li><code>HttpEntity&lt;T&gt;</code></li>
+</ul>
+</blockquote>
+<h5 id="HttpHeaders"><a href="#HttpHeaders" class="headerlink" title="HttpHeaders"></a><code>HttpHeaders</code></h5><p>​    故名思意，就是用来封装Http请求的请求头的，这里我们要设置他的<code>ContentType</code>为**<code>MediaType.APPLICATION_FORM_URLENCODED</code>**以使得我们提交的参数是以Form(表单)的形式提交。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//设置请求头, x-www-form-urlencoded格式的数据</span></span><br><span class="line">        <span class="type">HttpHeaders</span> <span class="variable">httpHeaders</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HttpHeaders</span>();</span><br><span class="line">        <span class="comment">//这里指定参数以UTF-8编码格式传输</span></span><br><span class="line">        <span class="type">MediaType</span> <span class="variable">mediaType</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MediaType</span>(MediaType.APPLICATION_FORM_URLENCODED, UTF_8);</span><br><span class="line">        httpHeaders.setContentType(mediaType);</span><br><span class="line">        <span class="comment">//提交参数设置</span></span><br><span class="line">        MultiValueMap&lt;String, String&gt; map = <span class="keyword">new</span> <span class="title class_">LinkedMultiValueMap</span>&lt;&gt;();</span><br><span class="line">        map.add(<span class="string">&quot;name&quot;</span>,<span class="string">&quot;鲁大师&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="MultiValueMap-lt-K-V-gt"><a href="#MultiValueMap-lt-K-V-gt" class="headerlink" title="MultiValueMap&lt;K,V&gt;"></a><code>MultiValueMap&lt;K,V&gt;</code></h5><p>​    该类是用来封装请求参数的，是以<code>key-value</code>的形式封装但是以单个key对应多个value的格式传输(也就是是以单个<code>key:[value...]</code>的格式传输的)。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//提交参数设置</span></span><br><span class="line">        MultiValueMap&lt;String, String&gt; map = <span class="keyword">new</span> <span class="title class_">LinkedMultiValueMap</span>&lt;&gt;();</span><br><span class="line">        map.add(<span class="string">&quot;name&quot;</span>,<span class="string">&quot;鲁大师&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>​    <strong>如果像传输单个<code>key</code>对应单个<code>value</code>使用普通的<code>Map</code>传参即可</strong></p>
+<hr>
+<h5 id="HttpEntity-lt-T-gt"><a href="#HttpEntity-lt-T-gt" class="headerlink" title="HttpEntity&lt;T&gt;"></a><code>HttpEntity&lt;T&gt;</code></h5><p>​    该类是用来封装请求的，主要作用就是将请求头和请求体封装在一起成为一个请求实体 T用来指定用来封装参数的容器的类型。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//组装请求体</span></span><br><span class="line">        HttpEntity&lt;MultiValueMap&lt;String, String&gt;&gt; request = <span class="keyword">new</span> <span class="title class_">HttpEntity</span>&lt;&gt;(map, httpHeaders);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h5><p>通过上述介绍后，我们就可以自己封装一个以form形式提交参数的<code>POST</code>请求了。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//请求地址</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;https://httpbin.org/post&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置请求头, x-www-form-urlencoded格式的数据</span></span><br><span class="line">        <span class="type">HttpHeaders</span> <span class="variable">httpHeaders</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HttpHeaders</span>();</span><br><span class="line">        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//提交参数设置</span></span><br><span class="line">        MultiValueMap&lt;String, String&gt; map = <span class="keyword">new</span> <span class="title class_">LinkedMultiValueMap</span>&lt;&gt;();</span><br><span class="line">        map.add(<span class="string">&quot;name&quot;</span>,<span class="string">&quot;鲁大师&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//组装请求体</span></span><br><span class="line">        HttpEntity&lt;MultiValueMap&lt;String, String&gt;&gt; request = <span class="keyword">new</span> <span class="title class_">HttpEntity</span>&lt;&gt;(map, httpHeaders);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//发送post请求并打印结果 以String类型接收响应结果JSON字符串</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> restTemplate.postForObject(url, request, String.class);</span><br><span class="line">        System.out.println(s);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220416124128856.png" alt="image-20220416124128856"></p>
+<p>​    通过拦截器拦截了请求并对请求头进行拆包，可以发现<code>ContentType</code>已经被修改成了<code>x-www-form-urlencoded</code>格式了。</p>
+<h3 id="PUT"><a href="#PUT" class="headerlink" title="PUT"></a>PUT</h3><p>​    <code>PUT</code>请求的方法只有一类</p>
+<blockquote>
+<ul>
+<li><code>void put()</code></li>
+</ul>
+</blockquote>
+<h4 id="PUT-1"><a href="#PUT-1" class="headerlink" title="PUT()"></a><code>PUT()</code></h4><p>​    使用方法与<code>postForEntity()</code>参数基本一致，只是<code>put</code>方法没有返回值（也就不必去设置响应内容的类型了）。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//请求地址</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;http://httpbin.org/put&quot;</span>;</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">        user.setName(<span class="string">&quot;鲁大师&quot;</span>);</span><br><span class="line">        restTemplate.put(url,user);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h3><p>​    与<code>PUT</code>一样，<code>DELETE</code>方法只有一类</p>
+<blockquote>
+<ul>
+<li><code>void delete()</code></li>
+</ul>
+</blockquote>
+<h4 id="delete"><a href="#delete" class="headerlink" title="delete()"></a><code>delete()</code></h4><p>​    <code>delete()</code>可以指定<code>url</code>中的中的参数，但是<code>RestTemplate</code>的<code>delete()</code>方法是不支持上传<code>requestBody</code>的。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//请求地址</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;http://httpbin.org/delete&quot;</span>;</span><br><span class="line">    restTemplate.delete(url);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="HEADER"><a href="#HEADER" class="headerlink" title="HEADER"></a>HEADER</h3><p>​    <code>HEADER</code>也只有一类方法</p>
+<blockquote>
+<ul>
+<li><code>public HttpHeaders headForHeaders()</code></li>
+</ul>
+</blockquote>
+<p>​    主要用来发送请求获取响应头部信息，但是像<code>DELETE</code>、<code>PUT</code>这类没有响应的方法，是不能使用该方法的（因为没有响应也就没有响应头了）。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//请求地址</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;http://httpbin.org/get&quot;</span>;</span><br><span class="line">        <span class="type">HttpHeaders</span> <span class="variable">httpHeaders</span> <span class="operator">=</span> restTemplate.headForHeaders(url);</span><br><span class="line">        System.out.println(httpHeaders);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220416151836372.png" alt="image-20220416151836372"></p>
+<hr>
+<h3 id="OPTIONS"><a href="#OPTIONS" class="headerlink" title="OPTIONS"></a>OPTIONS</h3><blockquote>
+<ul>
+<li><code>public Set&lt;HttpMethod&gt; optionsForAllow()</code></li>
+</ul>
+</blockquote>
+<p>​    该方法的主要用来判断该服务地址，能够使用那种方法去执行</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">   <span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">       <span class="comment">//请求地址</span></span><br><span class="line">       <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;http://httpbin.org/get&quot;</span>;</span><br><span class="line">       Set&lt;HttpMethod&gt; httpMethods = restTemplate.optionsForAllow(url);</span><br><span class="line">       System.out.println(httpMethods);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220416152755753.png" alt="image-20220416152755753"></p>
+<hr>
+<h3 id="EXCHANGE"><a href="#EXCHANGE" class="headerlink" title="EXCHANGE"></a>EXCHANGE</h3><blockquote>
+<ul>
+<li><code>&lt;T&gt; ResponseEntity&lt;T&gt; exchange()</code></li>
+</ul>
+</blockquote>
+<p>​    该接口与其他接口不同</p>
+<blockquote>
+<ul>
+<li>该方法允许用户指定请求的方法（<code>get,post,put</code>等）</li>
+<li>可以在请求中增加body以及头信息，其内容通过参数<code>HttpEntity&lt;?&gt; requestEntity</code>描述</li>
+<li><code>exchange</code>支持’含参数的类型(即泛型)’作为返回类型，该特性通过<code>ParameterizedTypeReferenceresponseType</code> 描述</li>
+</ul>
+</blockquote>
+<p>​    该方法支持五个参数</p>
+<blockquote>
+<ul>
+<li>第一个是服务地址</li>
+<li>第二个是请求方法</li>
+<li>第三个是写入的请求实体</li>
+<li>第四个是响应内容的类型</li>
+<li>第五个是扩展模板的变量或包含<code>URI</code>模板变量的映射</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//请求地址</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;http://httpbin.org/post&quot;</span>;</span><br><span class="line">    <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">    user.setName(<span class="string">&quot;彭于晏&quot;</span>);</span><br><span class="line">    <span class="type">HttpHeaders</span> <span class="variable">httpHeaders</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HttpHeaders</span>();</span><br><span class="line">    httpHeaders.setContentType(MediaType.APPLICATION_JSON);</span><br><span class="line">    HttpEntity&lt;User&gt; userHttpEntity = <span class="keyword">new</span> <span class="title class_">HttpEntity</span>&lt;&gt;(user, httpHeaders);</span><br><span class="line">    ResponseEntity&lt;Object&gt; exchange = restTemplate.exchange(url, HttpMethod.POST, userHttpEntity, Object.class);</span><br><span class="line">    System.out.println(exchange);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    上述代码模拟了一个简单的<code>POST</code>请求 <strong>可以理解为可以动态的指定请求方法和请求实体的一个方法。</strong></p>
+<p> <strong>响应实体</strong></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220416154441113.png" alt="image-20220416154441113"></p>
+<hr>
+<h3 id="EXECUTE"><a href="#EXECUTE" class="headerlink" title="EXECUTE"></a>EXECUTE</h3><blockquote>
+<ul>
+<li><code>&lt;T&gt; T execute()</code></li>
+</ul>
+</blockquote>
+<p>​    该方法就是执行请求的方法，我们可以发现上述的所有方法的最后执行都是调用的该方法执行，所以他在<code>RestTemplate</code>中十分重要</p>
+<p>​    该方法有五个参数</p>
+<blockquote>
+<ul>
+<li>服务地址</li>
+<li>请求的方法</li>
+<li>准备请求的对象（<code>requestCallback</code>）</li>
+<li>从响应中提取返回值的对象</li>
+<li>扩展模板的变量或包含<code>URI</code>模板变量的映射</li>
+</ul>
+</blockquote>
+<p><code>execute()</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">	<span class="meta">@Nullable</span></span><br><span class="line">	<span class="keyword">public</span> &lt;T&gt; T <span class="title function_">execute</span><span class="params">(String url, HttpMethod method, <span class="meta">@Nullable</span> RequestCallback requestCallback,</span></span><br><span class="line"><span class="params">			<span class="meta">@Nullable</span> ResponseExtractor&lt;T&gt; responseExtractor, Object... uriVariables)</span> <span class="keyword">throws</span> RestClientException &#123;</span><br><span class="line"></span><br><span class="line">		<span class="type">URI</span> <span class="variable">expanded</span> <span class="operator">=</span> getUriTemplateHandler().expand(url, uriVariables);</span><br><span class="line">		<span class="keyword">return</span> doExecute(expanded, method, requestCallback, responseExtractor);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>​    通过上述源码我们可以发现<code>execute()</code>方法只是将我们传入的<code>String</code>类型的<code>URL</code>转换为了<code>URL</code>类型，最后执行请求是由<code>doExecute()</code>方法</p>
+<hr>
+<h4 id="doExecute"><a href="#doExecute" class="headerlink" title="doExecute()"></a><code>doExecute()</code></h4><p>​    这里需要了解两个类：<code>RequestCallback</code>和<code>ResPonseExtractor</code></p>
+<p>​    <code>RequestCallback</code>: <strong>用于操作请求头和body，在请求发出前执行。不需要关心关闭请求或处理错误：这都将由RestTemplate处理。</strong></p>
+<p>​    该接口有两个实现类：</p>
+<p>​    <img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/v2-6761e212c99b46b5b24de7784c5f6c44_720w.jpg" alt="img"></p>
+<p>​    <code>ResPonseExtractor</code>: <strong>解析HTTP响应的数据，而且不需要担心异常和资源的关闭。</strong></p>
+<p>​    该接口在<code>RestTemplate</code>中同样有两个实现类：</p>
+<table>
+<thead>
+<tr>
+<th><code>HeadersExtractor</code></th>
+<th>提取响应<code>HttpHeaders</code>的响应提取器。直接提取响应体中的响应头</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ResponseEntityResponseExtractor&lt;T&gt;</code></td>
+<td><code>HttpEntity</code><strong>的响应提取器。可以获取响应实体里面包括响应头，响应体等。具体请查看</strong><code>HttpEntity</code></td>
+<td></td>
+</tr>
+</tbody></table>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//请求地址</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;http://httpbin.org/post&quot;</span>;</span><br><span class="line">    <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">    user.setName(<span class="string">&quot;彭于晏&quot;</span>);</span><br><span class="line">    <span class="type">HttpHeaders</span> <span class="variable">httpHeaders</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HttpHeaders</span>();</span><br><span class="line">    httpHeaders.setContentType(MediaType.APPLICATION_JSON);</span><br><span class="line">    HttpEntity&lt;User&gt; userHttpEntity = <span class="keyword">new</span> <span class="title class_">HttpEntity</span>&lt;&gt;(user, httpHeaders);</span><br><span class="line">    ResponseEntity&lt;Object&gt; execute = restTemplate.execute(url, HttpMethod.POST, restTemplate.httpEntityCallback(userHttpEntity), restTemplate.responseEntityExtractor(Object.class));</span><br><span class="line">    System.out.println(execute);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220416161653708.png" alt="image-20220416161653708"></p>
+<hr>
+<h2 id="解惑"><a href="#解惑" class="headerlink" title="解惑"></a>解惑</h2><ul>
+<li>前面我们介绍方法的时候发现有个一个可变参数，那个参数被描述成了<strong>扩展模板的变量或是包含<code>URI</code>模板变量的映射</strong></li>
+</ul>
+<p>我们来简单看一下这个参数，我们知道请求传参可以通过<code>url</code>拼接参数的方式传参，拼接参数也分为两种：</p>
+<blockquote>
+<ul>
+<li>路径中嵌入占位的格式（<code>http://httpbin.org/&#123;1&#125;/post</code>）也叫模板映射</li>
+<li>末尾添加<code>Key-value</code>格式（<code>http://httpbin.org/post?name=&quot;彭于晏&quot;</code>）即扩展模板的变量</li>
+</ul>
+</blockquote>
+<ul>
+<li>当我们最后一参数传入map时会以<code>key-value</code>的格式拼接在<code>URL</code>后（通俗的说就是这样设置的变量会跟着<code>URL</code>路径后面）</li>
+</ul>
+<p>​    <code>http://httpbin.org/post?name=&quot;彭于晏&quot;</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//请求地址</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;http://httpbin.org/get&quot;</span>;</span><br><span class="line">    HashMap&lt;String, String&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;name&quot;</span>,<span class="string">&quot;彭于晏&quot;</span>);</span><br><span class="line">    <span class="type">Object</span> <span class="variable">forObject</span> <span class="operator">=</span> restTemplate.getForObject(url, Object.class, map);</span><br><span class="line">    System.out.println(forObject);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>当我们传入简单的对象如String，Integer时且路径中有嵌入的占位符时就会代替调用URL中占位符</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//请求地址</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;http://httpbin.org/&#123;2&#125;/get&quot;</span>;</span><br><span class="line">    HashMap&lt;String, String&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    <span class="type">Object</span> <span class="variable">forObject</span> <span class="operator">=</span> restTemplate.getForObject(url, Object.class, <span class="number">99</span>);</span><br><span class="line">    System.out.println(forObject);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220416163605771.png" alt="image-20220416163605771"></p>
+<hr>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u012843361/article/details/79893638">spring cloud 做微服务时关于RestTemplate中的各种请求方法的使用总结_DWT_CCFK的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/31681913">RestTemplate 详解 - 知乎 (zhihu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/35aca2e31f06">RestTemplate使用教程 - 简书 (jianshu.com)</a></p>
+<hr>
+<h1 id="End"><a href="#End" class="headerlink" title="-End-"></a>-End-</h1></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2022/04/16/restTemplate/">https://devildyw.github.io/2022/04/16/restTemplate/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/archive.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/04/11/HttpClient/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-pk9eye.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">HttpClient</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/02/28/ThreadLocal/" title="ThreadLocal"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-pk9eye.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">ThreadLocal</div></div></a></div><div><a href="/2022/02/28/%E5%8E%9F%E5%AD%90%E2%80%BB%E3%80%81%E5%8F%AF%E8%A7%81%E6%80%A7%E3%80%81%E6%9C%89%E5%BA%8F%E6%80%A7/" title="java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-pk9eye.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">java原子性是什么_中级Java应该清楚的概念：原子性、可见性、有序性是什么？</div></div></a></div><div><a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--synchronized%E5%85%B3%E9%94%AE%E5%AD%97/" title="每日一记--synchronized关键字"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-k7zdqm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">每日一记--synchronized关键字</div></div></a></div><div><a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0--%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E7%BB%AD%EF%BC%89/" title="每日一记--多线程（续）"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-9mo7kw.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">每日一记--多线程（续）</div></div></a></div><div><a href="/2022/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/" title="每日一记"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">每日一记</div></div></a></div><div><a href="/2022/02/28/DUBBO/" title="Dubbo"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-3zzkdv.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">Dubbo</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RestTemplate"><span class="toc-number">1.</span> <span class="toc-text">RestTemplate</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BARestTemplate"><span class="toc-number">1.2.</span> <span class="toc-text">创建RestTemplate</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80"><span class="toc-number">1.2.1.</span> <span class="toc-text">方法一</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">添加自定义的拦截器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C"><span class="toc-number">1.2.2.</span> <span class="toc-text">方法二</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RestTemplate-API%E4%BD%BF%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">RestTemplate API使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GET"><span class="toc-number">1.3.1.</span> <span class="toc-text">GET</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#getForEntity"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">getForEntity()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#getForObject"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">getForObject()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POST"><span class="toc-number">1.3.2.</span> <span class="toc-text">POST</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#postForEntity"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">postForEntity()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#postForObject"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">postForObject()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#postForLocation"><span class="toc-number">1.3.2.3.</span> <span class="toc-text">postForLocation()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8POST%E4%BB%A5%E8%A1%A8%E5%8D%95%E6%96%B9%E5%BC%8F%E6%8F%90%E4%BA%A4"><span class="toc-number">1.3.2.4.</span> <span class="toc-text">使用POST以表单方式提交</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#HttpHeaders"><span class="toc-number">1.3.2.4.1.</span> <span class="toc-text">HttpHeaders</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#MultiValueMap-lt-K-V-gt"><span class="toc-number">1.3.2.4.2.</span> <span class="toc-text">MultiValueMap&lt;K,V&gt;</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HttpEntity-lt-T-gt"><span class="toc-number">1.3.2.4.3.</span> <span class="toc-text">HttpEntity&lt;T&gt;</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-number">1.3.2.4.4.</span> <span class="toc-text">测试</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PUT"><span class="toc-number">1.3.3.</span> <span class="toc-text">PUT</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PUT-1"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">PUT()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DELETE"><span class="toc-number">1.3.4.</span> <span class="toc-text">DELETE</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#delete"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">delete()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HEADER"><span class="toc-number">1.3.5.</span> <span class="toc-text">HEADER</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OPTIONS"><span class="toc-number">1.3.6.</span> <span class="toc-text">OPTIONS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EXCHANGE"><span class="toc-number">1.3.7.</span> <span class="toc-text">EXCHANGE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EXECUTE"><span class="toc-number">1.3.8.</span> <span class="toc-text">EXECUTE</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#doExecute"><span class="toc-number">1.3.8.1.</span> <span class="toc-text">doExecute()</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%83%91"><span class="toc-number">1.4.</span> <span class="toc-text">解惑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.5.</span> <span class="toc-text">参考</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#End"><span class="toc-number">2.</span> <span class="toc-text">-End-</span></a></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
