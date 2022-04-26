@@ -7799,7 +7799,7 @@ String servletPath = request.getServletPath(); //   /testRequest
     <url>/2022/04/26/Zookeeper/</url>
     <content><![CDATA[<h1 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h1>]]></content>
       <categories>
-        <category>分布式,中间件</category>
+        <category>分布式</category>
       </categories>
       <tags>
         <tag>Developer</tag>
