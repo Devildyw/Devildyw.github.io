@@ -7856,4 +7856,238 @@ String servletPath = request.getServletPath(); //   /testRequest
         <tag>Middleware</tag>
       </tags>
   </entry>
+  <entry>
+    <title>JavaScript</title>
+    <url>/2022/04/27/JavaScript/</url>
+    <content><![CDATA[<h1 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h1><p>JavaScript 是 web 开发人员必须学习的 3 门语言中的一门：</p>
+<ol>
+<li><strong>HTML</strong> 定义了网页的内容</li>
+<li><strong>CSS</strong> 描述了网页的布局</li>
+<li><strong>JavaScript</strong> 控制了网页的行为</li>
+</ol>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ul>
+<li><strong>JavaScript 能够改变 HTML 内容</strong></li>
+</ul>
+<p>​    <code>getElementById()</code> 是多个 JavaScript HTML 方法之一。</p>
+<p>本例使用该方法来“查找” id&#x3D;”demo” 的 HTML 元素，并把元素内容（<code>innerHTML</code>）更改为 “Hello JavaScript”：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;h2&gt;<span class="title class_">JavaScript</span> 起步&lt;/h2&gt;</span><br><span class="line"></span><br><span class="line">   <span class="language-xml"><span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">&quot;demo&quot;</span>&gt;</span>JavaScript 能够改变HTML内容.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line">   <span class="language-xml"><span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;button&quot;</span> <span class="attr">onclick</span>=<span class="string">&#x27;document.getElementById(&quot;demo&quot;).innerHTML=&quot;Hello JavaScript&quot;&#x27;</span>&gt;</span>点击我 </span></span><br><span class="line"><span class="language-xml">   <span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>JavaScript 能够改变 HTML 属性</strong></li>
+</ul>
+<p>​    本例通过改变 <code>&lt;img&gt;</code> 标签的 <code>src</code> 属性（source）来改变一张 HTML 图像：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;h2&gt;<span class="title class_">JavaScript</span> 能做什么？&lt;/h2&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">p</span>&gt;</span>JavaScript 能够改变 HTML 属性值。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">p</span>&gt;</span>在本例中，JavaScript 改变了图像的 src 属性值。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">&quot;document.getElementById(&#x27;myImage&#x27;).src=&#x27;/i/eg_bulbon.gif&#x27;&quot;</span>&gt;</span>开灯<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">&quot;myImage&quot;</span> <span class="attr">border</span>=<span class="string">&quot;0&quot;</span> <span class="attr">src</span>=<span class="string">&quot;/i/eg_bulboff.gif&quot;</span> <span class="attr">style</span>=<span class="string">&quot;text-align:center;&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">&quot;document.getElementById(&#x27;myImage&#x27;).src=&#x27;/i/eg_bulboff.gif&#x27;&quot;</span>&gt;</span>关灯<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>JavaScript 能够改变 HTML 样式 (CSS)</strong></li>
+</ul>
+<p>​    改变 HTML 元素的样式，是改变 HTML 属性的一种变种：</p>
+<p><strong>实例</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;demo&quot;</span>).<span class="property">style</span>.<span class="property">fontSize</span> = <span class="string">&quot;25px&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>JavaScript 能够隐藏 HTML 元素</strong></li>
+</ul>
+<p>​    可通过改变 <code>display</code> 样式来隐藏 HTML 元素：</p>
+<p><strong>实例</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;demo&quot;</span>).<span class="property">style</span>.<span class="property">display</span>=<span class="string">&quot;none&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>JavaScript 能够显示 HTML 元素</strong></li>
+</ul>
+<p>可通过改变 <code>display</code> 样式来显示隐藏的 HTML 元素：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;demo&quot;</span>).<span class="property">style</span>.<span class="property">display</span>=<span class="string">&quot;block&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="JavaScript使用"><a href="#JavaScript使用" class="headerlink" title="JavaScript使用"></a>JavaScript使用</h2><p><strong><code>&lt;script&gt; </code>标签</strong></p>
+<p>在 HTML 中，JavaScript 代码必须位于 <code>&lt;script&gt;</code> 与 <code>&lt;/script&gt;</code> 标签之间。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;demo&quot;</span>).<span class="property">innerHTML</span> = <span class="string">&quot;我的第一段 JavaScript&quot;</span>;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="JavaScript-函数和事件"><a href="#JavaScript-函数和事件" class="headerlink" title="JavaScript 函数和事件"></a>JavaScript 函数和事件</h4><p>JavaScript <em>函数</em>是一种 JavaScript 代码块，它可以在调用时被执行。</p>
+<hr>
+<h4 id="lt-head-gt-或-lt-body-gt-中的-JavaScript"><a href="#lt-head-gt-或-lt-body-gt-中的-JavaScript" class="headerlink" title="&lt;head&gt; 或 &lt;body&gt; 中的 JavaScript"></a><code>&lt;head&gt;</code> 或 <code>&lt;body&gt;</code> 中的 JavaScript</h4><p>您能够在 HTML 文档中放置任意数量的脚本。</p>
+<p>脚本可被放置与 HTML 页面的 <code>&lt;body&gt;</code> 或 <code>&lt;head&gt;</code> 部分中，或兼而有之。</p>
+<hr>
+<h4 id="外部脚本"><a href="#外部脚本" class="headerlink" title="外部脚本"></a>外部脚本</h4><p>js脚本可以放置于外部文件中，在html的<code>&lt;head&gt;</code>标签中使用<code>link:src</code>引入</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>外部 JavaScript 的优势</strong></p>
+<p>在外部文件中放置脚本有如下优势：</p>
+<ul>
+<li>分离了 HTML 和代码</li>
+<li>使 HTML 和 JavaScript 更易于阅读和维护</li>
+<li>已缓存的 JavaScript 文件可加速页面加载</li>
+</ul>
+<p>如需向一张页面添加多个脚本文件 - 请使用多个 script 标签：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;myScript1.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;myScript2.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="JavaScript语法"><a href="#JavaScript语法" class="headerlink" title="JavaScript语法"></a>JavaScript语法</h2><h3 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h3><ul>
+<li><p><strong>innerHTML</strong></p>
+<p>如需访问 HTML 元素，JavaScript 可使用 <code>document.getElementById(id)</code> 方法。</p>
+<p><strong>提示：</strong>更改 HTML 元素的 innerHTML 属性是在 HTML 中显示数据的常用方法。</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;h2&gt;<span class="title class_">JavaScript</span>输出&lt;/h2&gt;</span><br><span class="line"></span><br><span class="line">   <span class="language-xml"><span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">&quot;demo&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line">   <span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">       <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;demo&quot;</span>).<span class="property">innerHTML</span> = <span class="number">5</span>+<span class="number">6</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">   </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>document.write()</strong></li>
+<li><strong>注意：</strong>在 HTML 文档完全加载后使用 <code>document.write()</code> 将<em>删除所有已有的 HTML</em> ：</li>
+<li><strong>提示：</strong><code>document.write()</code> 方法仅用于测试。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">       <span class="variable language_">document</span>.<span class="title function_">write</span>(<span class="number">5</span>+<span class="number">6</span>);</span><br><span class="line">   &lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>使用 window.alert()</strong></li>
+<li>您能够使用警告框来显示数据：</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">       <span class="variable language_">window</span>.<span class="title function_">alert</span>(<span class="number">5</span>+<span class="number">6</span>);</span><br><span class="line">   &lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>使用 console.log()</p>
+<p>在浏览器中，您可使用 <code>console.log()</code> 方法来显示数据。</p>
+<p>请通过 F12 来激活浏览器控制台，并在菜单中选择“控制台”。</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">       <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">5</span>+<span class="number">6</span>);</span><br><span class="line">   &lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="JavaScript-语句"><a href="#JavaScript-语句" class="headerlink" title="JavaScript 语句"></a>JavaScript 语句</h3><p><strong>在 HTML 中，JavaScript 语句是由 web 浏览器“执行”的“指令”。</strong></p>
+<p>JavaScript是一项编程语言 类似java的语法。</p>
+<ul>
+<li>以分号结尾</li>
+</ul>
+<h4 id="JavaScript关键词"><a href="#JavaScript关键词" class="headerlink" title="JavaScript关键词"></a>JavaScript关键词</h4><p>​    JavaScript 语句常常通过某个关键词来标识需要执行的 JavaScript 动作。</p>
+<p>下面的表格列出了一部分将在教程中学到的关键词：</p>
+<table>
+<thead>
+<tr>
+<th align="left">关键词</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">break</td>
+<td align="left">终止 switch 或循环。</td>
+</tr>
+<tr>
+<td align="left">continue</td>
+<td align="left">跳出循环并在顶端开始。</td>
+</tr>
+<tr>
+<td align="left">debugger</td>
+<td align="left">停止执行 JavaScript，并调用调试函数（如果可用）。</td>
+</tr>
+<tr>
+<td align="left">do … while</td>
+<td align="left">执行语句块，并在条件为真时重复代码块。</td>
+</tr>
+<tr>
+<td align="left">for</td>
+<td align="left">标记需被执行的语句块，只要条件为真。</td>
+</tr>
+<tr>
+<td align="left">function</td>
+<td align="left">声明函数。</td>
+</tr>
+<tr>
+<td align="left">if … else</td>
+<td align="left">标记需被执行的语句块，根据某个条件。</td>
+</tr>
+<tr>
+<td align="left">return</td>
+<td align="left">退出函数。</td>
+</tr>
+<tr>
+<td align="left">switch</td>
+<td align="left">标记需被执行的语句块，根据不同的情况。</td>
+</tr>
+<tr>
+<td align="left">try … catch</td>
+<td align="left">对语句块实现错误处理。</td>
+</tr>
+<tr>
+<td align="left">var</td>
+<td align="left">声明变量。</td>
+</tr>
+</tbody></table>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>语法方面除了使用若引用类型var定义变量之外 类型方面、符号方面、标识符定义规范等与其他编程语言一致，参考Java</p>
+<hr>
+<hr>
+<h1 id="持续更新中。。。"><a href="#持续更新中。。。" class="headerlink" title="持续更新中。。。"></a>持续更新中。。。</h1>]]></content>
+  </entry>
+  <entry>
+    <title>设计模式----创建型模式之简单工厂设计模式</title>
+    <url>/2022/04/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F----%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="设计模式—-创建型模式之单例设计模式"><a href="#设计模式—-创建型模式之单例设计模式" class="headerlink" title="设计模式—-创建型模式之单例设计模式"></a>设计模式—-创建型模式之单例设计模式</h1><h2 id="5-1-模式动机"><a href="#5-1-模式动机" class="headerlink" title="5.1. 模式动机"></a><a href="https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/singleton.html#id17">5.1. 模式动机</a></h2><p>对于系统中的某些类来说，只有一个实例很重要，例如，一个系统中可以存在多个打印任务，但是只能有一个正在工作的任务；一个系统只能有一个窗口管理器或文件系统；一个系统只能有一个计时工具或ID（序号）生成器。</p>
+<p>如何保证一个类只有一个实例并且这个实例易于被访问呢？定义一个全局变量可以确保对象随时都可以被访问，但不能防止我们实例化多个对象。</p>
+<p>一个更好的解决办法是让类自身负责保存它的唯一实例。这个类可以保证没有其他实例被创建，并且它可以提供一个访问该实例的方法。这就是单例模式的模式动机。</p>
+<h2 id="5-2-模式定义"><a href="#5-2-模式定义" class="headerlink" title="5.2. 模式定义"></a><a href="https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/singleton.html#id18">5.2. 模式定义</a></h2><p>单例模式(Singleton Pattern)：单例模式确保某一个类只有一个实例，而且自行实例化并向整个系统提供这个实例，这个类称为单例类，它提供全局访问的方法。</p>
+<p>单例模式的要点有三个：一是某个类只能有一个实例；二是它必须自行创建这个实例；三是它必须自行向整个系统提供这个实例。单例模式是一种对象创建型模式。单例模式又名单件模式或单态模式。</p>
+<h2 id="5-3-模式结构"><a href="#5-3-模式结构" class="headerlink" title="5.3. 模式结构"></a><a href="https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/singleton.html#id19">5.3. 模式结构</a></h2><p>单例模式包含如下角色：</p>
+<ul>
+<li>Singleton：单例</li>
+</ul>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/Singleton.jpg" alt="../_images/Singleton.jpg"></p>
+<h2 id="5-4-时序图"><a href="#5-4-时序图" class="headerlink" title="5.4. 时序图"></a><a href="https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/singleton.html#id20">5.4. 时序图</a></h2><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/seq_Singleton.jpg" alt="../_images/seq_Singleton.jpg"></p>
+<h2 id="5-5-代码分析"><a href="#5-5-代码分析" class="headerlink" title="5.5. 代码分析"></a><a href="https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/singleton.html#id21">5.5. 代码分析</a></h2><p>懒汉式:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HungrySingleton</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 在程序加载时 就将类初始化 生成实例</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">HungrySingleton</span> <span class="variable">HUNGRY_SINGLETON</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HungrySingleton</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//方式二: 静态代码块</span></span><br><span class="line"><span class="comment">//    private static HungrySingleton HUNGRY_SINGLETON = null;</span></span><br><span class="line"><span class="comment">//    static &#123;</span></span><br><span class="line"><span class="comment">//        HUNGRY_SINGLETON = new HungrySingleton();</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 构造器私有化 防止重复创建类</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">HungrySingleton</span><span class="params">()</span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 当被调用时 直接将该方法返回即可</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> HUNGRY_SINGLETON</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> HungrySingleton <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> HUNGRY_SINGLETON;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建一个可以打印数组的方法 用于测试</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array 数组</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">(<span class="type">int</span>[] array)</span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> t : array) &#123;</span><br><span class="line">            System.out.println(t);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>懒汉式:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LazySingleton</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 定义一个类实例的变量 用于等待调用 调用后 作为初始化对象的容器</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">LazySingleton</span> <span class="variable">LAZY_SINGLETON</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 构造器私有化 防止被调用重复生成实例</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LazySingleton</span><span class="params">()</span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 当被调用时 如果没有被实例化 则实例化</span></span><br><span class="line"><span class="comment">     * 已经实例化了 直接返回</span></span><br><span class="line"><span class="comment">     * &lt;br&gt;</span></span><br><span class="line"><span class="comment">     * &lt;h2&gt;注意:&lt;/h2&gt;</span></span><br><span class="line"><span class="comment">     * 这种写法的缺点就是线程安全无法保证</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> LAZY_SINGLETON</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LazySingleton <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//如果LAZY_SINGLETON为空</span></span><br><span class="line">        <span class="keyword">if</span> (LAZY_SINGLETON==<span class="literal">null</span>)&#123;</span><br><span class="line">            LAZY_SINGLETON = <span class="keyword">new</span> <span class="title class_">LazySingleton</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> LAZY_SINGLETON;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建一个可以打印数组的方法 用于测试</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array 数组</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">(<span class="type">int</span>[] array)</span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> t : array) &#123;</span><br><span class="line">            System.out.println(t);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>懒汉式改良版:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LazySingletonPlus</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 定义一个类实例的变量 用于等待调用 调用后 作为初始化对象的容器</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">LazySingletonPlus</span> <span class="variable">LAZY_SINGLETON_PLUS</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 构造器私有化 防止被调用重复生成实例</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LazySingletonPlus</span><span class="params">()</span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 当被调用时 如果没有被实例化 则实例化</span></span><br><span class="line"><span class="comment">     * 已经实例化了 直接返回</span></span><br><span class="line"><span class="comment">     * &lt;br&gt;</span></span><br><span class="line"><span class="comment">     * &lt;h2&gt;注意:&lt;/h2&gt;</span></span><br><span class="line"><span class="comment">     * 这种写法的缺点就是线程安全无法保证</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> LAZY_SINGLETON</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LazySingletonPlus <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//第一层检查  如果LAZY_SINGLETON为空</span></span><br><span class="line">        <span class="keyword">if</span> (LAZY_SINGLETON_PLUS==<span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="comment">//加锁 第一个线程调用该方法的会获得一个锁 这个锁为悲观锁 保证只有一个线程进入</span></span><br><span class="line">            <span class="comment">//假设有线程A和线程B两个线程同时通过第一层判断，那么它们需要排队进入同步代码块，</span></span><br><span class="line">            <span class="comment">//假设线程A先进入同步代码块，那么实例由线程A创建，那么当线程B进入同代码块时便不能通过第二层检查，</span></span><br><span class="line">            <span class="comment">//即直接返回实例。这样便实现了线程安全的懒加载。</span></span><br><span class="line">            <span class="keyword">synchronized</span> (LazySingletonPlus.class)&#123;</span><br><span class="line">                <span class="comment">//第二层检查 此时如果实例还未被创建 则交由此处创造</span></span><br><span class="line">                <span class="comment">//如果这里是被别人抢先一步获得锁 这里是阻塞完毕 实例已经被先行进入锁的线程创建了</span></span><br><span class="line">                <span class="comment">//则这里的判断是跳出条件判断的作用 防止锁死无法跳出 导致线程阻塞.</span></span><br><span class="line">                <span class="keyword">if</span> (LAZY_SINGLETON_PLUS==<span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="comment">//最后创造实例</span></span><br><span class="line">                    LAZY_SINGLETON_PLUS = <span class="keyword">new</span> <span class="title class_">LazySingletonPlus</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//返回实例</span></span><br><span class="line">        <span class="keyword">return</span> LAZY_SINGLETON_PLUS;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建一个可以打印数组的方法 用于测试</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array 数组</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">(<span class="type">int</span>[] array)</span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> t : array) &#123;</span><br><span class="line">            System.out.println(t);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>测试代码:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doTest</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="type">int</span>[] array = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>&#125;;</span><br><span class="line">        <span class="comment">//饿汉式</span></span><br><span class="line">        <span class="type">HungrySingleton</span> <span class="variable">instance</span> <span class="operator">=</span> HungrySingleton.getInstance();</span><br><span class="line">        instance.print(array);</span><br><span class="line">        <span class="type">HungrySingleton</span> <span class="variable">instance3</span> <span class="operator">=</span> HungrySingleton.getInstance();</span><br><span class="line">        System.out.println(instance==instance3);</span><br><span class="line">        System.out.println(<span class="string">&quot;=======================================&quot;</span>);</span><br><span class="line">        <span class="comment">//普通懒汉式</span></span><br><span class="line">        <span class="type">LazySingleton</span> <span class="variable">instance1</span> <span class="operator">=</span> LazySingleton.getInstance();</span><br><span class="line">        instance1.print(array);</span><br><span class="line">        <span class="type">LazySingleton</span> <span class="variable">instance4</span> <span class="operator">=</span> LazySingleton.getInstance();</span><br><span class="line">        System.out.println(instance1==instance4);</span><br><span class="line">        System.out.println(<span class="string">&quot;=======================================&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>运行结果：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220428005355210.png" alt="image-20220428005355210"></p>
+<h2 id="5-6-模式分析"><a href="#5-6-模式分析" class="headerlink" title="5.6. 模式分析"></a><a href="https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/singleton.html#id22">5.6. 模式分析</a></h2><p>单例模式的目的是保证一个类仅有一个实例，并提供一个访问它的全局访问点。单例模式包含的角色只有一个，就是单例类——Singleton。单例类拥有一个私有构造函数，确保用户无法通过new关键字直接实例化它。除此之外，该模式中包含一个静态私有成员变量与静态公有的工厂方法，该工厂方法负责检验实例的存在性并实例化自己，然后存储在静态成员变量中，以确保只有一个实例被创建。</p>
+<p>在单例模式的实现过程中，需要注意如下三点：</p>
+<ul>
+<li>单例类的构造函数为私有；</li>
+<li>提供一个自身的静态私有成员变量；</li>
+<li>提供一个公有的静态工厂方法。</li>
+</ul>
+<h2 id="5-7-实例"><a href="#5-7-实例" class="headerlink" title="5.7. 实例"></a><a href="https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/singleton.html#id23">5.7. 实例</a></h2><p>在操作系统中，打印池(Print Spooler)是一个用于管理打印任务的应用程序，通过打印池用户可以删除、中止或者改变打印任务的优先级，在一个系统中只允许运行一个打印池对象，如果重复创建打印池则抛出异常。现使用单例模式来模拟实现打印池的设计。</p>
+<h2 id="5-8-优点"><a href="#5-8-优点" class="headerlink" title="5.8. 优点"></a><a href="https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/singleton.html#id24">5.8. 优点</a></h2><ul>
+<li>提供了对唯一实例的受控访问。因为单例类封装了它的唯一实例，所以它可以严格控制客户怎样以及何时访问它，并为设计及开发团队提供了共享的概念。</li>
+<li>由于在系统内存中只存在一个对象，因此可以节约系统资源，对于一些需要频繁创建和销毁的对象，单例模式无疑可以提高系统的性能。</li>
+<li>允许可变数目的实例。我们可以基于单例模式进行扩展，使用与单例控制相似的方法来获得指定个数的对象实例。</li>
+</ul>
+<h2 id="5-9-缺点"><a href="#5-9-缺点" class="headerlink" title="5.9. 缺点"></a><a href="https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/singleton.html#id25">5.9. 缺点</a></h2><ul>
+<li>由于单例模式中没有抽象层，因此单例类的扩展有很大的困难。</li>
+<li>单例类的职责过重，在一定程度上违背了“单一职责原则”。因为单例类既充当了工厂角色，提供了工厂方法，同时又充当了产品角色，包含一些业务方法，将产品的创建和产品的本身的功能融合到一起。</li>
+<li>滥用单例将带来一些负面问题，如为了节省资源将数据库连接池对象设计为单例类，可能会导致共享连接池对象的程序过多而出现连接池溢出；现在很多面向对象语言(如Java、C#)的运行环境都提供了自动垃圾回收的技术，因此，如果实例化的对象长时间不被利用，系统会认为它是垃圾，会自动销毁并回收资源，下次利用时又将重新实例化，这将导致对象状态的丢失。</li>
+</ul>
+<h2 id="5-10-适用环境"><a href="#5-10-适用环境" class="headerlink" title="5.10. 适用环境"></a><a href="https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/singleton.html#id26">5.10. 适用环境</a></h2><p>在以下情况下可以使用单例模式：</p>
+<ul>
+<li>系统只需要一个实例对象，如系统要求提供一个唯一的序列号生成器，或者需要考虑资源消耗太大而只允许创建一个对象。</li>
+<li>客户调用类的单个实例只允许使用一个公共访问点，除了该公共访问点，不能通过其他途径访问该实例。</li>
+<li>在一个系统中要求一个类只有一个实例时才应当使用单例模式。反过来，如果一个类可以有几个实例共存，就需要对单例模式进行改进，使之成为多例模式</li>
+</ul>
+<h2 id="5-11-模式应用"><a href="#5-11-模式应用" class="headerlink" title="5.11. 模式应用"></a><a href="https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/singleton.html#id27">5.11. 模式应用</a></h2><p>一个具有自动编号主键的表可以有多个用户同时使用，但数据库中只能有一个地方分配下一个主键编号，否则会出现主键重复，因此该主键编号生成器必须具备唯一性，可以通过单例模式来实现。</p>
+<h2 id="5-12-模式扩展"><a href="#5-12-模式扩展" class="headerlink" title="5.12. 模式扩展"></a><a href="https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/singleton.html#id28">5.12. 模式扩展</a></h2><h2 id="5-13-总结"><a href="#5-13-总结" class="headerlink" title="5.13. 总结"></a><a href="https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/singleton.html#id29">5.13. 总结</a></h2><ul>
+<li>单例模式确保某一个类只有一个实例，而且自行实例化并向整个系统提供这个实例，这个类称为单例类，它提供全局访问的方法。单例模式的要点有三个：一是某个类只能有一个实例；二是它必须自行创建这个实例；三是它必须自行向整个系统提供这个实例。单例模式是一种对象创建型模式。</li>
+<li>单例模式只包含一个单例角色：在单例类的内部实现只生成一个实例，同时它提供一个静态的工厂方法，让客户可以使用它的唯一实例；为了防止在外部对其实例化，将其构造函数设计为私有。</li>
+<li>单例模式的目的是保证一个类仅有一个实例，并提供一个访问它的全局访问点。单例类拥有一个私有构造函数，确保用户无法通过new关键字直接实例化它。除此之外，该模式中包含一个静态私有成员变量与静态公有的工厂方法。该工厂方法负责检验实例的存在性并实例化自己，然后存储在静态成员变量中，以确保只有一个实例被创建。</li>
+<li>单例模式的主要优点在于提供了对唯一实例的受控访问并可以节约系统资源；其主要缺点在于因为缺少抽象层而难以扩展，且单例类职责过重。</li>
+<li>单例模式适用情况包括：系统只需要一个实例对象；客户调用类的单个实例只允许使用一个公共访问点。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>Developer</tag>
+      </tags>
+  </entry>
 </search>
