@@ -8210,12 +8210,16 @@ String servletPath = request.getServletPath(); //   /testRequest
   <entry>
     <title>Docker</title>
     <url>/2022/05/15/Docker/</url>
-    <content><![CDATA[<h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><h2 id="为什么会有Docker的出现"><a href="#为什么会有Docker的出现" class="headerlink" title="为什么会有Docker的出现"></a>为什么会有Docker的出现</h2><p>​    传统上认为，软件编码开发&#x2F;测试结束后，所产出的成果即是程序或是能够编译执行的二进制字节码等（Java为例）。而为了让这些程序可以顺利的执行，开发团队也得准备完成的部署文件，让运维团队得以部署应用程序，开发需要清楚的告诉运维部署团队，用的全部配置文件+所有软件环境。不过即便如此，任然常常发生部署失败的状况。Docker的出现使得Docker得以打破过期【程序即应用】的观念。通过镜像（images）将作业系统核心除外，运作应用程序所需要的系统环境，由下而上打包，达到系统程序跨平台间的无缝接轨运作。</p>
+    <content><![CDATA[<h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Docker 是一个开源的应用容器引擎，基于 Go 语言   并遵从Apache2.0协议开源。Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app）,更重要的是容器性能开销极低。</p>
+<h2 id="为什么会有Docker的出现"><a href="#为什么会有Docker的出现" class="headerlink" title="为什么会有Docker的出现"></a>为什么会有Docker的出现</h2><p>​    传统上认为，软件编码开发&#x2F;测试结束后，所产出的成果即是程序或是能够编译执行的二进制字节码等（Java为例）。而为了让这些程序可以顺利的执行，开发团队也得准备完成的部署文件，让运维团队得以部署应用程序，开发需要清楚的告诉运维部署团队，用的全部配置文件+所有软件环境。不过即便如此，任然常常发生部署失败的状况。Docker的出现使得Docker得以打破过期【程序即应用】的观念。通过镜像（images）将作业系统核心除外，运作应用程序所需要的系统环境，由下而上打包，达到系统程序跨平台间的无缝接轨运作。</p>
 <h2 id="Docker的理念"><a href="#Docker的理念" class="headerlink" title="Docker的理念"></a>Docker的理念</h2><p>Docker是基于Go语言实现的云开源项目。</p>
 <p>Docker的主要目标是&#96;“Build，Ship and Run Any App,Anywhere”，也就是通过对应用组件的封装、分发、部署、运行等生命周期的管理，使用户的APP（可以是一个WEB应用或数据库应用等等）及其运行环境能够做到“一次镜像，处处运行”。</p>
 <p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220515154552629.png" alt="image-20220515154552629"></p>
 <p>Linux容器技术的出现就解决了这样一个问题，而 Docker 就是在它的基础上发展过来的。将应用打成镜像，通过镜像成为运行在Docker容器上面的实例，而 Docker容器在任何操作系统上都是一致的，这就实现了跨平台、跨服务器。只需要一次配置好环境，换到别的机子上就可以一键部署好，大大简化了操作。</p>
 <p><strong>Docker解决了运行环境和配置问题的软件容器， 方便做持续集成并有助于整体发布的容器虚拟化技术。</strong></p>
+<hr>
+<h2 id="Docker的优势"><a href="#Docker的优势" class="headerlink" title="Docker的优势"></a>Docker的优势</h2><p><strong>简化程序：</strong><br>Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的  Linux 机器上，便可以实现虚拟化。Docker改变了虚拟化的方式，使开发者可以直接将自己的成果放入Docker中进行管理。方便快捷已经是 Docker的最大优势，过去需要用数天乃至数周的    任务，在Docker容器的处理下，只需要数秒就能完成。</p>
+<p><strong>节省开支：</strong><br>一方面，云计算时代到来，使开发者不必为了追求效果而配置高额的硬件，Docker 改变了高性能必然高价格的思维定势。Docker 与云的结合，让云空间得到更充分的利用。不仅解决了硬件管理的问题，也改变了虚拟化的方式。</p>
 <h2 id="容器与虚拟机的比较"><a href="#容器与虚拟机的比较" class="headerlink" title="容器与虚拟机的比较"></a>容器与虚拟机的比较</h2><p>上文我们提到了容器，那么容器和传统的虚拟机有什么区别呢？</p>
 <h3 id="容器发展简史"><a href="#容器发展简史" class="headerlink" title="容器发展简史"></a>容器发展简史</h3><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220515155014898.png" alt="image-20220515155014898"></p>
 <p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220515155023912.png" alt="image-20220515155023912"></p>
@@ -8244,9 +8248,58 @@ String servletPath = request.getServletPath(); //   /testRequest
 <p><strong>应用</strong>。应用的源代码与它的依赖都打包在Docker镜像中，不同的应用需要不同的Docker镜像。不同的应用运行在不同的Docker容器中，它们是相互隔离的。</p>
 <hr>
 <h3 id="两者之间的区别"><a href="#两者之间的区别" class="headerlink" title="两者之间的区别"></a>两者之间的区别</h3><ul>
-<li>传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；</li>
-<li>而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比传统虚拟机更为轻便。</li>
-<li>每个容器之间互相隔离，每个容器有自己的文件系统 ，容器之间进程不会相互影响，能区分各自的计算资源。</li>
+<li><p>传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；</p>
+</li>
+<li><p>而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比传统虚拟机更为轻便。</p>
+</li>
+<li><p>作为一种轻量级的虚拟化方式，Docker在运行应用上跟传统的虚拟机方式相比具有显著优势：</p>
+</li>
+<li><p>Docker容器很快，启动和停止可以在秒级实现，这相比传统的虚拟机方式要快得多。</p>
+</li>
+<li><p>Docker容器对系统资源需求很少，一台主机上可以同时运行数千个Docker容器。</p>
+</li>
+<li><p>Docker通过类似Git的操作来方便用户获取、分发和更新应用镜像，指令简明，学习成本较低。</p>
+</li>
+<li><p>Docker通过<code>Dockerfile</code>配置文件来支持灵活的自动化创建和部署机制，提高工作效率。</p>
+</li>
+<li><p>Docker容器除了运行其中的应用之外，基本不消耗额外的系统资源，保证应用性能的同时，尽量减小系统开销。</p>
+</li>
+<li><p>Docker利用Linux系统上的多种防护机制实现了严格可靠的隔离。从1.3版本开始，Docker引入了安全选项和镜像签名机制，极大地提高了使用Docker的安全性。</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>容器</th>
+<th>虚拟机</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>启动速度</td>
+<td>秒级</td>
+<td>分钟级</td>
+</tr>
+<tr>
+<td>硬盘使用</td>
+<td>一般为MB</td>
+<td>一般为GB</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>接近原生</td>
+<td>弱于原生</td>
+</tr>
+<tr>
+<td>系统支持量</td>
+<td>单机支持上千个容器</td>
+<td>一般几十个</td>
+</tr>
+<tr>
+<td>隔离性</td>
+<td>安全隔离</td>
+<td>完全隔离</td>
+</tr>
+</tbody></table>
+</li>
 </ul>
 <h2 id="Docker能干嘛"><a href="#Docker能干嘛" class="headerlink" title="Docker能干嘛"></a>Docker能干嘛</h2><ul>
 <li><p>开发&#x2F;运维（DevOps）新一代开发工程师</p>
@@ -8308,7 +8361,21 @@ String servletPath = request.getServletPath(); //   /testRequest
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">mkdir</span> -p /etc/docker</span><br><span class="line">sudo <span class="built_in">tee</span> /etc/docker/daemon.json &lt;&lt;-<span class="string">&#x27;EOF&#x27;</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;registry-mirrors&quot;</span>: [<span class="string">&quot;https://3h5lqxa4.mirror.aliyuncs.com&quot;</span>]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h3><h4 id="Docker镜像"><a href="#Docker镜像" class="headerlink" title="Docker镜像"></a>Docker镜像</h4><p>操作系统分为<strong>内核</strong>和<strong>用户空间</strong>.对于<code>linux</code>这类操作系统而言,内核启动后,会挂载<code>root</code>文件文件系统为其提供用户空间支持。而<strong>Docker镜像</strong>（<code>image</code>），就相当于是一个<code>root</code>文件系统。比如官方镜像<code>ubuntu:18.04</code>就包含了完整的一套<code>Ubuntu18.04</code>最小系统的root文件系统。</p>
+<h2 id="基本架构"><a href="#基本架构" class="headerlink" title="基本架构"></a>基本架构</h2><p><strong>Docker 使用客户端-服务器 (C&#x2F;S) 架构模式，使用远程API来管理和创建Docker容器。</strong></p>
+<p><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/1/24/1687d76498e7d980~tplv-t2oaga2asx-zoom-in-crop-mark:1304:0:0:0.awebp" alt="de4146cd809a9f320512b316ed5e4570.png"></p>
+<p><strong>Docker组件:</strong></p>
+<blockquote>
+<ul>
+<li><p>docker Client客户端————&gt;向docker服务器进程发起请求，如:创建、停止、销毁容器等操作</p>
+</li>
+<li><p>docker Server服务器进程—–&gt;处理所有docker的请求，管理所有容器</p>
+</li>
+<li><p>docker Registry镜像仓库——&gt;镜像存放的中央仓库，可看作是存放二进制的scm</p>
+</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h3><h4 id="Docker镜像"><a href="#Docker镜像" class="headerlink" title="Docker镜像"></a>Docker镜像</h4><p>操作系统分为<strong>内核</strong>和<strong>用户空间</strong>.对于<code>linux</code>这类操作系统而言,内核启动后,会挂载<code>root</code>文件文件系统为其提供用户空间支持。而<strong>Docker镜像</strong>（<code>image</code>），就相当于是一个<code>root</code>文件系统。比如官方镜像<code>ubuntu:18.04</code>就包含了完整的一套<code>Ubuntu18.04</code>最小系统的root文件系统。</p>
 <p>Docker镜像是一个特殊的文件系统，除恶了提供容器运行时所需要的程序、库、资源、配置等文件外，还包含了一些为运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。镜像<strong>不包含</strong>任何动态数据，其内容在构建之后也不会改变。</p>
 <h4 id="分层存储"><a href="#分层存储" class="headerlink" title="分层存储"></a>分层存储</h4><p>因为镜像包含操作系统完整的 <code>root</code> 文件系统，其体积往往是庞大的，因此在 Docker 设计时，就充分利用 <a href="https://en.wikipedia.org/wiki/Union_mount">Union FS</a> 的技术，将其设计为分层存储的架构。所以严格来说，镜像并非是像一个 <code>ISO</code> 那样的打包文件，镜像只是一个虚拟的概念，其实际体现并非由一个文件组成，而是由一组文件系统组成，或者说，由多层文件系统联合组成。</p>
 <p>镜像构建时，会一层层构建，前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。比如，删除前一层文件的操作，实际不是真的删除前一层的文件，而是仅在当前层标记为该文件已删除。在最终容器运行的时候，虽然不会看到这个文件，但是实际上该文件会一直跟随镜像。因此，在构建镜像的时候，需要额外小心，每一层尽量只包含该层需要添加的东西，任何额外的东西应该在该层构建结束前清理掉。</p>
@@ -8316,6 +8383,22 @@ String servletPath = request.getServletPath(); //   /testRequest
 <p>后续我会为大家详细介绍如何构建镜像。</p>
 <hr>
 <h3 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h3><h4 id="Docker容器"><a href="#Docker容器" class="headerlink" title="Docker容器"></a>Docker容器</h4><p>镜像（<code>Image</code>）和容器（<code>Container</code>）的关系，就像是面向对象程序设计中的 <code>类</code> 和 <code>实例</code> 一样，镜像是静态的定义，容器是镜像运行时的实体。容器可以被创建、启动、停止、删除、暂停等。</p>
+<table>
+<thead>
+<tr>
+<th>Docker</th>
+<th>面向对象</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>容器</td>
+<td>对象</td>
+</tr>
+<tr>
+<td>镜像</td>
+<td>类</td>
+</tr>
+</tbody></table>
 <p>容器的实质是进程，但与直接在宿主执行的进程不同，容器进程运行于属于自己的独立的 <a href="https://en.wikipedia.org/wiki/Linux_namespaces">命名空间</a>。因此容器可以拥有自己的 <code>root</code> 文件系统、自己的网络配置、自己的进程空间，甚至自己的用户 ID 空间。容器内的进程是运行在一个隔离的环境里，使用起来，就好像是在一个独立于宿主的系统下操作一样。这种特性使得容器封装的应用比直接在宿主运行更加安全。看到这里也就不迷惑为什么有人会把虚拟机和Docker容器混淆了，前面我也介绍了他们之间的区别（虚拟机需要虚拟一套硬件出来）。‘</p>
 <p>容器与镜像一样，也是使用分层存储，每一个容器运行时，是以镜像为基础层，在其上创建一个当前容器的存储层，我们可以称这个为容器运行时读写而准备的存储层为<strong>容器存储层</strong></p>
 <p><strong>容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡。因此，任何保存于容器存储层的信息都会随容器删除而丢失。</strong></p>
@@ -8337,6 +8420,7 @@ String servletPath = request.getServletPath(); //   /testRequest
 <h4 id="私有-Docker-Registry"><a href="#私有-Docker-Registry" class="headerlink" title="私有 Docker Registry"></a>私有 Docker Registry</h4><p>除了使用公开服务外，用户还可以在本地搭建私有 Docker Registry。Docker 官方提供了 <a href="https://hub.docker.com/_/registry/">Docker Registry</a> 镜像，可以直接使用做为私有 Registry 服务。在 <a href="https://docker-practice.github.io/zh-cn/repository/registry.html">私有仓库</a> 一节中，会有进一步的搭建私有 Registry 服务的讲解。</p>
 <p>开源的 Docker Registry 镜像只提供了 <a href="https://docs.docker.com/registry/spec/api/">Docker Registry API</a> 的服务端实现，足以支持 <code>docker</code> 命令，不影响使用。但不包含图形界面，以及镜像维护、用户管理、访问控制等高级功能。</p>
 <p>除了官方的 Docker Registry 外，还有第三方软件实现了 Docker Registry API，甚至提供了用户界面以及一些高级功能。比如，<a href="https://github.com/goharbor/harbor">Harbor</a> 和 <a href="https://docker-practice.github.io/zh-cn/repository/nexus3_registry.html">Sonatype Nexus</a>。</p>
+<hr>
 <hr>
 <h2 id="使用Docker镜像"><a href="#使用Docker镜像" class="headerlink" title="使用Docker镜像"></a>使用Docker镜像</h2><p>镜像是Docker的三大组件之一</p>
 <p>Docker运行容器之前，需要本地存在对应的镜像，如果本地不存在该镜像，Docker会从镜像仓库中下载该镜像。</p>
@@ -8403,5 +8487,10 @@ String servletPath = request.getServletPath(); //   /testRequest
 <p>​    既然有提议者，那么一定有提议，这里还有个有很重的概念叫做<strong>提案（Proposal）</strong>。最终要达成一致的value就在提案里面。</p>
 <p>Proposer可以提出（propose）提案；Acceptor可以接受（accept）提案；如果某个提案被选定（chosen），那么该提案里的value就被选定了。</p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>Cache</title>
+    <url>/2022/05/18/Cache/</url>
+    <content><![CDATA[]]></content>
   </entry>
 </search>
