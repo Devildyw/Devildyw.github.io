@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://devildyw.github.io/myself/index.html</loc>
+    
+    <lastmod>2022-06-12T08:00:09.209Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://devildyw.github.io/timeline/index.html</loc>
+    
+    <lastmod>2022-06-12T07:52:42.007Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://devildyw.github.io/2022/06/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
     
     <lastmod>2022-06-11T17:11:27.424Z</lastmod>
@@ -268,13 +282,6 @@
   </url>
   
   <url>
-    <loc>https://devildyw.github.io/myself/index.html</loc>
-    
-    <lastmod>2022-04-04T16:59:04.833Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://devildyw.github.io/about/index.html</loc>
     
     <lastmod>2022-04-04T15:53:41.499Z</lastmod>
@@ -285,13 +292,6 @@
     <loc>https://devildyw.github.io/messageboard/index.html</loc>
     
     <lastmod>2022-04-04T15:53:27.045Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://devildyw.github.io/timeline/index.html</loc>
-    
-    <lastmod>2022-04-04T10:28:56.519Z</lastmod>
     
   </url>
   
