@@ -2,9 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://devildyw.github.io/2022/05/15/Docker/</loc>
+    
+    <lastmod>2022-07-02T15:34:44.730Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://devildyw.github.io/2022/07/02/Hello%20Docker!/</loc>
+    
+    <lastmod>2022-07-02T15:34:41.182Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://devildyw.github.io/2022/07/02/%E8%B7%91%E6%AD%A5%E6%95%99%E7%A8%8B/</loc>
+    
+    <lastmod>2022-07-02T15:29:40.598Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://devildyw.github.io/2022/06/24/Shiro/</loc>
     
-    <lastmod>2022-07-01T16:01:26.031Z</lastmod>
+    <lastmod>2022-07-02T12:02:26.072Z</lastmod>
     
   </url>
   
@@ -54,13 +75,6 @@
     <loc>https://devildyw.github.io/2022/05/21/%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/</loc>
     
     <lastmod>2022-05-21T13:04:40.179Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://devildyw.github.io/2022/05/15/Docker/</loc>
-    
-    <lastmod>2022-05-18T09:56:05.627Z</lastmod>
     
   </url>
   
