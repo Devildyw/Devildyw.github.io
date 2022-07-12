@@ -9658,7 +9658,18 @@ String servletPath = request.getServletPath(); //   /testRequest
         <category>DevOps</category>
       </categories>
       <tags>
-        <tag>Devloper</tag>
+        <tag>Developer</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SpringCloud</title>
+    <url>/2022/07/12/SpringCloud/</url>
+    <content><![CDATA[<h1 id="SpringCloud"><a href="#SpringCloud" class="headerlink" title="SpringCloud"></a>SpringCloud</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2>]]></content>
+      <categories>
+        <category>分布式</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
       </tags>
   </entry>
 </search>
