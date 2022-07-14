@@ -1,17 +1,17 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Eureka详细配置 | Devil的个人博客</title><meta name="keywords" content="Middleware"><meta name="author" content="Devil"><meta name="copyright" content="Devil"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Eureka详细配置1. Eureka Client 配置项（eureka.client.*） org.springframework.cloud.netflix.eureka.EurekaClientConfigBean">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Eureka详细配置 | Devil的个人博客</title><meta name="keywords" content="Middleware"><meta name="author" content="Devil"><meta name="copyright" content="Devil"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Eureka详细配置1. Eureka Client 配置项（eureka.client.*） org.springframework.cloud.netflix.eureka.EurekaClientConfigBean     参数名称 说明 默认值    eureka.client.enabled 用于指示Eureka客户端已启用的标志 true   eureka.client.regist">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Eureka详细配置">
 <meta property="og:url" content="https://devildyw.github.io/2022/07/14/Eureka%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/index.html">
 <meta property="og:site_name" content="Devil的个人博客">
-<meta property="og:description" content="Eureka详细配置1. Eureka Client 配置项（eureka.client.*） org.springframework.cloud.netflix.eureka.EurekaClientConfigBean">
+<meta property="og:description" content="Eureka详细配置1. Eureka Client 配置项（eureka.client.*） org.springframework.cloud.netflix.eureka.EurekaClientConfigBean     参数名称 说明 默认值    eureka.client.enabled 用于指示Eureka客户端已启用的标志 true   eureka.client.regist">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg">
+<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg">
 <meta property="article:published_time" content="2022-07-14T04:56:09.000Z">
-<meta property="article:modified_time" content="2022-07-14T04:59:26.074Z">
+<meta property="article:modified_time" content="2022-07-14T05:46:32.324Z">
 <meta property="article:author" content="Devil">
 <meta property="article:tag" content="Middleware">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2022/07/14/Eureka%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2022/07/14/Eureka%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
   root: '/',
   algolia: undefined,
   localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
@@ -53,7 +53,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2022-07-14 12:59:26'
+  postUpdate: '2022-07-14 13:46:32'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -143,10 +143,665 @@
     }
     detectApple()
     })(window)</script><link rel="stylesheet" href="/css/dyw.css"><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
-</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">47</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Eureka详细配置</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-07-14T04:56:09.000Z" title="发表于 2022-07-14 12:56:09">2022-07-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-14T04:59:26.074Z" title="更新于 2022-07-14 12:59:26">2022-07-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Eureka详细配置"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Eureka详细配置"><a href="#Eureka详细配置" class="headerlink" title="Eureka详细配置"></a>Eureka详细配置</h1><h3 id="1-Eureka-Client-配置项（eureka-client-）"><a href="#1-Eureka-Client-配置项（eureka-client-）" class="headerlink" title="1. Eureka Client 配置项（eureka.client.*）"></a>1. <a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=Eureka&spm=1001.2101.3001.7020">Eureka</a> Client 配置项（eureka.client.*）</h3><blockquote>
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">47</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Eureka详细配置</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-07-14T04:56:09.000Z" title="发表于 2022-07-14 12:56:09">2022-07-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-14T05:46:32.324Z" title="更新于 2022-07-14 13:46:32">2022-07-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Eureka详细配置"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Eureka详细配置"><a href="#Eureka详细配置" class="headerlink" title="Eureka详细配置"></a>Eureka详细配置</h1><h2 id="1-Eureka-Client-配置项（eureka-client-）"><a href="#1-Eureka-Client-配置项（eureka-client-）" class="headerlink" title="1. Eureka Client 配置项（eureka.client.*）"></a>1. <a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=Eureka&spm=1001.2101.3001.7020">Eureka</a> Client 配置项（eureka.client.*）</h2><blockquote>
 <p>org.<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=springframework&spm=1001.2101.3001.7020">springframework</a>.cloud.netflix.eureka.EurekaClientConfigBean</p>
 </blockquote>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2022/07/14/Eureka%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/">https://devildyw.github.io/2022/07/14/Eureka%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Middleware/">Middleware</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/07/12/SpringCloud/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">SpringCloud</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/04/26/Zookeeper/" title="Zookeeper"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-k7zdqm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-26</div><div class="title">Zookeeper</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Eureka%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">Eureka详细配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Eureka-Client-%E9%85%8D%E7%BD%AE%E9%A1%B9%EF%BC%88eureka-client-%EF%BC%89"><span class="toc-number">1.0.1.</span> <span class="toc-text">1. Eureka Client 配置项（eureka.client.*）</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+<table>
+<thead>
+<tr>
+<th align="center"><strong>参数名称</strong></th>
+<th align="center"><strong>说明</strong></th>
+<th align="center"><strong>默认值</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>eureka.client.enabled</strong></td>
+<td align="center">用于指示Eureka客户端已启用的标志</td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.registry-fetch-interval-seconds</strong></td>
+<td align="center">指示从eureka服务器获取注册表信息的频率（s）</td>
+<td align="center">30</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.instance-info-replication-interval-seconds</strong></td>
+<td align="center">更新实例信息的变化到Eureka服务端的间隔时间，（s）</td>
+<td align="center">30</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.initial-instance-info-replication-interval-seconds</strong></td>
+<td align="center">初始化实例信息到Eureka服务端的间隔时间，（s）</td>
+<td align="center">40</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.eureka-service-url-poll-interval-seconds</strong></td>
+<td align="center">询问Eureka Server信息变化的时间间隔（s），默认为300秒</td>
+<td align="center">300</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.eureka-server-read-timeout-seconds</strong></td>
+<td align="center">读取Eureka Server 超时时间（s），默认8秒</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.eureka-server-connect-timeout-seconds</strong></td>
+<td align="center">连接Eureka Server 超时时间（s），默认5秒</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.eureka-server-total-connections</strong></td>
+<td align="center">获取从eureka客户端到所有eureka服务器的连接总数,默认200个</td>
+<td align="center">200</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.eureka-server-total-connections-per-host</strong></td>
+<td align="center">获取从eureka客户端到eureka服务器主机允许的连接总数，默认50个</td>
+<td align="center">50</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.eureka-connection-idle-timeout-seconds</strong></td>
+<td align="center">连接到 Eureka Server 空闲连接的超时时间（s），默认30</td>
+<td align="center">30</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.registry-refresh-single-vip-address</strong></td>
+<td align="center">指示客户端是否仅对单个VIP的注册表信息感兴趣，默认为null</td>
+<td align="center">null</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.heartbeat-executor-thread-pool-size</strong></td>
+<td align="center">心跳保持线程池初始化线程数，默认2个</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.heartbeat-executor-exponential-back-off-bound</strong></td>
+<td align="center">心跳超时重试延迟时间的最大乘数值，默认10</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.serviceUrl.defaultZone</strong></td>
+<td align="center">可用区域映射到与eureka服务器通信的完全限定URL列表。每个值可以是单个URL或逗号分隔的备用位置列表。(<strong>http:&#x2F;&#x2F; {eureka.instance.hostname}：${server.port}&#x2F;eureka&#x2F;</strong>)</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.use-dns-for-fetching-service-urls</strong></td>
+<td align="center">指示eureka客户端是否应使用DNS机制来获取要与之通信的eureka服务器列表。当DNS名称更新为具有其他服务器时，eureka客户端轮询eurekaServiceUrlPollIntervalSeconds中指定的信息后立即使用该信息。</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.register-with-eureka</strong></td>
+<td align="center">指示此实例是否应将其信息注册到eureka服务器以供其他服务发现，默认为false</td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.prefer-same-zone-eureka</strong></td>
+<td align="center">实例是否使用同一zone里的eureka服务器，默认为true，理想状态下，eureka客户端与服务端是在同一zone下</td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.log-delta-diff</strong></td>
+<td align="center">是否记录eureka服务器和客户端之间在注册表的信息方面的差异，默认为false</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.disable-delta</strong></td>
+<td align="center">指示eureka客户端是否禁用增量提取</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.fetch-remote-regions-registry</strong></td>
+<td align="center">逗号分隔的区域列表，提取eureka注册表信息</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.on-demand-update-status-change</strong></td>
+<td align="center">客户端的状态更新到远程服务器上，默认为true</td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.allow-redirects</strong></td>
+<td align="center">指示服务器是否可以将客户端请求重定向到备份服务器&#x2F;集群。如果设置为false，则服务器将直接处理请求。如果设置为true，则可以将HTTP重定向发送到具有新服务器位置的客户端。</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.availability-zones.*</strong></td>
+<td align="center">获取此实例所在区域的可用区域列表（在AWS数据中心中使用）。更改在运行时在registryFetchIntervalSeconds指定的下一个注册表获取周期生效。</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.backup-registry-impl</strong></td>
+<td align="center">获取实现BackupRegistry的实现的名称，该实现仅在eureka客户端启动时第一次作为后备选项获取注册表信息。 对于需要额外的注册表信息弹性的应用程序，可能需要这样做，否则它将无法运行。</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.cache-refresh-executor-exponential-back-off-bound</strong></td>
+<td align="center">在发生一系列超时的情况下，它是重试延迟的最大乘数值。</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.cache-refresh-executor-thread-pool-size</strong></td>
+<td align="center">缓存刷新线程池初始化线程数量</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.client-data-accept</strong></td>
+<td align="center">客户端数据接收的名称</td>
+<td align="center">null</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.decoder-name</strong></td>
+<td align="center">解码器名称</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.dollar-replacement</strong></td>
+<td align="center">eureka服务器序列化&#x2F;反序列化的信息中获取“$”符号的替换字符串。默认为“_-”</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.encoder-name</strong></td>
+<td align="center"><em>编码器名称</em></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.escape-char-replacement</strong></td>
+<td align="center">eureka服务器序列化&#x2F;反序列化的信息中获取“_”符号的的替换字符串。默认为“__“</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.eureka-server-d-n-s-name</strong></td>
+<td align="center">获取要查询的DNS名称来获得eureka服务器，此配置只有在eureka服务器ip地址列表是在DNS中才会用到。默认为null</td>
+<td align="center">null</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.eureka-server-port</strong></td>
+<td align="center">获取eureka服务器的端口，此配置只有在eureka服务器ip地址列表是在DNS中才会用到。默认为null</td>
+<td align="center">null</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.eureka-server-u-r-l-context</strong></td>
+<td align="center">表示eureka注册中心的路径，如果配置为eureka，则为<a href="http://ip:port/eureka/，在eureka的配置文件中加入此配置表示eureka作为客户端向注册中心注册，从而构成eureka集群。此配置只有在eureka服务器ip地址列表是在DNS中才会用到，默认为null">http://ip:port/eureka/，在eureka的配置文件中加入此配置表示eureka作为客户端向注册中心注册，从而构成eureka集群。此配置只有在eureka服务器ip地址列表是在DNS中才会用到，默认为null</a></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.fetch-registry</strong></td>
+<td align="center"><em>客户端是否获取eureka服务器注册表上的注册信息，默认为true</em></td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.filter-only-up-instances</strong></td>
+<td align="center">是否过滤掉非up实例，默认为true</td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.g-zip-content</strong></td>
+<td align="center">当服务端支持压缩的情况下，是否支持从服务端获取的信息进行压缩。默认为true</td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.property-resolver</strong></td>
+<td align="center">属性解析器</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.proxy-host</strong></td>
+<td align="center">获取eureka server 的代理主机名</td>
+<td align="center">null</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.proxy-password</strong></td>
+<td align="center">获取eureka server 的代理主机密码</td>
+<td align="center">null</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.proxy-port</strong></td>
+<td align="center">获取eureka server 的代理主机端口</td>
+<td align="center">null</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.proxy-user-name</strong></td>
+<td align="center">获取eureka server 的代理用户名</td>
+<td align="center">null</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.region</strong></td>
+<td align="center">获取此实例所在的区域（在AWS数据中心中使用）。</td>
+<td align="center">us-east-1</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.should-enforce-registration-at-init</strong></td>
+<td align="center">client 在初始化阶段是否强行注册到注册中心</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.client.should-unregister-on-shutdown</strong></td>
+<td align="center">client在shutdown情况下，是否显示从注册中心注销</td>
+<td align="center">true</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="2-服务实例配置项（eureka-instance-）"><a href="#2-服务实例配置项（eureka-instance-）" class="headerlink" title="2. 服务实例配置项（eureka.instance.*）"></a>2. 服务实例配置项（eureka.instance.*）</h2><blockquote>
+<p>org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center"><strong>参数名称</strong></th>
+<th align="center"><strong>说明</strong></th>
+<th align="center"><strong>默认值</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>eureka.instance.appname</strong></td>
+<td align="center">注册到注册中心的应用名称</td>
+<td align="center">unknown</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.a-s-g-name</strong></td>
+<td align="center">注册到注册中心的应用所属分组名称（AWS服务器）</td>
+<td align="center">null</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.app-group-name</strong></td>
+<td align="center">注册到注册中心的应用所属分组名称</td>
+<td align="center">null</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.data-center-info</strong></td>
+<td align="center">指定服务实例所属数据中心</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.instance-enabled-onit</strong></td>
+<td align="center">指示是否应在eureka注册后立即启用实例以获取流量</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.non-secure-port</strong></td>
+<td align="center">http通信端口</td>
+<td align="center">80</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.non-secure-port-enabled</strong></td>
+<td align="center">是否启用HTTP通信端口</td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.secure-port</strong></td>
+<td align="center">HTTPS通信端口</td>
+<td align="center">443</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.secure-port-enabled</strong></td>
+<td align="center">是否启用HTTPS通信端口</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.secure-virtual-host-name</strong></td>
+<td align="center">服务实例安全主机名称（HTTPS）</td>
+<td align="center">unknown</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.virtual-host-name</strong></td>
+<td align="center">该服务实例非安全注解名称（HTTP）</td>
+<td align="center">unknown</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.secure-health-check-url</strong></td>
+<td align="center">该服务实例安全健康检查地址（URL），绝对地址</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.lease-renewal-interval-in-seconds</strong></td>
+<td align="center">该服务实例向注册中心发送心跳间隔（s）</td>
+<td align="center">30</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.lease-expiration-duration-in-seconds</strong></td>
+<td align="center">指示eureka服务器在删除此实例之前收到最后一次心跳之后等待的时间（s）</td>
+<td align="center">90</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.metadata-map.*</strong></td>
+<td align="center">自定义元数据,符合KEY&#x2F;VALUE的存储格式。这 些元数据可以在远程客户端中访问。</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.ip-address</strong></td>
+<td align="center">该服务实例的IP地址</td>
+<td align="center">null</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.prefer-ip-address</strong></td>
+<td align="center">是否优先使用服务实例的IP地址，相较于hostname</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.status-page-url</strong></td>
+<td align="center">该服务实例的状态检查地址（url），绝对地址</td>
+<td align="center">null</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.status-page-url-path</strong></td>
+<td align="center">该服务实例的状态检查地址，相对地址</td>
+<td align="center"><strong>&#x2F;actuator&#x2F;info</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.home-page-url</strong></td>
+<td align="center">该服务实例的主页地址（url），绝对地址</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.home-page-url-path</strong></td>
+<td align="center">该服务实例的主页地址，相对地址</td>
+<td align="center">&#x2F;</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.health-check-url</strong></td>
+<td align="center">该服务实例的健康检查地址（url），绝对地址</td>
+<td align="center">null</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.health-check-url-path</strong></td>
+<td align="center">该服务实例的健康检查地址，相对地址</td>
+<td align="center">&#x2F;actuator&#x2F;health</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.instance-id</strong></td>
+<td align="center">该服务实例在注册中心的唯一实例ID</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.hostname</strong></td>
+<td align="center">该服务实例所在主机名</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.namespace</strong></td>
+<td align="center">获取用于查找属性的命名空间。 在Spring Cloud中被忽略。</td>
+<td align="center"><strong>eureka</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.environment</strong></td>
+<td align="center">该服务实例环境配置</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.default-address-resolution-order</strong></td>
+<td align="center">默认地址解析顺序</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.initial-status</strong></td>
+<td align="center">该服务实例注册到Eureka Server 的初始状态</td>
+<td align="center">up</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.registry.default-open-for-traffic-count</strong></td>
+<td align="center">【Eureka Server 端属性】默认开启通信的数量</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.instance.registry.expected-number-of-renews-per-min</strong></td>
+<td align="center">【Eureka Server 端属性】每分钟续约次数</td>
+<td align="center">1</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-Eureka-Server-配置项（eureka-server-）"><a href="#3-Eureka-Server-配置项（eureka-server-）" class="headerlink" title="3. Eureka Server 配置项（eureka.server.*）"></a>3. Eureka Server 配置项（eureka.server.*）</h2><table>
+<thead>
+<tr>
+<th align="center"><strong>参数名称</strong></th>
+<th align="center"><strong>说明</strong></th>
+<th align="center"><strong>默认值</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>eureka.server.enable-self-preservation</strong></td>
+<td align="center">启用自我保护机制，默认为true</td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.eviction-interval-timer-in-ms</strong></td>
+<td align="center">清除无效服务实例的时间间隔（ms），默认1分钟</td>
+<td align="center">60000</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.delta-retention-timer-interval-in-ms</strong></td>
+<td align="center">清理无效增量信息的时间间隔（ms），默认30秒</td>
+<td align="center">30000</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.disable-delta</strong></td>
+<td align="center">禁用增量获取服务实例信息</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.log-identity-headers</strong></td>
+<td align="center">是否记录登录日志</td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.rate-limiter-burst-size</strong></td>
+<td align="center">限流大小</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.rate-limiter-enabled</strong></td>
+<td align="center">是否启用限流</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.rate-limiter-full-fetch-average-rate</strong></td>
+<td align="center">平均请求速率</td>
+<td align="center">100</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.rate-limiter-throttle-standard-clients</strong></td>
+<td align="center">是否对标准客户端进行限流</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.rate-limiter-registry-fetch-average-rate</strong></td>
+<td align="center">服务注册与拉取的平均速率</td>
+<td align="center">500</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.rate-limiter-privileged-clients</strong></td>
+<td align="center">信任的客户端列表</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.renewal-percent-threshold</strong></td>
+<td align="center">15分钟内续约服务的比例小于0.85，则开启自我保护机制，再此期间不会清除已注册的任何服务（即便是无效服务）</td>
+<td align="center">0.85</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.renewal-threshold-update-interval-ms</strong></td>
+<td align="center">更新续约阈值的间隔（分钟），默认15分钟</td>
+<td align="center">15</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.response-cache-auto-expiration-in-seconds</strong></td>
+<td align="center">注册信息缓存有效时长（s），默认180秒</td>
+<td align="center">180</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.response-cache-auto-expiration-in-seconds</strong></td>
+<td align="center">注册信息缓存更新间隔（s），默认30秒</td>
+<td align="center">30</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.retention-time-in-m-s-in-delta-queue</strong></td>
+<td align="center">保留增量信息时长（分钟），默认3分钟</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.sync-when-timestamp-differs</strong></td>
+<td align="center">当时间戳不一致时，是否进行同步</td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.use-read-only-response-cache</strong></td>
+<td align="center">是否使用只读缓存策略</td>
+<td align="center">true</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="4-自定义工具设置"><a href="#4-自定义工具设置" class="headerlink" title="4. 自定义工具设置"></a>4. 自定义工具设置</h2><table>
+<thead>
+<tr>
+<th align="center"><strong>参数</strong></th>
+<th align="center"><strong>说明</strong></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>eureka.server.json-codec-name</strong></td>
+<td align="center">Json编解码器名称</td>
+<td></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.property-resolver</strong></td>
+<td align="center">属性解析器名称</td>
+<td></td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.xml-codec-name</strong></td>
+<td align="center">Xml编解码器名称</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="5-Eureka-Server-集群配置（eureka-server-）"><a href="#5-Eureka-Server-集群配置（eureka-server-）" class="headerlink" title="5. Eureka Server 集群配置（eureka.server.*）"></a>5. Eureka Server 集群配置（eureka.server.*）</h2><table>
+<thead>
+<tr>
+<th align="center"><strong>参数</strong></th>
+<th align="center"><strong>说明</strong></th>
+<th align="center"><strong>默认值</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>eureka.server.enable-replicated-request-compression</strong></td>
+<td align="center">复制数据请求时，数据是否压缩</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.batch-replication</strong></td>
+<td align="center">节点之间数据复制是否采用批处理</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.max-elements-in-peer-replication-pool</strong></td>
+<td align="center">备份池最大备份事件数量，默认1000</td>
+<td align="center">1000</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.max-elements-in-status-replication-pool</strong></td>
+<td align="center">状态备份池最大备份事件数量，默认1000</td>
+<td align="center">1000</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.max-idle-thread-age-in-minutes-for-peer-replication</strong></td>
+<td align="center">节点之间信息同步线程最大空闲时间（分钟）</td>
+<td align="center">15</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.max-idle-thread-age-in-minutes-for-peer-replication</strong></td>
+<td align="center">节点之间状态同步线程最大空闲时间（分钟）</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.max-threads-for-peer-replication</strong></td>
+<td align="center">节点之间信息同步最大线程数量</td>
+<td align="center">20</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.max-threads-for-status-replication</strong></td>
+<td align="center">节点之间状态同步最大线程数量</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.max-time-for-replication</strong></td>
+<td align="center">节点之间信息复制最大通信时长（ms）</td>
+<td align="center">3000</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.min-available-instances-for-peer-replication</strong></td>
+<td align="center">集群中服务实例最小数量，-1 表示单节点</td>
+<td align="center">-1</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.min-threads-for-peer-replication</strong></td>
+<td align="center">节点之间信息复制最小线程数量</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.min-threads-for-status-replication</strong></td>
+<td align="center">节点之间信息状态同步最小线程数量</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.number-of-replication-retries</strong></td>
+<td align="center">节点之间数据复制时，可重试次数</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.peer-eureka-nodes-update-interval-ms</strong></td>
+<td align="center">节点更新数据间隔时长（分钟）</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.peer-eureka-status-refresh-time-interval-ms</strong></td>
+<td align="center">节点之间状态刷新间隔时长（ms）</td>
+<td align="center">30000</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.peer-node-connect-timeout-ms</strong></td>
+<td align="center">节点之间连接超时时长（ms）</td>
+<td align="center">200</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.peer-node-connection-idle-timeout-seconds</strong></td>
+<td align="center">节点之间连接后，空闲时长（s）</td>
+<td align="center">30</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.peer-node-read-timeout-ms</strong></td>
+<td align="center">几点之间数据读取超时时间（ms）</td>
+<td align="center">200</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.peer-node-total-connections</strong></td>
+<td align="center">集群中节点连接总数</td>
+<td align="center">1000</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.peer-node-total-connections-per-host</strong></td>
+<td align="center">节点之间连接，单机最大连接数量</td>
+<td align="center">500</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.registry-sync-retries</strong></td>
+<td align="center">节点启动时，尝试获取注册信息的次数</td>
+<td align="center">500</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.registry-sync-retry-wait-ms</strong></td>
+<td align="center">节点启动时，尝试获取注册信息的间隔时长（ms）</td>
+<td align="center">30000</td>
+</tr>
+<tr>
+<td align="center"><strong>eureka.server.wait-time-in-ms-when-sync-empty</strong></td>
+<td align="center">在Eureka服务器获取不到集群里对等服务器上的实例时，需要等待的时间（分钟）</td>
+<td align="center">5</td>
+</tr>
+</tbody></table>
+<hr>
+<blockquote>
+<p>转载自：<a target="_blank" rel="noopener" href="https://blog.csdn.net/rzpy_qifengxiaoyue/article/details/108132255"> Eureka配置参数详细说明_四月丶丶的博客-CSDN博客</a></p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2022/07/14/Eureka%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/">https://devildyw.github.io/2022/07/14/Eureka%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Middleware/">Middleware</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/07/12/SpringCloud/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2l83l.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">SpringCloud</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/04/26/Zookeeper/" title="Zookeeper"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-k7zdqm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-26</div><div class="title">Zookeeper</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Eureka%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">Eureka详细配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Eureka-Client-%E9%85%8D%E7%BD%AE%E9%A1%B9%EF%BC%88eureka-client-%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">1. Eureka Client 配置项（eureka.client.*）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%9C%8D%E5%8A%A1%E5%AE%9E%E4%BE%8B%E9%85%8D%E7%BD%AE%E9%A1%B9%EF%BC%88eureka-instance-%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">2. 服务实例配置项（eureka.instance.*）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Eureka-Server-%E9%85%8D%E7%BD%AE%E9%A1%B9%EF%BC%88eureka-server-%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">3. Eureka Server 配置项（eureka.server.*）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B7%A5%E5%85%B7%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.4.</span> <span class="toc-text">4. 自定义工具设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Eureka-Server-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%EF%BC%88eureka-server-%EF%BC%89"><span class="toc-number">1.5.</span> <span class="toc-text">5. Eureka Server 集群配置（eureka.server.*）</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
   endLoading: () => {
     document.body.style.overflow = 'auto';
     document.getElementById('loading-box').classList.add("loaded")
