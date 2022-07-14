@@ -41,6 +41,30 @@
   </entry>
   
   <entry>
+    <title>Zookeeper</title>
+    <link href="https://devildyw.github.io/2022/07/14/Zookeeper/"/>
+    <id>https://devildyw.github.io/2022/07/14/Zookeeper/</id>
+    <published>2022-07-14T06:59:01.000Z</published>
+    <updated>2022-07-14T11:44:55.775Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>​    <code>ZooKeeper</code> 一个中心化的服务, 用于维护配置信息, 命名服务(<code>naming</code>), 提供分布式同步和集群服务(<code>group services</code>)。</p><p>​    <code>Zookeeper</code>是一个开源的分布式应用程序协调服务，是雅虎公司对于Google的<code>Chubby</code>的一个开源实现，现已加入Apache开源，其最主要的核心协议ZAB（<code>Zookeeper</code>原子广播协议）是著名的<code>Paxos</code>算法的衍生<code>Mult Paxos</code>的工业实现。</p><p>​    <code>Zookeeper</code>是 <code>Hadoop</code> 和 <code>Hbase</code> 的重要组件。 <code>ZooKeeper</code> 的目标是封装好复杂易出错的关键服务, 暴露简单易用、高效、稳定的接口给用户, 提供 <code>java</code> 和 <code>C</code> 接口。</p><p>​    在立项初期，考虑到之前内部很多项目都是使用动物的名字来命名的（例如著名的Pig项目),雅虎的工程师希望给这个项目也取一个动物的名字。时任研究院的首席科学家<code>RaghuRamakrishnan</code>开玩笑地说：“在这样下去，我们这儿就变成动物园了！”此话一出，大家纷纷表示就叫动物园管理员吧一一一因为各个以动物命名的分布式组件放在一起，雅虎的整个分布式系统看上去就像一个大型的动物园了，而<code>Zookeeper</code>正好要用来进行分布式环境的协调一一于是，<code>Zookeeper</code>的名字也就由此诞生了。 </p><h2 id="工作机制"><a href="#工作机制" class="headerlink" title="工作机制"></a>工作机制</h2><p>​    <code>Zookeeper</code>从设计模式角度来理解：是一个基于观察者模式设计的分布式服务管理框架，它负责存储和管理大家都关心的数据，然后接受观察者的注册，一旦这些数据的状态发生变化，<code>Zookeeper</code>就将负责通知已经在<code>Zookeeper</code>上注册的那些观察者做出相应的反应。</p><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220714185103332.png" alt="image-20220714185103332"></p><h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220714185224752.png" alt="image-20220714185224752"></p><ol><li><code>Zookeeper</code>: 一个领导者（Leader），多个跟随者（Follower）组成的集群。</li><li>集群中只要有<strong>半数以上</strong>节点存活，<code>Zokeeper</code>集群就能正常服务。所以<code>Zookeeper</code>适合安装奇数台服务器。<ol><li>可见，与<code>Eureka</code>相比<code>Zookeeper</code>更倾向于满足集群节点之间的一致性即CAP中 <code>Zookeeper</code>更倾向于<code>CP</code>分支</li><li>为什么<code>Zookeeper</code>适合安装奇数台服务器？<ol><li><strong>防止由脑裂造成的集群不可用。</strong>当集群节点发生脑裂分成了多个集群如果是奇数个节点的情况下，多个集群中总是会有一个小集群满足可用节点 &gt; 总节点&#x2F;2，也就是说这个小集群可以在脑裂的情况下重新选举leader，仍然能够对外提供服务；但是如果是偶数个节点的情况下，可能会出现分配十分均匀的小集群，比如说分成了两个集群，两个集群中的节点都是原来节点的一半，此时可用节点只能&#x3D;&#x3D;总结点&#x2F;2，不能对外提供服务，虽然这种情况是偶然情况，但是还是建议使用奇数个节点提高可用性。</li><li><strong>在容错能力相同的情况下，奇数台更节省资源。</strong>当容错能力相同的情况下，5台节点组成的集群对外正常提供服务至少需要大于5&#x2F;2 &#x3D; 2.5台 &#x3D; 3台机器正常（反过来说就是挂三台就宕机了），而6台节点组成的集群对外正常提供服务至少需要大于6&#x2F;3 &#x3D; 3台机器正常（同样也是挂三台就宕机）。可知5台与6台对于容忍度并没有提升，所以推荐奇数个。</li></ol></li></ol></li><li>全局数据一致；每个Server保存同一份相同的数据副本，Client无论连接到那个Server，数据都是一致的。</li><li>更新请求顺序执行，来自同一个Client的更新请求按其发送顺序依次执行。</li><li>数据更新原子性，一次数据更新要么成功，要么失败。</li><li>实时性，在一定时间范围内，Client能读到最新数据<ol><li>这个时间很短，因为Server保存的数据其实很小，更新&#x2F;同步起来很快。</li></ol></li></ol><h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>​    <code>Zookeeper</code>数据模型的结构与Unix文件系统很类似，整体上可用看作是一棵树，每个节点称作一个<code>ZNode</code>。每一个<code>ZNode</code>默认能够存储<code>1MB</code>的数据，每个<code>ZNode</code>都可以通过其路径唯一标识（通过一个路径能够找到唯一的一个<code>ZNode</code>）。</p><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220714192417943.png" alt="image-20220714192417943"></p><h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>​    提供的服务包括：统一命名服务、统一配置管理、统一集群管理、服务器节点动态上下线、软负载均衡等。</p><h3 id="统一命名服务"><a href="#统一命名服务" class="headerlink" title="统一命名服务"></a>统一命名服务</h3><p>​    在分布式环境下，经常需要对应用&#x2F;服务进行统一命名，便于识别（便于负载均衡）</p><p>​    例如：<code>IP</code>不好记住，而域名容易记住。</p><p>​    类似的功能<code>Nginx</code>的负载均衡，以及其他框架如<code>Eureka</code>也有</p><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220714192903303.png" alt="image-20220714192903303"></p><h3 id="统一配置管理"><a href="#统一配置管理" class="headerlink" title="统一配置管理"></a>统一配置管理</h3><ol><li>分布式环境下，配置文件同步非常常见。<ol><li>一般要求一个集群中，所有节点的配置信息是一致的，比如Kafka集群。</li><li>对配置文件修改后，希望能够快速同步到各个节点上。</li></ol></li><li>配置管理可交由<code>Zookeeper</code>实现<ol><li>可将配置信息写入<code>Zookeeper</code>上的一个<code>ZNode</code>。</li><li>各个客户端服务器监听这个<code>ZNode</code>。</li><li>一旦<code>Znode</code>中的数据被修改，<code>Zookeeper</code>将通知各个客户端服务器。</li></ol></li></ol><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220714193439722.png"></p><h3 id="统一集群管理"><a href="#统一集群管理" class="headerlink" title="统一集群管理"></a>统一集群管理</h3><ol><li>分布式环境中，实时掌握每个节点的状态是必要的。<ol><li>可用根据节点实时状态做出一些调整</li></ol></li><li><code>Zookeeper</code>可用实时监控节点状态变化<ol><li>可将节点信息写入<code>Zookeeper</code>上的<code>ZNode</code>。</li><li>监听这个<code>ZNode</code>可获取它的实时状态变化。</li></ol></li></ol><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220714193710640.png" alt="image-20220714193710640"></p><h3 id="服务器动态上下线"><a href="#服务器动态上下线" class="headerlink" title="服务器动态上下线"></a>服务器动态上下线</h3><p>​    客户端能实时洞察到服务器的上下线的变化。</p><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220714193816296.png" alt="image-20220714193816296"></p><h3 id="软负载均衡"><a href="#软负载均衡" class="headerlink" title="软负载均衡"></a>软负载均衡</h3><p>在<code>Zookeeper</code>中记录每台服务器的访问数，让访问数最少的服务器去处理最新的客户端请求。</p><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220714193918850.png" alt="image-20220714193918850"></p><h2 id="下载与安装"><a href="#下载与安装" class="headerlink" title="下载与安装"></a>下载与安装</h2><h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p>官网首页：<a href="https://zookeeper.apache.org/"><code>Apache ZooKeeper</code></a></p><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220714194148375.png" alt="image-20220714194148375"></p><p>点击<code>Download</code>选择你要下载的版本</p><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220714194308833.png" alt="image-20220714194308833"></p><p>这里我们选择<code>version:3.5.7</code></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Zookeeper&quot;&gt;&lt;a href=&quot;#Zookeeper&quot; class=&quot;headerlink&quot; title=&quot;Zookeeper&quot;&gt;&lt;/a&gt;Zookeeper&lt;/h1&gt;&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; </summary>
+      
+    
+    
+    
+    <category term="分布式" scheme="https://devildyw.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+    <category term="Middleware" scheme="https://devildyw.github.io/tags/Middleware/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Eureka详细配置</title>
     <link href="https://devildyw.github.io/2022/07/14/Eureka%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/"/>
     <id>https://devildyw.github.io/2022/07/14/Eureka%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/</id>
@@ -422,30 +446,6 @@
     
     
     
-    
-  </entry>
-  
-  <entry>
-    <title>Zookeeper</title>
-    <link href="https://devildyw.github.io/2022/04/26/Zookeeper/"/>
-    <id>https://devildyw.github.io/2022/04/26/Zookeeper/</id>
-    <published>2022-04-26T06:59:01.000Z</published>
-    <updated>2022-05-04T03:35:14.317Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="Zookeeper-一-简单介绍和历史由来"><a href="#Zookeeper-一-简单介绍和历史由来" class="headerlink" title="Zookeeper(一) 简单介绍和历史由来"></a>Zookeeper(一) 简单介绍和历史由来</h1><p><a href="https://www.w3cschool.cn/zookeeper/zookeeper_overview.html">Zookeeper 概述_w3cschool</a></p><p><a href="https://blog.csdn.net/yyx3214/article/details/97114603">(15条消息) zookeeper的前世今生_柠檬草。的博客-CSDN博客</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;Zookeeper-一-简单介绍和历史由来&quot;&gt;&lt;a href=&quot;#Zookeeper-一-简单介绍和历史由来&quot; class=&quot;headerlink&quot; title=&quot;Zookeeper(一) 简单介绍和历史由来&quot;&gt;&lt;/a&gt;Zookeeper(一) 简单介绍和历史由来</summary>
-      
-    
-    
-    
-    <category term="分布式" scheme="https://devildyw.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
-    
-    
-    <category term="Middleware" scheme="https://devildyw.github.io/tags/Middleware/"/>
     
   </entry>
   
