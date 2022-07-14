@@ -9890,13 +9890,43 @@ String servletPath = request.getServletPath(); //   /testRequest
 </li>
 </ol>
 <hr>
-<h2 id="Eureka"><a href="#Eureka" class="headerlink" title="Eureka"></a>Eureka</h2><p>未完待续。。。</p>
-]]></content>
+<h2 id="Eureka"><a href="#Eureka" class="headerlink" title="Eureka"></a>Eureka</h2><p>虽然Eureka已经停止维护了，但是并不代表我们不去学习它，理解它的思想也是后来为学习其他注册中心打下基础。</p>
+<blockquote>
+<p>以下所有Demo都是基于上述入门案例改编。</p>
+</blockquote>
+<h3 id="服务治理"><a href="#服务治理" class="headerlink" title="服务治理"></a>服务治理</h3><p><code>Spring Cloud</code>封装<code>NetFlix</code>公司开发的<code>Eureka</code>模块来实现服务治理</p>
+<p>那么什么事服务治理呢？</p>
+<p>当服务较少的时候，可能我们根本不需要什么所谓的服务治理，会觉得这不就是中间商赚差价吗，为什么我能直接调用还要再中间加个服务治理呢？其实啊在传统的<code>RPC</code>框架中当服务多到一定程度时，管理每个服务与服务之间依赖关系比较复杂，管理比较复杂，所以需要使用服务治理，管理服务与服务之间的依赖关系，可以实现服务调用，负载均衡，熔断等，实现服务的注册与发现。</p>
+<h3 id="服务注册-x2F-发现"><a href="#服务注册-x2F-发现" class="headerlink" title="服务注册&#x2F;发现"></a>服务注册&#x2F;发现</h3><p><code>Eureka</code>采用了<code>C/S</code>的设计架构，<code>Eureka Server</code>作为服务注册功能的服务器，他是服务注册中心。而系统中的其他微服务，使用<code>Eureka</code>的客户端连接到<code>Eureka Server</code>并维持心跳连接。这样系统的维护人员就可以通过<code>Eureka Server</code>来监控系统中各个微服务是否可以正常运行。</p>
+<p>在服务注册与发现中，有一个注册中心。当服务器启动的时候，会把当前自己的信息比如服务地址通讯地址等以别名的方式注册到注册中心上。另一方（消费者服务的提供者），以该别名的方式去注册中心上获取到实际的服务通讯地址（<code>ip</code>地址），然后在实现本地<code>RPC</code>调用<code>RPC</code>远程调用框架核心设计思想：在于注册中心，因为使用注册中心管理每个服务与每个服务之间的依赖关系（服务治理概念）。在任何<code>RPC</code>远程调用框架中，都会有一个注册中心存放服务地址相关信息（接口地址）。</p>
+<p>注册中心会维护所有注册到注册中心上的健康的服务的信息，当有消费者消费对应服务时，注册中心会返回服务的<code>ip</code>地址等信息，消费者在通过这些信息去远程调用服务。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/3956561052b9dc3909f16f1ff26d01bb.png" alt="img"></p>
+<h3 id="Eureka组件"><a href="#Eureka组件" class="headerlink" title="Eureka组件"></a>Eureka组件</h3><p>前面我们了解到，<code>Eureka</code>是<code>C/S</code>结构的，它有两个组件    <strong><code>Eureka Server</code> 和 <code>EurekaClient</code></strong></p>
+<h4 id="Eureka-Server"><a href="#Eureka-Server" class="headerlink" title="Eureka Server"></a>Eureka Server</h4><p>提供服务注册服务，就是我们所说的<code>Eureka</code>的服务端，提供服务治理的相关功能。</p>
+<p>各个微服务节点通过配置启动后，会在<code>Eureka Server</code>中进行注册，这样<code>Eureka Server</code>中的服务注册表中将会存储所有可用的服务节点的信息，服务节点的信息可用在界面中直观的看到。</p>
+<h4 id="Eureka-Client"><a href="#Eureka-Client" class="headerlink" title="Eureka Client"></a>Eureka Client</h4><p>通过注册中心进行访问，<code>Eureka</code>的客户端，提供了与<code>Eureka</code>服务端交互的功能。</p>
+<p>他是一个Java客户端，用于简化与<code>Eureka Server</code>的交互，客户端同时也具备一个内置的，使用轮询（<code>round-robin</code>）负载均衡算法的负载均衡器（用于同一个服务下多个提供者的情况），在应用启动后，将会</p>
+<p>向<code>Eureka Server</code>发送心跳（默认周期30秒）。如果<code>Eureka Server</code>在多个心跳周期内没有接收到某个节点的心跳，<code>Eureka Server</code>将会从服务注册表中把这个服务节点移除（默认90秒）。</p>
+<h3 id="Eureka配置"><a href="#Eureka配置" class="headerlink" title="Eureka配置"></a>Eureka配置</h3>]]></content>
       <categories>
         <category>分布式</category>
       </categories>
       <tags>
         <tag>Spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Eureka详细配置</title>
+    <url>/2022/07/14/Eureka%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="Eureka详细配置"><a href="#Eureka详细配置" class="headerlink" title="Eureka详细配置"></a>Eureka详细配置</h1><h3 id="1-Eureka-Client-配置项（eureka-client-）"><a href="#1-Eureka-Client-配置项（eureka-client-）" class="headerlink" title="1. Eureka Client 配置项（eureka.client.*）"></a>1. <a href="https://so.csdn.net/so/search?q=Eureka&spm=1001.2101.3001.7020">Eureka</a> Client 配置项（eureka.client.*）</h3><blockquote>
+<p>org.<a href="https://so.csdn.net/so/search?q=springframework&spm=1001.2101.3001.7020">springframework</a>.cloud.netflix.eureka.EurekaClientConfigBean</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>分布式</category>
+      </categories>
+      <tags>
+        <tag>Middleware</tag>
       </tags>
   </entry>
 </search>
