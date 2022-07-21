@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Paxos-wiki | Devil的个人博客</title><meta name="keywords" content="算法"><meta name="author" content="Devil"><meta name="copyright" content="Devil"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Paxos-wiki(转载)Paxos算法是莱斯利·兰伯特（英语：Leslie Lamport，LaTeX中的“La”）于1990年提出的一种基于消息传递且具有高度容错特性的一致性算法。本文是对维基百科上Paxos算法文献的翻译。 假设条件为了简化 Paxos 的介绍, 先明确以下假设和定义。 Processors Processors 以任意速度运行。 Processors 可能会遇到故障。 具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Paxos-wiki">
+<meta property="og:url" content="https://devildyw.github.io/2022/07/21/Paxos-wiki/index.html">
+<meta property="og:site_name" content="Devil的个人博客">
+<meta property="og:description" content="Paxos-wiki(转载)Paxos算法是莱斯利·兰伯特（英语：Leslie Lamport，LaTeX中的“La”）于1990年提出的一种基于消息传递且具有高度容错特性的一致性算法。本文是对维基百科上Paxos算法文献的翻译。 假设条件为了简化 Paxos 的介绍, 先明确以下假设和定义。 Processors Processors 以任意速度运行。 Processors 可能会遇到故障。 具">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-z8pyxo.jpg">
+<meta property="article:published_time" content="2022-07-21T15:28:44.000Z">
+<meta property="article:modified_time" content="2022-07-21T15:30:57.560Z">
+<meta property="article:author" content="Devil">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-z8pyxo.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2022/07/21/Paxos-wiki/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Paxos-wiki',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-07-21 23:30:57'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/dyw.css"><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-z8pyxo.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Paxos-wiki</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-07-21T15:28:44.000Z" title="发表于 2022-07-21 23:28:44">2022-07-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-21T15:30:57.560Z" title="更新于 2022-07-21 23:30:57">2022-07-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Paxos-wiki"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Paxos-wiki-转载"><a href="#Paxos-wiki-转载" class="headerlink" title="Paxos-wiki(转载)"></a>Paxos-wiki(转载)</h1><p>Paxos算法是莱斯利·兰伯特（英语：Leslie Lamport，LaTeX中的“La”）于1990年提出的一种基于消息传递且具有高度容错特性的一致性算法。本文是对维基百科上<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Paxos_(computer_science)">Paxos算法文献</a>的翻译。</p>
+<h2 id="假设条件"><a href="#假设条件" class="headerlink" title="假设条件"></a>假设条件</h2><p>为了简化 Paxos 的介绍, 先明确以下假设和定义。</p>
+<h3 id="Processors"><a href="#Processors" class="headerlink" title="Processors"></a>Processors</h3><ul>
+<li>Processors 以任意速度运行。</li>
+<li>Processors 可能会遇到故障。</li>
+<li>具有稳定存储的 Processors 在失败后可以重新加入协议（遵循崩溃-恢复故障模型）。</li>
+<li>不会发生拜占庭将军问题。</li>
+</ul>
+<h3 id="Network"><a href="#Network" class="headerlink" title="Network"></a>Network</h3><ul>
+<li>每个 Processor 可以将消息发送到其它任何 Processor。</li>
+<li>消息是异步发送的，可能要花很长时间才能发出。</li>
+<li>消息可能会丢失、乱序或重复。</li>
+<li>消息在发送过程中没有损坏（即没发生拜占庭式故障）。</li>
+</ul>
+<h3 id="Processor的数量"><a href="#Processor的数量" class="headerlink" title="Processor的数量"></a>Processor的数量</h3><p>通常，使用 n&#x3D;2F+1 个 Processor 可以在 F 个 Processor 同时发生故障时依然保持共识算法的正常运行：换句话说，非故障的 Processor 数量必须大于故障的 Processor 数量。然而，采用重新配置，可以使用一个协议，允许不超过 F 的任意数量的同时故障。</p>
+<h2 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h2><p>在 Paxos 中，Processor 的行为取决于它的角色：client、acceptor、proposer、learner 和 leader。在典型实现中，同一个 Processor 可以扮演多个角色，这不会影响协议的正确性——合并角色通常能改善延迟并减少消息数量。</p>
+<ul>
+<li>Client: 客户端向分布式系统发出请求，然后等待响应。例如，对分布式文件服务器中文件的写请求。</li>
+<li>Acceptor (Voters): Acceptor 扮演一个协议中容错存储的角色，法定人数由多个 Acceptor 组成，任何一个消息都必须发送给法定人数。如果法定人数中的其他 Acceptor 没能收到消息副本，那么这条消息将被忽略。</li>
+<li>Proposer: 向 Acceptors 提出 Client 的请求，并在冲突发生的时候，起到冲突调节的作用。</li>
+<li>Learner: 在协议中充当备份的角色。一旦 Client 的请求被 Acceptors 同意了，Learner 将执行请求并将响应发送给 Client。为了提高可用性，可以添加多个 Learner。</li>
+<li>Leader: Paxos 需要一个特殊的 Proposer （称为 Leader），Proposer 们认为自身就是 Leader，但是只有在这些 Proposer 中最终选出一个 Leader 时，协议才能正常运行。如果两个 Proposer 认为他们自身是 Leader，那么他们会通过不断提出彼此间冲突的更新，致使协议拖延。但是在这种情况下，安全性仍能得到保证。</li>
+</ul>
+<h3 id="法定人数"><a href="#法定人数" class="headerlink" title="法定人数"></a>法定人数</h3><p>法定人数通过确保那些存活的 processor 仍保留结果来保证 Paxos 的一致性。法定人数是 Acceptors 的子集，因此任意两个子集（即任意两组法定人数）至少有一个成员是共享的。通常，法定人数是 Acceptors 中的多数派，例如，给定一组 Acceptors {A，B，C，D}，法定人数可以是任意三个 Acceptors: {A，B，C}，{A，C，D}，{A，B，D} ，{B，C，D}。同样，可以将任意权重分配给 Acceptors，此时，法定人数可以定义为权重大于所有 Acceptors 总权重一半的任意子集。</p>
+<h3 id="提案编号和内容"><a href="#提案编号和内容" class="headerlink" title="提案编号和内容"></a>提案编号和内容</h3><p>Acceptor 可能接受或者不接受收到的每一个带有 提案内容v 的提案。Proposer 提出的每个提案都有一个唯一编号。例如，每一个提案都可以 （n，v） 表示，其中 n 是提案的唯一编号，v 是提案内容。在运行 Paxos 协议时，某个提案编号对应的提案内容可以参与运算，但这是不必要的。</p>
+<h2 id="Basic-Paxos"><a href="#Basic-Paxos" class="headerlink" title="Basic Paxos"></a>Basic Paxos</h2><p>Basic Paxos 是 Paxos 协议族中最基本的一种协议。Basic Paxos 的每一个实例（或 “操作”）都决定了一个输出值。这个协议会进行多轮。一个成功的轮次有两个阶段：阶段1（分为 a 和 b 两个部分）和阶段2（分为 a 和 b 两个部分）。参见下面对各阶段的描述。我们假设一个异步模型，一个 processor 可能在其中一个阶段而另一个 processor 可能在另一个阶段。</p>
+<h3 id="阶段1"><a href="#阶段1" class="headerlink" title="阶段1"></a>阶段1</h3><h4 id="阶段1a：Prepare"><a href="#阶段1a：Prepare" class="headerlink" title="阶段1a：Prepare"></a>阶段1a：<em>Prepare</em></h4><p>一个 Proposer 创建了一条消息，我们把这条消息称 <em>Prepare</em> 消息，并确认一个数 n，注意，n 不是提案内容，而只是一个数字，它由 Proposer 唯一标识此初始消息（发送给 Acceptors）。而 n 必须比这个 Proposer 在之前创建的任何 <em>Prepare</em> 消息的编号都要大。接着，它发送这个带有 n 的 <em>Prepare</em> 消息给 <a target="_blank" rel="noopener" href="https://github.com/BitNile/paxos-wiki#%E8%A7%92%E8%89%B2">Acceptors</a> 的 <a target="_blank" rel="noopener" href="https://github.com/BitNile/paxos-wiki#%E6%B3%95%E5%AE%9A%E4%BA%BA%E6%95%B0">法定人数</a>。注意，<em>Prepare</em> 消息只包含了数字 n （也就是说，它没有包含提案的内容，提案的内容通常用 v 来表示）。Proposer 决定哪些 Acceptor 在法定人数中。如果无法与 Acceptors 中的多数派进行通信，则 Paxos 就不会进行下去。</p>
+<h4 id="阶段1b：Promise"><a href="#阶段1b：Promise" class="headerlink" title="阶段1b：Promise"></a>阶段1b：<em>Promise</em></h4><p>任何一个 Acceptor 都在等待接收来自任意一个 Proposer 的 <em>Prepare</em> 消息，Acceptor 必须查看刚刚收到的 <em>Prepare</em> 消息中的提案编号 n。这里有两种情况：</p>
+<ul>
+<li>如果 n 大于 Acceptor 在之前从任何一个 Proposer 接收到的提案编号，则 Acceptor 必须向 Proposer 返回一条消息，我们称这个消息为 <em>Promise</em> 消息，用来忽略将来所有编号小于 n 的提案。如果 Acceptor 在过去的某个时候接受过提案，那么它必须在对 Proposer 的回复中包含先前的提案编号 m 和相应的提案内容 w。</li>
+<li>否则（指的是 n 不大于 Acceptor 在之前从任何一个 Proposer 接收到的提案编号），Acceptor 可以忽略这个提案。在这种情况下，Paxos 不会进行。但是，为了优化起见，它会发送一个拒绝响应（<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/NAK_(protocol_message)">Nack</a>）告诉 Proposer 它将不会与 n 达成共识。</li>
+</ul>
+<h3 id="阶段2"><a href="#阶段2" class="headerlink" title="阶段2"></a>阶段2</h3><h4 id="阶段2a：Accept"><a href="#阶段2a：Accept" class="headerlink" title="阶段2a：Accept"></a>阶段2a：<em>Accept</em></h4><p>如果 Proposer 收到了来自法定人数的 Acceptor 的 <em>Promise</em>消息，它需要给这个提案设定一个值 v。 如果任何 Acceptor 以前接受过任何提案，那么它们会将提案内容发送给 Proposer，Proposer 现在必须将其提案的内容 v 设置为 Acceptor 报告的最高的提案编号关联的内容 z。 如果到目前为止没有任何一个 Acceptor 接受过提案，那么 Proposer 可以选择它最初想要的提案内容 x。</p>
+<p>Proposer 发送一个带有提案内容 v 和提案编号 n 的 <em>Accept</em> 消息（n，v）给具有法定人数的 Acceptor（n 和之前发送给 Acceptor 的 <em>Prepare</em> 消息中的提案编号是相同的）。所以，这个 <em>Accept</em> 消息又可以表示为 （n，v&#x3D;z），在之前没有 Acceptor 接收值的情况下，（n，v&#x3D;x）。</p>
+<p>这个 <em>Accept</em> 消息应该被翻译为 “请求”，表示为“请接受该提案！”。</p>
+<h4 id="阶段2b：Accepted"><a href="#阶段2b：Accepted" class="headerlink" title="阶段2b：Accepted"></a>阶段2b：<em>Accepted</em></h4><p>如果一个 Acceptor 接收了一个来自 Proposer 的 <em>Accept</em> 消息（n，v），当且仅当它尚未对提案编号大于 n 的提案作出承诺时（在 Paxos 协议的 阶段1b 中），它才必须接受该提案。</p>
+<p>如果 Acceptor 尚未对提案编号大于 n 的天做出承诺时（在 Paxos 协议的 阶段1b 中），则应将（刚收到的 <em>Accept</em> 消息）的提案内容 v 注册为（协议的）共识，并发送一个 <em>Accepted</em> 消息给 Proposer 和每个 Learner（通常是 Proposer 本身）<br>否则，它将忽略这个 <em>Accept</em> 消息或请求。</p>
+<p>注意，一个 Acceptor 可以接收多个提案。所以可能会发生以下情况：当另一个 Proposer 不知道要确定的新的提案内容时，使用一个更高的提案编号 n 来开始一个新的轮次。在这种情况下，即使 Acceptor 在早先接收了另外一个提案编号，Acceptor 仍然会承诺并且稍后接收新的（提案编号更大的）提案。在某些故障情况下，这些提案甚至可能会有不同的内容。但是 Paxos 协议会保证 Acceptor 最终会在一个值中达成共识。</p>
+<h3 id="轮次失败的情况"><a href="#轮次失败的情况" class="headerlink" title="轮次失败的情况"></a>轮次失败的情况</h3><p>当多个 Proposer 发送冲突的 <em>Prepare</em> 消息，或者 Proposer 未能接收到法定人数的承诺或接收回复，该轮次会失败。在这些情况下，会开始另一个带有更高的提案编号的轮次。</p>
+<h3 id="Paxos-能应用在-Leader-选举中"><a href="#Paxos-能应用在-Leader-选举中" class="headerlink" title="Paxos 能应用在 Leader 选举中"></a>Paxos 能应用在 Leader 选举中</h3><p>请注意，当 Acceptor 接收了一个请求，他也会承认 Proposer 的领导。因此，Paxos 也能够用来选举一个节点集群的 Leader。</p>
+<h3 id="Basic-Paxos-的图形表示"><a href="#Basic-Paxos-的图形表示" class="headerlink" title="Basic Paxos 的图形表示"></a>Basic Paxos 的图形表示</h3><p>下面的流程图表示 Basic Paxos 协议应用的几种情况。这几种情况会说明 Basic Paxos 协议如何应对分布式系统中的一些组件 question 的故障。</p>
+<p>注意：在首次提出提案时， <em>Promise</em>消息中返回的值为 “null”（因为在这个轮次之前，没有 Acceptor 接受过任意值）</p>
+<h4 id="Basic-Paxos-的成功情况"><a href="#Basic-Paxos-的成功情况" class="headerlink" title="Basic Paxos 的成功情况"></a>Basic Paxos 的成功情况</h4><p>在下图中，有一个 client，一个 Proposer， 三个 Acceptor（即法定人数为 3）和两个 Learner（由2条垂直线表示）。该图表示第一轮成功的情况（即网络中没有进程失败）。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Client   Proposer      Acceptor     Learner</span><br><span class="line">   |         |          |  |  |       |  |</span><br><span class="line">   X--------&gt;|          |  |  |       |  |  Request</span><br><span class="line">   |         X---------&gt;|-&gt;|-&gt;|       |  |  Prepare(1)</span><br><span class="line">   |         |&lt;---------X--X--X       |  |  Promise(1,&#123;Va,Vb,Vc&#125;)</span><br><span class="line">   |         X---------&gt;|-&gt;|-&gt;|       |  |  Accept!(1,V)</span><br><span class="line">   |         |&lt;---------X--X--X------&gt;|-&gt;|  Accepted(1,V)</span><br><span class="line">   |&lt;---------------------------------X--X  Response</span><br><span class="line">   |         |          |  |  |       |  |</span><br></pre></td></tr></table></figure>
+
+<p>在这里，V 指的是 Va、Vb、Vc 中提案编号最大的提案内容。</p>
+<h4 id="Basic-Paxos-的错误情况"><a href="#Basic-Paxos-的错误情况" class="headerlink" title="Basic Paxos 的错误情况"></a>Basic Paxos 的错误情况</h4><p>Basic Paxos 最简单的错误场景是一个 Acceptor 崩溃（当法定人数的 Acceptor 仍然存活）和 冗余的 Learner 崩溃。在这些情况下，协议不要求恢复（它仍然是成功的）：不需要额外的轮次或者消息。如下所示：（在接下来两个图表案例中）</p>
+<h4 id="Acceptor-崩溃的-Basic-Paxos"><a href="#Acceptor-崩溃的-Basic-Paxos" class="headerlink" title="Acceptor 崩溃的 Basic Paxos"></a>Acceptor 崩溃的 Basic Paxos</h4><p>在下图中，法定人数中的其中一个 Acceptor 崩溃，所以法定人数变成了 2，在这种情况下，Basic Paxos 仍然可以成功。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Client   Proposer      Acceptor     Learner</span><br><span class="line">   |         |          |  |  |       |  |</span><br><span class="line">   X--------&gt;|          |  |  |       |  |  Request</span><br><span class="line">   |         X---------&gt;|-&gt;|-&gt;|       |  |  Prepare(1)</span><br><span class="line">   |         |          |  |  !       |  |  !! FAIL !!</span><br><span class="line">   |         |&lt;---------X--X          |  |  Promise(1,&#123;Va, Vb, null&#125;)</span><br><span class="line">   |         X---------&gt;|-&gt;|          |  |  Accept!(1,V)</span><br><span class="line">   |         |&lt;---------X--X---------&gt;|-&gt;|  Accepted(1,V)</span><br><span class="line">   |&lt;---------------------------------X--X  Response</span><br><span class="line">   |         |          |  |          |  |</span><br></pre></td></tr></table></figure>
+
+<h4 id="冗余-Learner-的崩溃-Basic-Paxos"><a href="#冗余-Learner-的崩溃-Basic-Paxos" class="headerlink" title="冗余 Learner 的崩溃 Basic Paxos"></a>冗余 Learner 的崩溃 Basic Paxos</h4><p>在这种情况下，冗余的 Learner 中的其中一个崩溃了，但是 Basic Paxos 协议仍然能成功</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Client Proposer         Acceptor     Learner</span><br><span class="line">   |         |          |  |  |       |  |</span><br><span class="line">   X--------&gt;|          |  |  |       |  |  Request</span><br><span class="line">   |         X---------&gt;|-&gt;|-&gt;|       |  |  Prepare(1)</span><br><span class="line">   |         |&lt;---------X--X--X       |  |  Promise(1,&#123;Va,Vb,Vc&#125;)</span><br><span class="line">   |         X---------&gt;|-&gt;|-&gt;|       |  |  Accept!(1,V)</span><br><span class="line">   |         |&lt;---------X--X--X------&gt;|-&gt;|  Accepted(1,V)</span><br><span class="line">   |         |          |  |  |       |  !  !! FAIL !!</span><br><span class="line">   |&lt;---------------------------------X     Response</span><br><span class="line">   |         |          |  |  |       |</span><br></pre></td></tr></table></figure>
+
+<h4 id="一个-Proposer-崩溃的-Basic-Paxos"><a href="#一个-Proposer-崩溃的-Basic-Paxos" class="headerlink" title="一个 Proposer 崩溃的 Basic Paxos"></a>一个 Proposer 崩溃的 Basic Paxos</h4><p>在这种情况下，一个 Proposer 发送一个带有内容的消息后，在达成共识之前崩溃了。特殊地，它在发送 <em>Accept</em>* 消息的过程中崩溃，只有法定人数的一个 Acceptor 收到了提案。此时，有一个新的 Proposer Leader 被选举出来（图中没有说明选举细节）。注意，在这种情况下有两轮（轮次从上往下进行）。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Client  Proposer        Acceptor     Learner</span><br><span class="line">   |      |             |  |  |       |  |</span><br><span class="line">   X-----&gt;|             |  |  |       |  |  Request</span><br><span class="line">   |      X------------&gt;|-&gt;|-&gt;|       |  |  Prepare(1)</span><br><span class="line">   |      |&lt;------------X--X--X       |  |  Promise(1,&#123;Va, Vb, Vc&#125;)</span><br><span class="line">   |      |             |  |  |       |  |</span><br><span class="line">   |      |             |  |  |       |  |  !! Leader fails during broadcast !!</span><br><span class="line">   |      X------------&gt;|  |  |       |  |  Accept!(1,V)</span><br><span class="line">   |      !             |  |  |       |  |</span><br><span class="line">   |         |          |  |  |       |  |  !! NEW LEADER !!</span><br><span class="line">   |         X---------&gt;|-&gt;|-&gt;|       |  |  Prepare(2)</span><br><span class="line">   |         |&lt;---------X--X--X       |  |  Promise(2,&#123;V, null, null&#125;)</span><br><span class="line">   |         X---------&gt;|-&gt;|-&gt;|       |  |  Accept!(2,V)</span><br><span class="line">   |         |&lt;---------X--X--X------&gt;|-&gt;|  Accepted(2,V)</span><br><span class="line">   |&lt;---------------------------------X--X  Response</span><br><span class="line">   |         |          |  |  |       |  |</span><br></pre></td></tr></table></figure>
+
+<h4 id="多个-Proposer-冲突的-Basic-Paxos"><a href="#多个-Proposer-冲突的-Basic-Paxos" class="headerlink" title="多个 Proposer 冲突的 Basic Paxos"></a>多个 Proposer 冲突的 Basic Paxos</h4><p>如果有多个 Proposer 认为自身是 Leader 的时候，这种情况是最复杂的。举个例子，当前的 Leader 可能崩溃后恢复，但是此时其他的 Proposer 已经选举了新 Leader。而恢复后的 Leader 仍不知道选举了新 leader，而试图开启一个和当前的 Leader 冲突的轮次。在下图中，展示了 4 种未成功的轮次，但其实有可能一直失败下去。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Client   Leader         Acceptor     Learner</span><br><span class="line">   |      |             |  |  |       |  |</span><br><span class="line">   X-----&gt;|             |  |  |       |  |  Request</span><br><span class="line">   |      X------------&gt;|-&gt;|-&gt;|       |  |  Prepare(1)</span><br><span class="line">   |      |&lt;------------X--X--X       |  |  Promise(1,&#123;null,null,null&#125;)</span><br><span class="line">   |      !             |  |  |       |  |  !! LEADER FAILS</span><br><span class="line">   |         |          |  |  |       |  |  !! NEW LEADER (knows last number was 1)</span><br><span class="line">   |         X---------&gt;|-&gt;|-&gt;|       |  |  Prepare(2)</span><br><span class="line">   |         |&lt;---------X--X--X       |  |  Promise(2,&#123;null,null,null&#125;)</span><br><span class="line">   |      |  |          |  |  |       |  |  !! OLD LEADER recovers</span><br><span class="line">   |      |  |          |  |  |       |  |  !! OLD LEADER tries 2, denied</span><br><span class="line">   |      X------------&gt;|-&gt;|-&gt;|       |  |  Prepare(2)</span><br><span class="line">   |      |&lt;------------X--X--X       |  |  Nack(2)</span><br><span class="line">   |      |  |          |  |  |       |  |  !! OLD LEADER tries 3</span><br><span class="line">   |      X------------&gt;|-&gt;|-&gt;|       |  |  Prepare(3)</span><br><span class="line">   |      |&lt;------------X--X--X       |  |  Promise(3,&#123;null,null,null&#125;)</span><br><span class="line">   |      |  |          |  |  |       |  |  !! NEW LEADER proposes, denied</span><br><span class="line">   |      |  X---------&gt;|-&gt;|-&gt;|       |  |  Accept!(2,Va)</span><br><span class="line">   |      |  |&lt;---------X--X--X       |  |  Nack(3)</span><br><span class="line">   |      |  |          |  |  |       |  |  !! NEW LEADER tries 4</span><br><span class="line">   |      |  X---------&gt;|-&gt;|-&gt;|       |  |  Prepare(4)</span><br><span class="line">   |      |  |&lt;---------X--X--X       |  |  Promise(4,&#123;null,null,null&#125;)</span><br><span class="line">   |      |  |          |  |  |       |  |  !! OLD LEADER proposes, denied</span><br><span class="line">   |      X------------&gt;|-&gt;|-&gt;|       |  |  Accept!(3,Vb)</span><br><span class="line">   |      |&lt;------------X--X--X       |  |  Nack(4)</span><br><span class="line">   |      |  |          |  |  |       |  |  ... and so on ...</span><br></pre></td></tr></table></figure>
+
+<h2 id="Multi-Paxos"><a href="#Multi-Paxos" class="headerlink" title="Multi-Paxos"></a>Multi-Paxos</h2><p>Paxos 的典型部署需要连续不断的提案内容的流来充当对分布式状态机的命令。如果每个命令是 Basic Paxos 协议的单个实例的结果，则将导致大量的开销。</p>
+<p>如果 Leader 比较稳定，就没必要再进行阶段一了。因此，对于将来具有相同领导者的协议的实例，可以跳过阶段一。</p>
+<p>为了实现这一点，将第一轮连同每个值一起包括在内，每个值在同一轮中由同一 Leader 递增。 Multi-Paxos 将无故障消息延迟从4个延迟减少到2个延迟。</p>
+<h3 id="Multi-Paxos-中消息流的图形表示"><a href="#Multi-Paxos-中消息流的图形表示" class="headerlink" title="Multi-Paxos 中消息流的图形表示"></a>Multi-Paxos 中消息流的图形表示</h3><h4 id="正常情况下的-Multi-Paxos"><a href="#正常情况下的-Multi-Paxos" class="headerlink" title="正常情况下的 Multi-Paxos"></a>正常情况下的 Multi-Paxos</h4><p>在下图中，只显示了 Basic-Paxos 协议的一个实例，其中有一个初始领导者（一个提议者）。注意，Multi-Paxos 由 Basic-Paxos 协议的几个实例组成。question</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Client   Proposer      Acceptor     Learner</span><br><span class="line">   |         |          |  |  |       |  | --- First Request ---</span><br><span class="line">   X--------&gt;|          |  |  |       |  |  Request</span><br><span class="line">   |         X---------&gt;|-&gt;|-&gt;|       |  |  Prepare(N)</span><br><span class="line">   |         |&lt;---------X--X--X       |  |  Promise(N,I,&#123;Va,Vb,Vc&#125;)</span><br><span class="line">   |         X---------&gt;|-&gt;|-&gt;|       |  |  Accept!(N,I,V)</span><br><span class="line">   |         |&lt;---------X--X--X------&gt;|-&gt;|  Accepted(N,I,V)</span><br><span class="line">   |&lt;---------------------------------X--X  Response</span><br><span class="line">   |         |          |  |  |       |  |</span><br></pre></td></tr></table></figure>
+
+<p>在这里，V 指的是 Va、Vb、Vc 中提案编号最大的提案内容。</p>
+<h4 id="可忽略阶段一的-Multi-Paxos"><a href="#可忽略阶段一的-Multi-Paxos" class="headerlink" title="可忽略阶段一的 Multi-Paxos"></a>可忽略阶段一的 Multi-Paxos</h4><p>在这种情况下，Basic-Paxos 协议的子序列实例（由I+1表示）使用相同的领导者，所以包含了 Prepare 和 Promise 子阶段的阶段一将被忽略。注意，Leader 应当是稳定的，即不应崩溃或更换。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Client   Proposer       Acceptor     Learner</span><br><span class="line">   |         |          |  |  |       |  |  --- Following Requests ---</span><br><span class="line">   X--------&gt;|          |  |  |       |  |  Request</span><br><span class="line">   |         X---------&gt;|-&gt;|-&gt;|       |  |  Accept!(N,I+1,W)</span><br><span class="line">   |         |&lt;---------X--X--X------&gt;|-&gt;|  Accepted(N,I+1,W)</span><br><span class="line">   |&lt;---------------------------------X--X  Response</span><br><span class="line">   |         |          |  |  |       |  |</span><br></pre></td></tr></table></figure>
+
+<h4 id="角色合并的-Multi-Paxos"><a href="#角色合并的-Multi-Paxos" class="headerlink" title="角色合并的 Multi-Paxos"></a>角色合并的 Multi-Paxos</h4><p>Multi-Paxos 的一个常见部署是将 Proposers、Acceptors 和 Learners 的角色合并为 Servers。所以，最后只有 Clients 和 Servers。下图代表 Basic-Paxos 协议的第一个“实例”，即当 Proposer、Acceptor 和 Learner 的角色合并为单个角色（称为 Server）时。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Client      Servers</span><br><span class="line">   |         |  |  | --- First Request ---</span><br><span class="line">   X--------&gt;|  |  |  Request</span><br><span class="line">   |         X-&gt;|-&gt;|  Prepare(N)</span><br><span class="line">   |         |&lt;-X--X  Promise(N, I, &#123;Va, Vb&#125;)</span><br><span class="line">   |         X-&gt;|-&gt;|  Accept!(N, I, Vn)</span><br><span class="line">   |         X&lt;&gt;X&lt;&gt;X  Accepted(N, I)</span><br><span class="line">   |&lt;--------X  |  |  Response</span><br><span class="line">   |         |  |  |</span><br></pre></td></tr></table></figure>
+
+<h4 id="当角色合并且-Leader-稳定时的-Multi-Paxos"><a href="#当角色合并且-Leader-稳定时的-Multi-Paxos" class="headerlink" title="当角色合并且 Leader 稳定时的 Multi-Paxos"></a>当角色合并且 Leader 稳定时的 Multi-Paxos</h4><p>如果 Leader 相同，则可以跳过阶段一。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Client      Servers</span><br><span class="line">   X--------&gt;|  |  |  Request</span><br><span class="line">   |         X-&gt;|-&gt;|  Accept!(N,I+1,W)</span><br><span class="line">   |         X&lt;&gt;X&lt;&gt;X  Accepted(N,I+1)</span><br><span class="line">   |&lt;--------X  |  |  Response</span><br><span class="line">   |         |  |  |</span><br></pre></td></tr></table></figure>
+
+<h2 id="译者注"><a href="#译者注" class="headerlink" title="译者注"></a>译者注</h2><h3 id="拜占庭将军问题"><a href="#拜占庭将军问题" class="headerlink" title="拜占庭将军问题"></a>拜占庭将军问题</h3><p>假设有9位将军投票，其中1名叛徒。8名忠诚的将军中出现了4人投进攻，4人投撤离的情况。这时候叛徒可能故意给4名投进攻的将领送信表示投票进攻，而给4名投撤离的将领送信表示投撤离。这样一来在4名投进攻的将领看来，投票结果是5人投进攻，从而发起进攻；而在4名投撤离的将军看来则是5人投撤离。这样各支军队的一致协同就遭到了破坏。</p>
+<p>由于将军之间需要通过信使通讯，叛变将军可能通过伪造信件来以其他将军的身份发送假投票。而即使在保证所有将军忠诚的情况下，也不能排除信使被敌人截杀，甚至被敌人间谍替换等情况。因此很难通过保证人员可靠性及通讯可靠性来解决问题。</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98">拜占庭将军问题</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2022/07/21/Paxos-wiki/">https://devildyw.github.io/2022/07/21/Paxos-wiki/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95/">算法</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-z8pyxo.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/07/21/ZAB/"><img class="prev-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-k7zdqm.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">ZAB</div></div></a></div><div class="next-post pull-right"><a href="/2022/07/21/Paxos/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-pk9eye.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Paxos</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/07/21/Paxos/" title="Paxos"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-pk9eye.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-21</div><div class="title">Paxos</div></div></a></div><div><a href="/2022/05/21/%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/" title="布隆过滤器"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-l3dvqp.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-21</div><div class="title">布隆过滤器</div></div></a></div><div><a href="/2022/04/04/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/" title="雪花算法"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-04</div><div class="title">雪花算法</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Paxos-wiki-%E8%BD%AC%E8%BD%BD"><span class="toc-number">1.</span> <span class="toc-text">Paxos-wiki(转载)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%81%87%E8%AE%BE%E6%9D%A1%E4%BB%B6"><span class="toc-number">1.1.</span> <span class="toc-text">假设条件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Processors"><span class="toc-number">1.1.1.</span> <span class="toc-text">Processors</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Network"><span class="toc-number">1.1.2.</span> <span class="toc-text">Network</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Processor%E7%9A%84%E6%95%B0%E9%87%8F"><span class="toc-number">1.1.3.</span> <span class="toc-text">Processor的数量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%92%E8%89%B2"><span class="toc-number">1.2.</span> <span class="toc-text">角色</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%95%E5%AE%9A%E4%BA%BA%E6%95%B0"><span class="toc-number">1.2.1.</span> <span class="toc-text">法定人数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E6%A1%88%E7%BC%96%E5%8F%B7%E5%92%8C%E5%86%85%E5%AE%B9"><span class="toc-number">1.2.2.</span> <span class="toc-text">提案编号和内容</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Basic-Paxos"><span class="toc-number">1.3.</span> <span class="toc-text">Basic Paxos</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B6%E6%AE%B51"><span class="toc-number">1.3.1.</span> <span class="toc-text">阶段1</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%98%B6%E6%AE%B51a%EF%BC%9APrepare"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">阶段1a：Prepare</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%98%B6%E6%AE%B51b%EF%BC%9APromise"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">阶段1b：Promise</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B6%E6%AE%B52"><span class="toc-number">1.3.2.</span> <span class="toc-text">阶段2</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%98%B6%E6%AE%B52a%EF%BC%9AAccept"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">阶段2a：Accept</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%98%B6%E6%AE%B52b%EF%BC%9AAccepted"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">阶段2b：Accepted</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AE%E6%AC%A1%E5%A4%B1%E8%B4%A5%E7%9A%84%E6%83%85%E5%86%B5"><span class="toc-number">1.3.3.</span> <span class="toc-text">轮次失败的情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Paxos-%E8%83%BD%E5%BA%94%E7%94%A8%E5%9C%A8-Leader-%E9%80%89%E4%B8%BE%E4%B8%AD"><span class="toc-number">1.3.4.</span> <span class="toc-text">Paxos 能应用在 Leader 选举中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Basic-Paxos-%E7%9A%84%E5%9B%BE%E5%BD%A2%E8%A1%A8%E7%A4%BA"><span class="toc-number">1.3.5.</span> <span class="toc-text">Basic Paxos 的图形表示</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Basic-Paxos-%E7%9A%84%E6%88%90%E5%8A%9F%E6%83%85%E5%86%B5"><span class="toc-number">1.3.5.1.</span> <span class="toc-text">Basic Paxos 的成功情况</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Basic-Paxos-%E7%9A%84%E9%94%99%E8%AF%AF%E6%83%85%E5%86%B5"><span class="toc-number">1.3.5.2.</span> <span class="toc-text">Basic Paxos 的错误情况</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Acceptor-%E5%B4%A9%E6%BA%83%E7%9A%84-Basic-Paxos"><span class="toc-number">1.3.5.3.</span> <span class="toc-text">Acceptor 崩溃的 Basic Paxos</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%97%E4%BD%99-Learner-%E7%9A%84%E5%B4%A9%E6%BA%83-Basic-Paxos"><span class="toc-number">1.3.5.4.</span> <span class="toc-text">冗余 Learner 的崩溃 Basic Paxos</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA-Proposer-%E5%B4%A9%E6%BA%83%E7%9A%84-Basic-Paxos"><span class="toc-number">1.3.5.5.</span> <span class="toc-text">一个 Proposer 崩溃的 Basic Paxos</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E4%B8%AA-Proposer-%E5%86%B2%E7%AA%81%E7%9A%84-Basic-Paxos"><span class="toc-number">1.3.5.6.</span> <span class="toc-text">多个 Proposer 冲突的 Basic Paxos</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Multi-Paxos"><span class="toc-number">1.4.</span> <span class="toc-text">Multi-Paxos</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Multi-Paxos-%E4%B8%AD%E6%B6%88%E6%81%AF%E6%B5%81%E7%9A%84%E5%9B%BE%E5%BD%A2%E8%A1%A8%E7%A4%BA"><span class="toc-number">1.4.1.</span> <span class="toc-text">Multi-Paxos 中消息流的图形表示</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A3%E5%B8%B8%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84-Multi-Paxos"><span class="toc-number">1.4.1.1.</span> <span class="toc-text">正常情况下的 Multi-Paxos</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E5%BF%BD%E7%95%A5%E9%98%B6%E6%AE%B5%E4%B8%80%E7%9A%84-Multi-Paxos"><span class="toc-number">1.4.1.2.</span> <span class="toc-text">可忽略阶段一的 Multi-Paxos</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%92%E8%89%B2%E5%90%88%E5%B9%B6%E7%9A%84-Multi-Paxos"><span class="toc-number">1.4.1.3.</span> <span class="toc-text">角色合并的 Multi-Paxos</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BD%93%E8%A7%92%E8%89%B2%E5%90%88%E5%B9%B6%E4%B8%94-Leader-%E7%A8%B3%E5%AE%9A%E6%97%B6%E7%9A%84-Multi-Paxos"><span class="toc-number">1.4.1.4.</span> <span class="toc-text">当角色合并且 Leader 稳定时的 Multi-Paxos</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%91%E8%80%85%E6%B3%A8"><span class="toc-number">1.5.</span> <span class="toc-text">译者注</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98"><span class="toc-number">1.5.1.</span> <span class="toc-text">拜占庭将军问题</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
