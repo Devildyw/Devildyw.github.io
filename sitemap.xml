@@ -2,16 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://devildyw.github.io/2022/07/21/Zookeeper%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/</loc>
+    
+    <lastmod>2022-07-22T05:58:28.906Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://devildyw.github.io/2022/07/22/CAP%E7%90%86%E8%AE%BA/</loc>
+    
+    <lastmod>2022-07-22T05:58:00.084Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://devildyw.github.io/2022/07/21/ZAB/</loc>
     
-    <lastmod>2022-07-21T15:31:32.625Z</lastmod>
+    <lastmod>2022-07-22T05:49:39.896Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://devildyw.github.io/2022/07/21/Paxos-wiki/</loc>
     
-    <lastmod>2022-07-21T15:30:57.560Z</lastmod>
+    <lastmod>2022-07-22T04:16:03.494Z</lastmod>
     
   </url>
   
@@ -19,13 +33,6 @@
     <loc>https://devildyw.github.io/2022/07/21/Paxos/</loc>
     
     <lastmod>2022-07-21T15:29:38.792Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://devildyw.github.io/2022/07/21/Zookeeper%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/</loc>
-    
-    <lastmod>2022-07-21T07:57:34.891Z</lastmod>
     
   </url>
   

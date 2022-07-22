@@ -11459,7 +11459,8 @@ String servletPath = request.getServletPath(); //   /testRequest
   <entry>
     <title>Zookeeper源码学习</title>
     <url>/2022/07/21/Zookeeper%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<h1 id="Zookeeper源码学习"><a href="#Zookeeper源码学习" class="headerlink" title="Zookeeper源码学习"></a>Zookeeper源码学习</h1>]]></content>
+    <content><![CDATA[<h1 id="Zookeeper源码学习"><a href="#Zookeeper源码学习" class="headerlink" title="Zookeeper源码学习"></a>Zookeeper源码学习</h1><p>暂时不更新。。。</p>
+]]></content>
       <categories>
         <category>分布式</category>
       </categories>
@@ -11470,7 +11471,67 @@ String servletPath = request.getServletPath(); //   /testRequest
   <entry>
     <title>ZAB</title>
     <url>/2022/07/21/ZAB/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h1 id="Zookeeper-Atomic-Broadcast-Zookeeper-原子广播协议"><a href="#Zookeeper-Atomic-Broadcast-Zookeeper-原子广播协议" class="headerlink" title="Zookeeper Atomic Broadcast(Zookeeper 原子广播协议)"></a><code>Zookeeper Atomic Broadcast</code>(<code>Zookeeper</code> 原子广播协议)</h1><h2 id="什么是ZAB算法"><a href="#什么是ZAB算法" class="headerlink" title="什么是ZAB算法"></a>什么是<code>ZAB</code>算法</h2><p><code>Zab</code>借鉴了<code>Paxos</code>算法(<code>Multi Paxos</code>)，是特别为<code>Zookeeper</code>设计的支持崩溃回复的原子广播协议。基于该协议，<code>Zookeeper</code>设计了为只有一台客户端(Leader)负责处理外部的写事务请求，然后Leader客户端将数据同步到其他Follower节点。即<code>Zookeeper</code>只有一个Leader可以发起提案。</p>
+<h2 id="ZAB协议内容"><a href="#ZAB协议内容" class="headerlink" title="ZAB协议内容"></a><code>ZAB</code>协议内容</h2><p><code>ZAB</code>协议包括两种基本的模式：消息广播、崩溃恢复。</p>
+<h4 id="消息广播"><a href="#消息广播" class="headerlink" title="消息广播"></a>消息广播</h4><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220722122448654.png" alt="image-20220722122448654"></p>
+<ol>
+<li>客户端发起一个写操作请求。</li>
+<li>Leader服务器将客户端的请求转化为事务Proposal提案，同时为每个Proposal分配一个全局ID，即<code>zxid</code></li>
+<li>Leader服务器<strong>为每个Follower服务器分配一个单独的队列</strong>，然后将需要广播的Proposal依次放到队列中去，并且根据FIFO策略进行消息发送。</li>
+<li>Follower接受到Proposal后，会首先将起以事务日志的方式是写入本地磁盘中，写入成功后向Leader反馈一个<code>Ack</code>响应消息</li>
+<li>Leader接收到<strong>超过半数以上</strong>Follower的<code>Ack</code>响应消息后，即认为消息发送成功，可以发送commit消息</li>
+<li>Leader向<strong>所有Follower</strong>广播commit消息，同时自身也会完成事务提交。Follower接受到commit消息后，会将上一条事务提交</li>
+<li><code>Zookeeper</code>采用<code>Zab</code>协议的核心，就是只要有一台服务器提交Proposal，就要确保所有服务器最终都能正确提交Proposal。</li>
+</ol>
+<blockquote>
+<p><code>ZAB</code>协议针对事务请求的处理过程类似于一个两阶段提交过程</p>
+<ol>
+<li>广播事务阶段</li>
+<li>广播提交阶段</li>
+</ol>
+<p>这两个阶段提交模型如下，有可能因为Leader宕机带来数据不一致，比如</p>
+<ol>
+<li>Leader发起一个事务<code>Proposal1</code>后就宕机，Follower都没有<code>Proposal1</code></li>
+<li>Leader收到半数<code>ACK</code>宕机，没来得及向Follower发送Commit</li>
+</ol>
+<p><strong>为了解决上述问题，<code>ZAB</code>引入了崩溃恢复模式。</strong></p>
+</blockquote>
+<h4 id="崩溃恢复–异常假说"><a href="#崩溃恢复–异常假说" class="headerlink" title="崩溃恢复–异常假说"></a>崩溃恢复–异常假说</h4><p>一旦Leader服务器出现崩溃或者由于网络原因导致Leader服务器失去了与过半Follower的联系，那么就会进入<strong>崩溃恢复模式</strong>。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220722131218448.png" alt="image-20220722131218448"></p>
+<ol>
+<li><strong>假设两种服务器异常情况</strong><ol>
+<li>假设一个事务在Leader提出之后，Leader挂了。</li>
+<li>一个事务在Leader上提交了，并且过半的Follower都响应<code>Ack</code>了，但是Leader在Commit消息发出之前挂了。</li>
+</ol>
+</li>
+<li><strong><code>Zab</code>协议崩溃恢复要求满足以下两个要求：</strong><ol>
+<li>确保已经被Leader提交的提案Proposal，必须最终被所有的Follower服务器提交。(<strong>已经产生的提案，Follower必须执行</strong>)</li>
+<li>确保丢弃已经被Leader提出的但是没有被提交的Proposal。(<strong>丢弃胎死腹中的提案</strong>)</li>
+</ol>
+</li>
+</ol>
+<h4 id="崩溃恢复–Leader选举"><a href="#崩溃恢复–Leader选举" class="headerlink" title="崩溃恢复–Leader选举"></a>崩溃恢复–Leader选举</h4><p>崩溃恢复主要包括两个部分：<strong>Leader选举和数据恢复</strong></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220722131903208.png" alt="image-20220722131903208"></p>
+<p><strong>Leader选举：</strong>根据上述要求，<code>Zab</code>协议需要保证选举出来的Leader需要满足以下条件：</p>
+<ol>
+<li>新选举出来的Leader不能包括未提交的Proposal。<strong>即新Leader必须都是已经提交了Proposal的Follower服务器节点。</strong></li>
+<li><strong>新选举的Leader节点中含有最大的<code>zxid</code>。</strong>这样做的好处是可以避免Leader服务器检查Proposal的提交和丢弃工作。(因为它自身的<code>zxid</code>最大所以它有着最新的操作记录，所以不需要去检查其他服务器的Proposal的提交和丢弃，他自己就可以知道)</li>
+</ol>
+<h4 id="崩溃恢复–数据恢复"><a href="#崩溃恢复–数据恢复" class="headerlink" title="崩溃恢复–数据恢复"></a>崩溃恢复–数据恢复</h4><p>崩溃恢复主要包括两个部分：<strong>Leader选举和数据恢复</strong></p>
+<img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220722132241185.png" alt="image-20220722132241185"  />
+
+<p><strong><code>Zab</code>如何数据同步：</strong></p>
+<ol>
+<li>完成Leader选举后，在正式开始工作之前（接收事务请求，然后提出新的Proposal），<strong>Leader服务器会首先确认事务日志中的所有Proposal是否已经被集群中过半的服务器Commit。</strong>（在正式工作之前需要将日志中的数据同步）</li>
+<li>Leader服务器需要确保所有的Follower服务器能够接收到每一条事务的Proposal，并且能将所有已经提交的事务Proposal应用到内存数据中。<strong>等到Follower将所有尚未同步的事务Proposal都从Leader服务器上同步过，并且应用到内容数据中以后，Leader次啊会把该Follower加入到真正可用的Follower列表中。</strong></li>
+</ol>
+]]></content>
+      <categories>
+        <category>分布式</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
   </entry>
   <entry>
     <title>Paxos-wiki</title>
@@ -11510,8 +11571,8 @@ String servletPath = request.getServletPath(); //   /testRequest
 <h3 id="阶段2"><a href="#阶段2" class="headerlink" title="阶段2"></a>阶段2</h3><h4 id="阶段2a：Accept"><a href="#阶段2a：Accept" class="headerlink" title="阶段2a：Accept"></a>阶段2a：<em>Accept</em></h4><p>如果 Proposer 收到了来自法定人数的 Acceptor 的 <em>Promise</em>消息，它需要给这个提案设定一个值 v。 如果任何 Acceptor 以前接受过任何提案，那么它们会将提案内容发送给 Proposer，Proposer 现在必须将其提案的内容 v 设置为 Acceptor 报告的最高的提案编号关联的内容 z。 如果到目前为止没有任何一个 Acceptor 接受过提案，那么 Proposer 可以选择它最初想要的提案内容 x。</p>
 <p>Proposer 发送一个带有提案内容 v 和提案编号 n 的 <em>Accept</em> 消息（n，v）给具有法定人数的 Acceptor（n 和之前发送给 Acceptor 的 <em>Prepare</em> 消息中的提案编号是相同的）。所以，这个 <em>Accept</em> 消息又可以表示为 （n，v&#x3D;z），在之前没有 Acceptor 接收值的情况下，（n，v&#x3D;x）。</p>
 <p>这个 <em>Accept</em> 消息应该被翻译为 “请求”，表示为“请接受该提案！”。</p>
-<h4 id="阶段2b：Accepted"><a href="#阶段2b：Accepted" class="headerlink" title="阶段2b：Accepted"></a>阶段2b：<em>Accepted</em></h4><p>如果一个 Acceptor 接收了一个来自 Proposer 的 <em>Accept</em> 消息（n，v），当且仅当它尚未对提案编号大于 n 的提案作出承诺时（在 Paxos 协议的 阶段1b 中），它才必须接受该提案。</p>
-<p>如果 Acceptor 尚未对提案编号大于 n 的天做出承诺时（在 Paxos 协议的 阶段1b 中），则应将（刚收到的 <em>Accept</em> 消息）的提案内容 v 注册为（协议的）共识，并发送一个 <em>Accepted</em> 消息给 Proposer 和每个 Learner（通常是 Proposer 本身）<br>否则，它将忽略这个 <em>Accept</em> 消息或请求。</p>
+<h4 id="阶段2b：Accepted"><a href="#阶段2b：Accepted" class="headerlink" title="阶段2b：Accepted"></a>阶段2b：<em>Accepted</em></h4><p>如果一个 Acceptor 接收了一个来自 Proposer 的 <em>Accept</em> 消息（n，v），当且仅当它尚未对提案编号大于 n 的提案作出承诺时（在 Paxos 协议的 阶段1b 中），它才必须接受该提案。（<strong>也就是说在这个阶段中，如果在还未对上一个提案做出接受时，另一个proposer发起一个提案编号大于n的新提案（在接受编号为n的提案号之前），Acceptor就会去讨论新的提案，放弃提案编号小的提案。</strong>）</p>
+<p>如果 Acceptor 尚未对提案编号大于 n 的提案做出承诺时（在 Paxos 协议的 阶段1b 中），则应将（刚收到的 <em>Accept</em> 消息）的提案内容 v 注册为（协议的）共识，并发送一个 <em>Accepted</em> 消息给 Proposer 和每个 Learner（通常是 Proposer 本身）<br>否则，它将忽略这个 <em>Accept</em> 消息或请求。</p>
 <p>注意，一个 Acceptor 可以接收多个提案。所以可能会发生以下情况：当另一个 Proposer 不知道要确定的新的提案内容时，使用一个更高的提案编号 n 来开始一个新的轮次。在这种情况下，即使 Acceptor 在早先接收了另外一个提案编号，Acceptor 仍然会承诺并且稍后接收新的（提案编号更大的）提案。在某些故障情况下，这些提案甚至可能会有不同的内容。但是 Paxos 协议会保证 Acceptor 最终会在一个值中达成共识。</p>
 <h3 id="轮次失败的情况"><a href="#轮次失败的情况" class="headerlink" title="轮次失败的情况"></a>轮次失败的情况</h3><p>当多个 Proposer 发送冲突的 <em>Prepare</em> 消息，或者 Proposer 未能接收到法定人数的承诺或接收回复，该轮次会失败。在这些情况下，会开始另一个带有更高的提案编号的轮次。</p>
 <h3 id="Paxos-能应用在-Leader-选举中"><a href="#Paxos-能应用在-Leader-选举中" class="headerlink" title="Paxos 能应用在 Leader 选举中"></a>Paxos 能应用在 Leader 选举中</h3><p>请注意，当 Acceptor 接收了一个请求，他也会承认 Proposer 的领导。因此，Paxos 也能够用来选举一个节点集群的 Leader。</p>
@@ -11528,7 +11589,7 @@ String servletPath = request.getServletPath(); //   /testRequest
 <h4 id="冗余-Learner-的崩溃-Basic-Paxos"><a href="#冗余-Learner-的崩溃-Basic-Paxos" class="headerlink" title="冗余 Learner 的崩溃 Basic Paxos"></a>冗余 Learner 的崩溃 Basic Paxos</h4><p>在这种情况下，冗余的 Learner 中的其中一个崩溃了，但是 Basic Paxos 协议仍然能成功</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Client Proposer         Acceptor     Learner</span><br><span class="line">   |         |          |  |  |       |  |</span><br><span class="line">   X--------&gt;|          |  |  |       |  |  Request</span><br><span class="line">   |         X---------&gt;|-&gt;|-&gt;|       |  |  Prepare(1)</span><br><span class="line">   |         |&lt;---------X--X--X       |  |  Promise(1,&#123;Va,Vb,Vc&#125;)</span><br><span class="line">   |         X---------&gt;|-&gt;|-&gt;|       |  |  Accept!(1,V)</span><br><span class="line">   |         |&lt;---------X--X--X------&gt;|-&gt;|  Accepted(1,V)</span><br><span class="line">   |         |          |  |  |       |  !  !! FAIL !!</span><br><span class="line">   |&lt;---------------------------------X     Response</span><br><span class="line">   |         |          |  |  |       |</span><br></pre></td></tr></table></figure>
 
-<h4 id="一个-Proposer-崩溃的-Basic-Paxos"><a href="#一个-Proposer-崩溃的-Basic-Paxos" class="headerlink" title="一个 Proposer 崩溃的 Basic Paxos"></a>一个 Proposer 崩溃的 Basic Paxos</h4><p>在这种情况下，一个 Proposer 发送一个带有内容的消息后，在达成共识之前崩溃了。特殊地，它在发送 <em>Accept</em>* 消息的过程中崩溃，只有法定人数的一个 Acceptor 收到了提案。此时，有一个新的 Proposer Leader 被选举出来（图中没有说明选举细节）。注意，在这种情况下有两轮（轮次从上往下进行）。</p>
+<h4 id="一个-Proposer-崩溃的-Basic-Paxos"><a href="#一个-Proposer-崩溃的-Basic-Paxos" class="headerlink" title="一个 Proposer 崩溃的 Basic Paxos"></a>一个 Proposer 崩溃的 Basic Paxos</h4><p>在这种情况下，一个 Proposer 发送一个带有内容的消息后，在达成共识之前崩溃了。特殊地，它在发送 <strong>Accept</strong> 消息的过程中崩溃，只有法定人数的一个 Acceptor 收到了提案。此时，有一个新的 Proposer Leader 被选举出来（图中没有说明选举细节）。注意，在这种情况下有两轮（轮次从上往下进行）。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Client  Proposer        Acceptor     Learner</span><br><span class="line">   |      |             |  |  |       |  |</span><br><span class="line">   X-----&gt;|             |  |  |       |  |  Request</span><br><span class="line">   |      X------------&gt;|-&gt;|-&gt;|       |  |  Prepare(1)</span><br><span class="line">   |      |&lt;------------X--X--X       |  |  Promise(1,&#123;Va, Vb, Vc&#125;)</span><br><span class="line">   |      |             |  |  |       |  |</span><br><span class="line">   |      |             |  |  |       |  |  !! Leader fails during broadcast !!</span><br><span class="line">   |      X------------&gt;|  |  |       |  |  Accept!(1,V)</span><br><span class="line">   |      !             |  |  |       |  |</span><br><span class="line">   |         |          |  |  |       |  |  !! NEW LEADER !!</span><br><span class="line">   |         X---------&gt;|-&gt;|-&gt;|       |  |  Prepare(2)</span><br><span class="line">   |         |&lt;---------X--X--X       |  |  Promise(2,&#123;V, null, null&#125;)</span><br><span class="line">   |         X---------&gt;|-&gt;|-&gt;|       |  |  Accept!(2,V)</span><br><span class="line">   |         |&lt;---------X--X--X------&gt;|-&gt;|  Accepted(2,V)</span><br><span class="line">   |&lt;---------------------------------X--X  Response</span><br><span class="line">   |         |          |  |  |       |  |</span><br></pre></td></tr></table></figure>
 
 <h4 id="多个-Proposer-冲突的-Basic-Paxos"><a href="#多个-Proposer-冲突的-Basic-Paxos" class="headerlink" title="多个 Proposer 冲突的 Basic Paxos"></a>多个 Proposer 冲突的 Basic Paxos</h4><p>如果有多个 Proposer 认为自身是 Leader 的时候，这种情况是最复杂的。举个例子，当前的 Leader 可能崩溃后恢复，但是此时其他的 Proposer 已经选举了新 Leader。而恢复后的 Leader 仍不知道选举了新 leader，而试图开启一个和当前的 Leader 冲突的轮次。在下图中，展示了 4 种未成功的轮次，但其实有可能一直失败下去。</p>
@@ -11553,6 +11614,40 @@ String servletPath = request.getServletPath(); //   /testRequest
 <h2 id="译者注"><a href="#译者注" class="headerlink" title="译者注"></a>译者注</h2><h3 id="拜占庭将军问题"><a href="#拜占庭将军问题" class="headerlink" title="拜占庭将军问题"></a>拜占庭将军问题</h3><p>假设有9位将军投票，其中1名叛徒。8名忠诚的将军中出现了4人投进攻，4人投撤离的情况。这时候叛徒可能故意给4名投进攻的将领送信表示投票进攻，而给4名投撤离的将领送信表示投撤离。这样一来在4名投进攻的将领看来，投票结果是5人投进攻，从而发起进攻；而在4名投撤离的将军看来则是5人投撤离。这样各支军队的一致协同就遭到了破坏。</p>
 <p>由于将军之间需要通过信使通讯，叛变将军可能通过伪造信件来以其他将军的身份发送假投票。而即使在保证所有将军忠诚的情况下，也不能排除信使被敌人截杀，甚至被敌人间谍替换等情况。因此很难通过保证人员可靠性及通讯可靠性来解决问题。</p>
 <p>参考：<a href="https://zh.wikipedia.org/wiki/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98">拜占庭将军问题</a></p>
+]]></content>
+      <categories>
+        <category>分布式</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CAP理论</title>
+    <url>/2022/07/22/CAP%E7%90%86%E8%AE%BA/</url>
+    <content><![CDATA[<h1 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h1><p>CAP理论告诉我们，一个分布式系统不可能同时满足以下三种</p>
+<p>⚫ 一致性（C:Consistency） </p>
+<p>⚫ 可用性（A:Available） </p>
+<p>⚫ 分区容错性（P:Partition Tolerance）</p>
+<p>这三个基本需求，最多只能同时满足其中的两项，因为P是必须的，因此往往选择就在CP或者AP中。 </p>
+<ol>
+<li><p><strong>一致性</strong>（<strong>C:Consistency</strong>）</p>
+<p>在分布式环境中，一致性是指数据在多个副本之间是否能够保持数据一致的特性。在一致性的需求下，当一个系统在数据一致的状态下执行更新操作后，应该保证系统的数据仍然处于一致的状态。 </p>
+</li>
+<li><p><strong>可用性</strong>（<strong>A:Available</strong>）</p>
+<p>可用性是指系统提供的服务必须一直处于可用的状态，对于用户的每一个操作请求总是能够在有限的时间内返回结果。 </p>
+</li>
+<li><p><strong>分区容错性</strong>（<strong>P:Partition Tolerance</strong>）</p>
+<p>分布式系统在遇到任何网络分区故障的时候，仍然需要能够保证对外提供满足一致性和可用性的服务，除非是整个网络环境都发生了故障。</p>
+</li>
+</ol>
+<p><strong>ZooKeeper保证的是CP</strong></p>
+<ol>
+<li><p><strong><code>ZooKeeper</code>不能保证每次服务请求的可用性。</strong>（注：在极端环境下，ZooKeeper可能会丢弃一些请求，消费者程序需要重新请求才能获得结果）。所以说，ZooKeeper不能100%保证服务可用性。 </p>
+</li>
+<li><p><strong>进行Leader选举时集群都是不可用。</strong></p>
+</li>
+</ol>
 ]]></content>
       <categories>
         <category>分布式</category>
