@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://devildyw.github.io/2022/07/23/Spring%20Cloud-Consul/</loc>
+    
+    <lastmod>2022-07-23T16:28:27.558Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://devildyw.github.io/2022/07/22/CAP%E7%90%86%E8%AE%BA/</loc>
+    
+    <lastmod>2022-07-23T16:26:28.583Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://devildyw.github.io/2022/07/14/Spring%20Cloud-Zookeeper/</loc>
     
     <lastmod>2022-07-23T11:50:00.449Z</lastmod>
@@ -12,13 +26,6 @@
     <loc>https://devildyw.github.io/2022/07/21/Zookeeper%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/</loc>
     
     <lastmod>2022-07-22T05:58:28.906Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://devildyw.github.io/2022/07/22/CAP%E7%90%86%E8%AE%BA/</loc>
-    
-    <lastmod>2022-07-22T05:58:00.084Z</lastmod>
     
   </url>
   
