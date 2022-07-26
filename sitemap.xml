@@ -2,6 +2,41 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://devildyw.github.io/2022/07/26/Spring%20Cloud-Hystrix/</loc>
+    
+    <lastmod>2022-07-26T11:07:39.404Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://devildyw.github.io/2022/07/24/Spring%20Cloud-OpenFeign/</loc>
+    
+    <lastmod>2022-07-26T11:05:46.465Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://devildyw.github.io/2022/07/24/Spring%20Cloud-Ribbon/</loc>
+    
+    <lastmod>2022-07-24T15:35:23.127Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://devildyw.github.io/2022/07/12/Spring%20Cloud/</loc>
+    
+    <lastmod>2022-07-24T09:32:24.935Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://devildyw.github.io/2022/04/16/restTemplate/</loc>
+    
+    <lastmod>2022-07-24T07:30:47.289Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://devildyw.github.io/2022/07/23/Spring%20Cloud-Consul/</loc>
     
     <lastmod>2022-07-23T16:28:27.558Z</lastmod>
@@ -61,13 +96,6 @@
     <loc>https://devildyw.github.io/2022/05/15/Docker/</loc>
     
     <lastmod>2022-07-15T11:35:20.890Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://devildyw.github.io/2022/07/12/Spring%20Cloud/</loc>
-    
-    <lastmod>2022-07-14T09:43:35.554Z</lastmod>
     
   </url>
   
@@ -222,13 +250,6 @@
     <loc>https://devildyw.github.io/2022/04/17/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
     
     <lastmod>2022-04-17T09:30:56.095Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://devildyw.github.io/2022/04/16/restTemplate/</loc>
-    
-    <lastmod>2022-04-16T09:04:44.307Z</lastmod>
     
   </url>
   
