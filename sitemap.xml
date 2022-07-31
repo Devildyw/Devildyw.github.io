@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://devildyw.github.io/myself/index.html</loc>
+    
+    <lastmod>2022-07-31T04:48:05.691Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://devildyw.github.io/2022/07/29/Spring%20Cloud-Eureka/</loc>
     
     <lastmod>2022-07-29T15:49:21.610Z</lastmod>
@@ -145,13 +152,6 @@
     <loc>https://devildyw.github.io/2022/07/14/Eureka%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/</loc>
     
     <lastmod>2022-07-14T05:46:32.324Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://devildyw.github.io/myself/index.html</loc>
-    
-    <lastmod>2022-07-12T08:07:07.449Z</lastmod>
     
   </url>
   
