@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://devildyw.github.io/2022/07/29/RabbitMQ/</loc>
+    
+    <lastmod>2022-08-01T12:14:42.535Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://devildyw.github.io/myself/index.html</loc>
     
     <lastmod>2022-07-31T04:48:05.691Z</lastmod>
@@ -82,13 +89,6 @@
     <loc>https://devildyw.github.io/2022/02/28/RocketMQ/</loc>
     
     <lastmod>2022-07-29T15:44:24.508Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://devildyw.github.io/2022/07/29/RabbitMQ/</loc>
-    
-    <lastmod>2022-07-29T15:44:10.541Z</lastmod>
     
   </url>
   
