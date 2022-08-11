@@ -1,0 +1,989 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Spring Cloud-Stream | Devil的个人博客</title><meta name="keywords" content="Spring Cloud"><meta name="author" content="Devil"><meta name="copyright" content="Devil"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Spring Cloud Stream引言为什么要引入Spring Cloud Stream？ 如今市场上有着4大流行的 MQ （消息中间件）如：ActiveMQ、RabbitMQ、RocketMQ、Kafka。在不同系统中可能使用的消息中间件不同，这就需要程序员对每种的消息中间件去掌握，如果每一种消息中间件都去掌握的话，是一件费时又费力的事情，而且还要涉及到消息中间件的切换，维护，和开发。 有没">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Cloud-Stream">
+<meta property="og:url" content="https://devildyw.github.io/2022/08/10/Spring%20Cloud-Stream/index.html">
+<meta property="og:site_name" content="Devil的个人博客">
+<meta property="og:description" content="Spring Cloud Stream引言为什么要引入Spring Cloud Stream？ 如今市场上有着4大流行的 MQ （消息中间件）如：ActiveMQ、RabbitMQ、RocketMQ、Kafka。在不同系统中可能使用的消息中间件不同，这就需要程序员对每种的消息中间件去掌握，如果每一种消息中间件都去掌握的话，是一件费时又费力的事情，而且还要涉及到消息中间件的切换，维护，和开发。 有没">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-3zkmod.jpg">
+<meta property="article:published_time" content="2022-08-10T09:30:35.000Z">
+<meta property="article:modified_time" content="2022-08-11T07:26:23.490Z">
+<meta property="article:author" content="Devil">
+<meta property="article:tag" content="Spring Cloud">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-3zkmod.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2022/08/10/Spring%20Cloud-Stream/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Spring Cloud-Stream',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-08-11 15:26:23'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/dyw.css"><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">63</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">25</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-3zkmod.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Spring Cloud-Stream</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-08-10T09:30:35.000Z" title="发表于 2022-08-10 17:30:35">2022-08-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-08-11T07:26:23.490Z" title="更新于 2022-08-11 15:26:23">2022-08-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8/">消息驱动</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Spring Cloud-Stream"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Spring-Cloud-Stream"><a href="#Spring-Cloud-Stream" class="headerlink" title="Spring Cloud Stream"></a>Spring Cloud Stream</h1><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>为什么要引入Spring Cloud Stream？</p>
+<p>如今市场上有着4大流行的 <code>MQ</code> （消息中间件）如：<code>ActiveMQ</code>、<code>RabbitMQ</code>、<code>RocketMQ</code>、<code>Kafka</code>。在不同系统中可能使用的消息中间件不同，这就需要程序员对每种的消息中间件去掌握，如果每一种消息中间件都去掌握的话，是一件费时又费力的事情，而且还要涉及到消息中间件的切换，维护，和开发。</p>
+<p>有没有一种新的技术诞生？</p>
+<p>让我们不再关注具体 <code>MQ</code> 的细节，我们只需要用一种适配绑定的方式，自动的给我们在各种 <code>MQ</code> 内切换。（类似于JDBC）</p>
+<p><strong>Spring Cloud Stream 响应诞生</strong>，它是<strong>屏蔽底层消息中间件的差异，降低切换成本，统一消息的编程模型。</strong></p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>官方定义 Spring Cloud Stream 是一个构建消息驱动微服务的框架。</p>
+<p>应用程序通过 inputs 或者 outputs 来与 Spring Cloud Stream 中 binder 对象交互。</p>
+<p>通过我们配置来binding（绑定），而Spring Cloud Stream 的 binder 对象负责于消息中间件交互。</p>
+<p>所以，我们只需要搞清楚如何于 Spring Cloud Stream 交互就可以方便使用消息驱动方式。</p>
+<p>通过使用 Spring Integration来连接消息代理中间件以实现消息事件驱动。</p>
+<p>Spring Cloud Stream 为一些供应商的消息中间件产品提供了个性化的自动化配置实现，引用了<strong>发布-订阅、消费组、分区</strong>的三个概念</p>
+<p><strong>目前官方只支持 RabbitMQ、Kafka</strong></p>
+<blockquote>
+<p>Spring Cloud Stream 官方地址：<a target="_blank" rel="noopener" href="https://spring.io/projects/spring-cloud-stream#overview">Spring Cloud Stream-Spring.io</a></p>
+<p>Spring Cloud Stream 中文指导手册：<a target="_blank" rel="noopener" href="https://m.wang1314.com/doc/webapp/topic/20971999.html">Spring Cloud Stream 中文指导手册</a></p>
+</blockquote>
+<h2 id="设计思想"><a href="#设计思想" class="headerlink" title="设计思想"></a>设计思想</h2><h3 id="标准-MQ"><a href="#标准-MQ" class="headerlink" title="标准 MQ"></a>标准 <code>MQ</code></h3><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208101804867.png" alt="image-20220810180406037"></p>
+<p>标准的 <code>MQ</code> 中 生产者&#x2F;消费者之间靠Message（消息）媒介传递信息内容</p>
+<p>消息必须走特定的通道–消息通道<code>MessageChannel</code></p>
+<p>消息通道里的消息由<code>MessageChannel</code>的子接口<code>SubscribableChannel</code>转发，由<code>MessageHandler</code>消息处理器订阅消费</p>
+<h3 id="为什么使用Spring-Cloud-Stream"><a href="#为什么使用Spring-Cloud-Stream" class="headerlink" title="为什么使用Spring Cloud Stream?"></a>为什么使用Spring Cloud Stream?</h3><p>假如说我们用到了<code>RabbitMQ</code>和<code>Kafka</code>，由于这两个消息中间件的架构上的不同，像<code>RabbitMQ</code>由exchange，<code>kafka</code>由Topic和Partitions分区。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208101838002.png" alt="image-20220810183809938"></p>
+<p>这些中间件的差异性导致我们实际项目开发给我们造成了一定的困扰，我们如果用两个消息队列的其中一种，后面的业务需求，我们向往另外一种消息队列进行迁移，这时无疑就是一个灾难性的，<strong>一大堆东西都要重新推倒重新做</strong>，因为它更我们的系统耦合了，这时候Spring Cloud Stream给我们提供了一种解耦合的方式。</p>
+<h4 id="为什么Spring-Cloud-Stream可以统一底层差异"><a href="#为什么Spring-Cloud-Stream可以统一底层差异" class="headerlink" title="为什么Spring Cloud Stream可以统一底层差异"></a>为什么Spring Cloud Stream可以统一底层差异</h4><p>在没有绑定器这个概念的请款下，我们的Spring Boot应用要直接与消息中间件进行信息交互的时候，由于各消息中间件构建的初衷不同，他们的实现细节上会有较大的差异性</p>
+<p>通过定义绑定器作为中间层，完美地实现了<strong>应用程序与消息中间件细节之间的隔离</strong>。</p>
+<p><strong>通过定义绑定器Binder作为中间层，实现了应用程序与消息中间件细节之间的隔离。</strong></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208101849568.png" alt="image-20220810184906483"></p>
+<h3 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h3><p>在没有绑定器这个概念的情况下，完美的Spring Boot应用要直接与消息中间件进行消息交互的时候，由于各个消息中间件构建的初衷哦那个不同，它们的实现细节上会有较大的差异性。通过定义绑定器作为中间层，完美地实现了<strong>应用程序与消息中间件细节之间的隔离</strong>。Stream对消息中间件的进一步封装，可以做到代码层面对中间件的无感知，甚至于动态的动态的切换中间件（<code>rabbitMQ</code>切换为<code>Kafka</code>），使得微服务开发的高度解耦，服务可以关注更多自己的业务流程。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208101938238.png" alt="img"></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208101937891.gif" alt="img"></p>
+<p><strong>通过定义绑定器Binder作为中间层，实现了应用程序与消息中间件细节之间的隔离。</strong></p>
+<blockquote>
+<p><strong>INPUT对应于消费者</strong></p>
+<p><strong>OUTPUT对应于生产者</strong></p>
+</blockquote>
+<p><strong>Spring Cloud Stream中的消息通信遵循了发布-订阅模式，使用Topic（主题）进行广播</strong>，主题这个概念在Kafka中就是Topic，在<code>RabbitMQ</code>中就是Exchange（交换机）</p>
+<h2 id="Spring-Cloud-Stream-标准流程"><a href="#Spring-Cloud-Stream-标准流程" class="headerlink" title="Spring Cloud Stream 标准流程"></a>Spring Cloud Stream 标准流程</h2><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208101907035.png" alt="image-20220810190738980"></p>
+<p>上述中展示了4种Spring Cloud Stream的组件，分别是<strong>Binder</strong>、<strong>Channel</strong>、<strong>Source</strong>和<strong>Sink</strong>。</p>
+<p><strong>作用</strong></p>
+<p><strong>Binder</strong>：很方便的连接中间件，屏蔽差异</p>
+<p><strong>Channel</strong>：通道，是队列Queue的一种抽象，在消息通讯系统中就是实现存储和转发的媒介，通过对Channel对队列进行配置</p>
+<p><strong>Source和Sink</strong>：简单的可理解为参照对象是Spring Cloud Stream自身，从Stream发布消息就是输出，接受消息就是输入</p>
+<h2 id="RabbitMQ-Binder-配置"><a href="#RabbitMQ-Binder-配置" class="headerlink" title="RabbitMQ Binder 配置"></a><code>RabbitMQ</code> Binder 配置</h2><h3 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h3><p>要使用 <code>RabbitMQ</code> binder，您可以使用以下 Maven 坐标将其添加到 Spring Cloud Stream 应用程序中：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-stream-rabbit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>或者，您可以使用 Spring Cloud Stream RabbitMQ Starter，如下所示：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-stream-rabbit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="配置选项"><a href="#配置选项" class="headerlink" title="配置选项"></a>配置选项</h3><h4 id="RabbitMQ-Binder属性"><a href="#RabbitMQ-Binder属性" class="headerlink" title="RabbitMQ Binder属性"></a>RabbitMQ Binder属性</h4><p>默认情况下，<code>RabbitMQ</code> binder 使用 Spring Boot 的<code>ConnectionFactory</code>. 因此，它支持 <code>RabbitMQ</code> 的所有 Spring Boot 配置选项（<a href="https://devildyw.github.io/2022/07/29/RabbitMQ/">RabbitMQ</a>）。<code>RabbitMQ</code> 配置选项使用<code>spring.rabbitmq</code>前缀。</p>
+<p>除了 Spring Boot 选项之外，<code>RabbitMQ</code> binder 还支持以下属性：</p>
+<table>
+<thead>
+<tr>
+<th align="center">属性</th>
+<th align="center">说明</th>
+<th align="center">默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><em>spring.cloud.stream.rabbit.binder.adminAddresses</em></td>
+<td align="center"></td>
+<td align="center">空</td>
+</tr>
+<tr>
+<td align="center"><em>spring.cloud.stream.rabbit.binder.nodes</em></td>
+<td align="center"></td>
+<td align="center">空</td>
+</tr>
+<tr>
+<td align="center"><em>spring.cloud.stream.rabbit.binder.compressionLevel</em></td>
+<td align="center">压缩绑定的压缩级别。</td>
+<td align="center">1(BEST_LEVEL)</td>
+</tr>
+<tr>
+<td align="center"><em>spring.cloud.stream.binder.connection-name-prefix</em></td>
+<td align="center">连接名称前缀，用于命名此绑定器创建的连接。名称是此前缀后跟<code>#n</code>，<code>n</code>每次打开新连接时都会递增。</td>
+<td align="center">无（Spring AMQP 默认值）</td>
+</tr>
+</tbody></table>
+<h4 id="RabbitMQ-消费者属性"><a href="#RabbitMQ-消费者属性" class="headerlink" title="RabbitMQ 消费者属性"></a>RabbitMQ 消费者属性</h4><p>以下属性仅适用于 Rabbit 消费者，并且必须以 <code>spring.cloud.stream.rabbit.bindings.&lt;channelName&gt;.consumer. </code>为前缀</p>
+<p>但是，如果需要将同一组属性应用于大多数绑定，为避免重复，Spring Cloud Stream 支持为所有通道设置值，格式为<code>spring.cloud.stream.rabbit.default.&lt;property&gt;=&lt;value&gt;</code>.</p>
+<p>另外，请记住，<strong>绑定特定属性将在默认情况下覆盖为其配置的全局属性</strong>。</p>
+<table>
+<thead>
+<tr>
+<th align="center"><strong>属性</strong></th>
+<th align="center"><strong>说明</strong></th>
+<th align="center"><strong>默认值</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><em>acknowledgeMode</em></td>
+<td align="center">消费者端的<code>ACK</code>模式</td>
+<td align="center"><code>AUTO</code></td>
+</tr>
+<tr>
+<td align="center"><em>anonymousGroupPrefix</em></td>
+<td align="center">当绑定没有<code>group</code>属性时，一个匿名且自动删除的队列被绑定到目标交换机上，此类队列会由默认命名策略生成一个名为<code>anonymous.&lt;base64 representation of a UUID&gt;</code>的属性值。设置此属性可将前缀更改为默认值以外的值。</td>
+<td align="center"><code>anonymous.</code></td>
+</tr>
+<tr>
+<td align="center"><em>autoBindDlq</em></td>
+<td align="center">是否自动声明 DLQ（死信队列） 并将其绑定到 binder DLX（死信交换机）。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>bindingRoutingKey</em></td>
+<td align="center">将队列绑定到交换器的路由键（如果<code>bindQueue</code>是<code>true</code>）。可以是多个键 - 请参阅<code>bindingRoutingKeyDelimiter</code>。对于分区目标，<code>-&lt;instanceIndex&gt;</code>附加到每个键。</td>
+<td align="center"><code>#</code></td>
+</tr>
+<tr>
+<td align="center"><em>bindingRoutingKeyDelimiter</em></td>
+<td align="center">当该属性不为空时，<code>bindingRoutingKey</code> 被认为是由该值分隔的键列表；通常使用逗号。</td>
+<td align="center"><code>null</code></td>
+</tr>
+<tr>
+<td align="center"><em>bindQueue</em></td>
+<td align="center">是否声明队列并将其绑定到目标交换机。如果您已经设置了自己的基础架构并且之前已经创建并绑定了队列，请将其设置为<code>false</code>。</td>
+<td align="center"><code>true</code></td>
+</tr>
+<tr>
+<td align="center"><em>consumerTagPrefix</em></td>
+<td align="center">用于创建消费者标签；将添加每个消费者创建的<code>#n</code>增量<code>n</code>。 示例：<code>$&#123;spring.application.name&#125;-$&#123;spring.cloud.stream.bindings.input.group&#125;-$&#123;spring.cloud.stream.instance-index&#125;</code>。</td>
+<td align="center">无 - 代理将生成随机消费者标签</td>
+</tr>
+<tr>
+<td align="center"><em>containerType</em></td>
+<td align="center">选择要使用的侦听器容器的类型。</td>
+<td align="center"><code>simple</code></td>
+</tr>
+<tr>
+<td align="center"><em>deadLetterQueueName</em></td>
+<td align="center">DLQ（死信队列） 的名称</td>
+<td align="center"><code>prefix+destination.dlq</code></td>
+</tr>
+<tr>
+<td align="center"><em>deadLetterExchange</em></td>
+<td align="center">分配给队列的 DLX（死信交换机）。仅当<code>autoBindDlq</code>是<code>true</code>时才相关。</td>
+<td align="center"><code>prefix+DLX</code></td>
+</tr>
+<tr>
+<td align="center"><em>deadLetterExchangeType</em></td>
+<td align="center">要分配给队列的 DLX 的类型。仅当<code>autoBindDlq</code>是<code>true</code>时才相关。</td>
+<td align="center"><code>direct</code></td>
+</tr>
+<tr>
+<td align="center"><em>deadLetterRoutingKey</em></td>
+<td align="center">绑定交换机的死信路由键，仅当<code>autoBindDlq</code>为<code>true</code>才相关。</td>
+<td align="center"><code>destination</code></td>
+</tr>
+<tr>
+<td align="center"><em>declareDlx</em></td>
+<td align="center">是否为指定<code>destination</code>声明 DLX，仅当<code>autoBindDlq</code>是<code>true</code>时才相关。如果你有与配置的 DLX 请设置为 <code>false</code></td>
+<td align="center"><code>true</code></td>
+</tr>
+<tr>
+<td align="center"><em>declareExchange</em></td>
+<td align="center">是否为指定<code>destination</code>声明交换机</td>
+<td align="center"><code>true</code></td>
+</tr>
+<tr>
+<td align="center"><em>delayedExchange</em></td>
+<td align="center">是否为指定<code>destination</code>声明<code>Delayed Message Exchagne</code>（延迟交换机）。需要在broker上安装<code>Delayed Message Exchagne</code> 插件。将参数 <code>exchageType</code> 设置为 <code>x-delayed-type</code>。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>dlqBindingArguments</em></td>
+<td align="center">将 dlq 绑定到死信交换时应用的参数；用于<code>headers</code> <code>deadLetterExchangeType</code>指定要匹配的标头。例如<code>…dlqBindingArguments.x-match=any</code>，<code>…dlqBindingArguments.someHeader=someValue</code>。</td>
+<td align="center">空</td>
+</tr>
+<tr>
+<td align="center"><em>dlqDeadLetterExchange</em></td>
+<td align="center">如果声明了 DLQ，则分配给该队列一个 DLX。</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center"><em>dlqDeadLetterRoutingKey</em></td>
+<td align="center">如果一个 DLQ 被声明了，会分配给该队列一个死信路由key</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center"><em>dlqExpires</em></td>
+<td align="center">一个死信队列超过多长时间后被删除。</td>
+<td align="center">不过期</td>
+</tr>
+<tr>
+<td align="center"><em>dlqLazy</em></td>
+<td align="center">声明一个带有<code>x-queue-mode=lazy</code>参数的死信队列（即 <strong>惰性死信队列</strong>），考虑使用策略而不是此设置，因为使用策略允许在不删除队列的情况下更改设置。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>dlqMaxLength</em></td>
+<td align="center">死信队列中的可存储最大消息数。</td>
+<td align="center">不限制</td>
+</tr>
+<tr>
+<td align="center"><em>dlqMaxLengthBytes</em></td>
+<td align="center">死信队列中所有消息的最大总字节数和。</td>
+<td align="center">不限制</td>
+</tr>
+<tr>
+<td align="center"><em>dlqMaxPriority</em></td>
+<td align="center">死信队列中消息的最大优先级</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center"><em>dlqOverflowBehavior</em></td>
+<td align="center">超过<code>dlqMaxLength</code>或<code>dlqMaxLengthBytes</code>时采取的行动；由<code>drop-head</code>和<code>reject-publish</code>两种</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center"><em>dlqQuorum.deliveryLimit</em></td>
+<td align="center">当<code>quorum.enabled=true</code>时，设置投递限制，超过该限制后，邮件将被丢弃或死信。</td>
+<td align="center">无  - 将应用代理默认值。</td>
+</tr>
+<tr>
+<td align="center"><em>dlqQuorum.enabled</em></td>
+<td align="center">如果为 true，则创建仲裁死信队列而不是普通队列。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>dlqQuorum.initialQuorumSize</em></td>
+<td align="center">当<code>quorum.enabled=true</code>时，设置初始仲裁队列大小。</td>
+<td align="center">无 - 将应用代理默认值。</td>
+</tr>
+<tr>
+<td align="center"><em>dlqSingleActiveConsumer</em></td>
+<td align="center">设置为 true 将<code>x-single-active-consumer</code>队列属性设置为 true，即<a target="_blank" rel="noopener" href="https://www.cloudamqp.com/blog/rabbitmq-3-8-feature-focus-single-active-consumer.html">单一活动消费者</a>。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>dlqTtl</em></td>
+<td align="center">声明时应用于死信队列的默认生存时间（以毫秒为单位）。</td>
+<td align="center">不限制</td>
+</tr>
+<tr>
+<td align="center"><em>durableSubscription</em></td>
+<td align="center">订阅是否应该是持久的。仅当<code>group</code>也设置时才有效。</td>
+<td align="center"><code>true</code></td>
+</tr>
+<tr>
+<td align="center"><em>exchangeAutoDelete</em></td>
+<td align="center">如果<code>declareExchange</code>为<code>true</code>，则交换机会被自动删除（即在最后一个队列被删除后删除）。</td>
+<td align="center"><code>true</code></td>
+</tr>
+<tr>
+<td align="center"><em>exchangeDurable</em></td>
+<td align="center">如果<code>declareExchange</code>为<code>true</code>，则交换机是持久的（即，它在broker重启后仍然存在）。</td>
+<td align="center"><code>true</code></td>
+</tr>
+<tr>
+<td align="center"><em>exchangeType</em></td>
+<td align="center">交换类型：<code>direct</code>, <code>fanout</code>,<code>headers</code>或<code>topic</code>用于非分区<code>destination</code>和<code>direct</code>, 标头或<code>topic</code>用于分区<code>destination</code>。</td>
+<td align="center"><code>topic</code></td>
+</tr>
+<tr>
+<td align="center"><em>exclusive</em></td>
+<td align="center">是否创建单一活动的消费者，如果该属性值为<code>true</code>，则最大消费者数为1。多个消费者同时监听同一个队列，同一时间只能有一个消费者去消费消息，其他的消费者都处于等待状态，当该消费者失败或者关闭时，另一个消费者才将成为“活跃”消费者并恢复消费。（原理参阅请参阅<code>recoveryInterval</code>，它控制备用实例尝试使用的频率。）在使用 <code>RabbitMQ 3.8</code> 或更高版本时考虑使用<code>singleActiveConsumer</code>。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>expires</em></td>
+<td align="center">队列未使用被删除的时间（存活时间）</td>
+<td align="center">不过期</td>
+</tr>
+<tr>
+<td align="center"><em>failedDeclarationRetryInterval</em></td>
+<td align="center">如果队列丢失，重试消费的时间间隔</td>
+<td align="center">5000</td>
+</tr>
+<tr>
+<td align="center"><em>frameMaxHeadroom</em></td>
+<td align="center">将堆栈跟踪添加到 DLQ 消息标头时为其他标头保留的字节数。所有标头必须适合<code>frame_max</code>代理上配置的大小。堆栈跟踪可能很大；如果大小加上此属性超过<code>frame_max</code>，则堆栈跟踪将被截断。将写入 WARN 日志；考虑<code>frame_max</code>通过捕获异常并抛出具有较小堆栈跟踪的异常来增加或减少堆栈跟踪。</td>
+<td align="center">20000</td>
+</tr>
+<tr>
+<td align="center"><em>headerPatterns</em></td>
+<td align="center">标头模式</td>
+<td align="center">&#96;&#96;[‘*’]<code>所有标题</code></td>
+</tr>
+<tr>
+<td align="center"><em>lazy</em></td>
+<td align="center">是否用参数声明队列<code>x-queue-mode=lazy</code>，惰性队列，考虑使用策略而不是此设置，因为使用策略允许在不删除队列的情况下更改设置。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>maxConcurrency</em></td>
+<td align="center">最大消费者数。<code>containerType</code>是<code>direct</code>时不支持。</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center"><em>maxLength</em></td>
+<td align="center">普通队列中的最大消息数。</td>
+<td align="center">不限制</td>
+</tr>
+<tr>
+<td align="center"><em>maxLengthBytes</em></td>
+<td align="center">普通队列中所有消息的最大总字节数。</td>
+<td align="center">不限制</td>
+</tr>
+<tr>
+<td align="center"><em>maxPriority</em></td>
+<td align="center">普通队列中消息的最大优先级 (0-255)</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center"><em>missingQueuesFatal</em></td>
+<td align="center">当找不到队列时，是否将条件视为致命并停止监听听器容器。默认为<code>false</code>使容器不断尝试从队列中消费</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>overflowBehavior</em></td>
+<td align="center"><code>maxLength</code>超过或超过时采取的行动<code>maxLengthBytes</code>；目前有<code>drop-head</code>或<code>reject-publish</code>两种</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center"><em>prefetch</em></td>
+<td align="center">每个消费者可以处理的未确认消息的最大数量</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center"><em>prefix</em></td>
+<td align="center">要添加到<code>destination</code>和 队列名称的前缀。</td>
+<td align="center">””</td>
+</tr>
+<tr>
+<td align="center"><em>queueBindingArguments</em></td>
+<td align="center">将队列绑定到交换器时应用的参数；用于<code>headers</code> <code>exchangeType</code>指定要匹配的标头。例如<code>…queueBindingArguments.x-match=any</code>，<code>…queueBindingArguments.someHeader=someValue</code>。</td>
+<td align="center">空</td>
+</tr>
+<tr>
+<td align="center"><em>queueDeclarationRetries</em></td>
+<td align="center">如果队列丢失，则重试从队列消费的次数。仅当<code>missingQueuesFatal</code>是<code>true</code>时才相关。否则，容器会无限期地重试。<code>containerType</code>是<code>direct</code>时不支持。</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center"><em>queueNameGroupOnly</em></td>
+<td align="center">如果为 <code>true</code>，则从名称等于 <code>group</code> 的队列中消费。否则从队列名称为 <code>destination.group</code> 队列中消费。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>quorum.deliveryLimit</em></td>
+<td align="center">当<code>quorum.enabled=true</code>时，设置投递限制，超过该限制后，消息将被丢弃或死信。</td>
+<td align="center">无 - 将应用代理默认值。</td>
+</tr>
+<tr>
+<td align="center"><em>quorum.enabled</em></td>
+<td align="center">如果为 true，则创建仲裁队列而不是普通队列。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>quorum.initialQuorumSize</em></td>
+<td align="center">当<code>quorum.enabled=true</code>时，设置初始仲裁队列大小。</td>
+<td align="center">无 - 将应用代理默认值。</td>
+</tr>
+<tr>
+<td align="center"><em>recoveryInterval</em></td>
+<td align="center">连接恢复尝试之间的间隔，以毫秒为单位。</td>
+<td align="center">5000</td>
+</tr>
+<tr>
+<td align="center"><em>requeueRejected</em></td>
+<td align="center">当消息消费失败重试机制被关闭或者<code>republishToDlq</code> 为 <code>false</code>时，重新入队失败后是否还应该重新入队，</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>republishDeliveryMode</em></td>
+<td align="center">当<code>republishToDlq</code> 为 <code>false</code>时，指定重新发布消息的传递模式。</td>
+<td align="center"><code>DeliveryMode.PERSISTENT</code></td>
+</tr>
+<tr>
+<td align="center"><em>republishToDlq</em></td>
+<td align="center">默认情况下，重试次数用尽后失败的消息将被拒绝。如果配置了死信队列 (DLQ)，RabbitMQ 会将失败的消息（未更改）路由到 DLQ。</td>
+<td align="center"><code>true</code></td>
+</tr>
+<tr>
+<td align="center"><em>singleActiveConsumer</em></td>
+<td align="center">设置为 true 将<code>x-single-active-consumer</code>队列属性设置为 true。称为<a target="_blank" rel="noopener" href="https://www.cloudamqp.com/blog/rabbitmq-3-8-feature-focus-single-active-consumer.html">单一活动消费者</a>。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>transacted</em></td>
+<td align="center">是否使用channel-transacted，即是否在消息中使用事务</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>ttl</em></td>
+<td align="center">声明时应用到队列的默认生存时间（以毫秒为单位）。</td>
+<td align="center">无限制</td>
+</tr>
+<tr>
+<td align="center"><em>txSize</em></td>
+<td align="center">设置transaction-size的数量，当<code>acknowledgeMode</code>为AUTO时，容器会在处理txSize数目消息之后才开始应答,<code>containerType</code>是 <code>direct</code> 时不支持。</td>
+<td align="center">1</td>
+</tr>
+</tbody></table>
+<h4 id="RabbitMQ-生产者属性"><a href="#RabbitMQ-生产者属性" class="headerlink" title="RabbitMQ 生产者属性"></a>RabbitMQ 生产者属性</h4><p>以下属性仅适用于 Rabbit 生产者，并且必须以<code>spring.cloud.stream.rabbit.bindings.&lt;channelName&gt;.producer.</code>作为前缀。</p>
+<p>如果需要将同一组属性应用于大多数绑定，为避免重复，Spring Cloud Stream 支持为所有通道设置值，格式为<code>spring.cloud.stream.rabbit.default.&lt;property&gt;=&lt;value&gt;</code>.</p>
+<p>另外，请记住，<strong>绑定特定属性将在默认情况下覆盖其全局配置属性。</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">属性</th>
+<th align="center">说明</th>
+<th align="center">默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><em>autoBindDlq</em></td>
+<td align="center">是否自动声明 DLQ（死信队列） 并将其绑定到 binder DLX（死信交换机）。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>batchingEnabled</em></td>
+<td align="center">是否启用生产者的消息批处理。消息根据以下属性（在此列表的下三个条目中描述）被批处理为一条消息：<code>batchSize</code> <code>batchBufferLimit</code>、 和<code>batchTimeout</code>。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>batchSize</em></td>
+<td align="center">启用批处理时要缓冲的消息数。</td>
+<td align="center">100</td>
+</tr>
+<tr>
+<td align="center"><em>batchBufferLimit</em></td>
+<td align="center">启用批处理时的最大缓冲区大小。</td>
+<td align="center">10000</td>
+</tr>
+<tr>
+<td align="center"><em>batchTimeout</em></td>
+<td align="center">启用批处理时的批处理超时。</td>
+<td align="center">5000</td>
+</tr>
+<tr>
+<td align="center"><em>bindingRoutingKey</em></td>
+<td align="center">将队列绑定到交换器的路由键（如果<code>bindQueue</code>是<code>true</code>）。可以是多个键 - 请参阅<code>bindingRoutingKeyDelimiter</code>。对于分区目标，<code>-&lt;instanceIndex&gt;</code>附加到每个键。</td>
+<td align="center"><code>#</code></td>
+</tr>
+<tr>
+<td align="center"><em>bindingRoutingKeyDelimiter</em></td>
+<td align="center">当该属性不为空时，<code>bindingRoutingKey</code> 被认为是由该值分隔的键列表；通常使用逗号。</td>
+<td align="center"><code>null</code></td>
+</tr>
+<tr>
+<td align="center"><em>bindQueue</em></td>
+<td align="center">是否声明队列并将其绑定到目标交换机。如果您已经设置了自己的基础架构并且之前已经创建并绑定了队列，请将其设置为<code>false</code>。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center"><code>true</code></td>
+</tr>
+<tr>
+<td align="center"><em>compress</em></td>
+<td align="center">发送时是否应压缩数据。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>confirmAckChannel</em></td>
+<td align="center">当 <code>errorChannelEnabled</code>为true时，向其发送肯定的交付确认（又名发布者确认）的通道。如果通道不存在，则<code>DirectChannel</code>使用此名称注册。连接工厂必须配置为<code>publisher confirms</code>为 <code>true</code></td>
+<td align="center"><code>nullChannel</code>（<code>acks</code> are discarded）</td>
+</tr>
+<tr>
+<td align="center"><em>deadLetterQueueName</em></td>
+<td align="center">DLQ（死信队列） 的名称仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center"><code>prefix+destination.dlq</code></td>
+</tr>
+<tr>
+<td align="center"><em>deadLetterExchange</em></td>
+<td align="center">分配给队列的 DLX。仅当<code>autoBindDlq</code>是<code>true</code>时才相关。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center"><code>prefix+DLX</code></td>
+</tr>
+<tr>
+<td align="center"><em>deadLetterExchangeType</em></td>
+<td align="center">分配给队列的 DLX。仅当<code>autoBindDlq</code>是<code>true</code>时才相关。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center"><code>direct</code></td>
+</tr>
+<tr>
+<td align="center"><em>deadLetterRoutingKey</em></td>
+<td align="center">分配给队列的死信路由键。仅当<code>autoBindDlq</code>是<code>true</code>时才相关。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center"><code>destination</code></td>
+</tr>
+<tr>
+<td align="center"><em>declareDlx</em></td>
+<td align="center">是否为<code>destination</code>申报死信交换机。仅当<code>autoBindDlq</code>是<code>true</code>时才相关。如果您有预配置的 DLX，请设置为<code>false</code>。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center"><code>true</code></td>
+</tr>
+<tr>
+<td align="center"><em>declareExchange</em></td>
+<td align="center">是否为<code>destination</code>申报交换机</td>
+<td align="center"><code>true</code></td>
+</tr>
+<tr>
+<td align="center"><em>delayExpression</em></td>
+<td align="center">一个 SpEL 表达式，用于评估应用于消息（<code>x-delay</code>标头）的延迟。如果交换机不是延迟消息交换机，则无效。</td>
+<td align="center">不设置x-delay标头</td>
+</tr>
+<tr>
+<td align="center"><em>delayedExchange</em></td>
+<td align="center">是否将交易所声明为<code>Delayed Message Exchange</code>. 需要broker上安装延迟消息交换插件。将参数 <code>exchageType</code> 设置为 <code>x-delayed-type</code>。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>deliveryMode</em></td>
+<td align="center">消息持久化</td>
+<td align="center"><code>PERSISTENT</code></td>
+</tr>
+<tr>
+<td align="center"><em>dlqBindingArguments</em></td>
+<td align="center">将 dlq 绑定到死信交换时应用的参数；用于<code>headers</code> <code>deadLetterExchangeType</code>指定要匹配的标头。例如<code>…dlqBindingArguments.x-match=any</code>，<code>…dlqBindingArguments.someHeader=someValue</code>。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">空</td>
+</tr>
+<tr>
+<td align="center"><em>dlqDeadLetterExchange</em></td>
+<td align="center">声明 DLQ 时，分配给该队列的 DLX。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center"><em>dlqDeadLetterRoutingKey</em></td>
+<td align="center">声明 DLQ 时，分配给该队列的死信路由键。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center"><em>dlqExpires</em></td>
+<td align="center">删除超过该事件的未使用的死信队列（以毫秒为单位）。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">不过期</td>
+</tr>
+<tr>
+<td align="center"><em>dlqLazy</em></td>
+<td align="center">声明一个带有<code>x-queue-mode=lazy</code>参数的死信队列（即 <strong>惰性死信队列</strong>），考虑使用策略而不是此设置，因为使用策略允许在不删除队列的情况下更改设置。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>dlqMaxLength</em></td>
+<td align="center">死信队列中的最大消息数。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">无限制</td>
+</tr>
+<tr>
+<td align="center"><em>dlqMaxLengthBytes</em></td>
+<td align="center">所有消息的死信队列中的最大总字节数。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">无限制</td>
+</tr>
+<tr>
+<td align="center"><em>dlqMaxPriority</em></td>
+<td align="center">死信队列中消息的最大优先级 (0-255) 仅在<code>requiredGroups</code>提供时适用，然后仅适用于那些组。</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center"><em>dlqQuorum.deliveryLimit</em></td>
+<td align="center">当<code>quorum.enabled=true</code>时，设置投递限制，超过该限制后，邮件将被丢弃或死信。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">无 - 将应用代理默认值</td>
+</tr>
+<tr>
+<td align="center"><em>dlqQuorum.enabled</em></td>
+<td align="center">如果为 true，则创建仲裁死信队列而不是普通队列。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>dlqQuorum.initialQuorumSize</em></td>
+<td align="center">当<code>quorum.enabled=true</code>时，设置初始仲裁队列大小。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">无 - 将应用代理默认值</td>
+</tr>
+<tr>
+<td align="center"><em>dlqSingleActiveConsumer</em></td>
+<td align="center">设置为 true 将<code>x-single-active-consumer</code>队列属性设置为 true，即<a target="_blank" rel="noopener" href="https://www.cloudamqp.com/blog/rabbitmq-3-8-feature-focus-single-active-consumer.html">单一活动消费者</a>。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>dlqTtl</em></td>
+<td align="center">声明时应用于死信队列的默认生存时间（以毫秒为单位）。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">无限制</td>
+</tr>
+<tr>
+<td align="center"><em>exchangeAutoDelete</em></td>
+<td align="center">如果<code>declareExchange</code>为<code>true</code>，则交换机会被自动删除（即在最后一个队列被删除后删除）。</td>
+<td align="center"><code>true</code></td>
+</tr>
+<tr>
+<td align="center"><em>exchangeDurable</em></td>
+<td align="center">如果<code>declareExchange</code>为<code>true</code>，则交换机是持久的（即，它在broker重启后仍然存在）。</td>
+<td align="center"><code>true</code></td>
+</tr>
+<tr>
+<td align="center"><em>exchangeType</em></td>
+<td align="center">交换类型：<code>direct</code>, <code>fanout</code>,<code>headers</code>或<code>topic</code>用于非分区<code>destination</code>和<code>direct</code>, 标头或<code>topic</code>用于分区<code>destination</code>。</td>
+<td align="center"><code>topic</code></td>
+</tr>
+<tr>
+<td align="center"><em>expires</em></td>
+<td align="center">队列未使用被删除的时间（存活时间）</td>
+<td align="center">不过期</td>
+</tr>
+<tr>
+<td align="center"><em>headerPatterns</em></td>
+<td align="center">标头模式</td>
+<td align="center"><code>[&#39;*&#39;]</code>所有标题</td>
+</tr>
+<tr>
+<td align="center"><em>lazy</em></td>
+<td align="center">是否用参数声明队列<code>x-queue-mode=lazy</code>，惰性队列，考虑使用策略而不是此设置，因为使用策略允许在不删除队列的情况下更改设置。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>maxLength</em></td>
+<td align="center">普通队列中的最大消息数。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">无限制</td>
+</tr>
+<tr>
+<td align="center"><em>maxLengthBytes</em></td>
+<td align="center">普通队列中所有消息的最大总字节数。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">无限制</td>
+</tr>
+<tr>
+<td align="center"><em>maxPriority</em></td>
+<td align="center">普通队列中消息的最大优先级 (0-255)。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center"><em>prefix</em></td>
+<td align="center">要添加到<code>destination</code>交换机所名称的前缀。</td>
+<td align="center">””</td>
+</tr>
+<tr>
+<td align="center"><em>queueBindingArguments</em></td>
+<td align="center">将队列绑定到交换器时应用的参数；用于<code>headers</code> <code>exchangeType</code>指定要匹配的标头。例如<code>…queueBindingArguments.x-match=any</code>，<code>…queueBindingArguments.someHeader=someValue</code>。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">空</td>
+</tr>
+<tr>
+<td align="center"><em>queueNameGroupOnly</em></td>
+<td align="center">如果为 <code>true</code>，则从名称等于 <code>group</code> 的队列中消费。否则从队列名称为 <code>destination.group</code> 队列中消费。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>quorum.deliveryLimit</em></td>
+<td align="center">当<code>quorum.enabled=true</code>时，设置投递限制，超过该限制后，消息将被丢弃或死信。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">无 - 将应用代理默认值</td>
+</tr>
+<tr>
+<td align="center"><em>quorum.enabled</em></td>
+<td align="center">如果为 true，则创建仲裁队列而不是普通队列。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>quorum.initialQuorumSize</em></td>
+<td align="center">仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">无 - 将应用代理默认值。</td>
+</tr>
+<tr>
+<td align="center"><em>routingKeyExpression</em></td>
+<td align="center">一个 SpEL 表达式，用于确定发布消息时要使用的路由键。对于固定路由键，请使用<code>routingKey</code>.</td>
+<td align="center"><code>destination</code>或<code>destination-&lt;partition&gt;</code>用于分区目标。</td>
+</tr>
+<tr>
+<td align="center"><em>routingKey</em></td>
+<td align="center">定义发布消息时使用的固定路由键的字符串。</td>
+<td align="center">见<code>routingKeyExpression</code></td>
+</tr>
+<tr>
+<td align="center"><em>singleActiveConsumer</em></td>
+<td align="center">设置为 true 将<code>x-single-active-consumer</code>队列属性设置为 true。称为<a target="_blank" rel="noopener" href="https://www.cloudamqp.com/blog/rabbitmq-3-8-feature-focus-single-active-consumer.html">单一活动消费者</a>。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>transacted</em></td>
+<td align="center">是否使用channel-transacted，即是否在消息中使用事务</td>
+<td align="center"><code>false</code></td>
+</tr>
+<tr>
+<td align="center"><em>ttl</em></td>
+<td align="center">声明时应用到队列的默认生存时间（以毫秒为单位）。仅在<code>requiredGroups</code>提供时适用，然后仅适用于这些组。</td>
+<td align="center">无限制</td>
+</tr>
+<tr>
+<td align="center"><em>useConfirmHeader</em></td>
+<td align="center">详情查看 <a target="_blank" rel="noopener" href="https://github.com/spring-cloud/spring-cloud-stream-binder-rabbit#publisher-confirms">Publisher Confirms</a>. 与 <code>confirmAckChannel</code> 互斥。</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<h3 id="Publisher-Confirms"><a href="#Publisher-Confirms" class="headerlink" title="Publisher Confirms"></a>Publisher Confirms</h3><p>有两种机制可以获取发布消息的结果；在每种情况下，连接工厂都必须<code>publisherConfirmType</code>设置<code>ConfirmType.CORRELATED</code>。 “<strong>legacy</strong>” 机制是将 <code>confirmAckChannel</code> 设置为以消息通道为名称的bean。您可以从中异步检索确认；否定确认被发送到错误通道（如果启用）</p>
+<p>3.1 版中添加的<code>preferred</code>机制是使用<code>correlation data header</code>并通过其属性 <code>Future&lt;Confirm&gt;</code> 等待结果。这对于批处理监听器特别有用，因为您可以在等待结果之前发送多条消息。要使用此技术，请将<code>useConfirmHeader</code>属性设置为 <code>true</code>。以下简单应用程序是使用此技术的示例：     </p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring.cloud.stream.bindings.input-in-0.group</span>=<span class="string">someGroup</span></span><br><span class="line"><span class="attr">spring.cloud.stream.bindings.input-in-0.consumer.batch-mode</span>=<span class="string">true</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring.cloud.stream.source</span>=<span class="string">output</span></span><br><span class="line"><span class="attr">spring.cloud.stream.bindings.output-out-0.producer.error-channel-enabled</span>=<span class="string">true</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring.cloud.stream.rabbit.bindings.output-out-0.producer.useConfirmHeader</span>=<span class="string">true</span></span><br><span class="line"><span class="attr">spring.cloud.stream.rabbit.bindings.input-in-0.consumer.auto-bind-dlq</span>=<span class="string">true</span></span><br><span class="line"><span class="attr">spring.cloud.stream.rabbit.bindings.input-in-0.consumer.batch-size</span>=<span class="string">10</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring.rabbitmq.publisher-confirm-type</span>=<span class="string">correlated</span></span><br><span class="line"><span class="attr">spring.rabbitmq.publisher-returns</span>=<span class="string">true</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Application</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Logger</span> <span class="variable">log</span> <span class="operator">=</span> LoggerFactory.getLogger(Application.class);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(Application.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> StreamBridge bridge;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    Consumer&lt;List&lt;String&gt;&gt; <span class="title function_">input</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> list -&gt; &#123;</span><br><span class="line">            List&lt;MyCorrelationData&gt; results = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">            list.forEach(str -&gt; &#123;</span><br><span class="line">                log.info(<span class="string">&quot;Received: &quot;</span> + str);</span><br><span class="line">                <span class="type">MyCorrelationData</span> <span class="variable">corr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyCorrelationData</span>(UUID.randomUUID().toString(), str);</span><br><span class="line">                results.add(corr);</span><br><span class="line">                <span class="built_in">this</span>.bridge.send(<span class="string">&quot;output-out-0&quot;</span>, MessageBuilder.withPayload(str.toUpperCase())</span><br><span class="line">                        .setHeader(AmqpHeaders.PUBLISH_CONFIRM_CORRELATION, corr)</span><br><span class="line">                        .build());</span><br><span class="line">            &#125;);</span><br><span class="line">            results.forEach(correlation -&gt; &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="type">Confirm</span> <span class="variable">confirm</span> <span class="operator">=</span> correlation.getFuture().get(<span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line">                    log.info(confirm + <span class="string">&quot; for &quot;</span> + correlation.getPayload());</span><br><span class="line">                    <span class="keyword">if</span> (correlation.getReturnedMessage() != <span class="literal">null</span>) &#123;</span><br><span class="line">                        log.error(<span class="string">&quot;Message for &quot;</span> + correlation.getPayload() + <span class="string">&quot; was returned &quot;</span>);</span><br><span class="line"></span><br><span class="line">                        <span class="comment">// try to re-publish, send a DLQ, etc</span></span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    Thread.currentThread().interrupt();</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">catch</span> (ExecutionException | TimeoutException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> ApplicationRunner <span class="title function_">runner</span><span class="params">(BatchingRabbitTemplate template)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> args -&gt; IntStream.range(<span class="number">0</span>, <span class="number">10</span>).forEach(i -&gt;</span><br><span class="line">                template.convertAndSend(<span class="string">&quot;input-in-0&quot;</span>, <span class="string">&quot;input-in-0.rbgh303&quot;</span>, <span class="string">&quot;foo&quot;</span> + i));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> BatchingRabbitTemplate <span class="title function_">template</span><span class="params">(CachingConnectionFactory cf, TaskScheduler taskScheduler)</span> &#123;</span><br><span class="line">        <span class="type">BatchingStrategy</span> <span class="variable">batchingStrategy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleBatchingStrategy</span>(<span class="number">10</span>, <span class="number">1000000</span>, <span class="number">1000</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">BatchingRabbitTemplate</span>(cf, batchingStrategy, taskScheduler);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyCorrelationData</span> <span class="keyword">extends</span> <span class="title class_">CorrelationData</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String payload;</span><br><span class="line"></span><br><span class="line">    MyCorrelationData(String id, String payload) &#123;</span><br><span class="line">        <span class="built_in">super</span>(id);</span><br><span class="line">        <span class="built_in">this</span>.payload = payload;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getPayload</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.payload;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p><strong>correlation data必须具有唯一<code>id</code>性，以便框架可以执行关联。</strong></p>
+</blockquote>
+<p>你不能同时设置<code>useConfirmHeader </code>和<code>confirmAckChannel</code>，但是当<code>useConfirmHeader</code>为true时仍然可以在错误通道中接收返回的消息，但是使用<code>correlation header</code>更方便。</p>
+<h3 id="接收批量消息的配置"><a href="#接收批量消息的配置" class="headerlink" title="接收批量消息的配置"></a>接收批量消息的配置</h3><p>使用 <code>RabbitMQ</code> binder，有两种类型的批处理由消费者 bindings 处理：</p>
+<h5 id="生产者创建的批处理消息"><a href="#生产者创建的批处理消息" class="headerlink" title="生产者创建的批处理消息"></a>生产者创建的批处理消息</h5><p>通常，如果生产者 bindings 具有<code>batch-enabled=true</code>，或者<code>BatchingRabbitTemplate</code>创建一条消息，批次元素将作为一个对监听器方法的单独调用返回。从<code>RabbitMQ3.0</code>开始，如果<code>spring.cloud.stream.bindings.&lt;name&gt;.consumer.batch-mode</code> 为 <code>true </code> 则任何此类批次消息都将以<code>List&lt;?&gt;</code>的形式传递到监听方法中，</p>
+<h5 id="消费端批处理"><a href="#消费端批处理" class="headerlink" title="消费端批处理"></a>消费端批处理</h5><p>从3.1版本开始，将消费者可以配置为将多个入站消息组装成一个批处理，该批处理作为<code>List&lt;?&gt;</code>转换后的有效负载呈现给应用程序。以下简单的应用程序演示了如何使用此技术：</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring.cloud.stream.bindings.input-in-0.group</span>=<span class="string">someGroup</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring.cloud.stream.bindings.input-in-0.consumer.batch-mode</span>=<span class="string">true #开启批处理模式</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring.cloud.stream.rabbit.bindings.input-in-0.consumer.enable-batching</span>=<span class="string">true #是否开启批处理</span></span><br><span class="line"><span class="attr">spring.cloud.stream.rabbit.bindings.input-in-0.consumer.batch-size</span>=<span class="string">10  #批处理大小</span></span><br><span class="line"><span class="attr">spring.cloud.stream.rabbit.bindings.input-in-0.consumer.receive-timeout</span>=<span class="string">200  #接收超时时间</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Application</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(Application.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    Consumer&lt;List&lt;Thing&gt;&gt; <span class="title function_">input</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> list -&gt; &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;Received &quot;</span> + list.size());</span><br><span class="line">            list.forEach(thing -&gt; &#123;</span><br><span class="line">                System.out.println(thing);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> ApplicationRunner <span class="title function_">runner</span><span class="params">(RabbitTemplate template)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> args -&gt; &#123;</span><br><span class="line">            template.convertAndSend(<span class="string">&quot;input-in-0.someGroup&quot;</span>, <span class="string">&quot;&#123;\&quot;field\&quot;:\&quot;value1\&quot;&#125;&quot;</span>);</span><br><span class="line">            template.convertAndSend(<span class="string">&quot;input-in-0.someGroup&quot;</span>, <span class="string">&quot;&#123;\&quot;field\&quot;:\&quot;value2\&quot;&#125;&quot;</span>);</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Thing</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> String field;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">Thing</span><span class="params">()</span> &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">Thing</span><span class="params">(String field)</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.field = field;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> String <span class="title function_">getField</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">this</span>.field;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setField</span><span class="params">(String field)</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.field = field;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;Thing [field=&quot;</span> + <span class="built_in">this</span>.field + <span class="string">&quot;]&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight tex"><table><tr><td class="code"><pre><span class="line">Received 2</span><br><span class="line">Thing [field=value1]</span><br><span class="line">Thing [field=value2]</span><br></pre></td></tr></table></figure>
+
+<p>批处理中的消息数量由<code>batch-size</code>和<code>receive-timeout</code>属性指定；如果<code>receive-timeout</code>过去没有新消息，则发送“短”批次。</p>
+<blockquote>
+<p>仅使用<code>container-type=simple</code>（默认）才支持消费者端批处理。</p>
+</blockquote>
+<p><strong>如果您想检查消费者端批处理消息的Headers，您应该使用<code>Message&lt;List&lt;?&gt;&gt;</code>；</strong></p>
+<h3 id="使用现有队列-x2F-交换机"><a href="#使用现有队列-x2F-交换机" class="headerlink" title="使用现有队列&#x2F;交换机"></a>使用现有队列&#x2F;交换机</h3><p>默认情况下，绑定器将自动提供一个主题交换，其名称源自目标绑定属性的值<code>&lt;prefix&gt;&lt;destination&gt;</code>。如果未提供，则<code>destination</code>默认为 <code>bindings</code> 名称。绑定消费者时，将自动为队列提供名称<code>&lt;prefix&gt;&lt;destination&gt;.&lt;group&gt;</code>（如果<code>group</code>指定了绑定属性），或者为一个匿名名称（没有指定group的匿名队列会被自动删除）。对于非分区绑定或分区绑定，队列将使用“match-all”通配符路由键 ( <code>#</code> ) 绑定到交换机<code>&lt;destination&gt;-&lt;instanceIndex&gt;</code>。前缀默认为空字符串。如果使用 <code>requiredGroups</code> 指定了输出绑定，将为每个组提供一个队列&#x2F;绑定。</p>
+<p>有许多特定于 rabbit 的绑定属性允许您修改此默认行为。</p>
+<p>如果你想要使用现有交换&#x2F;队列，你可以完全禁用自动配置，假设交换机被命名<code>myExchange</code>并且队列被命名<code>myQueue</code>：</p>
+<p><code>myQueue</code>：</p>
+<ul>
+<li><code>spring.cloud.stream.bindings.&lt;binding name&gt;.destination=myExhange</code></li>
+<li><code>spring.cloud.stream.bindings.&lt;binding name&gt;.group=myQueue</code></li>
+<li><code>spring.cloud.stream.rabbit.bindings.&lt;binding name&gt;.consumer.bindQueue=false</code></li>
+<li><code>spring.cloud.stream.rabbit.bindings.&lt;binding name&gt;.consumer.declareExchange=false</code></li>
+<li><code>spring.cloud.stream.rabbit.bindings.&lt;binding name&gt;.consumer.queueNameGroupOnly=true</code></li>
+</ul>
+<p>如果您希望binder提供 队列&#x2F;交换机，但您想使用此处讨论的默认值以外的其他内容来执行此操作，请使用以下属性。</p>
+<ul>
+<li><code>spring.cloud.stream.rabbit.bindings.&lt;binding name&gt;.consumer.bindingRoutingKey=myRoutingKey</code></li>
+<li><code>spring.cloud.stream.rabbit.bindings.&lt;binding name&gt;.consumer.exchangeType=&lt;type&gt;</code></li>
+<li><code>spring.cloud.stream.rabbit.bindings.&lt;binding name&gt;.producer.routingKeyExpression=&#39;myRoutingKey&#39;</code></li>
+</ul>
+<p>当 <code>autoBindDlq</code>为 <code>true</code>时，在声明死信交换&#x2F;队列时使用了类似的属性。</p>
+<hr>
+<h3 id="使用-RabbitMQ-Binder-重试"><a href="#使用-RabbitMQ-Binder-重试" class="headerlink" title="使用 RabbitMQ Binder 重试"></a>使用 RabbitMQ Binder 重试</h3><p>在 Binder 中启用重试后，监听器容器线程将在配置的周期的任何期间内暂停。当需要对<strong>单一消费者</strong>进行严格排序时，这时非常重要的。但是，对于其他用例，它会阻止在该线程上处理其他消息。</p>
+<p>使用 Binder 重试的另一种方法是在死信队列 (DLQ) 上设置死信，以及在 DLQ 本身上设置死信配置。</p>
+<ul>
+<li>设置<code>autoBindDlq</code>为<code>true</code>。binder 创建一个 DLQ。或者，您可以在 <code>deadLetterQueueName</code> 中指定名称。</li>
+<li>设置<code>dlqTtl</code>为重试等待时间。</li>
+<li>将 <code>dlqDeadLetterExchange</code> 设置为默认交换。来自 DLQ 的过期消息被路由到原来的队列，因为默认<code>deadLetterRoutingKey</code>是队列名称 ( <code>destination.group</code>)。设置为默认交换机是通过将属性设置为无值来实现的，如下例所示。</li>
+</ul>
+<p>要强制消息为死信，请抛出一个<code>AmqpRejectAndDontRequeueException</code>或设置<code>requeueRejected</code>为<code>false</code>（默认值）并抛出任何异常。</p>
+<p>循环无止境地继续，这对于暂时性问题很好，但您可能希望在尝试多次后放弃。幸运的是，RabbitMQ 提供了<code>x-death</code>标头，可以让您确定发生了多少个周期。</p>
+<p>要在放弃后确认消息，请抛出<code>ImmediateAcknowledgeAmqpException</code>。</p>
+<h2 id="编码案例"><a href="#编码案例" class="headerlink" title="编码案例"></a>编码案例</h2><p><strong>注意</strong>：在进行编码时至少需要完成<code>RabbitMQ</code>和<code>Kafka</code>种任意一个消息中间件的环境搭建 </p>
+<p>这里我们演示Spring Cloud Stream RabbitMQ Binder 的案例</p>
+<h3 id="父工程"><a href="#父工程" class="headerlink" title="父工程"></a>父工程</h3><ol>
+<li><p>首先创建父工程<code>Cloud-09-Stream</code></p>
+</li>
+<li><p><code>pom.xml</code></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>top.devildyw.Stream<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>Cloud-09-Stream<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">maven.compiler.source</span>&gt;</span>8<span class="tag">&lt;/<span class="name">maven.compiler.source</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">maven.compiler.target</span>&gt;</span>8<span class="tag">&lt;/<span class="name">maven.compiler.target</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">project.build.sourceEncoding</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">junit.version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">junit.version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">lombok.version</span>&gt;</span>1.18.10<span class="tag">&lt;/<span class="name">lombok.version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">log4j.version</span>&gt;</span>1.2.17<span class="tag">&lt;/<span class="name">log4j.version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mysql.version</span>&gt;</span>8.0.28<span class="tag">&lt;/<span class="name">mysql.version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">druid.version</span>&gt;</span>1.2.11<span class="tag">&lt;/<span class="name">druid.version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mybatis.spring.boot.version</span>&gt;</span>2.1.1<span class="tag">&lt;/<span class="name">mybatis.spring.boot.version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mybatis-plus</span>&gt;</span>3.5.2<span class="tag">&lt;/<span class="name">mybatis-plus</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--子模块继承之后，提供作用：锁定版本+子module不用谢groupId和version--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-project-info-reports-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.2.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!--spring boot 2.2.2--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-dependencies<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.8<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!--spring cloud Hoxton.SR1--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-dependencies<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>2021.0.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!--spring cloud 阿里巴巴--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-alibaba-dependencies<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>2021.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!--mysql--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;mysql.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- druid--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>druid-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;druid.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!--mybatis--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;mybatis.spring.boot.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.baomidou<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-plus-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;mybatis-plus&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!--junit--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.8<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!--log4j--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>log4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>log4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;log4j.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">finalName</span>&gt;</span>SpringCloud-Hello-01<span class="tag">&lt;/<span class="name">finalName</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">fork</span>&gt;</span>true<span class="tag">&lt;/<span class="name">fork</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">addResources</span>&gt;</span>true<span class="tag">&lt;/<span class="name">addResources</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="子工程-消息驱动之生产者"><a href="#子工程-消息驱动之生产者" class="headerlink" title="子工程-消息驱动之生产者"></a>子工程-消息驱动之生产者</h3><ol>
+<li><p>创建工程<code>Cloud-09-stream-rabbitMQ-provider8801</code></p>
+</li>
+<li><p><code>pom.xml</code></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>Cloud-09-Stream<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>top.devildyw.Stream<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>Cloud-09-stream-rabbitMQ-provider8801<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">maven.compiler.source</span>&gt;</span>8<span class="tag">&lt;/<span class="name">maven.compiler.source</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">maven.compiler.target</span>&gt;</span>8<span class="tag">&lt;/<span class="name">maven.compiler.target</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">project.build.sourceEncoding</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!--Spring Cloud Stream RabbitMQ Binder--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-stream-rabbit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-eureka-server --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-eureka-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.dyw<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>Cloud-api-commons<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-devtools<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.projectlombok/lombok --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>application.yml</code></p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8801</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">cloud-stream-provider</span></span><br><span class="line">  <span class="attr">rabbitmq:</span></span><br><span class="line">    <span class="attr">host:</span> <span class="number">36.137</span><span class="number">.128</span><span class="number">.27</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">8071</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">admin</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">admin</span></span><br><span class="line">    <span class="attr">virtual-host:</span> <span class="string">/</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">stream:</span></span><br><span class="line">      <span class="attr">binders:</span> <span class="comment"># 在此处配置要绑定的rabbitmq的服务信息；</span></span><br><span class="line">        <span class="attr">defaultRabbit:</span> <span class="comment"># 表示定义的名称，用于于binding整合</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">rabbit</span> <span class="comment"># 消息组件类型</span></span><br><span class="line">      <span class="attr">bindings:</span> <span class="comment"># 服务的整合处理</span></span><br><span class="line">        <span class="attr">myChannel-out-0:</span> <span class="comment"># 这个名字是一个通道的名称</span></span><br><span class="line">          <span class="attr">destination:</span> <span class="string">studyExchange</span> <span class="comment"># 表示要使用的Exchange名称定义</span></span><br><span class="line">          <span class="attr">content-type:</span> <span class="string">application/json</span> <span class="comment"># 设置消息类型，本次为json，文本则设置“text/plain”</span></span><br><span class="line">          <span class="attr">binder:</span> <span class="string">defaultRabbit</span>  <span class="comment"># 设置要绑定的消息服务的具体设置</span></span><br><span class="line"></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">client:</span> <span class="comment"># 客户端进行Eureka注册的配置</span></span><br><span class="line">    <span class="attr">service-url:</span></span><br><span class="line">      <span class="attr">defaultZone:</span> <span class="string">http://localhost:7001/eureka</span></span><br><span class="line">  <span class="attr">instance:</span></span><br><span class="line">    <span class="attr">lease-renewal-interval-in-seconds:</span> <span class="number">2</span> <span class="comment"># 设置心跳的时间间隔（默认是30秒）</span></span><br><span class="line">    <span class="attr">lease-expiration-duration-in-seconds:</span> <span class="number">5</span> <span class="comment"># 如果现在超过了5秒的间隔（默认是90秒）</span></span><br><span class="line">    <span class="attr">instance-id:</span> <span class="string">send-8801.com</span>  <span class="comment"># 在信息列表时显示主机名称</span></span><br><span class="line">    <span class="attr">prefer-ip-address:</span> <span class="literal">true</span>     <span class="comment"># 访问的路径变为IP地址</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意<code>bingdings</code> 集合中的key由 通道名-out&#x2F;in-数字组成</p>
+</blockquote>
+</li>
+<li><p>主启动类</p>
+</li>
+<li><p>业务类</p>
+<p>消息发送接口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> top.devildyw.springcloud.serivce;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-08-10-19:32</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IMessageProvider</span> &#123;</span><br><span class="line">    String <span class="title function_">send</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>实现类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IMessageProviderImpl</span> <span class="keyword">implements</span> <span class="title class_">IMessageProvider</span> &#123;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> StreamBridge streamBridge;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">send</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">serial</span> <span class="operator">=</span> UUID.randomUUID().toString(); <span class="comment">//发送的消息</span></span><br><span class="line">        streamBridge.send(<span class="string">&quot;output&quot;</span>, serial);</span><br><span class="line">        log.debug(<span class="string">&quot;发送消息:&quot;</span>+serial);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用<code>@Resource</code>注入<code>StreamBride</code>，<code>StreamBridge</code>的send方法第一个参数是binding的key名字，第二个参数是想要发送的消息</strong></p>
+</li>
+<li><p>控制器类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"><span class="keyword">import</span> top.devildyw.springcloud.serivce.IMessageProvider;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.annotation.Resource;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SendMessageController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> IMessageProvider messageProvider;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/sendMessage&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">sendMessage</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> messageProvider.send();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="子工程-消息驱动之消费者"><a href="#子工程-消息驱动之消费者" class="headerlink" title="子工程-消息驱动之消费者"></a>子工程-消息驱动之消费者</h3><ol>
+<li><p>创建工程<code>Cloud-09-stream-rabbitMQ-consumer8802</code></p>
+</li>
+<li><p><code>pom.xml</code></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>Cloud-09-Stream<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>top.devildyw.Stream<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>Cloud-09-stream-rabbitMQ-consumer8802<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">maven.compiler.source</span>&gt;</span>8<span class="tag">&lt;/<span class="name">maven.compiler.source</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">maven.compiler.target</span>&gt;</span>8<span class="tag">&lt;/<span class="name">maven.compiler.target</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">project.build.sourceEncoding</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!--Spring Cloud Stream RabbitMQ Binder--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-stream-rabbit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-eureka-server --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-eureka-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.dyw<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>Cloud-api-commons<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-devtools<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.projectlombok/lombok --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>application.yml</code></p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8803</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">cloud-stream-consumer</span></span><br><span class="line">  <span class="attr">rabbitmq:</span></span><br><span class="line">    <span class="attr">host:</span> <span class="number">36.137</span><span class="number">.128</span><span class="number">.27</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">8071</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">admin</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">admin</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">stream:</span></span><br><span class="line">      <span class="attr">bindings:</span> <span class="comment">#服务的整合处理</span></span><br><span class="line">        <span class="attr">myChannel-in-0:</span> <span class="comment">#这个名字是一个通道的名字</span></span><br><span class="line">          <span class="attr">destination:</span> <span class="string">studyExchange</span> <span class="comment">#表示要使用Exchange名称定义</span></span><br><span class="line">          <span class="attr">contentType:</span> <span class="string">application/json</span> <span class="comment">#设置消息类型，本次为json，文本则设置为“text/plain”</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">client:</span> <span class="comment"># 客户端进行Eureka注册的配置</span></span><br><span class="line">    <span class="attr">service-url:</span></span><br><span class="line">      <span class="attr">defaultZone:</span> <span class="string">http://localhost:7001/eureka</span></span><br><span class="line">  <span class="attr">instance:</span></span><br><span class="line">    <span class="attr">lease-renewal-interval-in-seconds:</span> <span class="number">2</span> <span class="comment"># 设置心跳的时间间隔（默认是30秒）</span></span><br><span class="line">    <span class="attr">lease-expiration-duration-in-seconds:</span> <span class="number">5</span> <span class="comment"># 如果现在超过了5秒的间隔（默认是90秒）</span></span><br><span class="line">    <span class="attr">instance-id:</span> <span class="string">receive-8803.com</span>  <span class="comment"># 在信息列表时显示主机名称</span></span><br><span class="line">    <span class="attr">prefer-ip-address:</span> <span class="literal">true</span>     <span class="comment"># 访问的路径变为IP地址</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>主启动类</p>
+</li>
+<li><p>业务类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.function.Consumer;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StreamConsumerService</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> Consumer&lt;String&gt; <span class="title function_">myChannel</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Consumer</span>&lt;String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">accept</span><span class="params">(String message)</span> &#123;</span><br><span class="line">                log.info(<span class="string">&quot;message:&#123;&#125;&quot;</span>,message);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>上述代码的方法名（即Consumer的bean实例名）需要是<code>yml</code>配置中的通道名，应用程序启动后会自动接收生产者发送的消息</strong></p>
+</li>
+</ol>
+<h3 id="启动测试"><a href="#启动测试" class="headerlink" title="启动测试"></a>启动测试</h3><p>启动eureka注册中心、生产者、消费者（8802）</p>
+<p><code>RabbitMQ</code>图形控制界面新增了一个交换机，这个交换机也就是我们所设置的bindings 的 <code>myChannel</code> 的 <code>destination</code> ，在 <code>RabbitMQ</code> 中该 <code>destination</code> 值就是交换机</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208102209425.png" alt="image-20220810220917325"></p>
+<p>进入交换机查看详细信息，可以发现该交换机绑定了一个个队列，这个队列也就是我们消费者所监听的队列。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208102203457.png" alt="image-20220810220306385"></p>
+<p>调用接口<code>get: http://localhost:8801/sendMessage</code>发送消息</p>
+<p>消费者控制台：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208102203631.png" alt="image-20220810220355584"></p>
+<h2 id="消息重复消费问题"><a href="#消息重复消费问题" class="headerlink" title="消息重复消费问题"></a>消息重复消费问题</h2><p>将8802拷贝改名成为新的消费者8803，配置与业务类与8802完全相同</p>
+<p>启动eureka注册中心、生产者、消费者（8802、8803）</p>
+<p>可以看到交换机现在绑定了两个队列了，这两个队列就是我们消费者所监听的队列</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208102214091.png" alt="image-20220810221338704"></p>
+<p>调用接口<code>get: http://localhost:8801/sendMessage</code>发送消息</p>
+<p>消费者控制台：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208102214171.png" alt="image-20220810220355584"></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208102214095.png" alt="image-20220810221438351"></p>
+<p>我们会发现同一条消息被两个消费者同时消费了，这样的情况在某些场景下是毁灭级别的。</p>
+<p>比如在如下场景下，订单系统我们坐集群部署，都会从RabbitMQ中获取订单信息，那<strong>如果一个订单同时被两个服务获取到</strong>，那么就会造成数据错误，我们得避免这种情况。</p>
+<p>这时<strong>我们就可以使用Stream中的消息分组来解决</strong></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208102218046.png" alt="image-20220810221759981"></p>
+<p>注意在Stream中处于同一个group中的多个消费者是竞争关系，就能够保证消息只会被其中一个应用消费一次。</p>
+<p><strong>不同组是可以全面消费的</strong>（重复消费）。</p>
+<p><strong>同一组内会发生竞争关系，只有其中一个可以消费</strong>。</p>
+<h3 id="导致重复消费的原因"><a href="#导致重复消费的原因" class="headerlink" title="导致重复消费的原因"></a>导致重复消费的原因</h3><p>默认分组group是不同的，组流水号不一样，被认为不同组，（不同组）可以消费同一条消息（广播）。</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>微服务应用放置于同一个group中，就能够保证消息只会被其中一个应用消费一次。<strong>不同的组是可以消费的，同一个组内会发生竞争关系，只有其中一个可以消费</strong>。</p>
+<blockquote>
+<p>Stream概念中的group，对应在<code>RabbitMQ</code>中就是队列的含义，交换机默认创建是Topic类型，而消费者创建的队列默认<code>routingKey</code>为 #，在 <code>RabbitMQ</code> 中我们学过 # 可以匹配一个或多个词，所以基本上交换机会将消息转发到所有于其相连的队列上。</p>
+</blockquote>
+<blockquote>
+<p>Stream在我们没有配置group时，为我们创建一个随机的唯一的group名称这样的消费者我们称为匿名消费者，它所监听的队列也会在消费者关闭时被删除。如果想要将多个消费者分为一组，就需要手动指定了。</p>
+</blockquote>
+<p>为每个消费者设置<code>group</code>，同一组的消费者group名称要相同。</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">......</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="string">......</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">stream:</span></span><br><span class="line">      <span class="attr">bindings:</span> <span class="comment">#服务的整合处理</span></span><br><span class="line">        <span class="attr">myChannel-in-0:</span> <span class="comment">#这个名字是一个通道的名字</span></span><br><span class="line">          <span class="attr">destination:</span> <span class="string">studyExchange</span> <span class="comment">#表示要使用Exchange名称定义</span></span><br><span class="line">          <span class="attr">contentType:</span> <span class="string">application/json</span> <span class="comment">#设置消息类型，本次为json，文本则设置为“text/plain”</span></span><br><span class="line">          <span class="attr">group:</span> <span class="string">receiveA</span> <span class="comment">#设置组名为receiveA</span></span><br><span class="line"><span class="string">......</span></span><br></pre></td></tr></table></figure>
+
+<p>配置完成后，重新启动消费者</p>
+<p><code>RabbitMQ</code>图形界面可以发现交换机只绑定了一个队列，并且该队列的后缀就是我们所设置的组名。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208102234521.png" alt="image-20220810223431446"></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208102301336.png" alt="image-20220810230132249"></p>
+<p>调用接口<code>get: http://localhost:8801/sendMessage</code>发送消息</p>
+<p>消费者控制台：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208102232791.png" alt="image-20220810223258747"></p>
+<p>这次只有8803接收到了，尝试多次后只有一个消费者能够接收。说明重复消费问题解决。</p>
+<blockquote>
+<p>我们也可以主动配置交换机和队列，交换机的名称就是<code>destination</code>的值，而队列的名称则是交换机名称.group即<code>destinnation.group</code> 可以自己手动配置队列和交换机的属性，前提是你了解不同的消息中间件</p>
+</blockquote>
+<h2 id="消息持久化"><a href="#消息持久化" class="headerlink" title="消息持久化"></a>消息持久化</h2><p>因为 <code>RabbitMQ</code> 的消息都是默认持久化的，生产者发送的消息会率先到达交换机，交换机转发到队列中，此时的消息会存放在 <code>RabbitMQ</code> 虽在主机的内存中，持久化的目的就是防止消息的丢失。</p>
+<p>但是消息持久化的前提是队列也要持久化，否则队列都没了还谈什么消息呢？</p>
+<p>将 exchange、queue 和 message 都进行持久化操作后，也不能保证消息一定不会丢失，消息存入<code>RabbitMQ</code> 之后，还需要一段时间才能存入硬盘。<code>RabbitMQ</code> 并不会为每条消息都进行同步存盘，如果在这段时间，服务器宕机或者重启，消息还没来得及保存到磁盘当中，就会丢失。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2022/08/10/Spring%20Cloud-Stream/">https://devildyw.github.io/2022/08/10/Spring%20Cloud-Stream/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Spring-Cloud/">Spring Cloud</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-3zkmod.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/08/10/Spring%20Cloud-Sleuth/"><img class="prev-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-x87m9z.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Spring Cloud-Sleuth</div></div></a></div><div class="next-post pull-right"><a href="/2022/07/29/Spring%20Cloud-Eureka/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-z8pyxo.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">SpringCloud-Eureka</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/07/14/Spring%20Cloud-Zookeeper/" title="Spring Cloud-Zookeeper"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/tag.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-14</div><div class="title">Spring Cloud-Zookeeper</div></div></a></div><div><a href="/2022/07/12/Spring%20Cloud/" title="Spring Cloud"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-8oeg3j.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-12</div><div class="title">Spring Cloud</div></div></a></div><div><a href="/2022/07/23/Spring%20Cloud-Consul/" title="Spring Cloud-Consul"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-57kw88.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-23</div><div class="title">Spring Cloud-Consul</div></div></a></div><div><a href="/2022/07/26/Spring%20Cloud-Hystrix/" title="Spring Cloud-Hystrix"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-k7zdqm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-26</div><div class="title">Spring Cloud-Hystrix</div></div></a></div><div><a href="/2022/07/24/Spring%20Cloud-Ribbon/" title="Spring Cloud-Ribbon"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-x87m9z.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-24</div><div class="title">Spring Cloud-Ribbon</div></div></a></div><div><a href="/2022/07/24/Spring%20Cloud-OpenFeign/" title="Spring Cloud-OpenFeign"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-v9orm5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-24</div><div class="title">Spring Cloud-OpenFeign</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Spring-Cloud-Stream"><span class="toc-number">1.</span> <span class="toc-text">Spring Cloud Stream</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.2.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3"><span class="toc-number">1.3.</span> <span class="toc-text">设计思想</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E5%87%86-MQ"><span class="toc-number">1.3.1.</span> <span class="toc-text">标准 MQ</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8Spring-Cloud-Stream"><span class="toc-number">1.3.2.</span> <span class="toc-text">为什么使用Spring Cloud Stream?</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88Spring-Cloud-Stream%E5%8F%AF%E4%BB%A5%E7%BB%9F%E4%B8%80%E5%BA%95%E5%B1%82%E5%B7%AE%E5%BC%82"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">为什么Spring Cloud Stream可以统一底层差异</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Binder"><span class="toc-number">1.3.3.</span> <span class="toc-text">Binder</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-Cloud-Stream-%E6%A0%87%E5%87%86%E6%B5%81%E7%A8%8B"><span class="toc-number">1.4.</span> <span class="toc-text">Spring Cloud Stream 标准流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RabbitMQ-Binder-%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.</span> <span class="toc-text">RabbitMQ Binder 配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96"><span class="toc-number">1.5.1.</span> <span class="toc-text">依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%80%89%E9%A1%B9"><span class="toc-number">1.5.2.</span> <span class="toc-text">配置选项</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RabbitMQ-Binder%E5%B1%9E%E6%80%A7"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">RabbitMQ Binder属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RabbitMQ-%E6%B6%88%E8%B4%B9%E8%80%85%E5%B1%9E%E6%80%A7"><span class="toc-number">1.5.2.2.</span> <span class="toc-text">RabbitMQ 消费者属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RabbitMQ-%E7%94%9F%E4%BA%A7%E8%80%85%E5%B1%9E%E6%80%A7"><span class="toc-number">1.5.2.3.</span> <span class="toc-text">RabbitMQ 生产者属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Publisher-Confirms"><span class="toc-number">1.5.3.</span> <span class="toc-text">Publisher Confirms</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E6%94%B6%E6%89%B9%E9%87%8F%E6%B6%88%E6%81%AF%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.4.</span> <span class="toc-text">接收批量消息的配置</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85%E5%88%9B%E5%BB%BA%E7%9A%84%E6%89%B9%E5%A4%84%E7%90%86%E6%B6%88%E6%81%AF"><span class="toc-number">1.5.4.0.1.</span> <span class="toc-text">生产者创建的批处理消息</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B6%88%E8%B4%B9%E7%AB%AF%E6%89%B9%E5%A4%84%E7%90%86"><span class="toc-number">1.5.4.0.2.</span> <span class="toc-text">消费端批处理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%8E%B0%E6%9C%89%E9%98%9F%E5%88%97-x2F-%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="toc-number">1.5.5.</span> <span class="toc-text">使用现有队列&#x2F;交换机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-RabbitMQ-Binder-%E9%87%8D%E8%AF%95"><span class="toc-number">1.5.6.</span> <span class="toc-text">使用 RabbitMQ Binder 重试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E7%A0%81%E6%A1%88%E4%BE%8B"><span class="toc-number">1.6.</span> <span class="toc-text">编码案例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%88%B6%E5%B7%A5%E7%A8%8B"><span class="toc-number">1.6.1.</span> <span class="toc-text">父工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%90%E5%B7%A5%E7%A8%8B-%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8%E4%B9%8B%E7%94%9F%E4%BA%A7%E8%80%85"><span class="toc-number">1.6.2.</span> <span class="toc-text">子工程-消息驱动之生产者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%90%E5%B7%A5%E7%A8%8B-%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8%E4%B9%8B%E6%B6%88%E8%B4%B9%E8%80%85"><span class="toc-number">1.6.3.</span> <span class="toc-text">子工程-消息驱动之消费者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E6%B5%8B%E8%AF%95"><span class="toc-number">1.6.4.</span> <span class="toc-text">启动测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%E9%97%AE%E9%A2%98"><span class="toc-number">1.7.</span> <span class="toc-text">消息重复消费问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E8%87%B4%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-number">1.7.1.</span> <span class="toc-text">导致重复消费的原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">1.7.2.</span> <span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-number">1.8.</span> <span class="toc-text">消息持久化</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
