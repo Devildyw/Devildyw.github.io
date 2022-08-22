@@ -2912,7 +2912,9 @@
 <p><strong>安装Docker(此处我们安装社区版 docker-ce)</strong></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ yum install docker-ce (这样写默认安装最新版本)</span><br><span class="line">$ yum install  docker-ce-&lt;VERSION_STRING&gt; (指定安装版本) </span><br><span class="line">例： yum install docker-ce-18.03.1.ce</span><br></pre></td></tr></table></figure>
 
-<h2 id="启动-Docker"><a href="#启动-Docker" class="headerlink" title="启动 Docker"></a>启动 Docker</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo systemctl <span class="built_in">enable</span> docker</span><br><span class="line">sudo systemctl start docker</span><br></pre></td></tr></table></figure>
+<p>如果提示接受 GPG 密钥，请验证指纹是否匹配 <code>060A 61C5 1B55 8A7F 742B 77AA C52F EB6B 621E 9F35</code>，如果是，则接受它。</p>
+<p>此命令会安装 Docker，但不会启动 Docker。它还会创建一个 <code>docker</code>组，但是默认情况下它不会将任何用户添加到该组中。启动 Docker</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo systemctl <span class="built_in">enable</span> docker</span><br><span class="line">sudo systemctl start docker</span><br></pre></td></tr></table></figure>
 
 <h2 id="建立-docker-用户组"><a href="#建立-docker-用户组" class="headerlink" title="建立 docker 用户组"></a>建立 docker 用户组</h2><p>默认情况下，<code>docker</code> 命令会使用 <a href="https://en.wikipedia.org/wiki/Unix_domain_socket">Unix socket</a> 与 Docker 引擎通讯。而只有 <code>root</code> 用户和 <code>docker</code> 组的用户才可以访问 Docker 引擎的 Unix socket。出于安全考虑，一般 Linux 系统上不会直接使用 <code>root</code> 用户。因此，更好地做法是将需要使用 <code>docker</code> 的用户加入 <code>docker</code> 用户组。</p>
 <p>建立 <code>docker</code> 组：</p>
@@ -2945,14 +2947,27 @@
 </ul>
 </blockquote>
 <hr>
-<h3 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h3><h4 id="Docker镜像"><a href="#Docker镜像" class="headerlink" title="Docker镜像"></a>Docker镜像</h4><p>操作系统分为<strong>内核</strong>和<strong>用户空间</strong>.对于<code>linux</code>这类操作系统而言,内核启动后,会挂载<code>root</code>文件文件系统为其提供用户空间支持。而<strong>Docker镜像</strong>（<code>image</code>），就相当于是一个<code>root</code>文件系统。比如官方镜像<code>ubuntu:18.04</code>就包含了完整的一套<code>Ubuntu18.04</code>最小系统的root文件系统。</p>
+<h3 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h3><h4 id="Docker镜像"><a href="#Docker镜像" class="headerlink" title="Docker镜像"></a>Docker镜像</h4><p>镜像名称一般分两部分组成：[repository]:[tag]。</p>
+<p>操作系统分为<strong>内核</strong>和<strong>用户空间</strong>.对于<code>linux</code>这类操作系统而言,内核启动后,会挂载<code>root</code>文件文件系统为其提供用户空间支持。而<strong>Docker镜像</strong>（<code>image</code>），就相当于是一个<code>root</code>文件系统。比如官方镜像<code>ubuntu:18.04</code>就包含了完整的一套<code>Ubuntu18.04</code>最小系统的root文件系统。</p>
 <p>Docker镜像是一个特殊的文件系统，除恶了提供容器运行时所需要的程序、库、资源、配置等文件外，还包含了一些为运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。镜像<strong>不包含</strong>任何动态数据，其内容在构建之后也不会改变。</p>
 <h4 id="分层存储"><a href="#分层存储" class="headerlink" title="分层存储"></a>分层存储</h4><p>因为镜像包含操作系统完整的 <code>root</code> 文件系统，其体积往往是庞大的，因此在 Docker 设计时，就充分利用 <a href="https://en.wikipedia.org/wiki/Union_mount">Union FS</a> 的技术，将其设计为分层存储的架构。所以严格来说，镜像并非是像一个 <code>ISO</code> 那样的打包文件，镜像只是一个虚拟的概念，其实际体现并非由一个文件组成，而是由一组文件系统组成，或者说，由多层文件系统联合组成。</p>
 <p>镜像构建时，会一层层构建，前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。比如，删除前一层文件的操作，实际不是真的删除前一层的文件，而是仅在当前层标记为该文件已删除。在最终容器运行的时候，虽然不会看到这个文件，但是实际上该文件会一直跟随镜像。因此，在构建镜像的时候，需要额外小心，每一层尽量只包含该层需要添加的东西，任何额外的东西应该在该层构建结束前清理掉。</p>
 <p>分层存储的特征还使得镜像的复用、定制变的更为容易。甚至可以用之前构建好的镜像作为基础层，然后进一步添加新的层，以定制自己所需的内容，构建新的镜像。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208211214598.png" alt="image-20220821121410473"></p>
+<h4 id="镜像操作"><a href="#镜像操作" class="headerlink" title="镜像操作"></a>镜像操作</h4><p>指令的详细使用可以通过在末尾添加 –help来查看</p>
+<blockquote>
+<p>docker images</p>
+<p>docker rmi</p>
+<p>docker pull</p>
+<p>docker push</p>
+<p>docker save</p>
+<p>docker load</p>
+</blockquote>
 <p>后续我会为大家详细介绍如何构建镜像。</p>
 <hr>
-<h3 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h3><h4 id="Docker容器"><a href="#Docker容器" class="headerlink" title="Docker容器"></a>Docker容器</h4><p>镜像（<code>Image</code>）和容器（<code>Container</code>）的关系，就像是面向对象程序设计中的 <code>类</code> 和 <code>实例</code> 一样，镜像是静态的定义，容器是镜像运行时的实体。容器可以被创建、启动、停止、删除、暂停等。</p>
+<h3 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h3><h4 id="Docker容器"><a href="#Docker容器" class="headerlink" title="Docker容器"></a>Docker容器</h4><p>docker容器的命令</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208211228278.png" alt="image-20220821122847191"></p>
+<p>镜像（<code>Image</code>）和容器（<code>Container</code>）的关系，就像是面向对象程序设计中的 <code>类</code> 和 <code>实例</code> 一样，镜像是静态的定义，容器是镜像运行时的实体。容器可以被创建、启动、停止、删除、暂停等。</p>
 <table>
 <thead>
 <tr>
@@ -2969,11 +2984,29 @@
 <td>类</td>
 </tr>
 </tbody></table>
-<p>容器的实质是进程，但与直接在宿主执行的进程不同，容器进程运行于属于自己的独立的 <a href="https://en.wikipedia.org/wiki/Linux_namespaces">命名空间</a>。因此容器可以拥有自己的 <code>root</code> 文件系统、自己的网络配置、自己的进程空间，甚至自己的用户 ID 空间。容器内的进程是运行在一个隔离的环境里，使用起来，就好像是在一个独立于宿主的系统下操作一样。这种特性使得容器封装的应用比直接在宿主运行更加安全。看到这里也就不迷惑为什么有人会把虚拟机和Docker容器混淆了，前面我也介绍了他们之间的区别（虚拟机需要虚拟一套硬件出来）。‘</p>
+<p>容器的实质是进程，但与直接在宿主执行的进程不同，容器进程运行于属于自己的独立的 <a href="https://en.wikipedia.org/wiki/Linux_namespaces">命名空间</a>。因此容器可以拥有自己的 <code>root</code> 文件系统、自己的网络配置、自己的进程空间，甚至自己的用户 ID 空间。容器内的进程是运行在一个隔离的环境里，使用起来，就好像是在一个独立于宿主的系统下操作一样。这种特性使得容器封装的应用比直接在宿主运行更加安全。看到这里也就不迷惑为什么有人会把虚拟机和Docker容器混淆了，前面我也介绍了他们之间的区别（虚拟机需要虚拟一套硬件出来）。</p>
 <p>容器与镜像一样，也是使用分层存储，每一个容器运行时，是以镜像为基础层，在其上创建一个当前容器的存储层，我们可以称这个为容器运行时读写而准备的存储层为<strong>容器存储层</strong></p>
 <p><strong>容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡。因此，任何保存于容器存储层的信息都会随容器删除而丢失。</strong></p>
 <p>注意：按照《Docker最佳实践》的要求，容器不应该向其存储层内写入任何数据，容器存储层要保持无状态化。所有的写入操作，都应该使用<strong>数据卷</strong>、或者<strong>绑定宿主目录</strong>，在这些位置的读写会跳过容器存储层，直接对宿主（或网络存储）发生读写，其性能和稳定性更高。（毕竟容器宕掉了数据也没了，还是有一个稳定的地方存储数据安全有一点。）</p>
 <p><strong>数据卷的生存周期独立于容器，容器消亡，数据卷不会消亡。因此，使用数据卷后，容器删除或者重新运行之后，数据却不会丢失。</strong></p>
+<h4 id="Docker-Run命令常见参数"><a href="#Docker-Run命令常见参数" class="headerlink" title="Docker Run命令常见参数"></a>Docker Run命令常见参数</h4><ul>
+<li>–name：指定容器名称</li>
+<li>-p：指定端口映射</li>
+<li>-d：让容器后台运行</li>
+</ul>
+<p>查看容器日志的命令：</p>
+<ul>
+<li>docker logs</li>
+<li>添加 -f 参数可以持续查看日志</li>
+</ul>
+<p>查看容器状态：</p>
+<ul>
+<li>docker ps</li>
+</ul>
+<p>端口映射，将容器的端口映射宿主机</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208211241926.png" alt="image-20220821124155858"></p>
+<h4 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h4><p>对于不会运行的容器，可以取Docker Hub上查看。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208211236068.png" alt="image-20220821123628024"></p>
 <hr>
 <h3 id="仓库"><a href="#仓库" class="headerlink" title="仓库"></a>仓库</h3><h4 id="Docker-Registry"><a href="#Docker-Registry" class="headerlink" title="Docker Registry"></a>Docker Registry</h4><p>Docker Registry就是一个可以集中存储、分发镜像的服务。我将镜像构建完成之后，可以很容易的在当前宿主机上运行，但是，如果我需要其他服务器上使用该镜像，或者分享给别人使用时Docker Registry就很有用了。</p>
 <p><strong>一个Docker Registry中可以有多个仓库（<code>Repository</code>）；每个仓库可以包含多个标签（<code>Tag</code>）；每个标签对应一个镜像。</strong></p>
@@ -3028,9 +3061,143 @@
 <li><code>ubuntu:18.04</code>：这是指用 <code>ubuntu:18.04</code> 镜像为基础来启动容器。</li>
 <li><code>bash</code>：放在镜像名后的是 <strong>命令</strong>，这里我们希望有个交互式 Shell，因此用的是 <code>bash</code>。</li>
 </ul>
-<p>进入容器后，我们就可以在Shell下操作，执行任何所需的命令。如上述代码</p>
+<p>通过<code>docker</code> <code>exec</code>进入容器后，我们就可以在Shell下操作，执行任何所需的命令。如上述代码</p>
+<p>修改容器中文件的内容可以通过 cat查看 sed修改</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sed -i <span class="string">&#x27;s#Welcome to nginx#传智教育欢迎您#g&#x27;</span> index.html</span><br><span class="line">sed -i <span class="string">&#x27;s#&lt;head&gt;#&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;#g&#x27;</span> index.html</span><br></pre></td></tr></table></figure>
+
+<p><strong>一般不在容器内修改容器内文件</strong></p>
 <p>可以通过<code>exit</code>退出这个容器。</p>
-<h1 id="持续更新中"><a href="#持续更新中" class="headerlink" title="持续更新中"></a>持续更新中</h1>]]></content>
+<h2 id="数据卷"><a href="#数据卷" class="headerlink" title="数据卷"></a>数据卷</h2><p>容器与数据耦合的问题，数据卷则完美解决了这些问题。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208211631714.png" alt="image-20220821163050315"></p>
+<p><strong>数据卷（volume）</strong>：是一个虚拟目录，指向宿主机文件系统中的某个目录。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208211632700.png" alt="image-20220821163214609"></p>
+<p>数据卷操作的基本语法如下：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker volume [<span class="built_in">command</span>]</span><br></pre></td></tr></table></figure>
+
+<p>docker volume命令是数据卷操作，根据命令后跟随command来确定下一步操作：</p>
+<ul>
+<li>create   创建一个volume</li>
+<li>inspect  显示一个或多个volume的信息</li>
+<li>ls  列出所有的volume</li>
+<li>prune  删除未使用的volume</li>
+<li>rm  删除一个或多个指定的volume</li>
+</ul>
+<h3 id="挂载数据卷"><a href="#挂载数据卷" class="headerlink" title="挂载数据卷"></a>挂载数据卷</h3><p>我们在创建容器时，可以通过 -v 参数来挂载一个数据卷到某个容器目录</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208211641130.png" alt="image-20220821164126063"></p>
+<blockquote>
+<p>如果运行容器时volume不存在，会被自动创建出来</p>
+</blockquote>
+<h3 id="挂载宿主机目录"><a href="#挂载宿主机目录" class="headerlink" title="挂载宿主机目录"></a>挂载宿主机目录</h3><p>提示：目录挂载与数据卷挂载的语法是类似的：</p>
+<ul>
+<li>-v [宿主机目录]:[容器内目录]</li>
+<li>-v [宿主机文件]:[容器内文件]</li>
+</ul>
+<p><strong>数据卷挂载的方式对比</strong></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208211701670.png" alt="image-20220821170135582"></p>
+<p><strong>案例展示：</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker run --name nginx -d -p 80:80 -v /home/docker/nginx/html:/usr/share/nginx/html -v /home/docker/nginx/conf/nginx.conf:/etc/nginx/nginx.conf nginx</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<li>docker run的命令中通过 -v 参数挂载文件或目录到容器中：<ol>
+<li>-v volume名称:容器内目录</li>
+<li>-v 宿主机文件:容器内文件</li>
+<li>-v 宿主机目录:容器内目录</li>
+</ol>
+</li>
+<li>数据卷挂载与目录直接挂载的区别：<ol>
+<li>数据卷挂载耦合度低，由docker来管理目录，但是目录较深，不好找</li>
+<li>目录挂载耦合度高，需要我们自己管理目录，不过目录容易寻找查看</li>
+</ol>
+</li>
+</ol>
+<h2 id="Dockerfile自定义镜像"><a href="#Dockerfile自定义镜像" class="headerlink" title="Dockerfile自定义镜像"></a>Dockerfile自定义镜像</h2><h3 id="镜像结构"><a href="#镜像结构" class="headerlink" title="镜像结构"></a>镜像结构</h3><ul>
+<li>镜像是将应用程序及其需要的系统函数库、环境、配置、依赖打包而成。</li>
+</ul>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208211800881.png" alt="image-20220821180045751"></p>
+<p><strong>镜像是分层结构，每一层称为一个Layer</strong></p>
+<ul>
+<li>BaseImage层：包含基本的系统函数库、环境变量、文件系统</li>
+<li>Entrypoint：入口，是镜像中应用启动的命令</li>
+<li>其他：在BaseImage基础上添加依赖、安装程序、完成整个应用的安装和配置。</li>
+</ul>
+<h3 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h3><p>Dockerfile就是一个文本文件，其中包含一个个的**指令(Instruction)**，用指令来说明要执行什么操作来构建镜像。每一个指令都会形成一层Layer。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208211805206.png" alt="image-20220821180547123"></p>
+<p>更新详细语法说明，请参考官网文档： <a href="https://docs.docker.com/engine/reference/builder">https://docs.docker.com/engine/reference/builder</a></p>
+<ul>
+<li><p>Dockerfile的第一行必须是FROM，从第一个基础镜像来构建</p>
+</li>
+<li><p><strong>基础镜像可以是基本操作系统，如Ubuntu。也可以是其他人制作好的镜像</strong>，例如：java:8-alpine</p>
+<blockquote>
+<p>在我们构建java应用的镜像时，一般需要指定操作系统，安装JDK，将jar包拷贝到那个目录，端口，镜像启动的命令。<strong>指定操作系统和安装JDK是避免不了且完全重复的部分</strong>，所以我们借助其他制作好的镜像就可以大大减少Dockerfile的编写量，实际得到的结果也是相同的。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="DockerCompose"><a href="#DockerCompose" class="headerlink" title="DockerCompose"></a>DockerCompose</h2><ul>
+<li>Docker Compose可以基于Compose文件帮助我们快速的部署分布式应用，而无需手动一个个创建和运行容器！</li>
+<li>Compose文件是一个文本文件，通过指令定义集群中的每个容器如何运行。</li>
+</ul>
+<p>案例：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208211824956.png" alt="image-20220821182438898"></p>
+<ul>
+<li>DockerCompose的详细语法参考官网：<a href="https://docs.docker.com/compose/compose-file/">https://docs.docker.com/compose/compose-file/</a></li>
+</ul>
+<blockquote>
+<p>帮助我们快速部署分布式应用，无需一个个微服务去构建镜像和部署。</p>
+</blockquote>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin</span><br></pre></td></tr></table></figure>
+
+<p>这条命令会安装<em>最新版本</em>的 Docker Engine、containerd 和 Docker Compose。</p>
+<p>安装docker-compose工具库，安装后才能使用docker-compose的相关命令</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo yum install docker-compose</span><br></pre></td></tr></table></figure>
+
+<h3 id="Docker-Compose的命令补全配置"><a href="#Docker-Compose的命令补全配置" class="headerlink" title="Docker Compose的命令补全配置"></a>Docker Compose的命令补全配置</h3><p>首先安装bash-completion</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo yum install -y bash-completion</span><br></pre></td></tr></table></figure>
+
+<p>然后执行</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> “199.232.68.133 raw.githubusercontent.com” &gt;&gt; /etc/hosts </span><br></pre></td></tr></table></figure>
+
+<p>最后执行</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo curl -L https://raw.githubusercontent.com/docker/compose/1.29.1/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose</span><br><span class="line"><span class="built_in">source</span> /etc/bash_completion.d/docker-compose</span><br></pre></td></tr></table></figure>
+
+<p>完成配置</p>
+<h2 id="Docker镜像仓库"><a href="#Docker镜像仓库" class="headerlink" title="Docker镜像仓库"></a>Docker镜像仓库</h2><p>镜像仓库（ Docker Registry ）有公共的和私有的两种形式：</p>
+<ul>
+<li><p>公共仓库：例如Docker官方的 Docker Hub，国内也有一些云服务商提供类似于 Docker Hub 的公开服务，比如 网易云镜像服务、DaoCloud 镜像服务、阿里云镜像服务等。</p>
+</li>
+<li><p>除了使用公开仓库外，用户还可以在本地搭建私有 Docker Registry。企业自己的镜像最好是采用私有Docker Registry来实现。</p>
+</li>
+</ul>
+<p>使用DockerCompose文件来部署Docker私有仓库</p>
+<h3 id="简化版镜像仓库"><a href="#简化版镜像仓库" class="headerlink" title="简化版镜像仓库"></a>简化版镜像仓库</h3><p>搭建方式比较简单，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -d --restart=always --name registry -p 5000:5000 -v registry-data:/var/lib/registry registry	</span><br></pre></td></tr></table></figure>
+
+<p>命令中挂载了一个数据卷registry-data到容器内的&#x2F;var&#x2F;lib&#x2F;reigstry目录，这是私有镜像库存放数据的目录</p>
+<p>访问<a href="http://yourip:5000/v2/catalog%E5%8F%AF%E4%BB%A5%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E7%A7%81%E6%9C%89%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E4%B8%AD%E5%8C%85%E5%90%AB%E7%9A%84%E9%95%9C%E5%83%8F">http://yourip:5000/v2/catalog可以查看当前私有镜像服务中包含的镜像</a></p>
+<h3 id="带有图形化界面的界面版本"><a href="#带有图形化界面的界面版本" class="headerlink" title="带有图形化界面的界面版本"></a>带有图形化界面的界面版本</h3><p>Docker官方的Docker Registry是一个基础版本的Docker镜像仓库，具备仓库管理的完整功能，但是没有图形化界面。</p>
+<p>使用DockerCompose部署带有图像界面的DockerRegistry，命令如下：</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">registry:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">registry</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./registry-data:/var/lib/registry</span></span><br><span class="line">  <span class="attr">ui:</span> <span class="comment">#ui界面并非docker官方提供的 而是有其他开发人员提供,这里使用dockercompose将两者组合起来</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">joxit/docker-registry-ui:static</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">8080</span><span class="string">:80</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">REGISTRY_TITLE=Devildyw私有仓库</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">REGISTRY_URL=http://registry:5000</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">registry</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="配置Docker-信任地址"><a href="#配置Docker-信任地址" class="headerlink" title="配置Docker 信任地址"></a>配置Docker 信任地址</h4><p>我们的私服采用的是http协议，默认不被Docker信任，所以需要做一个配置：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment">#打开要修改的文件</span></span><br><span class="line"><span class="comment">#添加内容</span></span><br><span class="line"><span class="string">&quot;insecure-registries&quot;</span>:[<span class="string">&quot;http://121.37.27.207:8080&quot;</span>]</span><br><span class="line"><span class="comment">#重加载</span></span><br><span class="line">systemctl daemon-reload</span><br><span class="line"><span class="comment">#重启docker</span></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+<p>配置完成后，编写docker-compose.yml文件，将如上的内容填写进去保存后，执行</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker-compose up -d </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208211951542.png" alt="image-20220821195137434"></p>
+<h3 id="在私有镜像仓库推送或拉取镜像"><a href="#在私有镜像仓库推送或拉取镜像" class="headerlink" title="在私有镜像仓库推送或拉取镜像"></a>在私有镜像仓库推送或拉取镜像</h3><p>推送镜像到私有镜像服务必须先tag，步骤如下：</p>
+<ol>
+<li><p>重新tag本地镜像，名称前缀为私有仓库地址：121.37.27.207:8080&#x2F;</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker tag nginx:latest 121.37.27.207:8080/nginx:1.0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>推送镜像</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker push 121.37.27.207:8080/nginx:1.0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>拉取镜像</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker pull 121.37.27.207:8080/nginx:1.0</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
       <categories>
         <category>DevOps</category>
       </categories>
@@ -17224,6 +17391,18 @@ String servletPath = request.getServletPath(); //   /testRequest
       </categories>
       <tags>
         <tag>Spring Cloud</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux</title>
+    <url>/2022/08/22/Linux/</url>
+    <content><![CDATA[<p><a href="https://www.runoob.com/linux/linux-tutorial.html">Linux 教程 | 菜鸟教程 (runoob.com)</a></p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
       </tags>
   </entry>
 </search>
