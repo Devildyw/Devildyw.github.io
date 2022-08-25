@@ -14593,6 +14593,26 @@ String servletPath = request.getServletPath(); //   /testRequest
 <p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208012011953.png" alt="image-20220801201113895"></p>
 <h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><p>Spring Boot整合 <code>RabbitMQ</code> 减少了代码量、提供了配置类工厂供开发人员使用，配置完成后，只需要注入其提供了<code>RabbitTemplate</code>，即可轻松地发送消息；</p>
 <p>消费端直接使用<code>@RabbitListener</code>完成消息接收</p>
+<h3 id="消息转化器"><a href="#消息转化器" class="headerlink" title="消息转化器"></a>消息转化器</h3><p>Spring AMQP发送方法中，接收消息的类型是Object，也就是说我们可以发送任意对象类型的消息，是因为Spring AMQP默认会帮助我们序列化为字节后发送</p>
+<p>当然我们也可以自定义序列化的方式，比如JSON格式</p>
+<p>生产者消费者都引入JSON依赖</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-json<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>配置新的消息转化器</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RabbitMQConfig</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> MessageConverter <span class="title function_">messageConverter</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Jackson2JsonMessageConverter</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>生产者发送</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testMessageConverter</span><span class="params">()</span>&#123;</span><br><span class="line">    HashMap&lt;String, String&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;ding&quot;</span>,<span class="string">&quot;丁杨维&quot;</span>);</span><br><span class="line">    rabbitTemplate.convertAndSend(<span class="string">&quot;message.queue&quot;</span>,map);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>消费者接收</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RabbitListener(queuesToDeclare = @Queue(</span></span><br><span class="line"><span class="meta">        name = &quot;message.queue&quot;,</span></span><br><span class="line"><span class="meta">        durable = &quot;true&quot;</span></span><br><span class="line"><span class="meta">))</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">listenMessageJsonConverter</span><span class="params">(Map&lt;String,Object&gt; map)</span>&#123;</span><br><span class="line">    System.out.println(map);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <h1 id="高级特性"><a href="#高级特性" class="headerlink" title="高级特性"></a>高级特性</h1><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208071853550.png" alt="image-20220807185257378"></p>
 <h2 id="消息的可靠性"><a href="#消息的可靠性" class="headerlink" title="消息的可靠性"></a>消息的可靠性</h2><h3 id="消息的可靠性问题"><a href="#消息的可靠性问题" class="headerlink" title="消息的可靠性问题"></a>消息的可靠性问题</h3><p>消费者从生产者发送到exchange，再到queue，再到消费者，有那些倒置消息丢失的可能性？</p>
 <ul>
@@ -17199,6 +17219,11 @@ String servletPath = request.getServletPath(); //   /testRequest
 <h2 id="环境隔离-NameSpace"><a href="#环境隔离-NameSpace" class="headerlink" title="环境隔离 - NameSpace"></a>环境隔离 - NameSpace</h2><p>Nacos中服务存储和数据存储的最外层都是一个名为 namespace 的东西，用来做最外层隔离。</p>
 <p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208131508378.png"></p>
 <p>用于进行租户粒度的配置隔离。不同的命名空间下，可以存在相同的 Group 或 Data ID 的配置。Namespace 的常用场景之一是不同环境的配置的区分隔离，例如开发测试环境和生产环境的资源（如配置、服务）隔离等。</p>
+<p>Nacos 数据模型 Key 由三元组唯一确认。</p>
+<ul>
+<li><strong>作为注册中心时，Namespace + Group + Service</strong></li>
+<li><strong>作为配置中心时，Namespace + Group + DataId</strong></li>
+</ul>
 <p>在Nacos控制台可用创建 namespace，用来隔离环境</p>
 <p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208131513130.png" alt="image-20220813151321008"></p>
 <p>然后填写一个新的命名空间信息：</p>
@@ -17403,6 +17428,413 @@ String servletPath = request.getServletPath(); //   /testRequest
       </categories>
       <tags>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式--结构型设计模式之适配器模式</title>
+    <url>/2022/08/25/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="设计模式–结构型设计模式之适配器模式"><a href="#设计模式–结构型设计模式之适配器模式" class="headerlink" title="设计模式–结构型设计模式之适配器模式"></a>设计模式–结构型设计模式之适配器模式</h1><h2 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h2><h3 id="1）概述"><a href="#1）概述" class="headerlink" title="1）概述"></a>1）概述</h3><p>​        在现实生活中，经常出现两个对象因接口不兼容而不能在一起工作的实例，这时需要第三者进行适配。例如，讲中文的人同讲英文的人对话时需要一个翻译，用直流电的笔记本电脑接交流电源时需要一个电源适配器，用计算机访问照相机的 SD 内存卡时需要一个读卡器等。还有像下面这张图一样：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208251751012.webp" alt="在这里插入图片描述"></p>
+<p>​        在软件设计中也可能出现：</p>
+<ol>
+<li><strong>需要开发的具有某种业务功能的组件在现有的组件库中已经存在，但它们与当前系统的接口规范不兼容，如果重新开发这些组件成本又很高，这时用适配器模式能很好地解决这些问题。</strong></li>
+<li>如果想增加现有组件的复用率也可以使用适配器模式。</li>
+</ol>
+<h3 id="2）介绍"><a href="#2）介绍" class="headerlink" title="2）介绍"></a>2）介绍</h3><p>适配器模式（Adapter）的定义如下：将一个类的接口转换成客户希望的另外一个接口，使得原本由于接口不兼容而不能一起工作的那些类能一起工作。适配器模式分为类结构型模式和对象结构型模式两种，前者类之间的耦合度比后者高，且要求程序员了解现有组件库中的相关组件的内部结构，所以应用相对较少些。</p>
+<p>Adapter模式的宗旨：<strong>保留现有类所提供的服务，向客户提供接口，以满足客户的期望</strong>。</p>
+<h3 id="3）角色结构"><a href="#3）角色结构" class="headerlink" title="3）角色结构"></a>3）角色结构</h3><p>适配器模式（Adapter）包含以下主要角色：</p>
+<ul>
+<li>目标（Target）接口：当前系统业务所期待的接口，它可以是抽象类或接口。</li>
+<li>适配者（Adaptee）类：它是被访问和适配的现存组件库中的组件接口。</li>
+<li>适配器（Adapter）类：它是一个转换器，通过继承或引用适配者的对象，把适配者接口转换成目标接口，让客户按目标接口的格式访问适配者。</li>
+</ul>
+<blockquote>
+<p>适配器就是使用现有的组件（适配者）来实现目标接口规范（目标接口）来完成转化的一个类。</p>
+</blockquote>
+<h3 id="4）使用场景"><a href="#4）使用场景" class="headerlink" title="4）使用场景"></a>4）使用场景</h3><p>适配器模式（Adapter）通常适用于以下场景。</p>
+<ul>
+<li>以前开发的系统存在满足新系统功能需求的类，但其接口同新系统的接口不一致。（<del>就是所谓的加一层，一层不行就加两层</del>）😁</li>
+<li>使用第三方提供的组件，但组件接口定义和自己要求的接口定义不同。</li>
+</ul>
+<h2 id="二、类适配器"><a href="#二、类适配器" class="headerlink" title="二、类适配器"></a>二、类适配器</h2><p>当客户在接口中定义了他期望的行为时，我们就可以应用适配器模式，提供一个实现该接口的类，并且扩展已有的类，通过创建子类来实现适配。</p>
+<p><code>实现方式</code>：<strong>定义一个适配器类来实现当前系统的业务接口，同时又继承现有组件库中已经存在的组件</strong>。</p>
+<p>我们直接用之前的那个图来做个例子：中国人到了欧洲，的给自己电脑充电，但因为自己电脑是双叉，欧式是三叉，这中间就得需要一个转换器。<strong>对于电脑而言，它只能是双叉的，但是现在只有三叉的插座，想要充电，就必须能让双叉的插头能够插入三叉的插座上，此时我们需要一个适配器，将三叉插座的电传输给双叉的插头。此时的目标是双叉，需要将三叉的电传输到双叉的线上。</strong></p>
+<blockquote>
+<p>可能使用sd卡和tf卡的案例比较好理解，对于同一台电脑而言它只能插入sd卡，但是呢我们现在不想让他插入sd读取数据了，我想让他读取tf卡，但是电脑不能匹配，此时就只能使用tf卡转sd的适配器了，通过读sd的方式读取了tf卡。对于该问题，目标接口就是sd卡，而适配者是tf卡，tf卡不符合现有接口规范（sd卡），需要通过适配器（适配器通过现有组件tf的读写方式实现了sd接口的规范）完成了转化。</p>
+</blockquote>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208251751008.webp" alt="在这里插入图片描述"></p>
+<h3 id="2-1、代码"><a href="#2-1、代码" class="headerlink" title="2.1、代码"></a>2.1、代码</h3><p>适配者（Adaptee）：即图中的欧式三叉</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">EuropeSocket</span> &#123;</span><br><span class="line">    <span class="comment">/** 欧式三叉 通电 接通电 插座*/</span></span><br><span class="line">    String <span class="title function_">useEuropesocket</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 欧式三叉实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EuropeSocketImpl</span> <span class="keyword">implements</span> <span class="title class_">EuropeSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useEuropesocket</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span><span class="string">&quot;使用欧式三叉充电&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> msg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>目标（Target）接口：即中国双叉</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用中国双叉充电</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    String <span class="title function_">useChineseSocket</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中国插头的实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChineseSocketImpl</span> <span class="keyword">implements</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">()</span> &#123;</span><br><span class="line">        String msg=<span class="string">&quot;使用中国双叉充电&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> msg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>适配器（Adapter）类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 定义适配器类 中国双叉转为欧洲三叉</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChineseAdapterEurope</span> <span class="keyword">extends</span> <span class="title class_">EuropeSocketImpl</span> <span class="keyword">implements</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;使用转换器转换完成&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> useEuropesocket();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>电脑类，对于电脑类而言，它只能使用双叉的充电器，所以客户端希望的目标类就是中国双叉。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Computer</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">(ChineseSocket chineseSocket)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(chineseSocket == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>(<span class="string">&quot;sd card null&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> chineseSocket.useChineseSocket();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>测试：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Computer</span> <span class="variable">computer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Computer</span>();</span><br><span class="line">        <span class="type">ChineseSocket</span> <span class="variable">chineseSocket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChineseSocketImpl</span>();</span><br><span class="line">        System.out.println(computer.useChineseSocket(chineseSocket));</span><br><span class="line">        System.out.println(<span class="string">&quot;------------&quot;</span>);</span><br><span class="line">        <span class="type">ChineseAdapterEurope</span> <span class="variable">adapter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChineseAdapterEurope</span>();</span><br><span class="line">        System.out.println(computer.useChineseSocket(adapter));</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 输出：</span></span><br><span class="line"><span class="comment">         * 使用中国双叉充电</span></span><br><span class="line"><span class="comment">         * ------------</span></span><br><span class="line"><span class="comment">         * 使用转换器转换完成</span></span><br><span class="line"><span class="comment">         * 使用欧式三叉充电</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码就是简单的演示了适配器的使用。</p>
+<p><code>注</code>:类适配器模式违背了合成复用原则。类适配器是客户类有一个接口规范的情况下可用，反之不可用。</p>
+<h2 id="三、对象适配器"><a href="#三、对象适配器" class="headerlink" title="三、对象适配器"></a>三、对象适配器</h2><p>对象适配器”通过组合除了满足“用户期待接口”还降低了代码间的不良耦合。在工作中推荐使用“对象适配”。</p>
+<p>实现方式：<strong>对象适配器模式可釆用将现有组件库中已经实现的组件引入适配器类中，该类同时实现当前系统的业务接口</strong>。</p>
+<p>题目还是和上面一样的哈。代码其实差异很小</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p>适配者（Adaptee）：即图中的欧式三叉</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">EuropeSocket</span> &#123;</span><br><span class="line">    <span class="comment">/** 欧式三叉 通电 接通电 插座*/</span></span><br><span class="line">    String <span class="title function_">useEuropesocket</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 欧式三叉实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EuropeSocketImpl</span> <span class="keyword">implements</span> <span class="title class_">EuropeSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useEuropesocket</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span><span class="string">&quot;使用欧式三叉充电&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> msg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>目标（Target）接口：即中国双叉</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用中国双叉充电</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    String <span class="title function_">useChineseSocket</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中国插头的实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChineseSocketImpl</span> <span class="keyword">implements</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">()</span> &#123;</span><br><span class="line">        String msg=<span class="string">&quot;使用中国双叉充电&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> msg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>适配器（Adapter）类： 就是这个适配器内做了一些更改 从继承改为了成员变量的方式</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChineseAdapterEurope</span> <span class="keyword">implements</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> EuropeSocket europeSocket;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ChineseAdapterEurope</span><span class="params">(EuropeSocket europeSocket)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.europeSocket = europeSocket;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;使用转换器转换完成&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> europeSocket.useEuropesocket();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>电脑类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Computer</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">(ChineseSocket chineseSocket)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(chineseSocket == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>(<span class="string">&quot;sd card null&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> chineseSocket.useChineseSocket();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>测试：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Computer</span> <span class="variable">computer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Computer</span>();</span><br><span class="line">        <span class="type">ChineseSocket</span> <span class="variable">chineseSocket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChineseSocketImpl</span>();</span><br><span class="line">        System.out.println(computer.useChineseSocket(chineseSocket));</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;------------&quot;</span>);</span><br><span class="line">        <span class="comment">//这里做了更改</span></span><br><span class="line">        EuropeSocket europeSocket=<span class="keyword">new</span> <span class="title class_">EuropeSocketImpl</span>();</span><br><span class="line">        <span class="type">ChineseAdapterEurope</span> <span class="variable">adapter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChineseAdapterEurope</span>(europeSocket);</span><br><span class="line">        System.out.println(computer.useChineseSocket(adapter));</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 输出：</span></span><br><span class="line"><span class="comment">         * 使用中国双叉充电</span></span><br><span class="line"><span class="comment">         * ------------</span></span><br><span class="line"><span class="comment">         * 使用转换器转换完成</span></span><br><span class="line"><span class="comment">         * 使用欧式三叉充电</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这就是对象适配器啦，</p>
+<p>适合于解决问题常见：</p>
+<ul>
+<li>　需要的东西有，但不能用，且短时间无法改造。即，使得一个功能适合不同的环境。</li>
+<li>　　在开发中，系统的数据、行为都匹配，但接口不符时，可以考虑适配器。</li>
+<li>　　<strong>希望复用一些现存的类，但是接口又与复用环境的要求不一致，应该考虑用适配器模式。</strong>（使用一个已经存在的类，但它的接口（即，方法)，与需要的不相同时）</li>
+</ul>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p><strong>适配器模式（Adapter）可扩展为双向适配器模式，双向适配器类既可以把适配者接口转换成目标接口，也可以把目标接口转换成适配者接口</strong>。</p>
+<h2 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h2><p><strong>优点</strong>：</p>
+<ul>
+<li>客户端通过适配器可以透明地调用目标接口。</li>
+<li>复用了现存的类，程序员不需要修改原有代码而重用现有的适配者类。<strong>提高了类的复用</strong></li>
+<li><strong>将目标类和适配者类解耦，解决了目标类和适配者类接口不一致的问题</strong>。灵活性好</li>
+<li>可以让任何两个没有关联的类一起运行</li>
+<li><strong>在很多业务场景中符合开闭原则</strong></li>
+</ul>
+<p><strong>其缺点是</strong>：</p>
+<ul>
+<li>适配器编写过程需要结合业务场景全面考虑，可能会增加系统的复杂性。</li>
+<li>增加代码阅读难度，降低代码可读性，过多使用适配器会使系统代码变得凌乱。（如：明明看到调用的是 A 接口，其实内部被适配成了 B 接口的实现，一个系统如果太多出现这种情况，无异于一场灾难）</li>
+</ul>
+<p> <strong>核心思想：</strong></p>
+<p>继承或者依赖（引用）适配者对象，然后实现目标的接口。确保原来代码不改变的情况下，增加新的功能。</p>
+<p>因为目标类是需要使用的，而我们现在并不能直接使用目标类（一个已存在的类，但是它不符合现有的接口规范），而需要通过适配器将现有的组件转化为目标类，所以适配器需由现有组件实现目标接口的功能（转化使其符合现有规范）来完成转化。</p>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>Developer</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring Boot Actuator</title>
+    <url>/2022/08/23/Spring%20Boot%20Actuator/</url>
+    <content><![CDATA[<h1 id="Spring-Boot-Actuator"><a href="#Spring-Boot-Actuator" class="headerlink" title="Spring Boot Actuator"></a>Spring Boot Actuator</h1><p>在企业级应用中，学习了如何进行SpringBoot应用的功能开发，以及如何写单元测试、集成测试等还是不够的。在实际的软件开发中还需要：<strong>应用程序的监控和管理</strong>。SpringBoot的Actuator模块实现了应用的监控与管理。这样的需求在分布式服务中基本是必须的，项目上线后的监控也是如此</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>生产系统中，往往需要对系统实际运行的情况（例如cpu、io、disk、db、业务功能等指标）进行监控运维。在SpringBoot项目中Actuator模块提供了众多HTTP接口端点（Endpoint），<strong>来提供应用程序运行时的内部状态信息。</strong></p>
+<p>Actuator模块提供了一个监控和管理生产环境的模块，可以使用<strong>http、jmx、ssh、telnet等</strong>来管理和监控应用。包括应用的审计（Auditing）、健康（health）状态信息、数据采集（metrics gathering）统计等监控运维的功能。同时，提供了可以扩展 Actuator端点（Endpoint）自定义监控指标。这些指标都是以<strong>JSON接口数据的方式呈现</strong>。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>使用Spring Boot Actuator需要加入如下依赖：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>actuator并没有默认集成在自动配置中（所以需要手动引入），而在作为独立的项目来呈现的。当引入了上面的依赖，默认会引入actuator相关的两个项目：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-actuator-autoconfigure<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>其中<code>spring-boot-actuator</code>为功能实现，<code>spring-boot-actuator-autoconfigure</code>为自动配置。</p>
+<p>需要注意：因<code>SpringBoot Actuator</code>会暴露服务的详细信息，为了保障安全性，建议添加安全控制的相关依赖<code>spring-boot-starter-security</code>，这样在访问应用监控端点时，都需要输入验证信息。所需依赖如下：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>当然也可以手动自定义不需要引入<code>security</code></p>
+<p>关于security的使用我们在此不进行展开，可在application文件中配置相应的访问密码：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">security:</span></span><br><span class="line">    <span class="attr">user:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">admin</span></span><br><span class="line">      <span class="attr">password:</span> <span class="string">admin</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>经过以上步骤的操作，启动SpringBoot项目，actuator便自动集成配置了，可通过：</p>
+<p><a href="http://localhost:8080/actuator">http://localhost:8080/actuator</a> 访问，结果如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;_links&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;self&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;href&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://localhost:8080/actuator&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;templated&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;health&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;href&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://localhost:8080/actuator/health&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;templated&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;health-path&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;href&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://localhost:8080/actuator/health/&#123;*path&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;templated&quot;</span><span class="punctuation">:</span> <span class="keyword">true</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>默认支持的链接有：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/actuator</span><br><span class="line">/actuator/health</span><br><span class="line">/actuator/health/&#123;*path&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以在application配置文件中配置开启更多的监控信息：</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">info:</span></span><br><span class="line">    <span class="attr">env:</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span> <span class="comment">#/info获取info前缀的配置信息 这一项必不可少</span></span><br><span class="line">  <span class="attr">endpoints:</span></span><br><span class="line">    <span class="attr">web:</span></span><br><span class="line">      <span class="attr">exposure:</span></span><br><span class="line">        <span class="attr">include:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="string">&#x27;*&#x27;</span></span><br><span class="line">  <span class="attr">endpoint:</span></span><br><span class="line">    <span class="attr">health:</span></span><br><span class="line">      <span class="attr">show-details:</span> <span class="string">ALWAYS</span></span><br><span class="line">    <span class="attr">shutdown:</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>management.endpoints.web.exposure.include</code>&#x3D;’*’，代表开启全部监控，也可仅配置需要开启的监控，如： <code>management.endpoints.web.exposure.include</code>&#x3D;beans,trace。</p>
+</li>
+<li><p><code>management.endpoint.health.show-details</code>&#x3D;always，health endpoint开启显示全部细节。默认情况下&#x2F;actuator&#x2F;health是公开的，但不显示细节。</p>
+</li>
+<li><p><code>management.endpoints.web.base-path</code>&#x3D;&#x2F;monitor，启用指定的url地址访问根路径，默认路径为&#x2F;actuator&#x2F;*，开启则访问路径变为&#x2F;monitor&#x2F;*。</p>
+</li>
+<li><p><code>management.endpoint.shutdown.enabled</code>&#x3D;true，启用接口关闭<code>SpringBoot</code>。</p>
+</li>
+</ul>
+<p>监控信息如果需要跨越调用，可通过<code>CORS</code>配置来支持，默认处于禁用状态。设置<code>management.endpoints.web.cors.allowed-origins</code>属性后开启。</p>
+<p>比如允许来自<a href="https://www.choupangxia.com/">https://www.choupangxia.com</a> 域的GET和POST调用：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">endpoints:</span></span><br><span class="line">    <span class="attr">web:</span></span><br><span class="line">      <span class="attr">cors:</span></span><br><span class="line">        <span class="attr">allowed-origins:</span> <span class="string">https://www.choupangxia.com</span></span><br><span class="line">        <span class="attr">allowed-methods:</span> <span class="string">GET,POST</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="REST接口"><a href="#REST接口" class="headerlink" title="REST接口"></a>REST接口</h2><p>Spring Boot Actuator提供了非常丰富的监控接口，可以通过这些接口了解应用程序运行时的内部状况。Actuator也支持用户自定义添加端点，可以根据实际应用，定义一些比较关心的指标，在运行期进行监控。</p>
+<table>
+<thead>
+<tr>
+<th>HTTP方法</th>
+<th>路径</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td>&#x2F;auditevents</td>
+<td>显示当前应用程序的审计事件信息</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;beans</td>
+<td>显示一个应用中所有Spring Beans的完整列表</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;conditions</td>
+<td>显示配置类和自动配置类(configuration and auto-configuration classes)的状态及它们被应用或未被应用的原因。</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;configprops</td>
+<td>显示一个所有@ConfigurationProperties的集合列表</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;env</td>
+<td>显示来自Spring的ConfigurableEnvironment的属性。</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;flyway</td>
+<td>显示数据库迁移路径，如果有的话。</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;health</td>
+<td>显示应用的健康信息（当使用一个未认证连接访问时显示一个简单的’status’，使用认证连接访问则显示全部信息详情）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;info</td>
+<td>显示任意的应用信息</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;liquibase</td>
+<td>展示任何Liquibase数据库迁移路径，如果有的话</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;metrics</td>
+<td>展示当前应用的metrics信息</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;mappings</td>
+<td>显示一个所有@RequestMapping路径的集合列表</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;scheduledtasks</td>
+<td>显示应用程序中的计划任务</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;sessions</td>
+<td>允许从Spring会话支持的会话存储中检索和删除(retrieval and deletion)用户会话。使用Spring Session对反应性Web应用程序的支持时不可用。</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>&#x2F;shutdown</td>
+<td>允许应用以优雅的方式关闭（默认情况下不启用）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;threaddump</td>
+<td>执行一个线程dump</td>
+</tr>
+</tbody></table>
+<p>如果使用web应用(Spring MVC, Spring WebFlux, 或者 Jersey)，还可以使用以下接口：</p>
+<table>
+<thead>
+<tr>
+<th>HTTP方法</th>
+<th>路径</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td>&#x2F;heapdump</td>
+<td>返回一个GZip压缩的hprof堆dump文件</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;jolokia</td>
+<td>通过HTTP暴露JMX beans（当Jolokia在类路径上时，WebFlux不可用）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;logfile</td>
+<td>返回日志文件内容（如果设置了logging.file或logging.path属性的话），支持使用HTTP Range头接收日志文件内容的部分信息</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;prometheus</td>
+<td>以可以被Prometheus服务器抓取的格式显示metrics信息</td>
+</tr>
+</tbody></table>
+<h2 id="接口详解"><a href="#接口详解" class="headerlink" title="接口详解"></a>接口详解</h2><p>health主要用来检查应用的运行状态，这是使用频次最高的监控点。通常使用此接口显示应用实例的运行状态，以及应用不“健康”的原因，比如数据库连接、磁盘空间不够等，如常用的eureka，zookeeper，consul注册中心就是靠该接口检测实例健康状态的。</p>
+<p>默认情况下health的状态是开放的，访问：<a href="http://localhost:8080/actuator/health">http://localhost:8080/actuator/health</a> 即可看到应用的状态。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;status&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;UP&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>设置状态码顺序：<code>setStatusOrder(Status.DOWN,Status.OUT*OF*SERVICE, Status.UP, Status.UNKNOWN</code>)。过滤掉不能识别的状态码。如果无任何状态码，整个<code>SpringBoot</code>应用的状态是UNKNOWN。将所有收集到的状态码排序。返回有序状态码序列中的第一个状态码，作为整个<code>SpringBoot</code>应用的状态。</p>
+<p>Health通过合并几个健康指数检查应用的健康情况。<code>SpringBoot Actuator</code>会自动配置以下内容：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>CassandraHealthIndicator</code></td>
+<td>检查Cassandra数据库是否已启动。</td>
+</tr>
+<tr>
+<td><code>CouchbaseHealthIndicator</code></td>
+<td>检查Couchbase群集是否已启动。</td>
+</tr>
+<tr>
+<td><code>DiskSpaceHealthIndicator</code></td>
+<td>检查磁盘空间不足。</td>
+</tr>
+<tr>
+<td><code>DataSourceHealthIndicator</code></td>
+<td>检查是否可以建立连接DataSource。</td>
+</tr>
+<tr>
+<td><code>ElasticsearchHealthIndicator</code></td>
+<td>检查Elasticsearch集群是否已启动。</td>
+</tr>
+<tr>
+<td><code>InfluxDbHealthIndicator</code></td>
+<td>检查InfluxDB服务器是否已启动。</td>
+</tr>
+<tr>
+<td><code>JmsHealthIndicator</code></td>
+<td>检查JMS代理是否启动。</td>
+</tr>
+<tr>
+<td><code>MailHealthIndicator</code></td>
+<td>检查邮件服务器是否已启动。</td>
+</tr>
+<tr>
+<td><code>MongoHealthIndicator</code></td>
+<td>检查Mongo数据库是否已启动。</td>
+</tr>
+<tr>
+<td><code>Neo4jHealthIndicator</code></td>
+<td>检查Neo4j服务器是否已启动。</td>
+</tr>
+<tr>
+<td><code>RabbitHealthIndicator</code></td>
+<td>检查Rabbit服务器是否已启动。</td>
+</tr>
+<tr>
+<td><code>RedisHealthIndicator</code></td>
+<td>检查Redis服务器是否启动。</td>
+</tr>
+<tr>
+<td><code>SolrHealthIndicator</code></td>
+<td>检查Solr服务器是否已启动。</td>
+</tr>
+</tbody></table>
+<p>可以通过设置 <code>management.health.defaults.enabled</code>属性来全部禁用。</p>
+<h2 id="原生端点"><a href="#原生端点" class="headerlink" title="原生端点"></a>原生端点</h2><p>原生端点分为三大类：</p>
+<ul>
+<li>应用配置类：获取应用程序中加载的应用配置、环境变量、自动化配置报告等与Spring Boot应用密切相关的配置类信息。</li>
+<li>度量指标类：获取应用程序运行过程中用于监控的度量指标，比如：内存信息、线程池信息、HTTP请求统计等。</li>
+<li>操作控制类：提供了对应用的关闭等操作类功能。</li>
+</ul>
+<hr>
+<h3 id="应用配置类"><a href="#应用配置类" class="headerlink" title="应用配置类"></a>应用配置类</h3><p>&#x2F;conditions：该端点用来获取应用的自动化配置报告，其中包括所有自动化配置的候选项。同时还列出了每个候选项自动化配置的各个先决条件是否满足。该端点可以帮助我们方便的找到一些自动化配置为什么没有生效的具体原因。</p>
+<p>该报告内容将自动化配置内容分为两部分：positiveMatches中返回的是条件匹配成功的自动化配置和negativeMatches中返回的是条件匹配不成功的自动化配置。</p>
+<p>部分代码如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;contexts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;application&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;positiveMatches&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;AuditEventsEndpointAutoConfiguration&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                    <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;condition&quot;</span><span class="punctuation">:</span> <span class="string">&quot;OnAvailableEndpointCondition&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;@ConditionalOnAvailableEndpoint marked as exposed by a &#x27;management.endpoints.web.exposure&#x27; property&quot;</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;BeansEndpointAutoConfiguration&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                    <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;condition&quot;</span><span class="punctuation">:</span> <span class="string">&quot;OnAvailableEndpointCondition&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;@ConditionalOnAvailableEndpoint marked as exposed by a &#x27;management.endpoints.web.exposure&#x27; property&quot;</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;BeansEndpointAutoConfiguration#beansEndpoint&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                    <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;condition&quot;</span><span class="punctuation">:</span> <span class="string">&quot;OnBeanCondition&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;@ConditionalOnMissingBean (types: org.springframework.boot.actuate.beans.BeansEndpoint; SearchStrategy: all) did not find any beans&quot;</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">]</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x2F;info：就是在配置文件中配置的以info开头的信息，如配置为：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">info:</span></span><br><span class="line">  <span class="attr">app:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">spring-boot-actuator</span></span><br><span class="line">    <span class="attr">version:</span> <span class="number">1.0</span><span class="number">.0</span></span><br></pre></td></tr></table></figure>
+
+<p>返回结果：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;app&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span><span class="string">&quot;spring-boot-actuator&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span><span class="string">&quot;1.0.0&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>info中配置的参数也可以通过符号*@*包围的属性值来自pom.xml文件中的元素节点。如下：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">info:</span></span><br><span class="line">    <span class="attr">build:</span></span><br><span class="line">        <span class="attr">artifact:</span> <span class="string">@project.artifactId@</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">@project.name@</span></span><br><span class="line">        <span class="attr">description:</span> <span class="string">@project.description@</span></span><br><span class="line">        <span class="attr">ersion:</span> <span class="string">@project.version@</span></span><br></pre></td></tr></table></figure>
+
+<p>返回结果：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;artifact&quot;</span><span class="punctuation">:</span> <span class="string">&quot;spring-learn&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;spring-learn&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Demo project for Spring Boot&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;ersion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.0.1-SNAPSHOT&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>&#x2F;beans：该端点用来获取应用上下文中创建的所有Bean。</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;contexts&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;application&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;beans&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;endpointCachingOperationInvokerAdvisor&quot;</span>: &#123;</span><br><span class="line">                    <span class="string">&quot;aliases&quot;</span>: [],</span><br><span class="line">                    <span class="string">&quot;scope&quot;</span>: <span class="string">&quot;singleton&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;type&quot;</span>: <span class="string">&quot;org.springframework.boot.actuate.endpoint.invoker.cache.CachingOperationInvokerAdvisor&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;resource&quot;</span>: <span class="string">&quot;class path resource [org/springframework/boot/actuate/autoconfigure/endpoint/EndpointAutoConfiguration.class]&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;dependencies&quot;</span>: [<span class="string">&quot;environment&quot;</span>]</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">&quot;defaultServletHandlerMapping&quot;</span>: &#123;</span><br><span class="line">                    <span class="string">&quot;aliases&quot;</span>: [],</span><br><span class="line">                    <span class="string">&quot;scope&quot;</span>: <span class="string">&quot;singleton&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;type&quot;</span>: <span class="string">&quot;org.springframework.web.servlet.HandlerMapping&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;resource&quot;</span>: <span class="string">&quot;class path resource [org/springframework/boot/autoconfigure/web/servlet/WebMvcAutoConfiguration<span class="variable">$EnableWebMvcConfiguration</span>.class]&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;dependencies&quot;</span>: []</span><br><span class="line">                &#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">&quot;parentId&quot;</span>: <span class="literal">null</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接口展现了bean的别名、类型、是否单例、类的地址、依赖等信息。</p>
+<p>&#x2F;configprops：该端点用来获取应用中配置的属性信息报告。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;spring.transaction-org.springframework.boot.autoconfigure.transaction.TransactionProperties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;prefix&quot;</span><span class="punctuation">:</span> <span class="string">&quot;spring.transaction&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面展示了TransactionProperties属性的配置信息。</p>
+<p>&#x2F;mappings：该端点用来返回所有SpringMVC的控制器映射关系报告。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;handler&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Actuator web endpoint &#x27;beans&#x27;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;predicate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&#123;GET /actuator/beans, produces [application/vnd.spring-boot.actuator.v2+json || application/json]&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;details&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;handlerMethod&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;className&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.springframework.boot.actuate.endpoint.web.servlet.AbstractWebMvcEndpointHandlerMapping.OperationHandler&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;handle&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;descriptor&quot;</span><span class="punctuation">:</span> <span class="string">&quot;(Ljavax/servlet/http/HttpServletRequest;Ljava/util/Map;)Ljava/lang/Object;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;requestMappingConditions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;consumes&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;headers&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;methods&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;GET&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;params&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;patterns&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;/actuator/beans&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;produces&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.spring-boot.actuator.v2+json&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;negated&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/json&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;negated&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>/env</code>：该端点与<code>/configprops</code>不同，它用来获取应用所有可用的环境属性报告。包括：环境变量、JVM属性、应用的配置配置、命令行中的参数。</p>
+<h3 id="度量指标类"><a href="#度量指标类" class="headerlink" title="度量指标类"></a>度量指标类</h3><p>应用配置类提供的指标为静态报告，而度量指标类端点提供的报告内容则是动态变化的，提供了应用程序在运行过程中的一些快照信息，比如：内存使用情况、HTTP请求统计、外部资源指标等。这些端点对于构建微服务架构中的监控系统非常有帮助。</p>
+<p>&#x2F;metrics：该端点用来返回当前应用的各类重要度量指标，比如：内存信息、线程信息、垃圾回收信息等。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;names&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;jvm.memory.max&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.threads.states&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;http.server.requests&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;process.files.max&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.gc.memory.promoted&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;system.load.average.1m&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.memory.used&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.gc.max.data.size&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.gc.pause&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.memory.committed&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;system.cpu.count&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;logback.events&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.global.sent&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.buffer.memory.used&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.sessions.created&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.threads.daemon&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;system.cpu.usage&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.gc.memory.allocated&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.global.request.max&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.global.request&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.sessions.expired&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.threads.live&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.threads.peak&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.global.received&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;process.uptime&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.sessions.rejected&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;process.cpu.usage&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.threads.config.max&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.classes.loaded&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.classes.unloaded&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.global.error&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.sessions.active.current&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.sessions.alive.max&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.gc.live.data.size&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.threads.current&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;process.files.open&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.buffer.count&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.buffer.total.capacity&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.sessions.active.max&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.threads.busy&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;process.start.time&quot;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>从上面的示例中有这些重要的度量值：</p>
+<ul>
+<li>系统信息：包括处理器数量processors、运行时间uptime和instance.uptime、系统平均负载systemload.average。</li>
+<li>mem.*：内存概要信息，包括分配给应用的总内存数量以及当前空闲的内存数量。这些信息来自java.lang.Runtime。</li>
+<li>heap.*：堆内存使用情况。这些信息来自java.lang.management.MemoryMXBean接口中getHeapMemoryUsage方法获取的java.lang.management.MemoryUsage。</li>
+<li>nonheap.*：非堆内存使用情况。这些信息来自java.lang.management.MemoryMXBean接口中getNonHeapMemoryUsage方法获取的java.lang.management.MemoryUsage。</li>
+<li>threads.*：线程使用情况，包括线程数、守护线程数（daemon）、线程峰值（peak）等，这些数据均来自java.lang.management.ThreadMXBean。</li>
+<li>classes.*：应用加载和卸载的类统计。这些数据均来自java.lang.management.ClassLoadingMXBean。</li>
+<li>gc.*：垃圾收集器的详细信息，包括垃圾回收次数gc.ps_scavenge.count、垃圾回收消耗时间gc.ps_scavenge.time、标记-清除算法的次数gc.ps_marksweep.count、标记-清除算法的消耗时间gc.ps_marksweep.time。这些数据均来自java.lang.management.GarbageCollectorMXBean。</li>
+<li>httpsessions.*：Tomcat容器的会话使用情况。包括最大会话数httpsessions.max和活跃会话数httpsessions.active。该度量指标信息仅在引入了嵌入式Tomcat作为应用容器的时候才会提供。</li>
+<li>gauge.*：HTTP请求的性能指标之一，它主要用来反映一个绝对数值。比如上面示例中的gauge.response.hello: 5，它表示上一次hello请求的延迟时间为5毫秒。</li>
+<li>counter.*：HTTP请求的性能指标之一，它主要作为计数器来使用，记录了增加量和减少量。如上示例中counter.status.200.hello: 11，它代表了hello请求返回200状态的次数为11。</li>
+</ul>
+<p>&#x2F;threaddump：会生成当前线程活动的快照。方便我们在日常定位问题的时候查看线程的情况。主要展示了线程名、线程ID、线程的状态、是否等待锁资源等信息。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;threads&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;threadName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Reference Handler&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;threadId&quot;</span><span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;blockedTime&quot;</span><span class="punctuation">:</span> <span class="number">-1</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;blockedCount&quot;</span><span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;waitedTime&quot;</span><span class="punctuation">:</span> <span class="number">-1</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;waitedCount&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockName&quot;</span><span class="punctuation">:</span> <span class="keyword">null</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockOwnerId&quot;</span><span class="punctuation">:</span> <span class="number">-1</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockOwnerName&quot;</span><span class="punctuation">:</span> <span class="keyword">null</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;daemon&quot;</span><span class="punctuation">:</span> <span class="keyword">true</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;inNative&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;suspended&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;threadState&quot;</span><span class="punctuation">:</span> <span class="string">&quot;RUNNABLE&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;priority&quot;</span><span class="punctuation">:</span> <span class="number">10</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;stackTrace&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;classLoaderName&quot;</span><span class="punctuation">:</span> <span class="keyword">null</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;moduleName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;java.base&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;moduleVersion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;11.0.4&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;methodName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;waitForReferencePendingList&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;fileName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Reference.java&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;lineNumber&quot;</span><span class="punctuation">:</span> <span class="number">-2</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;className&quot;</span><span class="punctuation">:</span> <span class="string">&quot;java.lang.ref.Reference&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;nativeMethod&quot;</span><span class="punctuation">:</span> <span class="keyword">true</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="attr">&quot;lockedMonitors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockedSynchronizers&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;className&quot;</span><span class="punctuation">:</span> <span class="string">&quot;java.util.concurrent.locks.ReentrantLock$NonfairSync&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;identityHashCode&quot;</span><span class="punctuation">:</span> <span class="number">2060076420</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockInfo&quot;</span><span class="punctuation">:</span> <span class="keyword">null</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;threadName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;DestroyJavaVM&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;threadId&quot;</span><span class="punctuation">:</span> <span class="number">42</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;blockedTime&quot;</span><span class="punctuation">:</span> <span class="number">-1</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;blockedCount&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;waitedTime&quot;</span><span class="punctuation">:</span> <span class="number">-1</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;waitedCount&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockName&quot;</span><span class="punctuation">:</span> <span class="keyword">null</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockOwnerId&quot;</span><span class="punctuation">:</span> <span class="number">-1</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockOwnerName&quot;</span><span class="punctuation">:</span> <span class="keyword">null</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;daemon&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;inNative&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;suspended&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;threadState&quot;</span><span class="punctuation">:</span> <span class="string">&quot;RUNNABLE&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;priority&quot;</span><span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;stackTrace&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockedMonitors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockedSynchronizers&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockInfo&quot;</span><span class="punctuation">:</span> <span class="keyword">null</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x2F;trace：该端点用来返回基本的HTTP跟踪信息。默认情况下，跟踪信息的存储采用。（2.2版本以后不在默认提供）</p>
+<h3 id="操作控制类"><a href="#操作控制类" class="headerlink" title="操作控制类"></a>操作控制类</h3><p>&#x2F;shutdown：配置文件中配置开启此功能：</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">management.endpoint.shutdown.enabled</span>=<span class="string">true</span></span><br></pre></td></tr></table></figure>
+
+<p>使用 curl 模拟 post 请求此接口：</p>
+<figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">curl -X POST <span class="string">&quot;http://localhost:8080/actuator/shutdown&quot;</span>复制代码</span><br></pre></td></tr></table></figure>
+
+<p>显示结果为：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Shutting down, bye...&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>由此可见shutdown可以关闭Spring Boot项目</p>
+]]></content>
+      <categories>
+        <category>监控</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
       </tags>
   </entry>
 </search>

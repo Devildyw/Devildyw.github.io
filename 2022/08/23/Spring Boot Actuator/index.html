@@ -1,0 +1,453 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Spring Boot Actuator | Devil的个人博客</title><meta name="keywords" content="Spring"><meta name="author" content="Devil"><meta name="copyright" content="Devil"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Spring Boot Actuator在企业级应用中，学习了如何进行SpringBoot应用的功能开发，以及如何写单元测试、集成测试等还是不够的。在实际的软件开发中还需要：应用程序的监控和管理。SpringBoot的Actuator模块实现了应用的监控与管理。这样的需求在分布式服务中基本是必须的，项目上线后的监控也是如此 简介生产系统中，往往需要对系统实际运行的情况（例如cpu、io、disk、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Boot Actuator">
+<meta property="og:url" content="https://devildyw.github.io/2022/08/23/Spring%20Boot%20Actuator/index.html">
+<meta property="og:site_name" content="Devil的个人博客">
+<meta property="og:description" content="Spring Boot Actuator在企业级应用中，学习了如何进行SpringBoot应用的功能开发，以及如何写单元测试、集成测试等还是不够的。在实际的软件开发中还需要：应用程序的监控和管理。SpringBoot的Actuator模块实现了应用的监控与管理。这样的需求在分布式服务中基本是必须的，项目上线后的监控也是如此 简介生产系统中，往往需要对系统实际运行的情况（例如cpu、io、disk、">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg">
+<meta property="article:published_time" content="2022-08-23T11:50:23.000Z">
+<meta property="article:modified_time" content="2022-08-23T14:09:05.834Z">
+<meta property="article:author" content="Devil">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2022/08/23/Spring%20Boot%20Actuator/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Spring Boot Actuator',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-08-23 22:09:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/dyw.css"><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">67</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">27</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Spring Boot Actuator</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-08-23T11:50:23.000Z" title="发表于 2022-08-23 19:50:23">2022-08-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-08-23T14:09:05.834Z" title="更新于 2022-08-23 22:09:05">2022-08-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%9B%91%E6%8E%A7/">监控</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Spring Boot Actuator"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Spring-Boot-Actuator"><a href="#Spring-Boot-Actuator" class="headerlink" title="Spring Boot Actuator"></a>Spring Boot Actuator</h1><p>在企业级应用中，学习了如何进行SpringBoot应用的功能开发，以及如何写单元测试、集成测试等还是不够的。在实际的软件开发中还需要：<strong>应用程序的监控和管理</strong>。SpringBoot的Actuator模块实现了应用的监控与管理。这样的需求在分布式服务中基本是必须的，项目上线后的监控也是如此</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>生产系统中，往往需要对系统实际运行的情况（例如cpu、io、disk、db、业务功能等指标）进行监控运维。在SpringBoot项目中Actuator模块提供了众多HTTP接口端点（Endpoint），<strong>来提供应用程序运行时的内部状态信息。</strong></p>
+<p>Actuator模块提供了一个监控和管理生产环境的模块，可以使用<strong>http、jmx、ssh、telnet等</strong>来管理和监控应用。包括应用的审计（Auditing）、健康（health）状态信息、数据采集（metrics gathering）统计等监控运维的功能。同时，提供了可以扩展 Actuator端点（Endpoint）自定义监控指标。这些指标都是以<strong>JSON接口数据的方式呈现</strong>。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>使用Spring Boot Actuator需要加入如下依赖：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>actuator并没有默认集成在自动配置中（所以需要手动引入），而在作为独立的项目来呈现的。当引入了上面的依赖，默认会引入actuator相关的两个项目：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-actuator-autoconfigure<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>其中<code>spring-boot-actuator</code>为功能实现，<code>spring-boot-actuator-autoconfigure</code>为自动配置。</p>
+<p>需要注意：因<code>SpringBoot Actuator</code>会暴露服务的详细信息，为了保障安全性，建议添加安全控制的相关依赖<code>spring-boot-starter-security</code>，这样在访问应用监控端点时，都需要输入验证信息。所需依赖如下：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>当然也可以手动自定义不需要引入<code>security</code></p>
+<p>关于security的使用我们在此不进行展开，可在application文件中配置相应的访问密码：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">security:</span></span><br><span class="line">    <span class="attr">user:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">admin</span></span><br><span class="line">      <span class="attr">password:</span> <span class="string">admin</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>经过以上步骤的操作，启动SpringBoot项目，actuator便自动集成配置了，可通过：</p>
+<p><a target="_blank" rel="noopener" href="http://localhost:8080/actuator">http://localhost:8080/actuator</a> 访问，结果如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;_links&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;self&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;href&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://localhost:8080/actuator&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;templated&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;health&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;href&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://localhost:8080/actuator/health&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;templated&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;health-path&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;href&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://localhost:8080/actuator/health/&#123;*path&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;templated&quot;</span><span class="punctuation">:</span> <span class="keyword">true</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>默认支持的链接有：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/actuator</span><br><span class="line">/actuator/health</span><br><span class="line">/actuator/health/&#123;*path&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以在application配置文件中配置开启更多的监控信息：</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">info:</span></span><br><span class="line">    <span class="attr">env:</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span> <span class="comment">#/info获取info前缀的配置信息 这一项必不可少</span></span><br><span class="line">  <span class="attr">endpoints:</span></span><br><span class="line">    <span class="attr">web:</span></span><br><span class="line">      <span class="attr">exposure:</span></span><br><span class="line">        <span class="attr">include:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="string">&#x27;*&#x27;</span></span><br><span class="line">  <span class="attr">endpoint:</span></span><br><span class="line">    <span class="attr">health:</span></span><br><span class="line">      <span class="attr">show-details:</span> <span class="string">ALWAYS</span></span><br><span class="line">    <span class="attr">shutdown:</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>management.endpoints.web.exposure.include</code>&#x3D;’*’，代表开启全部监控，也可仅配置需要开启的监控，如： <code>management.endpoints.web.exposure.include</code>&#x3D;beans,trace。</p>
+</li>
+<li><p><code>management.endpoint.health.show-details</code>&#x3D;always，health endpoint开启显示全部细节。默认情况下&#x2F;actuator&#x2F;health是公开的，但不显示细节。</p>
+</li>
+<li><p><code>management.endpoints.web.base-path</code>&#x3D;&#x2F;monitor，启用指定的url地址访问根路径，默认路径为&#x2F;actuator&#x2F;*，开启则访问路径变为&#x2F;monitor&#x2F;*。</p>
+</li>
+<li><p><code>management.endpoint.shutdown.enabled</code>&#x3D;true，启用接口关闭<code>SpringBoot</code>。</p>
+</li>
+</ul>
+<p>监控信息如果需要跨越调用，可通过<code>CORS</code>配置来支持，默认处于禁用状态。设置<code>management.endpoints.web.cors.allowed-origins</code>属性后开启。</p>
+<p>比如允许来自<a target="_blank" rel="noopener" href="https://www.choupangxia.com/">https://www.choupangxia.com</a> 域的GET和POST调用：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">endpoints:</span></span><br><span class="line">    <span class="attr">web:</span></span><br><span class="line">      <span class="attr">cors:</span></span><br><span class="line">        <span class="attr">allowed-origins:</span> <span class="string">https://www.choupangxia.com</span></span><br><span class="line">        <span class="attr">allowed-methods:</span> <span class="string">GET,POST</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="REST接口"><a href="#REST接口" class="headerlink" title="REST接口"></a>REST接口</h2><p>Spring Boot Actuator提供了非常丰富的监控接口，可以通过这些接口了解应用程序运行时的内部状况。Actuator也支持用户自定义添加端点，可以根据实际应用，定义一些比较关心的指标，在运行期进行监控。</p>
+<table>
+<thead>
+<tr>
+<th>HTTP方法</th>
+<th>路径</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td>&#x2F;auditevents</td>
+<td>显示当前应用程序的审计事件信息</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;beans</td>
+<td>显示一个应用中所有Spring Beans的完整列表</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;conditions</td>
+<td>显示配置类和自动配置类(configuration and auto-configuration classes)的状态及它们被应用或未被应用的原因。</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;configprops</td>
+<td>显示一个所有@ConfigurationProperties的集合列表</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;env</td>
+<td>显示来自Spring的ConfigurableEnvironment的属性。</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;flyway</td>
+<td>显示数据库迁移路径，如果有的话。</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;health</td>
+<td>显示应用的健康信息（当使用一个未认证连接访问时显示一个简单的’status’，使用认证连接访问则显示全部信息详情）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;info</td>
+<td>显示任意的应用信息</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;liquibase</td>
+<td>展示任何Liquibase数据库迁移路径，如果有的话</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;metrics</td>
+<td>展示当前应用的metrics信息</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;mappings</td>
+<td>显示一个所有@RequestMapping路径的集合列表</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;scheduledtasks</td>
+<td>显示应用程序中的计划任务</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;sessions</td>
+<td>允许从Spring会话支持的会话存储中检索和删除(retrieval and deletion)用户会话。使用Spring Session对反应性Web应用程序的支持时不可用。</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>&#x2F;shutdown</td>
+<td>允许应用以优雅的方式关闭（默认情况下不启用）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;threaddump</td>
+<td>执行一个线程dump</td>
+</tr>
+</tbody></table>
+<p>如果使用web应用(Spring MVC, Spring WebFlux, 或者 Jersey)，还可以使用以下接口：</p>
+<table>
+<thead>
+<tr>
+<th>HTTP方法</th>
+<th>路径</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td>&#x2F;heapdump</td>
+<td>返回一个GZip压缩的hprof堆dump文件</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;jolokia</td>
+<td>通过HTTP暴露JMX beans（当Jolokia在类路径上时，WebFlux不可用）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;logfile</td>
+<td>返回日志文件内容（如果设置了logging.file或logging.path属性的话），支持使用HTTP Range头接收日志文件内容的部分信息</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;prometheus</td>
+<td>以可以被Prometheus服务器抓取的格式显示metrics信息</td>
+</tr>
+</tbody></table>
+<h2 id="接口详解"><a href="#接口详解" class="headerlink" title="接口详解"></a>接口详解</h2><p>health主要用来检查应用的运行状态，这是使用频次最高的监控点。通常使用此接口显示应用实例的运行状态，以及应用不“健康”的原因，比如数据库连接、磁盘空间不够等，如常用的eureka，zookeeper，consul注册中心就是靠该接口检测实例健康状态的。</p>
+<p>默认情况下health的状态是开放的，访问：<a target="_blank" rel="noopener" href="http://localhost:8080/actuator/health">http://localhost:8080/actuator/health</a> 即可看到应用的状态。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;status&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;UP&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>设置状态码顺序：<code>setStatusOrder(Status.DOWN,Status.OUT*OF*SERVICE, Status.UP, Status.UNKNOWN</code>)。过滤掉不能识别的状态码。如果无任何状态码，整个<code>SpringBoot</code>应用的状态是UNKNOWN。将所有收集到的状态码排序。返回有序状态码序列中的第一个状态码，作为整个<code>SpringBoot</code>应用的状态。</p>
+<p>Health通过合并几个健康指数检查应用的健康情况。<code>SpringBoot Actuator</code>会自动配置以下内容：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>CassandraHealthIndicator</code></td>
+<td>检查Cassandra数据库是否已启动。</td>
+</tr>
+<tr>
+<td><code>CouchbaseHealthIndicator</code></td>
+<td>检查Couchbase群集是否已启动。</td>
+</tr>
+<tr>
+<td><code>DiskSpaceHealthIndicator</code></td>
+<td>检查磁盘空间不足。</td>
+</tr>
+<tr>
+<td><code>DataSourceHealthIndicator</code></td>
+<td>检查是否可以建立连接DataSource。</td>
+</tr>
+<tr>
+<td><code>ElasticsearchHealthIndicator</code></td>
+<td>检查Elasticsearch集群是否已启动。</td>
+</tr>
+<tr>
+<td><code>InfluxDbHealthIndicator</code></td>
+<td>检查InfluxDB服务器是否已启动。</td>
+</tr>
+<tr>
+<td><code>JmsHealthIndicator</code></td>
+<td>检查JMS代理是否启动。</td>
+</tr>
+<tr>
+<td><code>MailHealthIndicator</code></td>
+<td>检查邮件服务器是否已启动。</td>
+</tr>
+<tr>
+<td><code>MongoHealthIndicator</code></td>
+<td>检查Mongo数据库是否已启动。</td>
+</tr>
+<tr>
+<td><code>Neo4jHealthIndicator</code></td>
+<td>检查Neo4j服务器是否已启动。</td>
+</tr>
+<tr>
+<td><code>RabbitHealthIndicator</code></td>
+<td>检查Rabbit服务器是否已启动。</td>
+</tr>
+<tr>
+<td><code>RedisHealthIndicator</code></td>
+<td>检查Redis服务器是否启动。</td>
+</tr>
+<tr>
+<td><code>SolrHealthIndicator</code></td>
+<td>检查Solr服务器是否已启动。</td>
+</tr>
+</tbody></table>
+<p>可以通过设置 <code>management.health.defaults.enabled</code>属性来全部禁用。</p>
+<h2 id="原生端点"><a href="#原生端点" class="headerlink" title="原生端点"></a>原生端点</h2><p>原生端点分为三大类：</p>
+<ul>
+<li>应用配置类：获取应用程序中加载的应用配置、环境变量、自动化配置报告等与Spring Boot应用密切相关的配置类信息。</li>
+<li>度量指标类：获取应用程序运行过程中用于监控的度量指标，比如：内存信息、线程池信息、HTTP请求统计等。</li>
+<li>操作控制类：提供了对应用的关闭等操作类功能。</li>
+</ul>
+<hr>
+<h3 id="应用配置类"><a href="#应用配置类" class="headerlink" title="应用配置类"></a>应用配置类</h3><p>&#x2F;conditions：该端点用来获取应用的自动化配置报告，其中包括所有自动化配置的候选项。同时还列出了每个候选项自动化配置的各个先决条件是否满足。该端点可以帮助我们方便的找到一些自动化配置为什么没有生效的具体原因。</p>
+<p>该报告内容将自动化配置内容分为两部分：positiveMatches中返回的是条件匹配成功的自动化配置和negativeMatches中返回的是条件匹配不成功的自动化配置。</p>
+<p>部分代码如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;contexts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;application&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;positiveMatches&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;AuditEventsEndpointAutoConfiguration&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                    <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;condition&quot;</span><span class="punctuation">:</span> <span class="string">&quot;OnAvailableEndpointCondition&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;@ConditionalOnAvailableEndpoint marked as exposed by a &#x27;management.endpoints.web.exposure&#x27; property&quot;</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;BeansEndpointAutoConfiguration&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                    <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;condition&quot;</span><span class="punctuation">:</span> <span class="string">&quot;OnAvailableEndpointCondition&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;@ConditionalOnAvailableEndpoint marked as exposed by a &#x27;management.endpoints.web.exposure&#x27; property&quot;</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;BeansEndpointAutoConfiguration#beansEndpoint&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                    <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;condition&quot;</span><span class="punctuation">:</span> <span class="string">&quot;OnBeanCondition&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;@ConditionalOnMissingBean (types: org.springframework.boot.actuate.beans.BeansEndpoint; SearchStrategy: all) did not find any beans&quot;</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">]</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x2F;info：就是在配置文件中配置的以info开头的信息，如配置为：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">info:</span></span><br><span class="line">  <span class="attr">app:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">spring-boot-actuator</span></span><br><span class="line">    <span class="attr">version:</span> <span class="number">1.0</span><span class="number">.0</span></span><br></pre></td></tr></table></figure>
+
+<p>返回结果：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;app&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span><span class="string">&quot;spring-boot-actuator&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span><span class="string">&quot;1.0.0&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>info中配置的参数也可以通过符号*@*包围的属性值来自pom.xml文件中的元素节点。如下：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">info:</span></span><br><span class="line">    <span class="attr">build:</span></span><br><span class="line">        <span class="attr">artifact:</span> <span class="string">@project.artifactId@</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">@project.name@</span></span><br><span class="line">        <span class="attr">description:</span> <span class="string">@project.description@</span></span><br><span class="line">        <span class="attr">ersion:</span> <span class="string">@project.version@</span></span><br></pre></td></tr></table></figure>
+
+<p>返回结果：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;artifact&quot;</span><span class="punctuation">:</span> <span class="string">&quot;spring-learn&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;spring-learn&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Demo project for Spring Boot&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;ersion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.0.1-SNAPSHOT&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>&#x2F;beans：该端点用来获取应用上下文中创建的所有Bean。</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;contexts&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;application&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;beans&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;endpointCachingOperationInvokerAdvisor&quot;</span>: &#123;</span><br><span class="line">                    <span class="string">&quot;aliases&quot;</span>: [],</span><br><span class="line">                    <span class="string">&quot;scope&quot;</span>: <span class="string">&quot;singleton&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;type&quot;</span>: <span class="string">&quot;org.springframework.boot.actuate.endpoint.invoker.cache.CachingOperationInvokerAdvisor&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;resource&quot;</span>: <span class="string">&quot;class path resource [org/springframework/boot/actuate/autoconfigure/endpoint/EndpointAutoConfiguration.class]&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;dependencies&quot;</span>: [<span class="string">&quot;environment&quot;</span>]</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">&quot;defaultServletHandlerMapping&quot;</span>: &#123;</span><br><span class="line">                    <span class="string">&quot;aliases&quot;</span>: [],</span><br><span class="line">                    <span class="string">&quot;scope&quot;</span>: <span class="string">&quot;singleton&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;type&quot;</span>: <span class="string">&quot;org.springframework.web.servlet.HandlerMapping&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;resource&quot;</span>: <span class="string">&quot;class path resource [org/springframework/boot/autoconfigure/web/servlet/WebMvcAutoConfiguration<span class="variable">$EnableWebMvcConfiguration</span>.class]&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;dependencies&quot;</span>: []</span><br><span class="line">                &#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">&quot;parentId&quot;</span>: <span class="literal">null</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接口展现了bean的别名、类型、是否单例、类的地址、依赖等信息。</p>
+<p>&#x2F;configprops：该端点用来获取应用中配置的属性信息报告。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;spring.transaction-org.springframework.boot.autoconfigure.transaction.TransactionProperties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;prefix&quot;</span><span class="punctuation">:</span> <span class="string">&quot;spring.transaction&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面展示了TransactionProperties属性的配置信息。</p>
+<p>&#x2F;mappings：该端点用来返回所有SpringMVC的控制器映射关系报告。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;handler&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Actuator web endpoint &#x27;beans&#x27;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;predicate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&#123;GET /actuator/beans, produces [application/vnd.spring-boot.actuator.v2+json || application/json]&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;details&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;handlerMethod&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;className&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.springframework.boot.actuate.endpoint.web.servlet.AbstractWebMvcEndpointHandlerMapping.OperationHandler&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;handle&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;descriptor&quot;</span><span class="punctuation">:</span> <span class="string">&quot;(Ljavax/servlet/http/HttpServletRequest;Ljava/util/Map;)Ljava/lang/Object;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;requestMappingConditions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;consumes&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;headers&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;methods&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;GET&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;params&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;patterns&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;/actuator/beans&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;produces&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.spring-boot.actuator.v2+json&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;negated&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/json&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;negated&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>/env</code>：该端点与<code>/configprops</code>不同，它用来获取应用所有可用的环境属性报告。包括：环境变量、JVM属性、应用的配置配置、命令行中的参数。</p>
+<h3 id="度量指标类"><a href="#度量指标类" class="headerlink" title="度量指标类"></a>度量指标类</h3><p>应用配置类提供的指标为静态报告，而度量指标类端点提供的报告内容则是动态变化的，提供了应用程序在运行过程中的一些快照信息，比如：内存使用情况、HTTP请求统计、外部资源指标等。这些端点对于构建微服务架构中的监控系统非常有帮助。</p>
+<p>&#x2F;metrics：该端点用来返回当前应用的各类重要度量指标，比如：内存信息、线程信息、垃圾回收信息等。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;names&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;jvm.memory.max&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.threads.states&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;http.server.requests&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;process.files.max&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.gc.memory.promoted&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;system.load.average.1m&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.memory.used&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.gc.max.data.size&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.gc.pause&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.memory.committed&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;system.cpu.count&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;logback.events&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.global.sent&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.buffer.memory.used&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.sessions.created&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.threads.daemon&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;system.cpu.usage&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.gc.memory.allocated&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.global.request.max&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.global.request&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.sessions.expired&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.threads.live&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.threads.peak&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.global.received&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;process.uptime&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.sessions.rejected&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;process.cpu.usage&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.threads.config.max&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.classes.loaded&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.classes.unloaded&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.global.error&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.sessions.active.current&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.sessions.alive.max&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.gc.live.data.size&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.threads.current&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;process.files.open&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.buffer.count&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;jvm.buffer.total.capacity&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.sessions.active.max&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;tomcat.threads.busy&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;process.start.time&quot;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>从上面的示例中有这些重要的度量值：</p>
+<ul>
+<li>系统信息：包括处理器数量processors、运行时间uptime和instance.uptime、系统平均负载systemload.average。</li>
+<li>mem.*：内存概要信息，包括分配给应用的总内存数量以及当前空闲的内存数量。这些信息来自java.lang.Runtime。</li>
+<li>heap.*：堆内存使用情况。这些信息来自java.lang.management.MemoryMXBean接口中getHeapMemoryUsage方法获取的java.lang.management.MemoryUsage。</li>
+<li>nonheap.*：非堆内存使用情况。这些信息来自java.lang.management.MemoryMXBean接口中getNonHeapMemoryUsage方法获取的java.lang.management.MemoryUsage。</li>
+<li>threads.*：线程使用情况，包括线程数、守护线程数（daemon）、线程峰值（peak）等，这些数据均来自java.lang.management.ThreadMXBean。</li>
+<li>classes.*：应用加载和卸载的类统计。这些数据均来自java.lang.management.ClassLoadingMXBean。</li>
+<li>gc.*：垃圾收集器的详细信息，包括垃圾回收次数gc.ps_scavenge.count、垃圾回收消耗时间gc.ps_scavenge.time、标记-清除算法的次数gc.ps_marksweep.count、标记-清除算法的消耗时间gc.ps_marksweep.time。这些数据均来自java.lang.management.GarbageCollectorMXBean。</li>
+<li>httpsessions.*：Tomcat容器的会话使用情况。包括最大会话数httpsessions.max和活跃会话数httpsessions.active。该度量指标信息仅在引入了嵌入式Tomcat作为应用容器的时候才会提供。</li>
+<li>gauge.*：HTTP请求的性能指标之一，它主要用来反映一个绝对数值。比如上面示例中的gauge.response.hello: 5，它表示上一次hello请求的延迟时间为5毫秒。</li>
+<li>counter.*：HTTP请求的性能指标之一，它主要作为计数器来使用，记录了增加量和减少量。如上示例中counter.status.200.hello: 11，它代表了hello请求返回200状态的次数为11。</li>
+</ul>
+<p>&#x2F;threaddump：会生成当前线程活动的快照。方便我们在日常定位问题的时候查看线程的情况。主要展示了线程名、线程ID、线程的状态、是否等待锁资源等信息。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;threads&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;threadName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Reference Handler&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;threadId&quot;</span><span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;blockedTime&quot;</span><span class="punctuation">:</span> <span class="number">-1</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;blockedCount&quot;</span><span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;waitedTime&quot;</span><span class="punctuation">:</span> <span class="number">-1</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;waitedCount&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockName&quot;</span><span class="punctuation">:</span> <span class="keyword">null</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockOwnerId&quot;</span><span class="punctuation">:</span> <span class="number">-1</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockOwnerName&quot;</span><span class="punctuation">:</span> <span class="keyword">null</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;daemon&quot;</span><span class="punctuation">:</span> <span class="keyword">true</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;inNative&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;suspended&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;threadState&quot;</span><span class="punctuation">:</span> <span class="string">&quot;RUNNABLE&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;priority&quot;</span><span class="punctuation">:</span> <span class="number">10</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;stackTrace&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;classLoaderName&quot;</span><span class="punctuation">:</span> <span class="keyword">null</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;moduleName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;java.base&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;moduleVersion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;11.0.4&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;methodName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;waitForReferencePendingList&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;fileName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Reference.java&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;lineNumber&quot;</span><span class="punctuation">:</span> <span class="number">-2</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;className&quot;</span><span class="punctuation">:</span> <span class="string">&quot;java.lang.ref.Reference&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;nativeMethod&quot;</span><span class="punctuation">:</span> <span class="keyword">true</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="attr">&quot;lockedMonitors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockedSynchronizers&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;className&quot;</span><span class="punctuation">:</span> <span class="string">&quot;java.util.concurrent.locks.ReentrantLock$NonfairSync&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;identityHashCode&quot;</span><span class="punctuation">:</span> <span class="number">2060076420</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockInfo&quot;</span><span class="punctuation">:</span> <span class="keyword">null</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;threadName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;DestroyJavaVM&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;threadId&quot;</span><span class="punctuation">:</span> <span class="number">42</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;blockedTime&quot;</span><span class="punctuation">:</span> <span class="number">-1</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;blockedCount&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;waitedTime&quot;</span><span class="punctuation">:</span> <span class="number">-1</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;waitedCount&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockName&quot;</span><span class="punctuation">:</span> <span class="keyword">null</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockOwnerId&quot;</span><span class="punctuation">:</span> <span class="number">-1</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockOwnerName&quot;</span><span class="punctuation">:</span> <span class="keyword">null</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;daemon&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;inNative&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;suspended&quot;</span><span class="punctuation">:</span> <span class="keyword">false</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;threadState&quot;</span><span class="punctuation">:</span> <span class="string">&quot;RUNNABLE&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;priority&quot;</span><span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;stackTrace&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockedMonitors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockedSynchronizers&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lockInfo&quot;</span><span class="punctuation">:</span> <span class="keyword">null</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x2F;trace：该端点用来返回基本的HTTP跟踪信息。默认情况下，跟踪信息的存储采用。（2.2版本以后不在默认提供）</p>
+<h3 id="操作控制类"><a href="#操作控制类" class="headerlink" title="操作控制类"></a>操作控制类</h3><p>&#x2F;shutdown：配置文件中配置开启此功能：</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">management.endpoint.shutdown.enabled</span>=<span class="string">true</span></span><br></pre></td></tr></table></figure>
+
+<p>使用 curl 模拟 post 请求此接口：</p>
+<figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">curl -X POST <span class="string">&quot;http://localhost:8080/actuator/shutdown&quot;</span>复制代码</span><br></pre></td></tr></table></figure>
+
+<p>显示结果为：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Shutting down, bye...&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>由此可见shutdown可以关闭Spring Boot项目</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2022/08/23/Spring%20Boot%20Actuator/">https://devildyw.github.io/2022/08/23/Spring%20Boot%20Actuator/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Spring/">Spring</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/08/25/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/"><img class="prev-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-57kw88.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">设计模式--结构型设计模式之适配器模式</div></div></a></div><div class="next-post pull-right"><a href="/2022/08/22/Linux/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-8oeg3j.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Linux</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/02/28/Springboot/" title="SpringBoot"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-pkl5pm.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">SpringBoot</div></div></a></div><div><a href="/2022/02/28/Spring/" title="Spring"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-28yzm9.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">Spring</div></div></a></div><div><a href="/2022/02/28/SpringMVC/" title="SpringMVC"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-57kw88.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">SpringMVC</div></div></a></div><div><a href="/2022/02/28/SpringSecurity/" title="SpringSecurity"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-pk9eye.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">SpringSecurity</div></div></a></div><div><a href="/2022/07/03/%E5%BA%94%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E5%85%B7%E7%B1%BB/" title="应用上下文工具类"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/archive.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-03</div><div class="title">应用上下文工具类</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Spring-Boot-Actuator"><span class="toc-number">1.</span> <span class="toc-text">Spring Boot Actuator</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#REST%E6%8E%A5%E5%8F%A3"><span class="toc-number">1.3.</span> <span class="toc-text">REST接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A5%E5%8F%A3%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.4.</span> <span class="toc-text">接口详解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%94%9F%E7%AB%AF%E7%82%B9"><span class="toc-number">1.5.</span> <span class="toc-text">原生端点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E9%85%8D%E7%BD%AE%E7%B1%BB"><span class="toc-number">1.5.1.</span> <span class="toc-text">应用配置类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%A6%E9%87%8F%E6%8C%87%E6%A0%87%E7%B1%BB"><span class="toc-number">1.5.2.</span> <span class="toc-text">度量指标类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E6%8E%A7%E5%88%B6%E7%B1%BB"><span class="toc-number">1.5.3.</span> <span class="toc-text">操作控制类</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
