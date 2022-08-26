@@ -17431,106 +17431,6 @@ String servletPath = request.getServletPath(); //   /testRequest
       </tags>
   </entry>
   <entry>
-    <title>设计模式--结构型设计模式之适配器模式</title>
-    <url>/2022/08/25/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="设计模式–结构型设计模式之适配器模式"><a href="#设计模式–结构型设计模式之适配器模式" class="headerlink" title="设计模式–结构型设计模式之适配器模式"></a>设计模式–结构型设计模式之适配器模式</h1><h2 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h2><h3 id="1）概述"><a href="#1）概述" class="headerlink" title="1）概述"></a>1）概述</h3><p>​        在现实生活中，经常出现两个对象因接口不兼容而不能在一起工作的实例，这时需要第三者进行适配。例如，讲中文的人同讲英文的人对话时需要一个翻译，用直流电的笔记本电脑接交流电源时需要一个电源适配器，用计算机访问照相机的 SD 内存卡时需要一个读卡器等。还有像下面这张图一样：</p>
-<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208251751012.webp" alt="在这里插入图片描述"></p>
-<p>​        在软件设计中也可能出现：</p>
-<ol>
-<li><strong>需要开发的具有某种业务功能的组件在现有的组件库中已经存在，但它们与当前系统的接口规范不兼容，如果重新开发这些组件成本又很高，这时用适配器模式能很好地解决这些问题。</strong></li>
-<li>如果想增加现有组件的复用率也可以使用适配器模式。</li>
-</ol>
-<h3 id="2）介绍"><a href="#2）介绍" class="headerlink" title="2）介绍"></a>2）介绍</h3><p>适配器模式（Adapter）的定义如下：将一个类的接口转换成客户希望的另外一个接口，使得原本由于接口不兼容而不能一起工作的那些类能一起工作。适配器模式分为类结构型模式和对象结构型模式两种，前者类之间的耦合度比后者高，且要求程序员了解现有组件库中的相关组件的内部结构，所以应用相对较少些。</p>
-<p>Adapter模式的宗旨：<strong>保留现有类所提供的服务，向客户提供接口，以满足客户的期望</strong>。</p>
-<h3 id="3）角色结构"><a href="#3）角色结构" class="headerlink" title="3）角色结构"></a>3）角色结构</h3><p>适配器模式（Adapter）包含以下主要角色：</p>
-<ul>
-<li>目标（Target）接口：当前系统业务所期待的接口，它可以是抽象类或接口。</li>
-<li>适配者（Adaptee）类：它是被访问和适配的现存组件库中的组件接口。</li>
-<li>适配器（Adapter）类：它是一个转换器，通过继承或引用适配者的对象，把适配者接口转换成目标接口，让客户按目标接口的格式访问适配者。</li>
-</ul>
-<blockquote>
-<p>适配器就是使用现有的组件（适配者）来实现目标接口规范（目标接口）来完成转化的一个类。</p>
-</blockquote>
-<h3 id="4）使用场景"><a href="#4）使用场景" class="headerlink" title="4）使用场景"></a>4）使用场景</h3><p>适配器模式（Adapter）通常适用于以下场景。</p>
-<ul>
-<li>以前开发的系统存在满足新系统功能需求的类，但其接口同新系统的接口不一致。（<del>就是所谓的加一层，一层不行就加两层</del>）😁</li>
-<li>使用第三方提供的组件，但组件接口定义和自己要求的接口定义不同。</li>
-</ul>
-<h2 id="二、类适配器"><a href="#二、类适配器" class="headerlink" title="二、类适配器"></a>二、类适配器</h2><p>当客户在接口中定义了他期望的行为时，我们就可以应用适配器模式，提供一个实现该接口的类，并且扩展已有的类，通过创建子类来实现适配。</p>
-<p><code>实现方式</code>：<strong>定义一个适配器类来实现当前系统的业务接口，同时又继承现有组件库中已经存在的组件</strong>。</p>
-<p>我们直接用之前的那个图来做个例子：中国人到了欧洲，的给自己电脑充电，但因为自己电脑是双叉，欧式是三叉，这中间就得需要一个转换器。<strong>对于电脑而言，它只能是双叉的，但是现在只有三叉的插座，想要充电，就必须能让双叉的插头能够插入三叉的插座上，此时我们需要一个适配器，将三叉插座的电传输给双叉的插头。此时的目标是双叉，需要将三叉的电传输到双叉的线上。</strong></p>
-<blockquote>
-<p>可能使用sd卡和tf卡的案例比较好理解，对于同一台电脑而言它只能插入sd卡，但是呢我们现在不想让他插入sd读取数据了，我想让他读取tf卡，但是电脑不能匹配，此时就只能使用tf卡转sd的适配器了，通过读sd的方式读取了tf卡。对于该问题，目标接口就是sd卡，而适配者是tf卡，tf卡不符合现有接口规范（sd卡），需要通过适配器（适配器通过现有组件tf的读写方式实现了sd接口的规范）完成了转化。</p>
-</blockquote>
-<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208251751008.webp" alt="在这里插入图片描述"></p>
-<h3 id="2-1、代码"><a href="#2-1、代码" class="headerlink" title="2.1、代码"></a>2.1、代码</h3><p>适配者（Adaptee）：即图中的欧式三叉</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">EuropeSocket</span> &#123;</span><br><span class="line">    <span class="comment">/** 欧式三叉 通电 接通电 插座*/</span></span><br><span class="line">    String <span class="title function_">useEuropesocket</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 欧式三叉实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EuropeSocketImpl</span> <span class="keyword">implements</span> <span class="title class_">EuropeSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useEuropesocket</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span><span class="string">&quot;使用欧式三叉充电&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> msg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>目标（Target）接口：即中国双叉</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用中国双叉充电</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    String <span class="title function_">useChineseSocket</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中国插头的实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChineseSocketImpl</span> <span class="keyword">implements</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">()</span> &#123;</span><br><span class="line">        String msg=<span class="string">&quot;使用中国双叉充电&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> msg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>适配器（Adapter）类：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 定义适配器类 中国双叉转为欧洲三叉</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChineseAdapterEurope</span> <span class="keyword">extends</span> <span class="title class_">EuropeSocketImpl</span> <span class="keyword">implements</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;使用转换器转换完成&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> useEuropesocket();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>电脑类，对于电脑类而言，它只能使用双叉的充电器，所以客户端希望的目标类就是中国双叉。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Computer</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">(ChineseSocket chineseSocket)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(chineseSocket == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>(<span class="string">&quot;sd card null&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> chineseSocket.useChineseSocket();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
-
-<p>测试：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Computer</span> <span class="variable">computer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Computer</span>();</span><br><span class="line">        <span class="type">ChineseSocket</span> <span class="variable">chineseSocket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChineseSocketImpl</span>();</span><br><span class="line">        System.out.println(computer.useChineseSocket(chineseSocket));</span><br><span class="line">        System.out.println(<span class="string">&quot;------------&quot;</span>);</span><br><span class="line">        <span class="type">ChineseAdapterEurope</span> <span class="variable">adapter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChineseAdapterEurope</span>();</span><br><span class="line">        System.out.println(computer.useChineseSocket(adapter));</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 输出：</span></span><br><span class="line"><span class="comment">         * 使用中国双叉充电</span></span><br><span class="line"><span class="comment">         * ------------</span></span><br><span class="line"><span class="comment">         * 使用转换器转换完成</span></span><br><span class="line"><span class="comment">         * 使用欧式三叉充电</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上述代码就是简单的演示了适配器的使用。</p>
-<p><code>注</code>:类适配器模式违背了合成复用原则。类适配器是客户类有一个接口规范的情况下可用，反之不可用。</p>
-<h2 id="三、对象适配器"><a href="#三、对象适配器" class="headerlink" title="三、对象适配器"></a>三、对象适配器</h2><p>对象适配器”通过组合除了满足“用户期待接口”还降低了代码间的不良耦合。在工作中推荐使用“对象适配”。</p>
-<p>实现方式：<strong>对象适配器模式可釆用将现有组件库中已经实现的组件引入适配器类中，该类同时实现当前系统的业务接口</strong>。</p>
-<p>题目还是和上面一样的哈。代码其实差异很小</p>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p>适配者（Adaptee）：即图中的欧式三叉</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">EuropeSocket</span> &#123;</span><br><span class="line">    <span class="comment">/** 欧式三叉 通电 接通电 插座*/</span></span><br><span class="line">    String <span class="title function_">useEuropesocket</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 欧式三叉实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EuropeSocketImpl</span> <span class="keyword">implements</span> <span class="title class_">EuropeSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useEuropesocket</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span><span class="string">&quot;使用欧式三叉充电&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> msg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>目标（Target）接口：即中国双叉</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用中国双叉充电</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    String <span class="title function_">useChineseSocket</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中国插头的实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChineseSocketImpl</span> <span class="keyword">implements</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">()</span> &#123;</span><br><span class="line">        String msg=<span class="string">&quot;使用中国双叉充电&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> msg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>适配器（Adapter）类： 就是这个适配器内做了一些更改 从继承改为了成员变量的方式</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChineseAdapterEurope</span> <span class="keyword">implements</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> EuropeSocket europeSocket;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ChineseAdapterEurope</span><span class="params">(EuropeSocket europeSocket)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.europeSocket = europeSocket;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;使用转换器转换完成&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> europeSocket.useEuropesocket();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>电脑类</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Computer</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">(ChineseSocket chineseSocket)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(chineseSocket == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>(<span class="string">&quot;sd card null&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> chineseSocket.useChineseSocket();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>测试：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Computer</span> <span class="variable">computer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Computer</span>();</span><br><span class="line">        <span class="type">ChineseSocket</span> <span class="variable">chineseSocket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChineseSocketImpl</span>();</span><br><span class="line">        System.out.println(computer.useChineseSocket(chineseSocket));</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;------------&quot;</span>);</span><br><span class="line">        <span class="comment">//这里做了更改</span></span><br><span class="line">        EuropeSocket europeSocket=<span class="keyword">new</span> <span class="title class_">EuropeSocketImpl</span>();</span><br><span class="line">        <span class="type">ChineseAdapterEurope</span> <span class="variable">adapter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChineseAdapterEurope</span>(europeSocket);</span><br><span class="line">        System.out.println(computer.useChineseSocket(adapter));</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 输出：</span></span><br><span class="line"><span class="comment">         * 使用中国双叉充电</span></span><br><span class="line"><span class="comment">         * ------------</span></span><br><span class="line"><span class="comment">         * 使用转换器转换完成</span></span><br><span class="line"><span class="comment">         * 使用欧式三叉充电</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这就是对象适配器啦，</p>
-<p>适合于解决问题常见：</p>
-<ul>
-<li>　需要的东西有，但不能用，且短时间无法改造。即，使得一个功能适合不同的环境。</li>
-<li>　　在开发中，系统的数据、行为都匹配，但接口不符时，可以考虑适配器。</li>
-<li>　　<strong>希望复用一些现存的类，但是接口又与复用环境的要求不一致，应该考虑用适配器模式。</strong>（使用一个已经存在的类，但它的接口（即，方法)，与需要的不相同时）</li>
-</ul>
-<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p><strong>适配器模式（Adapter）可扩展为双向适配器模式，双向适配器类既可以把适配者接口转换成目标接口，也可以把目标接口转换成适配者接口</strong>。</p>
-<h2 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h2><p><strong>优点</strong>：</p>
-<ul>
-<li>客户端通过适配器可以透明地调用目标接口。</li>
-<li>复用了现存的类，程序员不需要修改原有代码而重用现有的适配者类。<strong>提高了类的复用</strong></li>
-<li><strong>将目标类和适配者类解耦，解决了目标类和适配者类接口不一致的问题</strong>。灵活性好</li>
-<li>可以让任何两个没有关联的类一起运行</li>
-<li><strong>在很多业务场景中符合开闭原则</strong></li>
-</ul>
-<p><strong>其缺点是</strong>：</p>
-<ul>
-<li>适配器编写过程需要结合业务场景全面考虑，可能会增加系统的复杂性。</li>
-<li>增加代码阅读难度，降低代码可读性，过多使用适配器会使系统代码变得凌乱。（如：明明看到调用的是 A 接口，其实内部被适配成了 B 接口的实现，一个系统如果太多出现这种情况，无异于一场灾难）</li>
-</ul>
-<p> <strong>核心思想：</strong></p>
-<p>继承或者依赖（引用）适配者对象，然后实现目标的接口。确保原来代码不改变的情况下，增加新的功能。</p>
-<p>因为目标类是需要使用的，而我们现在并不能直接使用目标类（一个已存在的类，但是它不符合现有的接口规范），而需要通过适配器将现有的组件转化为目标类，所以适配器需由现有组件实现目标接口的功能（转化使其符合现有规范）来完成转化。</p>
-]]></content>
-      <categories>
-        <category>设计模式</category>
-      </categories>
-      <tags>
-        <tag>Developer</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Spring Boot Actuator</title>
     <url>/2022/08/23/Spring%20Boot%20Actuator/</url>
     <content><![CDATA[<h1 id="Spring-Boot-Actuator"><a href="#Spring-Boot-Actuator" class="headerlink" title="Spring Boot Actuator"></a>Spring Boot Actuator</h1><p>在企业级应用中，学习了如何进行SpringBoot应用的功能开发，以及如何写单元测试、集成测试等还是不够的。在实际的软件开发中还需要：<strong>应用程序的监控和管理</strong>。SpringBoot的Actuator模块实现了应用的监控与管理。这样的需求在分布式服务中基本是必须的，项目上线后的监控也是如此</p>
@@ -17835,6 +17735,192 @@ String servletPath = request.getServletPath(); //   /testRequest
       </categories>
       <tags>
         <tag>Spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JUC</title>
+    <url>/2022/08/25/JUC/</url>
+    <content><![CDATA[<h1 id="JUC"><a href="#JUC" class="headerlink" title="JUC"></a>JUC</h1>]]></content>
+      <categories>
+        <category>JavaSE</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式--结构型设计模式之适配器模式</title>
+    <url>/2022/08/25/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="设计模式–结构型设计模式之适配器模式"><a href="#设计模式–结构型设计模式之适配器模式" class="headerlink" title="设计模式–结构型设计模式之适配器模式"></a>设计模式–结构型设计模式之适配器模式</h1><h2 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h2><h3 id="1）概述"><a href="#1）概述" class="headerlink" title="1）概述"></a>1）概述</h3><p>​        在现实生活中，经常出现两个对象因接口不兼容而不能在一起工作的实例，这时需要第三者进行适配。例如，讲中文的人同讲英文的人对话时需要一个翻译，用直流电的笔记本电脑接交流电源时需要一个电源适配器，用计算机访问照相机的 SD 内存卡时需要一个读卡器等。还有像下面这张图一样：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208251751012.webp" alt="在这里插入图片描述"></p>
+<p>​        在软件设计中也可能出现：</p>
+<ol>
+<li><strong>需要开发的具有某种业务功能的组件在现有的组件库中已经存在，但它们与当前系统的接口规范不兼容，如果重新开发这些组件成本又很高，这时用适配器模式能很好地解决这些问题。</strong></li>
+<li>如果想增加现有组件的复用率也可以使用适配器模式。</li>
+</ol>
+<h3 id="2）介绍"><a href="#2）介绍" class="headerlink" title="2）介绍"></a>2）介绍</h3><p>适配器模式（Adapter）的定义如下：将一个类的接口转换成客户希望的另外一个接口，使得原本由于接口不兼容而不能一起工作的那些类能一起工作。适配器模式分为类结构型模式和对象结构型模式两种，前者类之间的耦合度比后者高，且要求程序员了解现有组件库中的相关组件的内部结构，所以应用相对较少些。</p>
+<p>Adapter模式的宗旨：<strong>保留现有类所提供的服务，向客户提供接口，以满足客户的期望</strong>。</p>
+<h3 id="3）角色结构"><a href="#3）角色结构" class="headerlink" title="3）角色结构"></a>3）角色结构</h3><p>适配器模式（Adapter）包含以下主要角色：</p>
+<ul>
+<li>目标（Target）接口：当前系统业务所期待的接口，它可以是抽象类或接口。</li>
+<li>适配者（Adaptee）类：它是被访问和适配的现存组件库中的组件接口。</li>
+<li>适配器（Adapter）类：它是一个转换器，通过继承或引用适配者的对象，把适配者接口转换成目标接口，让客户按目标接口的格式访问适配者。</li>
+</ul>
+<blockquote>
+<p>适配器就是使用现有的组件（适配者）来实现目标接口规范（目标接口）来完成转化的一个类。</p>
+</blockquote>
+<h3 id="4）使用场景"><a href="#4）使用场景" class="headerlink" title="4）使用场景"></a>4）使用场景</h3><p>适配器模式（Adapter）通常适用于以下场景。</p>
+<ul>
+<li>以前开发的系统存在满足新系统功能需求的类，但其接口同新系统的接口不一致。（<del>就是所谓的加一层，一层不行就加两层</del>）😁</li>
+<li>使用第三方提供的组件，但组件接口定义和自己要求的接口定义不同。</li>
+</ul>
+<h2 id="二、类适配器"><a href="#二、类适配器" class="headerlink" title="二、类适配器"></a>二、类适配器</h2><p>当客户在接口中定义了他期望的行为时，我们就可以应用适配器模式，提供一个实现该接口的类，并且扩展已有的类，通过创建子类来实现适配。</p>
+<p><code>实现方式</code>：<strong>定义一个适配器类来实现当前系统的业务接口，同时又继承现有组件库中已经存在的组件</strong>。</p>
+<p>我们直接用之前的那个图来做个例子：中国人到了欧洲，的给自己电脑充电，但因为自己电脑是双叉，欧式是三叉，这中间就得需要一个转换器。<strong>对于电脑而言，它只能是双叉的，但是现在只有三叉的插座，想要充电，就必须能让双叉的插头能够插入三叉的插座上，此时我们需要一个适配器，将三叉插座的电传输给双叉的插头。此时的目标是双叉，需要将三叉的电传输到双叉的线上。</strong></p>
+<blockquote>
+<p>可能使用sd卡和tf卡的案例比较好理解，对于同一台电脑而言它只能插入sd卡，但是呢我们现在不想让他插入sd读取数据了，我想让他读取tf卡，但是电脑不能匹配，此时就只能使用tf卡转sd的适配器了，通过读sd的方式读取了tf卡。对于该问题，目标接口就是sd卡，而适配者是tf卡，tf卡不符合现有接口规范（sd卡），需要通过适配器（适配器通过现有组件tf的读写方式实现了sd接口的规范）完成了转化。</p>
+</blockquote>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208251751008.webp" alt="在这里插入图片描述"></p>
+<h3 id="2-1、代码"><a href="#2-1、代码" class="headerlink" title="2.1、代码"></a>2.1、代码</h3><p>适配者（Adaptee）：即图中的欧式三叉</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">EuropeSocket</span> &#123;</span><br><span class="line">    <span class="comment">/** 欧式三叉 通电 接通电 插座*/</span></span><br><span class="line">    String <span class="title function_">useEuropesocket</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 欧式三叉实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EuropeSocketImpl</span> <span class="keyword">implements</span> <span class="title class_">EuropeSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useEuropesocket</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span><span class="string">&quot;使用欧式三叉充电&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> msg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>目标（Target）接口：即中国双叉</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用中国双叉充电</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    String <span class="title function_">useChineseSocket</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中国插头的实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChineseSocketImpl</span> <span class="keyword">implements</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">()</span> &#123;</span><br><span class="line">        String msg=<span class="string">&quot;使用中国双叉充电&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> msg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>适配器（Adapter）类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 定义适配器类 中国双叉转为欧洲三叉</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChineseAdapterEurope</span> <span class="keyword">extends</span> <span class="title class_">EuropeSocketImpl</span> <span class="keyword">implements</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;使用转换器转换完成&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> useEuropesocket();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>电脑类，对于电脑类而言，它只能使用双叉的充电器，所以客户端希望的目标类就是中国双叉。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Computer</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">(ChineseSocket chineseSocket)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(chineseSocket == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>(<span class="string">&quot;sd card null&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> chineseSocket.useChineseSocket();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>测试：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Computer</span> <span class="variable">computer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Computer</span>();</span><br><span class="line">        <span class="type">ChineseSocket</span> <span class="variable">chineseSocket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChineseSocketImpl</span>();</span><br><span class="line">        System.out.println(computer.useChineseSocket(chineseSocket));</span><br><span class="line">        System.out.println(<span class="string">&quot;------------&quot;</span>);</span><br><span class="line">        <span class="type">ChineseAdapterEurope</span> <span class="variable">adapter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChineseAdapterEurope</span>();</span><br><span class="line">        System.out.println(computer.useChineseSocket(adapter));</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 输出：</span></span><br><span class="line"><span class="comment">         * 使用中国双叉充电</span></span><br><span class="line"><span class="comment">         * ------------</span></span><br><span class="line"><span class="comment">         * 使用转换器转换完成</span></span><br><span class="line"><span class="comment">         * 使用欧式三叉充电</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码就是简单的演示了适配器的使用。</p>
+<p><code>注</code>:类适配器模式违背了合成复用原则。类适配器是客户类有一个接口规范的情况下可用，反之不可用。</p>
+<h2 id="三、对象适配器"><a href="#三、对象适配器" class="headerlink" title="三、对象适配器"></a>三、对象适配器</h2><p>对象适配器”通过组合除了满足“用户期待接口”还降低了代码间的不良耦合。在工作中推荐使用“对象适配”。</p>
+<p>实现方式：<strong>对象适配器模式可釆用将现有组件库中已经实现的组件引入适配器类中，该类同时实现当前系统的业务接口</strong>。</p>
+<p>题目还是和上面一样的哈。代码其实差异很小</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p>适配者（Adaptee）：即图中的欧式三叉</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">EuropeSocket</span> &#123;</span><br><span class="line">    <span class="comment">/** 欧式三叉 通电 接通电 插座*/</span></span><br><span class="line">    String <span class="title function_">useEuropesocket</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 欧式三叉实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EuropeSocketImpl</span> <span class="keyword">implements</span> <span class="title class_">EuropeSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useEuropesocket</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span><span class="string">&quot;使用欧式三叉充电&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> msg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>目标（Target）接口：即中国双叉</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用中国双叉充电</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    String <span class="title function_">useChineseSocket</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中国插头的实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChineseSocketImpl</span> <span class="keyword">implements</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">()</span> &#123;</span><br><span class="line">        String msg=<span class="string">&quot;使用中国双叉充电&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> msg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>适配器（Adapter）类： 就是这个适配器内做了一些更改 从继承改为了成员变量的方式</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChineseAdapterEurope</span> <span class="keyword">implements</span> <span class="title class_">ChineseSocket</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> EuropeSocket europeSocket;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ChineseAdapterEurope</span><span class="params">(EuropeSocket europeSocket)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.europeSocket = europeSocket;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;使用转换器转换完成&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> europeSocket.useEuropesocket();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>电脑类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Computer</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">useChineseSocket</span><span class="params">(ChineseSocket chineseSocket)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(chineseSocket == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>(<span class="string">&quot;sd card null&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> chineseSocket.useChineseSocket();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>测试：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Computer</span> <span class="variable">computer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Computer</span>();</span><br><span class="line">        <span class="type">ChineseSocket</span> <span class="variable">chineseSocket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChineseSocketImpl</span>();</span><br><span class="line">        System.out.println(computer.useChineseSocket(chineseSocket));</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;------------&quot;</span>);</span><br><span class="line">        <span class="comment">//这里做了更改</span></span><br><span class="line">        EuropeSocket europeSocket=<span class="keyword">new</span> <span class="title class_">EuropeSocketImpl</span>();</span><br><span class="line">        <span class="type">ChineseAdapterEurope</span> <span class="variable">adapter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChineseAdapterEurope</span>(europeSocket);</span><br><span class="line">        System.out.println(computer.useChineseSocket(adapter));</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 输出：</span></span><br><span class="line"><span class="comment">         * 使用中国双叉充电</span></span><br><span class="line"><span class="comment">         * ------------</span></span><br><span class="line"><span class="comment">         * 使用转换器转换完成</span></span><br><span class="line"><span class="comment">         * 使用欧式三叉充电</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这就是对象适配器啦，</p>
+<p>适合于解决问题常见：</p>
+<ul>
+<li>　需要的东西有，但不能用，且短时间无法改造。即，使得一个功能适合不同的环境。</li>
+<li>　　在开发中，系统的数据、行为都匹配，但接口不符时，可以考虑适配器。</li>
+<li>　　<strong>希望复用一些现存的类，但是接口又与复用环境的要求不一致，应该考虑用适配器模式。</strong>（使用一个已经存在的类，但它的接口（即，方法)，与需要的不相同时）</li>
+</ul>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p><strong>适配器模式（Adapter）可扩展为双向适配器模式，双向适配器类既可以把适配者接口转换成目标接口，也可以把目标接口转换成适配者接口</strong>。</p>
+<h2 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h2><p><strong>优点</strong>：</p>
+<ul>
+<li>客户端通过适配器可以透明地调用目标接口。</li>
+<li>复用了现存的类，程序员不需要修改原有代码而重用现有的适配者类。<strong>提高了类的复用</strong></li>
+<li><strong>将目标类和适配者类解耦，解决了目标类和适配者类接口不一致的问题</strong>。灵活性好</li>
+<li>可以让任何两个没有关联的类一起运行</li>
+<li><strong>在很多业务场景中符合开闭原则</strong></li>
+</ul>
+<p><strong>其缺点是</strong>：</p>
+<ul>
+<li>适配器编写过程需要结合业务场景全面考虑，可能会增加系统的复杂性。</li>
+<li>增加代码阅读难度，降低代码可读性，过多使用适配器会使系统代码变得凌乱。（如：明明看到调用的是 A 接口，其实内部被适配成了 B 接口的实现，一个系统如果太多出现这种情况，无异于一场灾难）</li>
+</ul>
+<p> <strong>核心思想：</strong></p>
+<p>继承或者依赖（引用）适配者对象，然后实现目标的接口。确保原来代码不改变的情况下，增加新的功能。</p>
+<p>因为目标类是需要使用的，而我们现在并不能直接使用目标类（一个已存在的类，但是它不符合现有的接口规范），而需要通过适配器将现有的组件转化为目标类，所以适配器需由现有组件实现目标接口的功能（转化使其符合现有规范）来完成转化。</p>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>Developer</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式--结构型模式之桥接模式</title>
+    <url>/2022/08/26/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><blockquote>
+<p>推荐一读的概述</p>
+</blockquote>
+<p>毛笔和蜡笔是两种很常见的文具，它们都归属于画笔。假设需要大、中、小 3 种型号的画笔，能够绘制 12 种不同的颜色，如果使用蜡笔，需要准备 3 × 12 &#x3D; 36 支，但是如果使用毛笔，只需要提供 3 种型号的毛笔，外加一个包含 12 种颜色的调色板，涉及的对象个数仅为 3 + 12 &#x3D; 15，远小于 36 ，却能够实现 36 支蜡笔同样的功能。如果增加一种新型号的画笔，并且也需要具有 12 种颜色，对应的蜡笔需要增加 12 支，而毛笔只需要增加 1 支。</p>
+<p>不难得知，在蜡笔中，颜色和型号两个不同的变化维度耦合在一起，无论是对颜色进行扩展还是对型号进行扩展势必会影响另一个维度；但在毛笔中，颜色和型号实现了分离，增加新的颜色或者型号对另一方没有任何影响。如果使用软件工程中的术语，可以认为在蜡笔中颜色和型号之间存在较强的耦合性，而毛笔很好地将二者解耦，使用起来更加的灵活，扩展也更为方便。在软件开发中有一种设计模式可以用来处理与画笔类似的具有多变化维度的情况，这就是<strong>桥接模式</strong>。</p>
+<p>在桥接模式中将两个独立变化的维度设计为两个独立的继承等级结构，而不是将二者耦合在一起形成多层继承结构。桥接模式在抽象层建立起一个抽象关联，该关联关系类似一条连接两个独立继承结构的桥，故名桥接模式。</p>
+<blockquote>
+<p><strong>桥接模式</strong>：将抽象部分与它的实现部分解耦，使得两者都能够独立变化。</p>
+</blockquote>
+<p>桥接模式是一种对象结构型模式，它又被称为柄体（Handle and Body）模式或接口（Interface）模式。桥接模式用一种巧妙地方式处理多层继承存在的问题，用抽象关系取代了传统的多层继承，将类之间的静态继承关系转换为动态的对象组合关系，使得系统更加灵活，并易于扩展，同时有效地控制了系统中类的个数。</p>
+<h2 id="2-结构与实现"><a href="#2-结构与实现" class="headerlink" title="2 结构与实现"></a>2 结构与实现</h2><h3 id="2-1-桥接模式结构"><a href="#2-1-桥接模式结构" class="headerlink" title="2.1 桥接模式结构"></a>2.1 桥接模式结构</h3><p>桥接模式包含以下 4 个角色：</p>
+<ol>
+<li>**Abstraction(抽象类)**：其中定义了一个实现类接口类型的对象并可以维护该对象，它与 Implementor 之间具有关联关系，它既可以包含抽象业务方法，也可以包含具体业务方法。</li>
+<li><strong>RefinedAbstraction(扩充抽象类)<strong>：它扩充由抽象类定义的接口，它实现了在抽象类中定义的抽象业务方法，</strong>在扩充抽象类中可以调用在实现类接口中定义的业务方法；</strong></li>
+<li>**Implementor(实现类接口)**：实现类接口定义了实现类的接口，实现类接口仅提供基本操作，而抽象类定义的接口可能会做更多更复杂的操作；</li>
+<li>**ConcreteImplementor(具体实现类)**：具体实现类实现了实现类接口并且具体实现它，在不同的具体实现类中提供基本操作的不同实现，在程序运行时，具体实现类对象将替换其父类对象，提供给客户端具体的业务操作方法。</li>
+</ol>
+<h3 id="2-2-桥接模式举例"><a href="#2-2-桥接模式举例" class="headerlink" title="2.2 桥接模式举例"></a>2.2 桥接模式举例</h3><h4 id="一、背景介绍"><a href="#一、背景介绍" class="headerlink" title="一、背景介绍"></a>一、背景介绍</h4><p>某软件公司要开发一个跨平台图像浏览系统，要求该系统能够显示 BMP、JPG、GIF、PNG 等多种格式的文件，并且能够在 Windows、Linux、UNIX 等多个操作系统上运行。系统首先将各种格式的文件解析为像素矩阵（Matrix），然后将像素矩阵显示在屏幕上，在不同的操作系统中可以调用不同的绘制函数来绘制像素矩阵。系统需要具有较好的扩展性，以便在将来支持新的文件格式和操作系统。请使用桥接模式。</p>
+<h4 id="二、项目结构"><a href="#二、项目结构" class="headerlink" title="二、项目结构"></a>二、项目结构</h4><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208261617013.png" alt="image-20220826161740971"></p>
+<h4 id="三、项目-UML"><a href="#三、项目-UML" class="headerlink" title="三、项目 UML"></a>三、项目 UML</h4><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208261615858.webp" alt="UML"></p>
+<h4 id="四、抽象类"><a href="#四、抽象类" class="headerlink" title="四、抽象类"></a>四、抽象类</h4><h5 id="Image-抽象类"><a href="#Image-抽象类" class="headerlink" title="Image 抽象类"></a>Image 抽象类</h5><figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Image</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="title class_">OSImpl</span> osImpl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//注入实现类接口对象</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title class_">Image</span>(<span class="title class_">OSImpl</span> osImpl) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">osImpl</span> = osImpl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="built_in">void</span> <span class="title function_">parseFile</span>(<span class="title class_">String</span> fileName);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="五、扩充抽象类"><a href="#五、扩充抽象类" class="headerlink" title="五、扩充抽象类"></a>五、扩充抽象类</h4><h5 id="BMPImage-扩充抽象类"><a href="#BMPImage-扩充抽象类" class="headerlink" title="BMPImage 扩充抽象类"></a>BMPImage 扩充抽象类</h5><figure class="highlight scala"><table><tr><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">BMPImage</span> <span class="keyword">extends</span> <span class="title">Image</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    public <span class="type">BMPImage</span>(<span class="type">OSImpl</span> osImpl) &#123;</span><br><span class="line">        <span class="keyword">super</span>(osImpl);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    public void parseFile(<span class="type">String</span> fileName) &#123;</span><br><span class="line">        <span class="comment">//模拟解析BMP文件并获取一个像素矩阵对象 m</span></span><br><span class="line">        <span class="type">Matrix</span> matrix = <span class="keyword">new</span> <span class="type">Matrix</span>();</span><br><span class="line">        osImpl.doPaint(matrix);</span><br><span class="line">        <span class="type">System</span>.out.println(fileName+<span class="string">&quot;, 格式为BMP.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="JPGImage-扩充抽象类"><a href="#JPGImage-扩充抽象类" class="headerlink" title="JPGImage 扩充抽象类"></a>JPGImage 扩充抽象类</h5><figure class="highlight scala"><table><tr><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">JPGImage</span> <span class="keyword">extends</span> <span class="title">Image</span> </span>&#123;</span><br><span class="line">    public <span class="type">JPGImage</span>(<span class="type">OSImpl</span> osImpl) &#123;</span><br><span class="line">        <span class="keyword">super</span>(osImpl);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    public void parseFile(<span class="type">String</span> fileName) &#123;</span><br><span class="line">        <span class="comment">//模拟解析BMP文件并获取一个像素矩阵对象 m</span></span><br><span class="line">        <span class="type">Matrix</span> matrix = <span class="keyword">new</span> <span class="type">Matrix</span>();</span><br><span class="line">        osImpl.doPaint(matrix);</span><br><span class="line">        <span class="type">System</span>.out.println(fileName+<span class="string">&quot;, 格式为JPG.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="GIFImage-扩充抽象类"><a href="#GIFImage-扩充抽象类" class="headerlink" title="GIFImage 扩充抽象类"></a>GIFImage 扩充抽象类</h5><figure class="highlight scala"><table><tr><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">GIFImage</span> <span class="keyword">extends</span> <span class="title">Image</span> </span>&#123;</span><br><span class="line">    public <span class="type">GIFImage</span>(<span class="type">OSImpl</span> osImpl) &#123;</span><br><span class="line">        <span class="keyword">super</span>(osImpl);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    public void parseFile(<span class="type">String</span> fileName) &#123;</span><br><span class="line">        <span class="comment">//模拟解析BMP文件并获取一个像素矩阵对象 m</span></span><br><span class="line">        <span class="type">Matrix</span> matrix = <span class="keyword">new</span> <span class="type">Matrix</span>();</span><br><span class="line">        osImpl.doPaint(matrix);</span><br><span class="line">        <span class="type">System</span>.out.println(fileName+<span class="string">&quot;, 格式为GIF.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="PNGImage-扩充抽象类"><a href="#PNGImage-扩充抽象类" class="headerlink" title="PNGImage 扩充抽象类"></a>PNGImage 扩充抽象类</h5><figure class="highlight scala"><table><tr><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">PNGImage</span> <span class="keyword">extends</span> <span class="title">Image</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    public <span class="type">PNGImage</span>(<span class="type">OSImpl</span> osImpl) &#123;</span><br><span class="line">        <span class="keyword">super</span>(osImpl);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    public void parseFile(<span class="type">String</span> fileName) &#123;</span><br><span class="line">        <span class="comment">//模拟解析BMP文件并获取一个像素矩阵对象 m</span></span><br><span class="line">        <span class="type">Matrix</span> matrix = <span class="keyword">new</span> <span class="type">Matrix</span>();</span><br><span class="line">        osImpl.doPaint(matrix);</span><br><span class="line">        <span class="type">System</span>.out.println(fileName+<span class="string">&quot;, 格式为PNG.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="六、实现类接口"><a href="#六、实现类接口" class="headerlink" title="六、实现类接口"></a>六、实现类接口</h4><h5 id="OSImpl"><a href="#OSImpl" class="headerlink" title="OSImpl"></a>OSImpl</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OSImpl</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doPaint</span><span class="params">(Matrix m)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="七、具体实现类"><a href="#七、具体实现类" class="headerlink" title="七、具体实现类"></a>七、具体实现类</h4><h5 id="WindowsImpl"><a href="#WindowsImpl" class="headerlink" title="WindowsImpl"></a>WindowsImpl</h5><figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WindowImpl</span> <span class="keyword">implements</span> <span class="title class_">OSImpl</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">void</span> <span class="title function_">doPaint</span>(<span class="params">Matrix m</span>) &#123;</span><br><span class="line">        <span class="title class_">System</span>.<span class="property">out</span>.<span class="title function_">print</span>(<span class="string">&quot;在 Windows 操作系统中显示图像：&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="LinuxImpl"><a href="#LinuxImpl" class="headerlink" title="LinuxImpl"></a>LinuxImpl</h5><figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LinuxImpl</span> <span class="keyword">implements</span> <span class="title class_">OSImpl</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">void</span> <span class="title function_">doPaint</span>(<span class="params">Matrix m</span>) &#123;</span><br><span class="line">        <span class="title class_">System</span>.<span class="property">out</span>.<span class="title function_">print</span>(<span class="string">&quot;在 Linux 操作系统中显示图像：&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="UnixImpl"><a href="#UnixImpl" class="headerlink" title="UnixImpl"></a>UnixImpl</h5><figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UnixImpl</span> <span class="keyword">implements</span> <span class="title class_">OSImpl</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">void</span> <span class="title function_">doPaint</span>(<span class="params">Matrix m</span>) &#123;</span><br><span class="line">        <span class="title class_">System</span>.<span class="property">out</span>.<span class="title function_">print</span>(<span class="string">&quot;在 Unix 操作系统中显示图像：&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="八、Matrix-辅助类"><a href="#八、Matrix-辅助类" class="headerlink" title="八、Matrix 辅助类"></a>八、Matrix 辅助类</h4><figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Matrix</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="九、测试客户类"><a href="#九、测试客户类" class="headerlink" title="九、测试客户类"></a>九、测试客户类</h4><figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="type">static</span> <span class="type">void</span> <span class="title">main</span><span class="params">(<span class="type">String</span>[] args)</span> </span>&#123;</span><br><span class="line">        Image image;</span><br><span class="line">        image = <span class="keyword">new</span> <span class="built_in">GIFImage</span>(<span class="keyword">new</span> <span class="built_in">WindowImpl</span>());</span><br><span class="line">        image.<span class="built_in">parseFile</span>(<span class="string">&quot;杜颖淼&quot;</span>);</span><br><span class="line">        System.out.<span class="built_in">println</span>(<span class="string">&quot;--------------------------------------------&quot;</span>);</span><br><span class="line">        image = <span class="keyword">new</span> <span class="built_in">PNGImage</span>(<span class="keyword">new</span> <span class="built_in">LinuxImpl</span>());</span><br><span class="line">        image.<span class="built_in">parseFile</span>(<span class="string">&quot;这是一个文件&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="十、测试结果"><a href="#十、测试结果" class="headerlink" title="十、测试结果"></a>十、测试结果</h4><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208261621578.png" alt="image-20220826162105535"></p>
+<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3 总结"></a>3 总结</h2><p>从举例容易看出，客户端面向抽象编程，每个维度都有一个高级抽象类，每个维度的具体选项继承自该高级抽象类。<strong>举例中我们通过 xml 配置文件配置各个维度的选择，选择什么类型的图片？选择什么操作系统？实现了不同维度的的解耦。</strong></p>
+<p>桥接模式十设计 Java 虚拟机和实现 JDBC 等驱动程序的核心模式之一，应用较为广泛。在软件开发中如果一个类或一个系统有多个变化维度都可以尝试使用桥接模式对其进行设计。桥接模式为多维度变化的系统提供了一套完整的解决方案，并且降低了系统的复杂度。</p>
+<h3 id="3-1-桥接模式优点"><a href="#3-1-桥接模式优点" class="headerlink" title="3.1 桥接模式优点"></a>3.1 桥接模式优点</h3><ol>
+<li>分离抽象接口及其实现部分。桥接模式使用“对象间的关联关系”解耦了抽象和实现之间固有的绑定关系，使得抽象和实现可以沿着各自的维度来变化。所谓的抽象何实现沿着各自维度的变化，也就是说抽象和实现不在同一个继承层次结构中，而是“子类化”它们，使它们各自具有自己的子类，以便任意组合子类，从而获得多维度组合对象。</li>
+<li>在很多情况下，桥接模式可以取代多层继承方案，多层继承方案违背了单一职责原则，复用性较差，并且类的个数非常多，桥接模式是比多层继承方案更好的解决方法，它极大地减少了子类的个数。</li>
+<li>桥接模式提高了系统的可扩展性，在两个变化维度中任意扩展一个维度都不需要修改原有系统，符合开闭原则。</li>
+</ol>
+<h3 id="3-2-桥接模式缺点"><a href="#3-2-桥接模式缺点" class="headerlink" title="3.2 桥接模式缺点"></a>3.2 桥接模式缺点</h3><ol>
+<li>桥接模式的使用会增加系统的理解和设计难度，由于关联关系建立在抽象层，要求开发者一开始就针对抽象层进行设计与编程。</li>
+<li>桥接模式要求正确地识别出系统中地两个独立变化的维度，因此其使用的范围具有一定的局限性，如何正确识别两个独立维度也需要一定的经验积累。</li>
+</ol>
+<h3 id="3-3-桥接模式适用环境"><a href="#3-3-桥接模式适用环境" class="headerlink" title="3.3 桥接模式适用环境"></a>3.3 桥接模式适用环境</h3><ol>
+<li>如果一个系统需要在抽象化和具体化之间增加更多的灵活性，避免在两个层次之间建立静态的继承关系，通过桥接模式可以使它们在抽象层建立一个关联关系。</li>
+<li>抽象部分和实现部分可以用继承的方式独立扩展而互不影响，在程序运行时可以动态地将一个抽象化子类地对象和一个实现化子类地对象进行组合，即系统需要对抽象化角色和实现化角色进行多态耦合。</li>
+<li>一个类存在两个（或多个）独立变化的维度，且这两个（或多个）维度都需要独立进行扩展。</li>
+<li>对于那些不希望使用继承或因为多层继承导致系统类的个数急剧增加的系统，桥接模式尤为适用。</li>
+</ol>
+<blockquote>
+<p>抽象类和实现类接口都可以对调，因为对于不同规格的毛笔而言，每一种规格都可以有不同的颜色使用；对于不同的颜色而言每一种颜色都有不同规格的毛笔来使用。我们使用时权衡即可。</p>
+</blockquote>
+<h1 id="推荐链接"><a href="#推荐链接" class="headerlink" title="推荐链接"></a>推荐链接</h1><p><a href="https://zhuanlan.zhihu.com/p/58903776">秒懂设计模式之桥接模式（Bridge Pattern） - 知乎 (zhihu.com)</a></p>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>Developer</tag>
       </tags>
   </entry>
 </search>
