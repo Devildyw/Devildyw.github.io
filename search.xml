@@ -795,7 +795,8 @@
     <title>RESTful API</title>
     <url>/2022/04/06/RESTful%20API/</url>
     <content><![CDATA[<h1 id="RESTful-API"><a href="#RESTful-API" class="headerlink" title="RESTful API"></a>RESTful API</h1><p>正式学习RESTful API之前,我们需要把什么是API搞懂.</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/v2-1564b88f4461d69b90cd1ab50411f61b_b.jpg" alt="查看源图像"></h2><h2 id="什么是API"><a href="#什么是API" class="headerlink" title="什么是API?"></a>什么是API?</h2><p><strong>API（Application Programming Interface）</strong> 翻译过来是应用程序编程接口的意思。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/v2-1564b88f4461d69b90cd1ab50411f61b_b.jpg" alt="查看源图像"></p>
+<h2 id="什么是API"><a href="#什么是API" class="headerlink" title="什么是API?"></a>什么是API?</h2><p><strong>API（Application Programming Interface）</strong> 翻译过来是应用程序编程接口的意思。</p>
 <p>相信大家对于API这个此已经不陌生了, 比如”我调用了某某的API”等 又比如我们在进行后端开发的时候，主要的工作就是为前端或者其他后端服务提供 API 比如查询用户数据的 API. </p>
 <ul>
 <li><p>API不仅仅代表了后端系统暴露出的接口, 像框架中提供的方法也属于是API的范畴.</p>
@@ -950,40 +951,139 @@
   <entry>
     <title>ThreadLocal</title>
     <url>/2022/02/28/ThreadLocal/</url>
-    <content><![CDATA[<h1 id="ThreadLocal-ThreadLocal-简书-jianshu-com"><a href="#ThreadLocal-ThreadLocal-简书-jianshu-com" class="headerlink" title="[ThreadLocal](ThreadLocal - 简书 (jianshu.com))"></a>[ThreadLocal](<a href="https://www.jianshu.com/p/3c5d7f09dfbd">ThreadLocal - 简书 (jianshu.com)</a>)</h1><h4 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h4><p>threadlocal使用方法很简单</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;T&gt; sThreadLocal = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;T&gt;();</span><br><span class="line">sThreadLocal.set()</span><br><span class="line">sThreadLocal.get()</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<h1 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h1><blockquote>
+<p>摘自《Java并发编程之美》再结合一些自己的理解</p>
+</blockquote>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>多线程访问同一个共享变量时特别容易出现并发问题，特别时在多个线程需要对同一个共享变量进行写入时。为了保证线程安全，一般使用者在访问共享变量时需要进行适当的同步，如图。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208291610793.png" alt="image-20220829160953636"></p>
+<p><strong>同步的措施一般是加锁</strong>，这就需要使用者对锁有一定的了解，这显然加重了使用者的负担。那么有没有一种方式可以做到，当创建一个变量后，每个线程对其访问的时候访问的是自己线程的变量呢？其实 ThreadLocal 就可以做这件事，虽然 ThreadLocal 并不是为了解决这个问题而出现的。</p>
+<p>ThreadLocal 是 JDK 包提供的，他提供了线程本地变量，也就是如果你创建了一个 ThreadLocal 变量时，实际操作的是自己本地内存里面的变量，从而避免了线程安全问题。创建一个 ThreadLocal 变量后，每个线程都会复制一个变量到自己的本地内存，如图。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208291614022.png" alt="image-20220829161409978"></p>
+<h2 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h2><p>本例开启了两个线程，在每个线程内部都设置了本地变量的值，然后调用 print 函数打印当前本地变量的值。如果打印后调用了本 变量的remove 方法， 删除本地内存中的该变量，代码如下。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocalDemo</span> &#123;</span><br><span class="line">    <span class="comment">//print函数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">(String str)</span>&#123;</span><br><span class="line">        <span class="comment">//打印当前线程本地内存中的localVariable变量的值</span></span><br><span class="line">        System.out.println(str +<span class="string">&quot;:&quot;</span>+ localVariable.get());</span><br><span class="line">        <span class="comment">//清除当前线程本地内存中的localVariable变量</span></span><br><span class="line">        localVariable.remove();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建ThreadLocal变量</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> ThreadLocal&lt;String&gt; localVariable = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建线程one</span></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">threadOne</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Runnable</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">                <span class="comment">//设置线程One中本地变量localVariable的值</span></span><br><span class="line">                localVariable.set(<span class="string">&quot;threadOne local Variable&quot;</span>);</span><br><span class="line">                <span class="comment">//调用打印函数</span></span><br><span class="line">                print(<span class="string">&quot;threadOne&quot;</span>);</span><br><span class="line">                <span class="comment">//打印本地变量值</span></span><br><span class="line">                System.out.println(<span class="string">&quot;threadOne remove after&quot;</span> + <span class="string">&quot;:&quot;</span> + localVariable.get());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建线程two</span></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">threadTwo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Runnable</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">                <span class="comment">//设置Two中本地变量localVariable的值</span></span><br><span class="line">                localVariable.set(<span class="string">&quot;threadTwo local variable&quot;</span>);</span><br><span class="line">                <span class="comment">//调用打印函数</span></span><br><span class="line">                print(<span class="string">&quot;threadTwo&quot;</span>);</span><br><span class="line">                <span class="comment">//打印本地变量值</span></span><br><span class="line">                System.out.println(<span class="string">&quot;threadTwo remove after&quot;</span> + <span class="string">&quot;:&quot;</span> + localVariable.get());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//启动线程</span></span><br><span class="line">        threadOne.start();</span><br><span class="line">        threadTwo.start();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>threadlocal而是一个线程内部的存储类，可以在指定线程内存储数据，数据存储以后，只有指定线程可以得到存储数据，官方解释如下。</p>
-<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220211183419286.png" alt="image-20220211183419286"></p>
-<p>大致意思就是ThreadLocal提供了线程内存储变量的能力，这些变量不同之处在于每一个线程读取的变量是对应的互相独立的。通过get和set方法就可以得到当前线程对应的值。</p>
-<p>做个不恰当的比喻，从表面上看ThreadLocal相当于维护了一个map，key就是当前的线程，value就是需要存储的对象。</p>
-<p><strong>这里的这个比喻是不恰当的，实际上是ThreadLocal的静态内部类ThreadLocalMap为每个Thread都维护了一个数组table，ThreadLocal确定了一个数组下标，而这个下标就是value存储的对应位置。</strong></p>
-<span id="more"></span>
+<p>执行结果</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208291637644.png" alt="image-20220829163719610"></p>
+<p>线程One中的代码通过 set 方法设置了 localVariable 的值，<strong>这其实设置的是线程One 本地内存中的一个副本</strong>，这个副本线程 Two 是访问不了的。然后调用了print函数，通过 get 函数取得了<strong>当前线程本地内存中 localVariable 的值</strong>。线程Two执行同理</p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>ThreadLocal 相关类的类图结构</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208291728823.png" alt="image-20220829172812762"></p>
+<p>由图可知，<strong>Thread类中有一个 <code>threadLocals</code> 变量和与一个 <code>inheritableThreadLocals</code>变量</strong>，他们都是 <code>ThreadLocalMap</code> 类型的变量 。在<strong>默认情况下，每个线程中的的这两个变量都为null</strong>，只有当线程第一次调用 <code>ThreadLocal </code>的 set 或者get 方法时才会<strong>创建</strong>它们。</p>
+<blockquote>
+<p><strong><code>ThreadLocalMap</code> 是一个定制化的<code>Hashmap</code>。</strong></p>
+</blockquote>
+<p>其实当我们调用 <code>ThreadLocal</code> 的 set 方法存储本地变量时，并不存放在 <code>ThreadLocal</code> 实例里面，而是存放在调用线程的 <code>threadLocals</code> 变量里面。也就是说，**<code>ThreadLocal</code> 类型实例的本地变量存放在具体的线程空间中**。</p>
+<blockquote>
+<p>Thread 就是一个工具壳，他并不是正真存放变量的地方，而是通过 set 方法和 get 方法 把 value 值存放到调用线程的 <code>threadLocals</code> 里面存放和从中拿出来。</p>
+<p>如果调用的线程一直不终止，那么这个本地变量会一直存放在调用线程的 <code>threadLocals</code> 变量里面，所以当不需要使用本地变量时可以通过调用 <code>ThreadLocal</code> 变量的remove方法，从当前线程的 <code>threadLocals</code> 中删除该本地变量。</p>
+</blockquote>
+<p><strong>Thread 里面的 <code>threadLocals</code> 之所以被设计为 map 结构，是因为每个线程可以关联多个 <code>ThreadLocal</code> 变量</strong></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208291942008.png" alt="ThreadLocal 数据结构"></p>
+<h3 id="API分析"><a href="#API分析" class="headerlink" title="API分析"></a>API分析</h3><h4 id="void-set-T-value"><a href="#void-set-T-value" class="headerlink" title="void set(T value)"></a><code>void set(T value)</code></h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">set</span><span class="params">(T value)</span> &#123;</span><br><span class="line">    	<span class="comment">//获取当前调用线程</span></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">    	<span class="comment">//通过当前线程，去查找对应的线程变量，找到则设置</span></span><br><span class="line">        <span class="type">ThreadLocalMap</span> <span class="variable">map</span> <span class="operator">=</span> getMap(t);</span><br><span class="line">        <span class="keyword">if</span> (map != <span class="literal">null</span>) &#123;</span><br><span class="line">            map.set(<span class="built_in">this</span>, value);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//第一次调用就创建当前线程对应的HashMap</span></span><br><span class="line">            createMap(t, value);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-<p>作为一个存储数据的类，关键点就在get和set方法。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**源码**/</span></span><br><span class="line"><span class="comment">//set 方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">set</span><span class="params">(T value)</span> &#123;</span><br><span class="line">      <span class="comment">//获取当前线程</span></span><br><span class="line">      <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">      <span class="comment">//实际存储的数据结构类型</span></span><br><span class="line">      <span class="type">ThreadLocalMap</span> <span class="variable">map</span> <span class="operator">=</span> getMap(t);</span><br><span class="line">      <span class="comment">//如果存在map就直接set，没有则创建map并set</span></span><br><span class="line">      <span class="keyword">if</span> (map != <span class="literal">null</span>)</span><br><span class="line">          map.set(<span class="built_in">this</span>, value);</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">          createMap(t, value);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line"><span class="comment">//getMap方法</span></span><br><span class="line">ThreadLocalMap <span class="title function_">getMap</span><span class="params">(Thread t)</span> &#123;</span><br><span class="line">      <span class="comment">//thred中维护了一个ThreadLocalMap</span></span><br><span class="line">      <span class="keyword">return</span> t.threadLocals;</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">//createMap</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">createMap</span><span class="params">(Thread t, T firstValue)</span> &#123;</span><br><span class="line">      <span class="comment">//实例化一个新的ThreadLocalMap，并赋值给线程的成员变量threadLocals</span></span><br><span class="line">      t.threadLocals = <span class="keyword">new</span> <span class="title class_">ThreadLocalMap</span>(<span class="built_in">this</span>, firstValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以发现上述代码中一个段是根据当前调用线程，获取map，调用了 <code>getMap(t)</code> 方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ThreadLocalMap <span class="title function_">getMap</span><span class="params">(Thread t)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> t.threadLocals;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>从上面代码可以看出<strong>每个线程持有一个ThreadLocalMap对象</strong>。每一个新的线程Thread都会实例化一个ThreadLocalMap并赋值给成员变量threadLocals，使用时若已经存在threadLocals则直接使用已经存在的对象。</p>
+<p>该方法的作用时获取传入线程的 <code>threadLocals</code> 变量，threadlocal 变量被绑定到了线程的成员变量上。</p>
+<p>再回到 set 方法，如果 <code>getMap(t)</code> 返回值不为空，就把 value 值设置到 <code>threadLocals</code> 中。 <strong><code>threadLocals</code> 是一个  <code>HashMap</code> 结构，其中 key 就是当前 <code>ThreadLocal</code> 的实例对象引用，value 是通过 set 方法传递的值</strong></p>
+<p>如果 <code>getMap(t)</code> 返回值为空，则说明是第一次调用 set 方法，这时会调用 <code>createMap(t, value)</code> 初始化当前线程的 <code>threadLocals</code> 变量。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">createMap</span><span class="params">(Thread t, T firstValue)</span> &#123;</span><br><span class="line">    <span class="comment">//创建当前线程的 ThreadLocals 变量，并将 value 填入</span></span><br><span class="line">    t.threadLocals = <span class="keyword">new</span> <span class="title class_">ThreadLocalMap</span>(<span class="built_in">this</span>, firstValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <hr>
-<h2 id="ThreadLocal内存泄漏"><a href="#ThreadLocal内存泄漏" class="headerlink" title="ThreadLocal内存泄漏"></a>ThreadLocal内存泄漏</h2><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/9e256d87362c4d9295589e3d72e69211.png" alt="在这里插入图片描述"></p>
-<p><strong>实线代表强引用,虚线代表弱引用</strong></p>
+<h4 id="T-get"><a href="#T-get" class="headerlink" title="T get()"></a><code>T get()</code></h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> T <span class="title function_">get</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//获取当前调用的线程</span></span><br><span class="line">    <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">    <span class="comment">//获取当前线程的 threadLocals 变量</span></span><br><span class="line">    <span class="type">ThreadLocalMap</span> <span class="variable">map</span> <span class="operator">=</span> getMap(t);</span><br><span class="line">    <span class="comment">//如果threadLocals 不为null， 则返回对应本地变量(ThreadLocal的实例)的值</span></span><br><span class="line">    <span class="keyword">if</span> (map != <span class="literal">null</span>) &#123;</span><br><span class="line">        ThreadLocalMap.<span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> map.getEntry(<span class="built_in">this</span>);</span><br><span class="line">        <span class="comment">//如果获取到的变量值为空 也会进行初始化值</span></span><br><span class="line">        <span class="keyword">if</span> (e != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">            <span class="type">T</span> <span class="variable">result</span> <span class="operator">=</span> (T)e.value;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//threadLocals为空则初始化当前线程的threadLocals成员变量</span></span><br><span class="line">    <span class="keyword">return</span> setInitialValue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同样也是获得当前调用的线程，通过该线程去获得线程内部的 <code>threadLocals</code> 变量，如果 <code>getMap(t)</code> 返回值不为空，再根据当前 <code>ThreadLocal</code> 实例作为key去获取 <code>threadLocals</code> 中对应的值。</p>
+<p>如果 <code>getMap(t)</code> 返回值为空或者获取到的变量值为空，则执行 <code>setInitialValue()</code> 方法进行初始化。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> T <span class="title function_">setInitialValue</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//初始化值为null</span></span><br><span class="line">    <span class="type">T</span> <span class="variable">value</span> <span class="operator">=</span> initialValue();</span><br><span class="line">    <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">    <span class="type">ThreadLocalMap</span> <span class="variable">map</span> <span class="operator">=</span> getMap(t);</span><br><span class="line">    <span class="comment">//如果当前线程的threadLocals变量不为空</span></span><br><span class="line">    <span class="keyword">if</span> (map != <span class="literal">null</span>) &#123;</span><br><span class="line">        map.set(<span class="built_in">this</span>, value);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//如果当前线程的threadLocals变量为空</span></span><br><span class="line">        createMap(t, value);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span> <span class="keyword">instanceof</span> TerminatingThreadLocal) &#123;</span><br><span class="line">        TerminatingThreadLocal.register((TerminatingThreadLocal&lt;?&gt;) <span class="built_in">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span> T <span class="title function_">initialValue</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果当前线程的 <code>threadLocals</code> 变量不为空，则设置当前线程本地变量值为null，否则调用 <code>createMap</code> 方法创建当前线程的 <code>threadLocals</code> 变量。</p>
+<hr>
+<h4 id="void-remove"><a href="#void-remove" class="headerlink" title="void remove()"></a><code>void remove()</code></h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">ThreadLocalMap</span> <span class="variable">m</span> <span class="operator">=</span> getMap(Thread.currentThread());</span><br><span class="line">    <span class="keyword">if</span> (m != <span class="literal">null</span>) &#123;</span><br><span class="line">        m.remove(<span class="built_in">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果当前线程的 <code>threadLocals</code> 变量不为空，则删除当前线程中指定 <code>ThreadLocal</code> 实例对应的本地变量</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>每个线程内部都有一个名为 <code>threadLocals</code> 的成员变量，该变量的类型是 <code>HashMap</code> ，其中 key 为我们定义的 <code>ThreadLocal</code> 变量的 this 引用， value 则为我们使用 set 方法设置的值。每个线程的本地变量存放在线程自己的内存变量 <code>threadLocals</code> 中。</p>
+<p>如果当前线程一直不消亡，那么这些本地变量会一直存在，所以可能会造成内存溢出，因此使用完毕后要记得调用 <code>ThreadLocal</code> 的 remove 方法删除对应线程的 <code>threadLocals</code> 中的本地变量。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208291834735.png" alt="image-20220829183434665"></p>
+<blockquote>
+<p>这个图很形象的介绍了内存关系。</p>
+</blockquote>
+<hr>
+<h2 id="TheadLocal-不支持继承性"><a href="#TheadLocal-不支持继承性" class="headerlink" title="TheadLocal 不支持继承性"></a>TheadLocal 不支持继承性</h2><p>首先看一个例子</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocalDemo02</span> &#123;</span><br><span class="line">    <span class="comment">//创建线程变量</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> ThreadLocal&lt;String&gt; threadLocal = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="comment">//设置线程变量</span></span><br><span class="line">        threadLocal.set(<span class="string">&quot;hello world&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//启动子线程</span></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Runnable</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">                <span class="comment">//子线程输出线程变量的值</span></span><br><span class="line">                System.out.println(<span class="string">&quot;thread:&quot;</span> + threadLocal.get());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        thread.start();</span><br><span class="line">        <span class="comment">//阻塞主线程 使其等待子线程执行完毕</span></span><br><span class="line">        thread.join();</span><br><span class="line">        <span class="comment">//主线程输出线程变量的值</span></span><br><span class="line">        System.out.println(<span class="string">&quot;main:&quot;</span>+threadLocal.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208291846677.png" alt="image-20220829184612629"></p>
+<p><strong>原因就是父子线程并不是同一个线程，所以获取不到父线程 <code>threadLocals</code> 中的本地变量。</strong></p>
+<p>那么有没有办法让子线程能访问到父线程中的值？ 答案是有。**<code>InheritableThreadLocal类</code>**</p>
+<hr>
+<h2 id="lnheritableThreadLocal类"><a href="#lnheritableThreadLocal类" class="headerlink" title="lnheritableThreadLocal类"></a>lnheritableThreadLocal类</h2><p>为了解决子线程无法访问父线程中值的问题，<code>InheritableThreadLocal</code> 应运而生。<code>InheritableThreadLocal</code> 继承自 <code>ThreadLocal</code> , 其提供一个特性，就是让子线程可以访问在父线程中设置的本地变量。下面是 <code>InheritableThreadLocal</code> 的代码。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">InheritableThreadLocal</span>&lt;T&gt; <span class="keyword">extends</span> <span class="title class_">ThreadLocal</span>&lt;T&gt; &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">protected</span> T <span class="title function_">childValue</span><span class="params">(T parentValue)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> parentValue;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ThreadLocalMap <span class="title function_">getMap</span><span class="params">(Thread t)</span> &#123;</span><br><span class="line">       <span class="keyword">return</span> t.inheritableThreadLocals;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">createMap</span><span class="params">(Thread t, T firstValue)</span> &#123;</span><br><span class="line">        t.inheritableThreadLocals = <span class="keyword">new</span> <span class="title class_">ThreadLocalMap</span>(<span class="built_in">this</span>, firstValue);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>InheritableThreadLocal</code> 继承了 <code>ThreadLocal</code>，并重写了三个方法。由上述代码可知，<code>InheritableThreadLocal</code> **重写了 <code>createMap</code> 方法，现在当第一次调用 set 方法时，创建的是当前线程的 <code>inheritableThreadLocals</code> 变量的实例而不是 <code>threadLocals</code>**。</p>
+<p>当调用 get 方法时获取当前线程内部的 map 变量时，获取的是 <code>inheritableThreadLocals</code> 变量的实例而不再是 <code>threadLocals</code></p>
+<p><strong>综上可知，在 <code>InheritableThreadLocal</code>中，变量 <code>inheritableThreadLocals</code> 代替了 <code>threadLocals</code></strong></p>
+<hr>
+<p>接下来，我要揭秘 <code>InheritableThreadLocal</code> 让子线程可以访问父线程的本地变量。这要从创建 Thread 的代码说起，打开 Thread 类的默认构造函数，代码如下。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">Thread</span><span class="params">(Runnable target)</span> &#123;</span><br><span class="line">    init(<span class="literal">null</span>, target, <span class="string">&quot;Thread-&quot;</span> + nextThreadNum(), <span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">init</span><span class="params">(ThreadGroup g, Runnable target, String name,</span></span><br><span class="line"><span class="params">                  <span class="type">long</span> stackSize, AccessControlContext acc,</span></span><br><span class="line"><span class="params">                  <span class="type">boolean</span> inheritThreadLocals)</span> &#123;</span><br><span class="line">   </span><br><span class="line">    ......</span><br><span class="line">		</span><br><span class="line">    <span class="comment">//获取当前调用的线程</span></span><br><span class="line">    <span class="type">Thread</span> <span class="variable">parent</span> <span class="operator">=</span> currentThread();</span><br><span class="line">    </span><br><span class="line">    ......</span><br><span class="line">        </span><br><span class="line">   	<span class="comment">//如果父线程（当前调用的线程）的 inheritableThreadLocals 变量不为null 并且 inheritThreadLocals 变量为true</span></span><br><span class="line">    <span class="keyword">if</span> (inheritThreadLocals &amp;&amp; parent.inheritableThreadLocals != <span class="literal">null</span>)</span><br><span class="line">        <span class="comment">//设置子线程中的 inheritableThreadLocals 变量</span></span><br><span class="line">        <span class="built_in">this</span>.inheritableThreadLocals =</span><br><span class="line">            ThreadLocal.createInheritedMap(parent.inheritableThreadLocals);</span><br><span class="line">    <span class="comment">/* Stash the specified stack size in case the VM cares */</span></span><br><span class="line">    <span class="built_in">this</span>.stackSize = stackSize;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Set thread ID */</span></span><br><span class="line">    tid = nextThreadID();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如上代码在创建线程时，在构造函数里面会调用 <code>init</code> 方法。代码中获取了当前线程（父线程，这里是 main 函数所在的线程），然后判断 main 函数所在线程里面的 <code>inheritableThreadLocals</code> 属性是否为空以及 <code>inheritableThreadLocals</code> 变量是否为 true，如果都满足就会执行 <code>createInheritedMap()</code> 方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> ThreadLocalMap <span class="title function_">createInheritedMap</span><span class="params">(ThreadLocalMap parentMap)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ThreadLocalMap</span>(parentMap);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，在方法内部使用父线程的 <code>inheritableThreadLocals</code> 变量作为构造函数的变量创建了一个新的 <code>ThreadLocalMap</code> 变量，然后赋值给了子线程的 <code>inheritableThreadLocals</code> 变量。</p>
+<p>下面我们看看 <code>ThreadLocalMap</code> 的构造函数内部都做了什么</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="title function_">ThreadLocalMap</span><span class="params">(ThreadLocalMap parentMap)</span> &#123;</span><br><span class="line">    Entry[] parentTable = parentMap.table;</span><br><span class="line">    <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> parentTable.length;</span><br><span class="line">    setThreshold(len);</span><br><span class="line">    table = <span class="keyword">new</span> <span class="title class_">Entry</span>[len];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; len; j++) &#123;</span><br><span class="line">        <span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> parentTable[j];</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">            ThreadLocal&lt;Object&gt; key = (ThreadLocal&lt;Object&gt;) e.get();</span><br><span class="line">            <span class="keyword">if</span> (key != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="comment">//调用重写的方法</span></span><br><span class="line">                <span class="type">Object</span> <span class="variable">value</span> <span class="operator">=</span> key.childValue(e.value);</span><br><span class="line">                <span class="type">Entry</span> <span class="variable">c</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Entry</span>(key, value);</span><br><span class="line">                <span class="type">int</span> <span class="variable">h</span> <span class="operator">=</span> key.threadLocalHashCode &amp; (len - <span class="number">1</span>);</span><br><span class="line">                <span class="keyword">while</span> (table[h] != <span class="literal">null</span>)</span><br><span class="line">                    h = nextIndex(h, len);</span><br><span class="line">                table[h] = c;</span><br><span class="line">                size++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在该构造函数内部把父线程的 <code>inheritableThreadLocals</code> 成员变量的值复制到了新的 <code>ThreadLocalMap</code>对象中 ， 其中调用了 <code>InheritableThreadLocal</code> 类重写的代码</p>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p> <code>InheritableThreadLocal</code>  类通过重写代码让本地变量保存到了具体线程的  <code>inheritableThreadLocals</code> 变量里面。</p>
+<p><strong>线程在通过  <code>InheritableThreadLocal</code> 类实例的 set 或者 get方法设置变量时，就会创建当前线程的 <code>inheritableThreadLocals</code> 变量。当父线程创建子线程时，构造函数会把父线程中  <code>inheritableThreadLocals</code> 变量里面的本地变量复制一份保存到子线程的  <code>inheritableThreadLocals</code> 变量里面。</strong></p>
+<blockquote>
+<p>注意：<strong>只会在初始化线程的时候才会把父线程中 <code>inheritableThreadLocals</code> 内的本地变量复制到子线程中。线程一旦初始化后，父线程再调用 set 或者 remove 方法修改  <code>inheritableThreadLocals</code>  是不影响子线程的。</strong> </p>
+</blockquote>
+<p>修改原来代码</p>
+ <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//创建线程变量</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> ThreadLocal&lt;String&gt; threadLocal = <span class="keyword">new</span> <span class="title class_">InheritableThreadLocal</span>&lt;&gt;();</span><br></pre></td></tr></table></figure>
+
+<p>输出结果</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208291932185.png" alt="image-20220829193247122"></p>
+<p>可见，现在可以从子线程正常获取到父线程变量的值了。</p>
+<blockquote>
+<p>其实子线程使用父线程中的 <code>threadlocal</code> 方法有很多种，比如：</p>
 <ul>
-<li><p>每一个Thread维护一个ThreadLocalMap, key为使用弱引用的ThreadLocal实例，value为线程变量的副本。</p>
+<li>创建线程时，传入父线程中的变量，并将其复制到子线程中</li>
+<li>在父线程中构造一个 map 作为参数传递给子线程</li>
+</ul>
+<p>但这些方法都改变了我们的使用习惯，<strong>所以在这些情况下就显得  <code>InheritableThreadLocal</code>  比较有用。</strong></p>
+</blockquote>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>子线程需要使用存放在 <code>threadLocal</code> 变量中的用户登录信息</li>
+<li>中间件需要把统一的 id 追踪的整个调用链路记录下来。</li>
+</ul>
+<h2 id="ThreadLocal内存泄漏"><a href="#ThreadLocal内存泄漏" class="headerlink" title="ThreadLocal内存泄漏"></a>ThreadLocal内存泄漏</h2><h3 id="强引用与弱引用"><a href="#强引用与弱引用" class="headerlink" title="强引用与弱引用"></a>强引用与弱引用</h3><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208291952859.jpeg" alt="img"></p>
+<blockquote>
+<p><strong>实线代表强引用,虚线代表弱引用</strong></p>
+</blockquote>
+<ul>
+<li><p>每一个Thread维护一个 <code>ThreadLocalMap</code>, key为使用弱引用的 <code>ThreadLocal</code> 实例，value为线程变量的副本。</p>
 </li>
-<li><p>强引用，使用最普遍的引用，一个对象具有强引用，不会被垃圾回收器回收。当内存空间不足，Java虚拟机宁愿抛出OutOfMemoryError错误，使程序异常终止，也不回收这种对象。</p>
+<li><p>强引用，使用最普遍的引用，一个对象具有强引用，不会被垃圾回收器回收。当内存空间不足，Java虚拟机宁愿抛出 <code>OutOfMemoryError</code> 错误，使程序异常终止，也不回收这种对象。</p>
 </li>
-<li><p>如果想取消强引用和某个对象之间的关联，可以显式地将引用赋值为null，这样可以使JVM在合适的时间就会回收该对象。</p>
+<li><p>如果想取消强引用和某个对象之间的关联，可以显式地将引用赋值为null，这样可以使 <code>JVM</code> 在合适的时间就会回收该对象。</p>
 </li>
-<li><p>弱引用，JVM进行垃圾回收时，无论内存是否充足，都会回收被弱引用关联的对象。在java中，用java.lang.ref.WeakReference类来表示。</p>
+<li><p>弱引用，<code>JVM</code> 进行垃圾回收时，无论内存是否充足，都会回收被弱引用关联的对象。在 <code>java</code> 中，用<code>java.lang.ref.WeakReference</code> 类来表示。</p>
 </li>
 </ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h2><p>简单来说就是 ThreadLocal为每个线程提供了一个ThreadLocalMap对象 这样就避免了线程安全问题 实际开发中可以用于存储用户信息代替session</p>
+<blockquote>
+<p>如果一个对象只具有弱引用，那就类似于<strong>可有可无的生活用品</strong>。弱引用与软引用的区别在于：只具有弱引用的对象拥有更短暂的生命周期。在垃圾回收器线程扫描它 所管辖的内存区域的过程中，一旦发现了只具有弱引用的对象，不管当前内存空间足够与否，都会回收它的内存。不过，由于垃圾回收器是一个优先级很低的线程， 因此不一定会很快发现那些只具有弱引用的对象。</p>
+<p>弱引用可以和一个引用队列（<code>ReferenceQueue</code>）联合使用，如果弱引用所引用的对象被垃圾回收，Java 虚拟机就会把这个弱引用加入到与之关联的引用队列中。</p>
+</blockquote>
+<h3 id="ThreadLocal-内存泄露问题是怎么导致的？"><a href="#ThreadLocal-内存泄露问题是怎么导致的？" class="headerlink" title="ThreadLocal 内存泄露问题是怎么导致的？"></a>ThreadLocal 内存泄露问题是怎么导致的？</h3><p><code>ThreadLocalMap</code> 中使用的 key 为 <code>ThreadLocal</code> 的弱引用，而 value 是强引用。所以，如果 <code>ThreadLocal</code> 没有被外部强引用的情况下，在垃圾回收的时候，key 会被清理掉，而 value 不会被清理掉。</p>
+<p>这样一来，<code>ThreadLocalMap</code> 中就会出现 key 为 null 的 Entry。假如我们不做任何措施的话，value 永远无法被 <code>GC</code> 回收，这个时候就可能会产生内存泄露。<code>ThreadLocalMap</code> 实现中已经考虑了这种情况，在调用 <code>set()</code>、<code>get()</code>、<code>remove()</code> 方法的时候，会清理掉 key 为 null 的记录。使用完 <code>ThreadLocal</code>方法后 最好手动调用<code>remove()</code>方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//弱引用</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Entry</span> <span class="keyword">extends</span> <span class="title class_">WeakReference</span>&lt;ThreadLocal&lt;?&gt;&gt; &#123;</span><br><span class="line">    <span class="comment">/** The value associated with this ThreadLocal. */</span></span><br><span class="line">    Object value;</span><br><span class="line"></span><br><span class="line">    Entry(ThreadLocal&lt;?&gt; k, Object v) &#123;</span><br><span class="line">        <span class="built_in">super</span>(k);</span><br><span class="line">        value = v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
-        <category>开发规范</category>
+        <category>JUC</category>
       </categories>
       <tags>
-        <tag>Java</tag>
+        <tag>并发编程</tag>
       </tags>
   </entry>
   <entry>
@@ -18096,6 +18196,116 @@ String servletPath = request.getServletPath(); //   /testRequest
       </categories>
       <tags>
         <tag>Developer</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式--结构型模式之享元模式</title>
+    <url>/2022/08/29/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="设计模式–结构型模式之享元模式"><a href="#设计模式–结构型模式之享元模式" class="headerlink" title="设计模式–结构型模式之享元模式"></a>设计模式–结构型模式之享元模式</h1><blockquote>
+<p>运用共享技术有效地支持大量细粒度对象的复用</p>
+</blockquote>
+<blockquote>
+<p>spring的常量池、数据库连接池、缓冲池等等这些都是享元模式的应用</p>
+<p>比如：我们每次创建字符串对象时，如果每次都创建一个新的字符串对象的话，内存开销会很大，所以如果第一次创建了字符串对象“七夕“，下次再创建相同的字符串”七夕“时，只是把它的引用指向”七夕“，这样就实现了”七夕“字符串再内存中的共享。</p>
+</blockquote>
+<p><strong>享元拆开来讲，享，即共享，元，可以理解为元数据，内存当中的数据，对象。看来是共享对象喽</strong></p>
+<h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><p>面向对象技术可以很好地解决一些灵活性或可扩展性问题，但在很多情况下需要在系统中增加类和对象的个数。当对象数量太多时，将导致运行代价过高，带来性能下降等问题。</p>
+<ul>
+<li>享元模式正是为解决这一类问题而诞生的。享元模式通过共享技术实现相同或相似对象的重用。</li>
+<li>在享元模式中可以共享的相同内容称为内部状态(IntrinsicState)，而那些需要外部环境来设置的不能共享的内容称为外部状态(Extrinsic State)，由于区分了内部状态和外部状态，因此可以通过设置不同的外部状态使得相同的对象可以具有一些不同的特征，而相同的内部状态是可以共享的。</li>
+<li>在享元模式中通常会出现工厂模式，需要创建一个享元工厂来负责维护一个享元池(Flyweight Pool)用于存储具有相同内部状态的享元对象。</li>
+<li>在享元模式中共享的是享元对象的内部状态，外部状态需要通过环境来设置。在实际使用中，能够共享的内部状态是有限的，因此享元对象一般都设计为较小的对象，它所包含的内部状态较少，这种对象也称为细粒度对象。享元模式的目的就是使用共享技术来实现大量细粒度对象的复用。</li>
+</ul>
+<h2 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h2><p>享元模式(Flyweight Pattern)：运用共享技术有效地支持大量细粒度对象的复用。系统只使用少量的对象，而这些对象都很相似，状态变化很小，可以实现对象的多次复用。由于享元模式要求能够共享的对象必须是细粒度对象，因此它又称为轻量级模式，它是一种对象结构型模式。</p>
+<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p>享元模式包含如下角色：</p>
+<ul>
+<li><strong>Flyweight: 抽象享元类</strong> 定义了享元对象需要实现的公共操作方法。在该方法中会使用一个状态作为输入参数，也叫外部状态。</li>
+<li><strong>ConcreteFlyweight: 具体享元类</strong> 能够复用享元工厂内部状态并实现享元类公共操作的具体实现类。</li>
+<li><strong>UnsharedConcreteFlyweight: 非共享具体享元类</strong> 不复用享元工厂内部状态，但实现享元类的具体实现类。</li>
+<li><strong>FlyweightFactory: 享元工厂类</strong> 管理一个享元对象类的缓存池</li>
+</ul>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208291310426.jpeg" alt="../_images/Flyweight.jpg"></p>
+<h2 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h2><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208291310753.jpeg" alt="../_images/seq_Flyweight.jpg"></p>
+<h2 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h2><p>享元模式尝试重用现有的同类对象，如果未找到匹配的对象，则创建新对象。我们将通过创建 5 个对象来画出 20 个分布于不同位置的圆来演示这种模式。由于只有 5 种可用的颜色，所以 color 属性被用来检查现有的 <em>Circle</em> 对象。</p>
+<p>对于相同颜色不同坐标的圆，我们可以将原有颜色的圆复用，这样可以减少很多内存空间，如果不进行复用而是每个坐标每个颜色圆都创建新的对象，那么该示例中就会出现20个新增对象。</p>
+<p><strong>抽象享元类</strong> 创建一个Shape接口。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Shape</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">draw</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>具体享元类</strong> 创建实现接口的实体类。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Circle</span> <span class="keyword">implements</span> <span class="title class_">Shape</span> &#123;</span><br><span class="line">    <span class="comment">//颜色</span></span><br><span class="line">    <span class="keyword">private</span> String color;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//x坐标</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> x;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//y坐标</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> y;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//半径</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> radius;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Circle</span><span class="params">(String color)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.color = color;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setX</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.x = x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setY</span><span class="params">(<span class="type">int</span> y)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.y = y;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setRadius</span><span class="params">(<span class="type">int</span> radius)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.radius = radius;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">draw</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Circle: Draw()[&quot;</span> +</span><br><span class="line">                <span class="string">&quot;color=&#x27;&quot;</span> + color + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, x=&quot;</span> + x +</span><br><span class="line">                <span class="string">&quot;, y=&quot;</span> + y +</span><br><span class="line">                <span class="string">&quot;, radius=&quot;</span> + radius +</span><br><span class="line">                <span class="string">&#x27;]&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>享元工厂类</strong> 创建一个工厂，生成基于给定信息的实体类的对象。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShapeFactory</span> &#123;</span><br><span class="line">    <span class="comment">//创建一个缓存池</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> HashMap&lt;String, Shape&gt; circleMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取对象</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> color 颜色</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> Shape</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Shape <span class="title function_">getCircle</span><span class="params">(String color)</span>&#123;</span><br><span class="line">        <span class="comment">//从缓存池中获取 防止每次都生成新的对象导致内存中对象数量太多(节约内存空间)</span></span><br><span class="line">        <span class="type">Circle</span> <span class="variable">circle</span> <span class="operator">=</span> (Circle) circleMap.get(color);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//如果缓冲池中没有 才去创建新的对象 并且将创建好的对象加入缓存池中</span></span><br><span class="line">        <span class="keyword">if</span> (circle == <span class="literal">null</span>)&#123;</span><br><span class="line">            circle = <span class="keyword">new</span> <span class="title class_">Circle</span>(color);</span><br><span class="line">            circleMap.put(color,circle);</span><br><span class="line">            System.out.println(<span class="string">&quot;Creating circle of color : &quot;</span> + color);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> circle;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>客户端</strong> 使用该工厂，通过传递颜色信息来获取实体类的对象。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String colors[] = &#123;<span class="string">&quot;Red&quot;</span>, <span class="string">&quot;Green&quot;</span>, <span class="string">&quot;Blue&quot;</span>, <span class="string">&quot;White&quot;</span>, <span class="string">&quot;Black&quot;</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">20</span>; i++) &#123;</span><br><span class="line">            <span class="type">Circle</span> <span class="variable">circle</span> <span class="operator">=</span> (Circle) ShapeFactory.getCircle(getRandomColor());</span><br><span class="line">            circle.setX(getRandomX());</span><br><span class="line">            circle.setY(getRandomY());</span><br><span class="line">            circle.setRadius(<span class="number">100</span>);</span><br><span class="line">            circle.draw();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取随机颜色</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> String</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String <span class="title function_">getRandomColor</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> colors[(<span class="type">int</span>) (Math.random() * colors.length)];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取随机x坐标</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> int</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">getRandomX</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="type">int</span>) (Math.random() * <span class="number">100</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取随机y坐标</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> int</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">getRandomY</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="type">int</span>) (Math.random() * <span class="number">100</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>结果</strong></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208291319413.png" alt="image-20220829131943337"></p>
+<p>可以发现我们花了20个不同坐标不同颜色的圆，但实际上只创建了5个对象。</p>
+<h2 id="模式分析"><a href="#模式分析" class="headerlink" title="模式分析"></a>模式分析</h2><p>享元模式是一个考虑系统性能的设计模式，通过使用享元模式可以节约内存空间，提高系统的性能。</p>
+<p>享元模式的核心在于享元工厂类，享元工厂类的作用在于提供一个用于存储享元对象的享元池，用户需要对象时，首先从享元池中获取，如果享元池中不存在，则创建一个新的享元对象返回给用户，并在享元池中保存该新增对象。</p>
+<p><strong>享元模式以共享的方式高效地支持大量的细粒度对象，享元对象能做到共享的关键是区分内部状态(Internal State)和外部状态(External State)。</strong></p>
+<ul>
+<li><strong>内部状态是存储在享元对象内部并且不会随环境改变而改变的状态，因此内部状态可以共享（例如该示例中的圆的颜色）。</strong></li>
+<li><strong>外部状态是随环境改变而改变的、不可以共享的状态（例如该示例中圆的坐标）。</strong>享元对象的外部状态必须由客户端保存，并在享元对象被创建之后，在需要使用的时候再传入到享元对象内部。一个外部状态与另一个外部状态之间是相互独立的。</li>
+</ul>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>spring的常量池、数据库连接池、缓冲池等；英雄联盟中，一台服务器要连接多个客户端（多个玩家），如果每个玩家进去地图都要创建对象，那对象将无数啊。。。。。所以这里要使用享元模式，将地图对象减少到几个实例。</p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><p>享元模式的优点</p>
+<ul>
+<li>享元模式的优点在于它可以极大减少内存中对象的数量，使得相同对象或相似对象在内存中只保存一份。</li>
+<li>享元模式的外部状态相对独立，而且不会影响其内部状态，从而使得享元对象可以在不同的环境中被共享。</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>享元模式的缺点</p>
+<ul>
+<li>享元模式使得系统更加复杂，需要分离出内部状态和外部状态，这使得程序的逻辑复杂化。</li>
+<li>为了使对象可以共享，享元模式需要将享元对象的状态外部化，而读取外部状态使得运行时间变长。</li>
+</ul>
+<h2 id="适用环境"><a href="#适用环境" class="headerlink" title="适用环境"></a>适用环境</h2><p>在以下情况下可以使用享元模式：</p>
+<ul>
+<li>一个系统有大量相同或者相似的对象，由于这类对象的大量使用，造成内存的大量耗费。</li>
+<li>对象的大部分状态都可以外部化，可以将这些外部状态传入对象中。</li>
+<li>使用享元模式需要维护一个存储享元对象的享元池，而这需要耗费资源，因此，应当在多次重复使用享元对象时才值得使用享元模式。</li>
+</ul>
+<h2 id="模式应用"><a href="#模式应用" class="headerlink" title="模式应用"></a>模式应用</h2><p>享元模式在编辑器软件中大量使用，如在一个文档中多次出现相同的图片，则只需要创建一个图片对象，通过在应用程序中设置该图片出现的位置，可以实现该图片在不同地方多次重复显示。</p>
+<h2 id="模式扩展"><a href="#模式扩展" class="headerlink" title="模式扩展"></a>模式扩展</h2><p>单纯享元模式和复合享元模式</p>
+<ul>
+<li>单纯享元模式：在单纯享元模式中，所有的享元对象都是可以共享的，即所有抽象享元类的子类都可共享，不存在非共享具体享元类。</li>
+<li>复合享元模式：将一些单纯享元使用组合模式加以组合，可以形成复合享元对象，这样的复合享元对象本身不能共享，但是它们可以分解成单纯享元对象，而后者则可以共享。</li>
+</ul>
+<p>享元模式与其他模式的联用</p>
+<ul>
+<li>在享元模式的享元工厂类中通常提供一个静态的工厂方法用于返回享元对象，使用简单工厂模式来生成享元对象。</li>
+<li>在一个系统中，通常只有唯一一个享元工厂，因此享元工厂类可以使用单例模式进行设计。</li>
+<li>享元模式可以结合组合模式形成复合享元模式，统一对享元对象设置外部状态。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>享元模式运用共享技术有效地支持大量细粒度对象的复用。系统只使用少量的对象，而这些对象都很相似，状态变化很小，可以实现对象的多次复用，它是一种对象结构型模式。</li>
+<li>享元模式包含四个角色：抽象享元类声明一个接口，通过它可以接受并作用于外部状态；具体享元类实现了抽象享元接口，其实例称为享元对象；非共享具体享元是不能被共享的抽象享元类的子类；享元工厂类用于创建并管理享元对象，它针对抽象享元类编程，将各种类型的具体享元对象存储在一个享元池中。</li>
+<li>享元模式以共享的方式高效地支持大量的细粒度对象，享元对象能做到共享的关键是区分内部状态和外部状态。其中内部状态是存储在享元对象内部并且不会随环境改变而改变的状态，因此内部状态可以共享；外部状态是随环境改变而改变的、不可以共享的状态。</li>
+<li>享元模式主要优点在于它可以极大减少内存中对象的数量，使得相同对象或相似对象在内存中只保存一份；其缺点是使得系统更加复杂，并且需要将享元对象的状态外部化，而读取外部状态使得运行时间变长。</li>
+<li>享元模式适用情况包括：一个系统有大量相同或者相似的对象，由于这类对象的大量使用，造成内存的大量耗费；对象的大部分状态都可以外部化，可以将这些外部状态传入对象中；多次重复使用享元对象。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>Developer</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《Java并发编程之美》读书笔记</title>
+    <url>/2021/08/28/%E3%80%8AJava%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8B%E7%BE%8E%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h1 id="《Java并发编程之美》读书笔记"><a href="#《Java并发编程之美》读书笔记" class="headerlink" title="《Java并发编程之美》读书笔记"></a>《Java并发编程之美》读书笔记</h1><blockquote>
+<p>收到pymjl大佬<a href="https://www.yuque.com/docs/share/bbe8cc28-c98e-42d8-87df-8ea2b4f873de">《Java并发编程之美》读书笔记</a>的启发，于是决定自己也写一个，帮助自己理解和回顾</p>
+</blockquote>
+<h2 id="第一章-并发编程线程基础"><a href="#第一章-并发编程线程基础" class="headerlink" title="第一章 并发编程线程基础"></a>第一章 并发编程线程基础</h2>]]></content>
+      <categories>
+        <category>读书笔记</category>
+      </categories>
+      <tags>
+        <tag>并发编程</tag>
       </tags>
   </entry>
 </search>
