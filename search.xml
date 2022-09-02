@@ -18302,6 +18302,8 @@ String servletPath = request.getServletPath(); //   /testRequest
 </blockquote>
 <h2 id="第一章-并发编程线程基础"><a href="#第一章-并发编程线程基础" class="headerlink" title="第一章 并发编程线程基础"></a>第一章 并发编程线程基础</h2><p><a href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/xmind/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80.xmind"><strong>思维导图下载地址</strong></a></p>
 <p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208292012339.png" alt="并发编程线程基础"></p>
+<h2 id="第二章-并发编程其他基础知识"><a href="#第二章-并发编程其他基础知识" class="headerlink" title="第二章 并发编程其他基础知识"></a>第二章 并发编程其他基础知识</h2><p><a href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/xmind/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%9A%84%E5%85%B6%E4%BB%96%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86.xmind">思维导图下载地址</a></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209022021386.png" alt="并发编程的其他基础知识"></p>
 ]]></content>
       <categories>
         <category>读书笔记</category>
@@ -18393,6 +18395,102 @@ String servletPath = request.getServletPath(); //   /testRequest
 <blockquote>
 <p>后续会学习 Java的动态代理。</p>
 </blockquote>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>Developer</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式--行为型模式之命令模式</title>
+    <url>/2022/09/01/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="设计模式–行为型模式之命令模式"><a href="#设计模式–行为型模式之命令模式" class="headerlink" title="设计模式–行为型模式之命令模式"></a>设计模式–行为型模式之命令模式</h1><blockquote>
+<p>将一个请求封装为一个对象，从而可用不同的请求对客户进行参数化，对请求排队或者记录请求日志，以及支持可撤销的操作</p>
+</blockquote>
+<h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><p>在软件设计中，我们经常需要向某些对象发送请求，但是并不知道请求的接收者是谁，也不知道被请求的操作是哪个，我们只需在程序运行时指定具体的请求接收者即可，此时，可以使用命令模式来进行设计，使得请求发送者与请求接收者消除彼此之间的耦合，让对象之间的调用关系更加灵活。</p>
+<p>命令模式可以对发送者和接收者完全解耦，发送者与接收者之间没有直接引用关系，发送请求的对象只需要知道如何发送请求，而不必知道如何完成请求。这就是命令模式的模式动机。</p>
+<h2 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h2><p>命令模式(Command Pattern)：将一个请求封装为一个对象，从而使我们可用不同的请求对客户进行参数化；对请求排队或者记录请求日志，以及支持可撤销的操作。命令模式是一种对象行为型模式，其别名为动作(Action)模式或事务(Transaction)模式。</p>
+<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p>命令模式包含如下角色：</p>
+<ul>
+<li><strong>Command: 抽象命令类</strong> 抽象命令类中声明了用于执行请求的execute()等方法，通过这些方法可以调用请求接收者的相关操作；</li>
+<li><strong>ConcreteCommand: 具体命令类</strong> 抽象命令类的子类，实现了在抽象命令类中声明的方法，它对应具体的接收者对象，将接收者对象的动作绑定其中；</li>
+<li><strong>Invoker: 调用者</strong> 请求的发送者，又称为请求者，它通过命令对象来执行请求；</li>
+<li><strong>Receiver: 接收者</strong> 接收者执行与请求相关的操作，它具体实现对请求的业务处理。</li>
+<li><strong>Client:客户类</strong></li>
+</ul>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209021255066.jpeg" alt="../_images/Command.jpg"></p>
+<h2 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h2><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209021255813.jpeg" alt="../_images/seq_Command.jpg"></p>
+<h2 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h2><p>抽象命令类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-01-22:53</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 抽象命令角色</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 对子类的规范约束</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Command</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>具体命令类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-01-22:56</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 具体命令对象</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 将会调用命令接收的方法 只是将一条一条的命令封装成了对象(请求) 命令始终是命令 真正执行的是接收命令的并执行的角色</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LightOffCommand</span> <span class="keyword">implements</span> <span class="title class_">Command</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Receiver receiver;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">LightOffCommand</span><span class="params">(Receiver receiver)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.receiver = receiver;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;</span><br><span class="line">        receiver.turnOFF();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LightOffCommand</span> <span class="keyword">implements</span> <span class="title class_">Command</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Receiver receiver;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">LightOffCommand</span><span class="params">(Receiver receiver)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.receiver = receiver;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;</span><br><span class="line">        receiver.turnOFF();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>调用者</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-01-22:59</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 命令调用者 负责调用</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 客户端通过将具体的命令对象创建后  传入该对象即可调用对应的方法</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Invoker</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">(Command command)</span> &#123;</span><br><span class="line">        command.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>接收者</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-01-22:57</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 命令接收者</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 正则执行命令的角色 命令对象内部会调用该对象的方法完成真正的命令</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Receiver</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">turnON</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;执行开灯操作...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">turnOFF</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;执行关灯操作...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>客户端</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-01-23:04</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 客户端</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 用户发送请求的客户端</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">//配置客户端</span></span><br><span class="line">        <span class="type">Receiver</span> <span class="variable">receiver</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Receiver</span>();</span><br><span class="line">        <span class="type">Invoker</span> <span class="variable">invoker</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Invoker</span>();</span><br><span class="line">        <span class="comment">//创建请求</span></span><br><span class="line">        <span class="type">LightOnCommand</span> <span class="variable">lightOnCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LightOnCommand</span>(receiver);</span><br><span class="line">        <span class="type">LightOffCommand</span> <span class="variable">lightOffCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LightOffCommand</span>(receiver);</span><br><span class="line">        <span class="comment">//发送请求 并执行</span></span><br><span class="line">        invoker.execute(lightOnCommand);</span><br><span class="line">        invoker.execute(lightOffCommand);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>执行结果</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209021307264.png" alt="image-20220902130729225"></p>
+<h2 id="模式分析"><a href="#模式分析" class="headerlink" title="模式分析"></a>模式分析</h2><p><strong>命令模式的本质是对命令进行封装，将发出命令的责任和执行命令的责任分割开。</strong></p>
+<ul>
+<li>每一个命令都是一个操作：请求的一方发出请求，要求执行一个操作；接收的一方收到请求，并执行操作。</li>
+<li>命令模式允许请求的一方和接收的一方独立开来，使得请求的一方不必知道接收请求的一方的接口，更不必知道请求是怎么被接收，以及操作是否被执行、何时被执行，以及是怎么被执行的。</li>
+<li>命令模式使请求本身成为一个对象，这个对象和其他对象一样可以被存储和传递。</li>
+<li>命令模式的关键在于引入了抽象命令接口，且发送者针对抽象命令接口编程，只有实现了抽象命令接口的具体命令才能与接收者相关联。</li>
+</ul>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>实例一：电视机遥控器</p>
+<ul>
+<li>电视机是请求的接收者，遥控器是请求的发送者，遥控器上有一些按钮，不同的按钮对应电视机的不同操作。抽象命令角色由一个命令接口来扮演，有三个具体的命令类实现了抽象命令接口，这三个具体命令类分别代表三种操作：打开电视机、关闭电视机和切换频道。显然，电视机遥控器就是一个典型的命令模式应用实例。</li>
+</ul>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209021255802.jpeg" alt="../_images/Command_eg.jpg"></p>
+<p>时序图:</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209021255789.jpeg" alt="../_images/seq_Command_eg.jpg"></p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><p>命令模式的优点</p>
+<ul>
+<li>降低系统的耦合度。</li>
+<li>新的命令可以很容易地加入到系统中。</li>
+<li>可以比较容易地设计一个命令队列和宏命令（组合命令）。</li>
+<li>可以方便地实现对请求的Undo和Redo。</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>命令模式的缺点</p>
+<ul>
+<li>使用命令模式可能会导致某些系统有过多的具体命令类。因为针对每一个命令都需要设计一个具体命令类，因此某些系统可能需要大量具体命令类，这将影响命令模式的使用。</li>
+</ul>
+<h2 id="适用环境"><a href="#适用环境" class="headerlink" title="适用环境"></a>适用环境</h2><p>在以下情况下可以使用命令模式：</p>
+<ul>
+<li>系统需要将请求调用者和请求接收者解耦，使得调用者和接收者不直接交互。</li>
+<li>系统需要在不同的时间指定请求、将请求排队和执行请求。</li>
+<li>系统需要支持命令的撤销(Undo)操作和恢复(Redo)操作。</li>
+<li>系统需要将一组操作组合在一起，即支持宏命令</li>
+</ul>
+<h2 id="模式应用"><a href="#模式应用" class="headerlink" title="模式应用"></a>模式应用</h2><p>很多系统都提供了宏命令功能，如UNIX平台下的Shell编程，可以将多条命令封装在一个命令对象中，只需要一条简单的命令即可执行一个命令序列，这也是命令模式的应用实例之一。</p>
+<h2 id="模式扩展"><a href="#模式扩展" class="headerlink" title="模式扩展"></a>模式扩展</h2><p>宏命令又称为组合命令，它是命令模式和组合模式联用的产物。</p>
+<p>-宏命令也是一个具体命令，不过它包含了对其他命令对象的引用，在调用宏命令的execute()方法时，将递归调用它所包含的每个成员命令的execute()方法，一个宏命令的成员对象可以是简单命令，还可以继续是宏命令。执行一个宏命令将执行多个具体命令，从而实现对命令的批处理。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>在命令模式中，将一个请求封装为一个对象，从而使我们可用不同的请求对客户进行参数化；对请求排队或者记录请求日志，以及支持可撤销的操作。命令模式是一种对象行为型模式，其别名为动作模式或事务模式。</li>
+<li>命令模式包含四个角色：抽象命令类中声明了用于执行请求的execute()等方法，通过这些方法可以调用请求接收者的相关操作；具体命令类是抽象命令类的子类，实现了在抽象命令类中声明的方法，它对应具体的接收者对象，将接收者对象的动作绑定其中；调用者即请求的发送者，又称为请求者，它通过命令对象来执行请求；接收者执行与请求相关的操作，它具体实现对请求的业务处理。</li>
+<li>命令模式的本质是对命令进行封装，将发出命令的责任和执行命令的责任分割开。命令模式使请求本身成为一个对象，这个对象和其他对象一样可以被存储和传递。</li>
+<li>命令模式的主要优点在于降低系统的耦合度，增加新的命令很方便，而且可以比较容易地设计一个命令队列和宏命令，并方便地实现对请求的撤销和恢复；其主要缺点在于可能会导致某些系统有过多的具体命令类。</li>
+<li>命令模式适用情况包括：需要将请求调用者和请求接收者解耦，使得调用者和接收者不直接交互；需要在不同的时间指定请求、将请求排队和执行请求；需要支持命令的撤销操作和恢复操作，需要将一组操作组合在一起，即支持宏命令。</li>
+</ul>
 ]]></content>
       <categories>
         <category>设计模式</category>
