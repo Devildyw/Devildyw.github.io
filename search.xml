@@ -18304,6 +18304,47 @@ String servletPath = request.getServletPath(); //   /testRequest
 <p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202208292012339.png" alt="并发编程线程基础"></p>
 <h2 id="第二章-并发编程其他基础知识"><a href="#第二章-并发编程其他基础知识" class="headerlink" title="第二章 并发编程其他基础知识"></a>第二章 并发编程其他基础知识</h2><p><a href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/xmind/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%9A%84%E5%85%B6%E4%BB%96%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86.xmind">思维导图下载地址</a></p>
 <p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209022021386.png" alt="并发编程的其他基础知识"></p>
+<h2 id="Java并发包中ThreadLocalRandom类原理剖析"><a href="#Java并发包中ThreadLocalRandom类原理剖析" class="headerlink" title="Java并发包中ThreadLocalRandom类原理剖析"></a>Java并发包中<code>ThreadLocalRandom</code>类原理剖析</h2><blockquote>
+<p><code>ThreadLocalRandom</code> 类是 <code>JDK</code> 7 在 <code>JUC</code> 包下新增的随机数生成器，它弥补了 Random类在多线程下的缺陷。</p>
+</blockquote>
+<h3 id="Random-类及其局限性"><a href="#Random-类及其局限性" class="headerlink" title="Random 类及其局限性"></a>Random 类及其局限性</h3><p>先看看 <code>java.util.Random</code> 的使用方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RandomTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">//创建一个默认种子的随机数生成器</span></span><br><span class="line">        <span class="type">Random</span> <span class="variable">random</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>();</span><br><span class="line">        <span class="comment">//输出10个在0~5（包含0,不包含5）之间的随机数</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            System.out.println(random.nextInt(<span class="number">5</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>随机数的生成需要一个默认的种子，这个种子其实是一个 long 类型的数字，你可以在创建 Random 对象时通过构造函数指定，如果不指定则在默认构造函数内部生成一个默认的值。有了默认的种子后，如果生成随机数呢？</p>
+<p>接下来我们来看看获取随机数的方法 <code>nextInt(int bound)</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">nextInt</span><span class="params">(<span class="type">int</span> bound)</span> &#123;</span><br><span class="line">    <span class="comment">//参数检查</span></span><br><span class="line">    <span class="keyword">if</span> (bound &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(BadBound);</span><br><span class="line">    <span class="comment">//根据老的种子生成新的种子</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">r</span> <span class="operator">=</span> next(<span class="number">31</span>);</span><br><span class="line">    <span class="comment">//根据新的种子计算随机数</span></span><br><span class="line">    </span><br><span class="line">    ......</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> r;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>随机数的生成需要两个步骤：</p>
+<ul>
+<li><strong>首先根据老的种子生成新的种子。</strong></li>
+<li><strong>然后根据新的种子来计算新的随机数。</strong></li>
+</ul>
+<p>在单线程情况下每次调用 <code>nextInt</code> 都是根据老的种子计算出新的种子，这是可以保证随机数产生的随机性的。<strong>但是多线程下多个线程可能都拿同一个老种子去生成新的种子，由于通过种子计算随机数的步骤时固定的，所以会导致多个线程产生相同的随机值。</strong></p>
+<p>要保证多线程下的可以生成不同的随机值，必须要保证<strong>根据老种子生成新种子的原子性</strong>。</p>
+<p>Random 函数使用了一个原子变量达到了这个效果，在创建 Random 对象时初始化的种子就被保存到了种子原子变量里面。</p>
+<p><code>next()</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="type">int</span> <span class="title function_">next</span><span class="params">(<span class="type">int</span> bits)</span> &#123;</span><br><span class="line">    <span class="type">long</span> oldseed, nextseed;</span><br><span class="line">    <span class="type">AtomicLong</span> <span class="variable">seed</span> <span class="operator">=</span> <span class="built_in">this</span>.seed;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="comment">//获取当前原子变量种子的值</span></span><br><span class="line">        oldseed = seed.get();</span><br><span class="line">        <span class="comment">//根据当前种子值计算出新的种子</span></span><br><span class="line">        nextseed = (oldseed * multiplier + addend) &amp; mask;</span><br><span class="line">    	<span class="comment">//使用CAS操作，它使用新的种子去更新老的种子。CAS操作会保证只有一个线程可以更新老的种子为新的，失败的线程会通过循环重新获取更新后的种子作为当前种子去计算新的种子</span></span><br><span class="line">    &#125; <span class="keyword">while</span> (!seed.compareAndSet(oldseed, nextseed));</span><br><span class="line">    <span class="comment">//使用固定算法根据新的种子计算随机数</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="type">int</span>)(nextseed &gt;&gt;&gt; (<span class="number">48</span> - bits));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>每个 Random 实例里面都有一个原子性的种子变量用来记录当前的种子值，当要生成新的随机数时需要根据当前种子计算新的种子并更新回原子变量，在多线程下使用 Random 实例生成随机数时，当多个线程同时计算随机数来计算新的种子时，多个线程会竞争同一个原子变量的更新操作，由于原子变量的更新操作是 CAS 操作，同时只有一个线程会成功，所以会导致大量线程进行自旋重试，这会降低并发性能，所以 <code>ThreadLocalRandom</code>应运而生。</p>
+</blockquote>
+<h3 id="ThreadLocalRandom"><a href="#ThreadLocalRandom" class="headerlink" title="ThreadLocalRandom"></a><code>ThreadLocalRandom</code></h3><p>为了弥补多线程高并发情况下 Random 的性能缺陷，在 <code>JUC</code> 包下新增了 <code>ThreadLocalRandom</code> 类。</p>
+<p>使用</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocalRandomTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">//获取一个随机数生成器</span></span><br><span class="line">        <span class="type">ThreadLocalRandom</span> <span class="variable">random</span> <span class="operator">=</span> ThreadLocalRandom.current();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//输出10个在0~5（包含0，不包含5）之间的随机数</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            System.out.println(random.nextInt(<span class="number">5</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>与 <code>ThreadLocal</code> 通过让每一个线程复制一份变量，使得在每个线程对变量进行操作时实际是操作自己本地内存里面的副本，来避免对共享变量进行同步的方法相似，<code>ThreadLocalRandom</code> 也是这个原理。</p>
+<p>Random的缺点是多个线程会使用同一个原子性种子变量，从而导致了对原子变量更新的竞争。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209022210525.png" alt="image-20220902221023443"></p>
+<p>如果每一个线程都维护一个种子变量，那么每个线程生成随机数时都根据自己老的种子计算新的种子，并使用新种子更新老的种子，再根据新种子计算随机数，就不会存在竞争问题了，大大提高并发性能。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209022212477.png" alt="image-20220902221239433"></p>
+<h3 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h3><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209022216296.png" alt="image-20220902221639249"></p>
+<p>由图中可以看出 <code>ThreadLocalRandom</code> 类继承了 Random类 并重写了 <code>nextInt</code> 方法，在<code>ThreadLocalRandom</code> 类中并没有使用继承自 Random 类的原子性种子变量。</p>
+<p>在 <code>TheadLocalRandom</code> 中并没有存放具体的种子，具体的种子存放在具体的调用线程的 <code>threadLocalRandomSeed</code> 变量里面。<code>ThreadLocalRandom</code> 类似于 <code>ThreadLocal</code> 类，就是个工具类。<strong>当线程调用 <code>ThreadLocalRandom</code> 的 current 方法时，<code>ThreadLocalRandom</code> 负责初始化调用线程的 <code>threadLocalRandomSeed</code> 变量，也就是初始化种子。</strong></p>
+<p>当调用 <code>ThreadLocalRandom</code> 的 <code>nextInt</code> 方法时，<strong>实际上是获取当前线程的 <code>threadLocalRandomSeed</code> 变量，再根据新种子并使用具体方法计算随机数。</strong></p>
+<p><strong><code>threadLocalRandomSeed</code> 变量就是 Thread 类里面的一个普通 long 型变量，他并不是原子性变量。</strong>（因为该变量是线程私有的，所以根本不用使用原子性变量）</p>
+<blockquote>
+<p>变量 instance 是 <code>ThreadLocalRandom</code> 的一个实例，该变量是 static 的。当多线程通过 <code>ThreadLocalRandom</code> 的 current 方法获取 <code>ThreadLocalRandom</code> 的实例时，其实获取的是同一个实例。但是由于具体的种子里面是存放在线程里面的，所以在 <code>ThreadLocalRandom</code>  的实例里面只包含与线程无关的通用算法，所以它是线程安全的。</p>
+</blockquote>
 ]]></content>
       <categories>
         <category>读书笔记</category>
@@ -18490,6 +18531,127 @@ String servletPath = request.getServletPath(); //   /testRequest
 <li>命令模式的本质是对命令进行封装，将发出命令的责任和执行命令的责任分割开。命令模式使请求本身成为一个对象，这个对象和其他对象一样可以被存储和传递。</li>
 <li>命令模式的主要优点在于降低系统的耦合度，增加新的命令很方便，而且可以比较容易地设计一个命令队列和宏命令，并方便地实现对请求的撤销和恢复；其主要缺点在于可能会导致某些系统有过多的具体命令类。</li>
 <li>命令模式适用情况包括：需要将请求调用者和请求接收者解耦，使得调用者和接收者不直接交互；需要在不同的时间指定请求、将请求排队和执行请求；需要支持命令的撤销操作和恢复操作，需要将一组操作组合在一起，即支持宏命令。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>Developer</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式--行为型模式之中介者模式</title>
+    <url>/2022/09/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="设计模式–行为型模式之中介者模式"><a href="#设计模式–行为型模式之中介者模式" class="headerlink" title="设计模式–行为型模式之中介者模式"></a>设计模式–行为型模式之中介者模式</h1><blockquote>
+<p>定义一个对象来封装一系列对象的交互。中介者模式使各对象之间不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间地交互</p>
+</blockquote>
+<h2 id="场景介绍："><a href="#场景介绍：" class="headerlink" title="场景介绍："></a>场景介绍：</h2><p><strong>房产中介</strong></p>
+<ol>
+<li>假如没有总经理。下面三个部门：财务部、市场部、研发部。财务部要发工资，让大家核对公司需要跟市场部和研发部都通气；市场部要接个新项目，需要研发部处理技术、需要财务部出资金。市场部跟各个部门打交道。 虽然只有三个部门，但是关系非常乱。</li>
+</ol>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209031218895.png" alt="img"></p>
+<ol>
+<li>实际上，公司都有总经理。各个部门有什么事情都通报到总经理这里，总经理再通知各个相关部门。</li>
+</ol>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209031218868.png" alt="img"></p>
+<ol>
+<li>这就是一个典型的“中介者模式”，总经理起到一个中介、协调的作用</li>
+</ol>
+<p><strong>实现核心</strong></p>
+<p>  如果一个系统中对象之间的联系呈现为网状结构，对象之间存在大量多对多关系，将导致关系及其复杂，这些对象称为”同事对象”，我们可以引入一个中介者对象，使各个同事对象只跟中介者对象打交道，将复杂的网络结构化解为星型结构。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209031218017.png" alt="img"></p>
+<h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><ul>
+<li>在用户与用户直接聊天的设计方案中，用户对象之间存在很强的关联性，将导致系统出现如下问题：</li>
+<li>系统结构复杂：对象之间存在大量的相互关联和调用，若有一个对象发生变化，则需要跟踪和该对象关联的其他所有对象，并进行适当处理。</li>
+<li>对象可重用性差：由于一个对象和其他对象具有很强的关联，若没有其他对象的支持，一个对象很难被另一个系统或模块重用，这些对象表现出来更像一个不可分割的整体，职责较为混乱。</li>
+<li>系统扩展性低：增加一个新的对象需要在原有相关对象上增加引用，增加新的引用关系也需要调整原有对象，系统耦合度很高，对象操作很不灵活，扩展性差。</li>
+<li>在面向对象的软件设计与开发过程中，根据“单一职责原则”，我们应该尽量将对象细化，使其只负责或呈现单一的职责。</li>
+<li>对于一个模块，可能由很多对象构成，而且这些对象之间可能存在相互的引用，为了减少对象两两之间复杂的引用关系，使之成为一个松耦合的系统，我们需要使用中介者模式，这就是中介者模式的模式动机。</li>
+</ul>
+<h2 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h2><p>中介者模式(Mediator Pattern)定义：用一个中介对象来封装一系列的对象交互，中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。中介者模式又称为调停者模式，它是一种对象行为型模式。</p>
+<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p>中介者模式包含如下角色：</p>
+<ul>
+<li><strong>Mediator: 抽象中介者</strong> 定义一个接口，该接口用于与各同事对象之间的通信；</li>
+<li><strong>ConcreteMediator: 具体中介者</strong> 是抽象中介者的子类，通过协调各个同事对象来实现协作行为，了解并维护它的各个同事对象的引用；</li>
+<li><strong>Colleague: 抽象同事类</strong> 定义各同事的公有方法；</li>
+<li><strong>ConcreteColleague: 具体同事类</strong> 是抽象同事类的子类，每一个同事对象都引用一个中介者对象；</li>
+</ul>
+<p><strong>每一个同事对象在需要和其他同事对象通信时，先与中介者通信，通过中介者来间接完成与其他同事类的通信；在具体同事类中实现了在抽象同事类中定义的方法。</strong></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209031219661.jpeg" alt="../_images/Mediator.jpg"></p>
+<h2 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h2><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209031219678.jpeg" alt="../_images/seq_Mediator.jpg"></p>
+<h2 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h2><p>抽象中介者</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 中介者接口</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-03-11:51</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Mediator</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 注册 同事</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> dname</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> d</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">register</span><span class="params">(String dname, Department d)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 执行 处理</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> name</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">command</span><span class="params">(String dname)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>具体中介者</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 中介者的实现类</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-03-11:53</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">President</span> <span class="keyword">implements</span> <span class="title class_">Mediator</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, Department&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String,Department&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">register</span><span class="params">(String dname, Department d)</span> &#123;</span><br><span class="line">        map.put(dname,d);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">command</span><span class="params">(String dname)</span> &#123;</span><br><span class="line">        map.get(dname).selfAction();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>抽象同事类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 同事类的接口</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-03-11:55</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Department</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">selfAction</span><span class="params">()</span>; <span class="comment">//做本部门的事情</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">outAction</span><span class="params">()</span>; <span class="comment">//向总经理发出申请</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>具体同事类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 财务部</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-03-12:00</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Financial</span> <span class="keyword">implements</span> <span class="title class_">Department</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Mediator mediator;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Financial</span><span class="params">(Mediator mediator)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>();</span><br><span class="line">        <span class="built_in">this</span>.mediator = mediator;</span><br><span class="line">        <span class="comment">//注册到中介者的管理列表中</span></span><br><span class="line">        mediator.register(<span class="string">&quot;financial&quot;</span>,<span class="built_in">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">selfAction</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;提供资金支持！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">outAction</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;数钱&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 开发部</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-03-12:01</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Development</span> <span class="keyword">implements</span> <span class="title class_">Department</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Mediator mediator;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Development</span><span class="params">(Mediator mediator)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>();</span><br><span class="line">        <span class="built_in">this</span>.mediator = mediator;</span><br><span class="line">        mediator.register(<span class="string">&quot;development&quot;</span>,<span class="built_in">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">selfAction</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;汇报工作！没钱了，需要资金支持！&quot;</span>);</span><br><span class="line">        <span class="comment">//中介者做协同处理 并不用我们单独去调用指定对象完成操作 而是借助了中介者</span></span><br><span class="line">        mediator.command(<span class="string">&quot;financial&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">outAction</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;专心科研，开发项目！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 市场部 同事类的具体实现</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-03-11:57</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Market</span> <span class="keyword">implements</span> <span class="title class_">Department</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Mediator mediator;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Market</span><span class="params">(Mediator mediator)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>();</span><br><span class="line">        <span class="built_in">this</span>.mediator = mediator;</span><br><span class="line">        mediator.register(<span class="string">&quot;market&quot;</span>,<span class="built_in">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">selfAction</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;汇报工作！项目承接的进度，需要资金支持！&quot;</span>);</span><br><span class="line">		<span class="comment">//中介者做协同处理 并不用我们单独去调用指定对象完成操作 而是借助了中介者</span></span><br><span class="line">        mediator.command(<span class="string">&quot;financial&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">outAction</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;跑去接项目！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>客户端</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 客户端</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-03-12:02</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">//获取中介者对象</span></span><br><span class="line">        <span class="type">Mediator</span> <span class="variable">m</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">President</span>();</span><br><span class="line">        <span class="comment">//获取同事对象，实例化的时候会在中介者对象中注册</span></span><br><span class="line">        <span class="type">Market</span> <span class="variable">market</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Market</span>(m);</span><br><span class="line">        <span class="type">Development</span> <span class="variable">development</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Development</span>(m);</span><br><span class="line">        <span class="type">Financial</span> <span class="variable">financial</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Financial</span>(m);</span><br><span class="line"></span><br><span class="line">        market.selfAction();</span><br><span class="line">        market.outAction();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>通过中介者的加入，将同事类之间的耦合关系松散，当同事之间有调用关系时，并不是通过添加引用直接调用，而是通过中介者完成协调。将这样的调用关系全部交给中介者。</strong></p>
+<p><strong>执行结果：</strong></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209031226123.png" alt="image-20220903122604085"></p>
+<h2 id="模式分析"><a href="#模式分析" class="headerlink" title="模式分析"></a>模式分析</h2><p>中介者模式可以使对象之间的关系数量急剧减少。</p>
+<p>中介者承担两方面的职责：</p>
+<ul>
+<li>中转作用（结构性）：<strong>通过中介者提供的中转作用，各个同事对象就不再需要显式引用其他同事，当需要和其他同事进行通信时，通过中介者即可。该中转作用属于中介者在结构上的支持。</strong></li>
+<li>协调作用（行为性）：<strong>中介者可以更进一步的对同事之间的关系进行封装，同事可以一致地和中介者进行交互，而不需要指明中介者需要具体怎么做，中介者根据封装在自身内部的协调逻辑，对同事的请求进行进一步处理，将同事成员之间的关系行为进行分离和封装。该协调作用属于中介者在行为上的支持。</strong></li>
+</ul>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209031219419.jpeg" alt="../_images/Mediator_eg.jpg"></p>
+<p>时序图</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209031219158.jpeg" alt="../_images/seq_Mediator_eg.jpg"></p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>实例：虚拟聊天室</p>
+<p>某论坛系统欲增加一个虚拟聊天室，允许论坛会员通过该聊天室进行信息交流，普通会员(CommonMember)可以给其他会员发送文本信息，钻石会员(DiamondMember)既可以给其他会员发送文本信息，还可以发送图片信息。该聊天室可以对不雅字符进行过滤，如“日”等字符；还可以对发送的图片大小进行控制。用中介者模式设计该虚拟聊天室。</p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><p>中介者模式的优点</p>
+<ul>
+<li>简化了对象之间的交互。</li>
+<li>将各同事解耦。</li>
+<li>减少子类生成。</li>
+<li>可以简化各同事类的设计和实现。</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>中介者模式的缺点</p>
+<ul>
+<li>在具体中介者类中包含了同事之间的交互细节，可能会导致具体中介者类非常复杂，使得系统难以维护。</li>
+</ul>
+<h2 id="适用环境"><a href="#适用环境" class="headerlink" title="适用环境"></a>适用环境</h2><p>在以下情况下可以使用中介者模式：</p>
+<ul>
+<li>系统中对象之间存在复杂的引用关系，产生的相互依赖关系结构混乱且难以理解。</li>
+<li>一个对象由于引用了其他很多对象并且直接和这些对象通信，导致难以复用该对象。</li>
+<li>想通过一个中间类来封装多个类中的行为，而又不想生成太多的子类。可以通过引入中介者类来实现，在中介者中定义对象。</li>
+<li>交互的公共行为，如果需要改变行为则可以增加新的中介者类。</li>
+</ul>
+<h2 id="模式应用"><a href="#模式应用" class="headerlink" title="模式应用"></a>模式应用</h2><p><strong>MVC架构中控制器</strong></p>
+<p>Controller 作为一种中介者，它负责控制视图对象View和模型对象Model之间的交互。如在Struts中，Action就可以作为JSP页面与业务对象之间的中介者。</p>
+<h2 id="模式扩展"><a href="#模式扩展" class="headerlink" title="模式扩展"></a>模式扩展</h2><p>中介者模式与迪米特法则</p>
+<ul>
+<li>在中介者模式中，<strong>通过创造出一个中介者对象，将系统中有关的对象所引用的其他对象数目减少到最少</strong>，使得一个对象与其同事之间的相互作用被这个对象与中介者对象之间的相互作用所取代。因此，<strong>中介者模式就是迪米特法则的一个典型应用。</strong></li>
+</ul>
+<p>中介者模式与GUI开发</p>
+<ul>
+<li>中介者模式可以方便地应用于图形界面(GUI)开发中，在比较复杂的界面中可能存在多个界面组件之间的交互关系。</li>
+<li>对于这些复杂的交互关系，有时候我们可以引入一个中介者类，将这些交互的组件作为具体的同事类，将它们之间的引用和控制关系交由中介者负责，在一定程度上简化系统的交互，这也是中介者模式的常见应用之一。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>中介者模式用一个中介对象来封装一系列的对象交互，中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。中介者模式又称为调停者模式，它是一种对象行为型模式。</li>
+<li>中介者模式包含四个角色：抽象中介者用于定义一个接口，该接口用于与各同事对象之间的通信；具体中介者是抽象中介者的子类，通过协调各个同事对象来实现协作行为，了解并维护它的各个同事对象的引用；抽象同事类定义各同事的公有方法；具体同事类是抽象同事类的子类，每一个同事对象都引用一个中介者对象；每一个同事对象在需要和其他同事对象通信时，先与中介者通信，通过中介者来间接完成与其他同事类的通信；在具体同事类中实现了在抽象同事类中定义的方法。</li>
+<li>通过引入中介者对象，可以将系统的网状结构变成以中介者为中心的星形结构，中介者承担了中转作用和协调作用。中介者类是中介者模式的核心，它对整个系统进行控制和协调，简化了对象之间的交互，还可以对对象间的交互进行进一步的控制。</li>
+<li>中介者模式的主要优点在于简化了对象之间的交互，将各同事解耦，还可以减少子类生成，对于复杂的对象之间的交互，通过引入中介者，可以简化各同事类的设计和实现；中介者模式主要缺点在于具体中介者类中包含了同事之间的交互细节，可能会导致具体中介者类非常复杂，使得系统难以维护。</li>
+<li>中介者模式适用情况包括：系统中对象之间存在复杂的引用关系，产生的相互依赖关系结构混乱且难以理解；一个对象由于引用了其他很多对象并且直接和这些对象通信，导致难以复用该对象；想通过一个中间类来封装多个类中的行为，而又不想生成太多的子类。</li>
 </ul>
 ]]></content>
       <categories>
