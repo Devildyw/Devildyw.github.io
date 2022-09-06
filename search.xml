@@ -18528,7 +18528,145 @@ String servletPath = request.getServletPath(); //   /testRequest
 <p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209042054572.png" alt="image-20220904205425497"></p>
 <p>由上可见，主线程在子线程执行完毕后使用获取的迭代器遍历数组元素，从输出结果我们知道，在子线程里面进行的操作一个都没有生效，这就是迭代器弱一致性的体现。<strong>需要注意的是，获取迭代器的操作必须在子线程操作之前进行</strong>。</p>
 <hr>
-<h2 id="第六章-Java并发包中锁原理剖析"><a href="#第六章-Java并发包中锁原理剖析" class="headerlink" title="第六章 Java并发包中锁原理剖析"></a>第六章 Java并发包中锁原理剖析</h2>]]></content>
+<h2 id="第六章-Java并发包中锁原理剖析"><a href="#第六章-Java并发包中锁原理剖析" class="headerlink" title="第六章 Java并发包中锁原理剖析"></a>第六章 Java并发包中锁原理剖析</h2><h3 id="LockSupport-工具类"><a href="#LockSupport-工具类" class="headerlink" title="LockSupport 工具类"></a><code>LockSupport</code> 工具类</h3><p><code>JDK</code> 中的 <code>rt.jar</code> 包里面的 <code>LockSupport</code> 是个工具类，<strong>它的主要作用是挂起和唤醒线程，该工具是创建锁和其他同步类的基础</strong>。</p>
+<p><code>LockSupport</code> 类与每个使用它的线程都会<strong>关联一个许可证</strong>，在<strong>默认情况下调用 <code>LockSupport</code> 类的方法的线程是不持有许可证的</strong>。<code>LockSupport</code> 是使用 Unsafe 实现的。</p>
+<h4 id="方法介绍"><a href="#方法介绍" class="headerlink" title="方法介绍"></a>方法介绍</h4><ol>
+<li><code>void park()</code></li>
+</ol>
+<p>如果调用 <code>park()</code> 方法的线程已经拿到了与 <code>LockSupport</code> 关联的许可证，则调用 <code>LockSupport.park()</code> 时会马上返回，否则调用线程会被禁止参与线程的调度，也就是会被阻塞挂起。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">park</span><span class="params">()</span> &#123;</span><br><span class="line">    UNSAFE.park(<span class="literal">false</span>, <span class="number">0L</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">LockSupportTest</span><span class="params">()</span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot; begin park !&quot;</span>);</span><br><span class="line">    LockSupport.park();</span><br><span class="line">    System.out.println(<span class="string">&quot; end park !&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码里面调用 <code>park()</code> 方法，最终只会输出 begin park!，然后当前线程就会被挂起，这是因为在<strong>默认情况下调用线程是不持有许可证的</strong>。</p>
+<p>在<strong>其他线程调用 <code>unpark(Thread thread)</code> 方法并且将当前线程作为参数时，调用 <code>park</code> 方法而被阻塞的线程会返回</strong>。另外如果其他线程调用了阻塞线程的 <code>interrupt()</code> 方法，<strong>设置了中断标志或者线程被虚假唤醒，则阻塞线程也会返回。</strong>所以在调用 <code>park</code> 方法时最好也使用<strong>循环条件判断方式</strong>。</p>
+<blockquote>
+<p>注意：调用 <code>park()</code> 方法而被阻塞的现场被其他线程中断而返回时并不会抛出 <code>InterruptedException</code> 异常。</p>
+</blockquote>
+<ol start="2">
+<li><code>void unpark(Thread thread)</code></li>
+</ol>
+<p> 当一个线程调用 <code>unpark()</code> 时，如果参数 thread 线程没有持有 thread 与 <code>LockSupport</code> 类关联的许可证，会让线程持有。如果 thread 之前因调用 <code>park()</code> 而被挂起，则调用 <code>unpark</code> 后，该线程会被唤醒。如果 thread 之前没有调用 <code>park()</code> ，则调用 <code>unpark()</code> 方法后，再调用 <code>park()</code> 方法，其会立刻返回。</p>
+<p>修改代码如下。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">LockSupportTest</span><span class="params">()</span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot; begin park !&quot;</span>);</span><br><span class="line">    <span class="comment">//使用当前线程获取到许可证</span></span><br><span class="line">    LockSupport.unpark(Thread.currentThread());</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//再次调用park方法</span></span><br><span class="line">    LockSupport.park();</span><br><span class="line">    System.out.println(<span class="string">&quot; end park !&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该代码会正常输出。</p>
+<p>示例</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">LockSupportTest01</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">    <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Runnable</span>() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;child thread begin park!&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//调用park方法，挂起自己</span></span><br><span class="line">            LockSupport.park();</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">&quot;child thread unpark!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//启动子线程</span></span><br><span class="line">    thread.start();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//主线程休眠1s 为了让子线程在主线程调用unpark方法之前 调用park方法</span></span><br><span class="line">    Thread.sleep(<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot;main thread begin unpark!&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//调用unpark方法让 thread 线程持有许可证，然后park方法返回。</span></span><br><span class="line">    LockSupport.unpark(thread);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>park</code> 方法返回时不会告诉你因何种原因返回，所以调用者需要根据之前调用 <code>park</code> 方法的原因，再次检查条件是否满足，如果不满足则还需要再次调用 <code>park</code> 方法。</p>
+<p>例如根据调用前后中断状态的对比就可以判断是不是因为被中断才返回的。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">LockSupportTest01</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Runnable</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;child thread begin park!&quot;</span>);</span><br><span class="line"></span><br><span class="line">                <span class="comment">//调用park方法，挂起自己，只有被中断才会退出循环</span></span><br><span class="line">                <span class="keyword">while</span> (!Thread.currentThread().isInterrupted())&#123;</span><br><span class="line">                    LockSupport.park();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                System.out.println(<span class="string">&quot;child thread unpark!&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//启动子线程</span></span><br><span class="line">        thread.start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//主线程休眠1s 为了让子线程在主线程调用unpark方法之前 调用park方法</span></span><br><span class="line">        Thread.sleep(<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;main thread begin unpark!&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//调用unpark方法让 thread 线程持有许可证，然后park方法返回。</span></span><br><span class="line"><span class="comment">//        LockSupport.unpark(thread);</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//中断子线程</span></span><br><span class="line">        thread.interrupt();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="3">
+<li><code>void parkNanos(long nanos)</code></li>
+</ol>
+<p>与 <code>park</code> 方法类似，如果调用 <code>park</code> 方法的线程已经拿到了与 <code>LockSupport</code> 关联的许可证则调用 <code>LockSupport.parkNanos(long nanos)</code> 方法后会马上返回。<strong>但是，如果没有拿到许可证，则调用线程会被挂起 <code>nanos</code> 时间后修改为自动返回。</strong></p>
+<ol start="4">
+<li><code>void park(Object blocker)</code></li>
+</ol>
+<blockquote>
+<p><code>park</code> 方法还支持带有 <code>blocker</code> 参数的方法，<strong>当线程在没有持有许可证的情况下调用 <code>park()</code> 方法而被阻塞挂起时，这个 <code>blocker</code> 对象会被记录到该线程内部。</strong></p>
+<p>使用诊断工具可以观察线程被阻塞的原因，诊断工具是通过调用 <code>getBlocker(Thread thread)</code> 方法来获取 <code>blocker</code> 对象的，所以 <code>JDK</code> 推荐我们使用带有 <code>blocker</code> 参数的 <code>park</code> 方法，并且 <code>blocker</code> 被设置为 this，这样当在打印线程推展排查问题时就能直到是那个类被阻塞了。</p>
+<p><strong>使用带 <code>blocker</code> 参数的 <code>park</code> 方法，线程堆栈可以提供更多有关阻塞对象的信息。</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">park</span><span class="params">(Object blocker)</span> &#123;</span><br><span class="line">    <span class="comment">//获取调用线程</span></span><br><span class="line">    <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//设置该线程的blocker变量</span></span><br><span class="line">    setBlocker(t, blocker);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//挂起线程</span></span><br><span class="line">    UNSAFE.park(<span class="literal">false</span>, <span class="number">0L</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//线程被激活后清除 blocker 变量，因为一边拿都是在线程阻塞时才分析原因</span></span><br><span class="line">    setBlocker(t, <span class="literal">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Thread 类里面有个变量 <code>volatile Object parkBlocker</code> ，<strong>用来存放 <code>park</code> 方法传递的 blocker 对象</strong>，也就是把 blocker 变量存放到了调用 <code>park</code> 方法的线程的成员变量里面。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209052010359.png" alt="image-20220905201022225"></p>
+<ol start="5">
+<li><code>void parkNanos(Object blocker, long nanos)</code></li>
+</ol>
+<p>相比 <code>park(Object blocker)</code> 方法多了个超时时间。</p>
+<ol start="6">
+<li><code>void parkUntil(Object blocker, long deadline)</code></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">parkUntil</span><span class="params">(Object blocker, <span class="type">long</span> deadline)</span> &#123;</span><br><span class="line">    <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">    setBlocker(t, blocker);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//isAbsolute=true,time=deadline; 表示到deadline时间后返回</span></span><br><span class="line">    </span><br><span class="line">    UNSAFE.park(<span class="literal">true</span>, deadline);</span><br><span class="line">    setBlocker(t, <span class="literal">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>其中参数 <code>deadline</code> 的时间单位为 ms，该时间是从 1970 年到现在某一个时间点的毫秒值</strong>。这个方法和 <code>parkNanos(Object blocker, long nanos)</code>的区别是，<strong>后者是从当前算等待 <code>nanos</code> 秒时间</strong>，而<strong>前者是指定一个时间点</strong>，比如需要等到 <code>2017.12.11 日 12:00:00</code>，则把这个时间点转换为从 1970 年到这个时间点的总毫秒数。</p>
+<h4 id="示例分析"><a href="#示例分析" class="headerlink" title="示例分析"></a>示例分析</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FIFOMutex</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">AtomicBoolean</span> <span class="variable">locked</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicBoolean</span>(<span class="literal">false</span>);</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Queue&lt;Thread&gt; waiters = <span class="keyword">new</span> <span class="title class_">ConcurrentLinkedDeque</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取锁</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lock</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="type">boolean</span> <span class="variable">wasInterrupted</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">current</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">        waiters.add(current);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//只有队首的线程可以获取到锁 循环判断</span></span><br><span class="line">        <span class="keyword">while</span>(waiters.peek()!=current||!locked.compareAndSet(<span class="literal">false</span>,<span class="literal">true</span>))&#123;</span><br><span class="line">            <span class="comment">//如果当前线程不是队首或者当前锁已经被其他线程获取，则调用park方法挂起自己。</span></span><br><span class="line">            LockSupport.park(<span class="built_in">this</span>);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//如果park方法是因为中断而返回，则忽略中断，并且重置中断标志 再次经过循环判断 </span></span><br><span class="line">            <span class="keyword">if</span> (Thread.interrupted()) &#123;</span><br><span class="line">                <span class="comment">//做个标记</span></span><br><span class="line">                wasInterrupted = <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">		</span><br><span class="line">        waiters.remove();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//判断标记 如果为true则中断该线程</span></span><br><span class="line">        <span class="keyword">if</span>(wasInterrupted)&#123;</span><br><span class="line">            current.interrupt();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//释放锁</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//设置锁的状态为false 代表释放</span></span><br><span class="line">        locked.set(<span class="literal">false</span>);</span><br><span class="line">        <span class="comment">//唤醒队列队首元素 让其去获得锁</span></span><br><span class="line">        LockSupport.unpark(waiters.peek());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上代码是一个先进先出的锁，也就是只有队列的首元素可以获取锁。</p>
+<hr>
+<h3 id="抽象同步队列-AQS-概述"><a href="#抽象同步队列-AQS-概述" class="headerlink" title="抽象同步队列 AQS 概述"></a>抽象同步队列 <code>AQS</code> 概述</h3><h4 id="AQS–锁的底层支持"><a href="#AQS–锁的底层支持" class="headerlink" title="AQS–锁的底层支持"></a><code>AQS</code>–锁的底层支持</h4><p><code>AbstractQueuedSynchronized</code> 抽象同步队列简称 <code>AQS</code>，它是实现同步器的基础组件，并发包中所得底层就是使用 <code>AQS</code> 实现的。</p>
+<blockquote>
+<p>另外大多数开发者可能永远不会直接使用 <code>AQS</code>，但是知道其原理对于架构设计还是很有帮助的。</p>
+</blockquote>
+<p><code>AQS</code>  的类图结构</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209052131564.png" alt="image-20220905213108481"></p>
+<p>由该图可以看到，<code>AQS</code> 是一个 FIFO 的双向队列，其内部通过节点 head 和 tail 记录队首和队尾元素，队列元素的类型为 Node。</p>
+<p>其中 Node 中的 thread 变量用来存放进入 <code>AQS</code> 队列里面的线程； </p>
+<p>Node 节点内部的其他参数。</p>
+<blockquote>
+<ul>
+<li>SHARED 用来标记该线程是获取共享资源时被阻塞挂起后放入 <code>AQS</code> 队列的。</li>
+<li>EXCLUSIVE 用来标记该线程是否获取独占资源时被挂起后放入 <code>AQS</code> 队列</li>
+<li><code>waitStatus</code> 记录当前线程等待状态，可以为 <code>CANCELLED</code>（线程被取消了）、SIGNAL（线程需要被唤醒）、CONDITION（线程在条件队列里面等待）、PROPAGATE（释放共享资源时需要通知其他节点）；</li>
+<li><code>prev</code> 记录当前节点的前驱节点，next记录当前节点的后继节点。</li>
+</ul>
+</blockquote>
+<p>在 <code>AQS</code> 中<strong>维持了一个单一的状态信息 state</strong>，可以通过 <code>getState</code>、<code>setSate</code>、<code>compareAndSetState</code> 函数修改其值。</p>
+<ul>
+<li><p>对于 <code>ReentrantLock</code> 的实现来说，<strong>state 可以用来表示当前线程获取锁的可重入次数；</strong></p>
+</li>
+<li><p>对于读写锁 <code>ReentrantReadWriteLock</code> 来说，<strong>state 的高16位表示读状态，也就是获取该读锁的次数，低16位表示获取到写锁的线程的可重入次数；</strong></p>
+</li>
+<li><p>对于 <code>semaphore</code> 来说，<strong>state 用来表示当前可用信号的个数；</strong></p>
+</li>
+<li><p>对于 <code>CountDownLatch</code> 来说，<strong>state 用来表示计数器当前的值。</strong></p>
+</li>
+</ul>
+<p><code>AQS</code> 有个内部类 <code>ConditionObject</code>，用来结合锁实现线程同步。<code>ConditionObject</code> 可以直接访问 <code>AQS</code> 对象内部的变量，比如 state 状态值和 <code>AQS</code> 队列。<code>ConditionObject</code> 是条件变量，每个条件变量对应一个条件队列（单向链表队列），其用来存放调用条件变量的 <code>await</code> 方法后被阻塞的线程，如类图所示，这个条件队列的头、尾元素分别为 <code>firstWaiter</code> 和 <code>lastWaiter</code>。</p>
+<hr>
+<h5 id="AQS-的独占方式和共享方式"><a href="#AQS-的独占方式和共享方式" class="headerlink" title="AQS 的独占方式和共享方式"></a><code>AQS</code> 的独占方式和共享方式</h5><blockquote>
+<p>对于 <code>AQS</code> 来说，线程同步的关键是对状态值 state 进行操作。根据 state 是否属于一个线程，操作 state 的方式分为<strong>独占方式</strong>和<strong>共享方式</strong>。</p>
+</blockquote>
+<ul>
+<li><p>在独占方式下获取和释放资源使用的方法为：<code>void acquire(int arg)</code>、<code>void acquireInterruptibly(int arg)</code>、<code>boolean release(int arg)</code>。</p>
+</li>
+<li><p>在共享方式下获取和释放资源的方法为：<code>void acquireShared(int arg)</code>、<code>void acquireSharedInterruptibly(int arg)</code>、<code>boolean releaseShared(int arg)</code></p>
+</li>
+</ul>
+<p><strong>使用独占方式获取到的资源是与具体线程绑定的</strong>，就是说如果一个线程获取到了资源，就会标记是这个线程获取到了，其他线程再尝试操作 state 获取资源时会发现当前资源不是自己持有的，就会在失败后被阻塞。</p>
+<blockquote>
+<p>比如独占锁 <code>ReentrantLock</code> 的实现，当一个线程获取到了 <code>ReentrantLock</code> 的锁后，在 <code>AQS</code> 内部会首先使用 <code>CAS</code> 操作把 state 状态值从0变为1，然后设置当前锁的持有者为当前线程，当该线程再次获取锁时发现它就是锁的持有者，则会把状态值从1 变为 2，也就是设置可重入次数，而当另一个线程获取锁时发现当前锁已被其他线程持有，就会被放入 <code>AQS</code> 阻塞队列后挂起。</p>
+</blockquote>
+<p><strong>共享方式的资源与具体线程是不相关的</strong>，当多个线程去请求资源时通过 <code>CAS</code> 方式竞争获取资源，当一个线程获取到了资源后，另外一个线程再次去获取时如果当前资源还能满足它的需求，则当前线程只需要使用 <code>CAS</code> 方式进行获取即可。</p>
+<blockquote>
+<p>比如 <code>Semaphore</code> 信号量，当一个线程通过 <code>acquire()</code> 方法获取信号量时，会首先看当前信号量个数是否满足需要，不满足则把当前线程放入 <code>AQS</code> 阻塞队列，如果满足则通过 自旋 <code>CAS</code> 获取信号量。</p>
+</blockquote>
+<p>在独占方式下，获取与释放资源的流程如下：</p>
+<p><code>void acquire</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//当一个线程调用 acquire(int arg) 方法获取独占锁资源时，会首先使用 tryAcquire 方法尝试获取资源</span></span><br><span class="line"><span class="comment">//具体是设置状态变量 state 的值，成功则直接返回</span></span><br><span class="line"><span class="comment">//失败则将当前线程封装为类型为 Node.EXCLUSIVE 的Node 节点后插入到 AQS 阻塞队列的尾部，并调用 LockSupport.park(this) 方法挂起自己</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">acquire</span><span class="params">(<span class="type">int</span> arg)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!tryAcquire(arg) &amp;&amp;</span><br><span class="line">         acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</span><br><span class="line">         selfInterrupt();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>boolean release(int arg)</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//当一个线程调用 release(int arg) 方法时会尝试使用 tryRelease 操作释放资源，</span></span><br><span class="line"><span class="comment">//这里是设置状态变量 state 的值，然后调用 LockSupport.unpark(thread) 方法激活队列里面被阻塞的一个线程(thread)。</span></span><br><span class="line"><span class="comment">//被激活的线程则使用 tryAcquire 尝试，看当前状态变量 state 的值是否能满足自己的需求，满足则该线程被激活，然后继续向下运行，否则还是会被放入 AQS 队列并被挂起</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="type">boolean</span> <span class="title function_">release</span><span class="params">(<span class="type">int</span> arg)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (tryRelease(arg)) &#123;</span><br><span class="line">        <span class="type">Node</span> <span class="variable">h</span> <span class="operator">=</span> head;</span><br><span class="line">        <span class="keyword">if</span> (h != <span class="literal">null</span> &amp;&amp; h.waitStatus != <span class="number">0</span>)</span><br><span class="line">            unparkSuccessor(h);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：**<code>AQS</code> 类并没有提供可用的 <code>tryAcquire</code> 和 <code>tryRelease</code> 方法，也正因 <code>AQS</code> 是锁阻塞和同步器的基础框架一样，<code>tryAcquire</code> 和 <code>tryRelease</code> 需要由具体的子类来实现。实现时要根据具体场景使用 <code>CAS</code> 算法尝试修改 state 状态值，成功返回true，失败返回false。子类还需要定义，在调用 <code>acquire</code> 和 <code>release</code> 方法时 state 状态值的增减代表什么含义。**</p>
+<blockquote>
+<p>比如：继承自 <code>AQS</code> 实现的独占锁 <code>ReetrantLock</code>，定义当 status 为 0时表示锁空闲，为1时表示锁已经被占用。在重写 <code>tryAcquire</code> 时，在内部需要使用 <code> CAS</code> 算法查看当前 state 是否为0，如果为0则使用 <code>CAS</code> 设置为 1，并设置当前锁的持有者为当前线程，而后返回true，如果 <code>CAS</code>失败则返回 false</p>
+<p>又比如：继承自 <code>AQS</code> 实现的独占锁在实现 <code>tryRelease</code> 时，在内部需要使用 <code>CAS</code> 算法把当前 state 的值从 1 修改为 0，并设置当前锁的持有者为 null，然后返回 true，如果 <code>CAS</code> 失败则返回false </p>
+</blockquote>
+<p>共享方式下，获取与释放锁的流程如下：</p>
+<p><code>void acquireShared(int arg)</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//当线程调用 acquireShared(int arg)获取共享资源是，会首先使用 tryAcquireShared尝试获取资源，</span></span><br><span class="line"><span class="comment">//具体是设置状态变量 state 的值，成功则直接返回，</span></span><br><span class="line"><span class="comment">//失败则将当前线程封装为类型为 Node.SHARED 的Node 节点后插入到 AQS 阻塞队列的尾部，并使用LockSupport.park(this)方法挂起自己</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">acquireShared</span><span class="params">(<span class="type">int</span> arg)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (tryAcquireShared(arg) &lt; <span class="number">0</span>)</span><br><span class="line">        doAcquireShared(arg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>boolean releaseShared(int arg)</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//当一个线程调用 releaseShared(int arg)时会尝试使用 tryReleaseShared 操作释放资源，</span></span><br><span class="line"><span class="comment">//这里是设置变量 state 的值，然后使用 LockSupport.unpark(thread) 激活 AQS 队列里面被阻塞的一个线程(thread)。</span></span><br><span class="line"><span class="comment">//被激活的线程则使用 tryReleaseShared 查看当前状态变量 state 的值是否能够满足自己的需要，</span></span><br><span class="line"><span class="comment">//满足则该线程被激活，然后继续向下运行，否则还是会被放入 AQS 队列并被挂起</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="type">boolean</span> <span class="title function_">releaseShared</span><span class="params">(<span class="type">int</span> arg)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (tryReleaseShared(arg)) &#123;</span><br><span class="line">        doReleaseShared();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同理，<code>AQS</code> 类也没有提供可用的 <code>tryAcquireShared</code> 和 <code>tryReleaseShared</code> 方法。具体的方法实现交给子类并定义相关 state 的含义。</p>
+<blockquote>
+<p><strong>基于 <code>AQS</code> 实现的锁除了需要重写上面介绍的方法外，还需要重写 <code>isHeldExclusively</code> 方法，来判断锁是被当前线程独占还是共享。</strong></p>
+</blockquote>
+<p><strong>方法中带有 <code>Interruptibly</code> 关键字的意思事对中断进行响应</strong>，也就是线程在调用带有 <code>Interruptibly</code> 关键字的方法获取资源时或者获取资源失败时，<strong>其他线程中断了该线程，那么该线程会因为中断而抛出 <code>InterruptedException</code> 异常而返回</strong>。也就是说对中断进行响应。<strong>反之不带则不做响应。</strong></p>
+]]></content>
       <categories>
         <category>读书笔记</category>
       </categories>
@@ -19102,6 +19240,107 @@ String servletPath = request.getServletPath(); //   /testRequest
 </ul>
 <h2 id="与其他模式的关系"><a href="#与其他模式的关系" class="headerlink" title="与其他模式的关系"></a>与其他模式的关系</h2><ul>
 <li><a href="https://refactoringguru.cn/design-patterns/bridge">桥接模式</a>、 <a href="https://refactoringguru.cn/design-patterns/state">状态模式</a>和<a href="https://refactoringguru.cn/design-patterns/strategy">策略模式</a> （在某种程度上包括<a href="https://refactoringguru.cn/design-patterns/adapter">适配器模式</a>） 模式的接口非常相似。 实际上， 它们都基于<a href="https://refactoringguru.cn/design-patterns/composite">组合模式</a>——即将工作委派给其他对象， 不过也各自解决了不同的问题。 模式并不只是以特定方式组织代码的配方， 你还可以使用它们来和其他开发者讨论模式所解决的问题。</li>
+<li><a href="https://refactoringguru.cn/design-patterns/state">状态</a>可被视为<a href="https://refactoringguru.cn/design-patterns/strategy">策略</a>的扩展。 两者都基于组合机制： 它们都通过将部分工作委派给 “帮手” 对象来改变其在不同情景下的行为。 <em>策略</em>使得这些对象相互之间完全独立， 它们不知道其他对象的存在。 但<em>状态</em>模式没有限制具体状态之间的依赖， 且允许它们自行改变在不同情景下的状态。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>Developer</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式--行为型模式之策略模式</title>
+    <url>/2022/09/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="设计模式–行为型模式之策略模式"><a href="#设计模式–行为型模式之策略模式" class="headerlink" title="设计模式–行为型模式之策略模式"></a>设计模式–行为型模式之策略模式</h1><h2 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h2><p><strong>策略模式</strong>是一种行为设计模式， 它能让你定义一系列算法， 并将每种算法分别放入独立的类中， 以使算法的对象能够相互替换。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209061256882.png" alt="策略设计模式"></p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>一天， 你打算为游客们创建一款导游程序。 该程序的核心功能是提供美观的地图， 以帮助用户在任何城市中快速定位。</p>
+<p>用户期待的程序新功能是自动路线规划： 他们希望输入地址后就能在地图上看到前往目的地的最快路线。</p>
+<p>程序的首个版本只能规划公路路线。 驾车旅行的人们对此非常满意。 但很显然， 并非所有人都会在度假时开车。 因此你在下次更新时添加了规划步行路线的功能。 此后， 你又添加了规划公共交通路线的功能。</p>
+<p>而这只是个开始。 不久后， 你又要为骑行者规划路线。 又过了一段时间， 你又要为游览城市中的所有景点规划路线。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209061256885.png" alt="导游代码将变得非常臃肿"></p>
+<p>导游代码将变得非常臃肿。</p>
+<p>尽管从商业角度来看， 这款应用非常成功， 但其技术部分却让你非常头疼： 每次添加新的路线规划算法后， 导游应用中主要类的体积就会增加一倍。 终于在某个时候， 你觉得自己没法继续维护这堆代码了。</p>
+<p>无论是修复简单缺陷还是微调街道权重， 对某个算法进行任何修改都会影响整个类， 从而增加在已有正常运行代码中引入错误的风险。</p>
+<p>此外， 团队合作将变得低效。 如果你在应用成功发布后招募了团队成员， 他们会抱怨在合并冲突的工作上花费了太多时间。 在实现新功能的过程中， 你的团队需要修改同一个巨大的类， 这样他们所编写的代码相互之间就可能会出现冲突。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>策略模式建议找出负责用许多不同方式完成特定任务的类， 然后将其中的算法抽取到一组被称为<em>策略</em>的独立类中。</p>
+<p>名为<em>上下文</em>的原始类必须包含一个成员变量来存储对于每种策略的引用。 上下文并不执行任务， 而是将工作委派给已连接的策略对象。</p>
+<p>上下文不负责选择符合任务需要的算法——客户端会将所需策略传递给上下文。 实际上， 上下文并不十分了解策略， 它会通过同样的通用接口与所有策略进行交互， 而该接口只需暴露一个方法来触发所选策略中封装的算法即可。</p>
+<p>因此， 上下文可独立于具体策略。 这样你就可在不修改上下文代码或其他策略的情况下添加新算法或修改已有算法了。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209061256878.png" alt="路线规划策略"></p>
+<p>路线规划策略。</p>
+<p>在导游应用中， 每个路线规划算法都可被抽取到只有一个 <code>build­Route</code>生成路线方法的独立类中。 该方法接收起点和终点作为参数， 并返回路线中途点的集合。</p>
+<p>即使传递给每个路径规划类的参数一模一样， 其所创建的路线也可能完全不同。 主要导游类的主要工作是在地图上渲染一系列中途点， 不会在意如何选择算法。 该类中还有一个用于切换当前路径规划策略的方法， 因此客户端 （例如用户界面中的按钮） 可用其他策略替换当前选择的路径规划行为。</p>
+<h2 id="真实世界类比"><a href="#真实世界类比" class="headerlink" title="真实世界类比"></a>真实世界类比</h2><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209061256868.png" alt="各种出行策略"></p>
+<p>各种前往机场的出行策略</p>
+<p>假如你需要前往机场。 你可以选择乘坐公共汽车、 预约出租车或骑自行车。 这些就是你的出行策略。 你可以根据预算或时间等因素来选择其中一种策略。</p>
+<h2 id="策略模式结构"><a href="#策略模式结构" class="headerlink" title="策略模式结构"></a>策略模式结构</h2><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209061256520.png" alt="策略设计模式的结构"></p>
+<ol>
+<li><strong>上下文</strong> （Con­text） 维护指向具体策略的引用， 且仅通过策略接口与该对象进行交流。</li>
+<li><strong>策略</strong> （Strat­e­gy） 接口是所有具体策略的通用接口， 它声明了一个上下文用于执行策略的方法。</li>
+<li><strong>具体策略</strong> （Con­crete Strate­gies） 实现了上下文所用算法的各种不同变体。</li>
+<li>当上下文需要运行算法时， 它会在其已连接的策略对象上调用执行方法。 上下文不清楚其所涉及的策略类型与算法的执行方式。</li>
+<li><strong>客户端</strong> （Client） 会创建一个特定策略对象并将其传递给上下文。 上下文则会提供一个设置器以便客户端在运行时替换相关联的策略。</li>
+</ol>
+<h2 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h2><p>在本例中， 上下文使用了多个<strong>策略</strong>来执行不同的计算操作。</p>
+<p>一个人想去一个目的地，他现在有四种策略可以选择，分别是 <strong>飞机</strong>、<strong>开车</strong>、<strong>骑车</strong>和<strong>坐公交</strong>。</p>
+<p><code>Strategy 抽象策略类</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 策略类接口</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-06-12:38</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 执行策略的方法</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>Context 上下文</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 上下文环境</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-06-12:42</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Context</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Strategy strategy;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setStrategy</span><span class="params">(Strategy strategy)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.strategy = strategy;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doSomething</span><span class="params">()</span>&#123;</span><br><span class="line">        strategy.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>ConcreteStrategies 具体策略类</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 具体策略类</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 乘坐飞机的策略</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-06-12:44</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AirPlaneStrategy</span> <span class="keyword">implements</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;选择乘坐飞机,已为您规划好路线!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 具体策略类</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 骑自行车的策略</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-06-12:45</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BikeStrategy</span> <span class="keyword">implements</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;选择骑自行车,已为您规划好路线!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 具体策略类</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 乘坐公交车的策略</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-06-12:46</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BusStrategy</span> <span class="keyword">implements</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;选择乘坐公交车,已为您规划好路线!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 具体策略类</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 开车的策略</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-06-12:46</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CarStrategy</span> <span class="keyword">implements</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;选择开车,已为您规划好路线!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>Client 客户端</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 客户端</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-06-12:37</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">//创建上下文</span></span><br><span class="line">        <span class="type">Context</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Context</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建策略</span></span><br><span class="line">        <span class="type">BusStrategy</span> <span class="variable">busStrategy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BusStrategy</span>();</span><br><span class="line">        <span class="type">BikeStrategy</span> <span class="variable">bikeStrategy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BikeStrategy</span>();</span><br><span class="line">        <span class="type">AirPlaneStrategy</span> <span class="variable">airPlaneStrategy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AirPlaneStrategy</span>();</span><br><span class="line">        <span class="type">CarStrategy</span> <span class="variable">carStrategy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CarStrategy</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//开车</span></span><br><span class="line">        System.out.println(<span class="string">&quot;-----------------------------&quot;</span>);</span><br><span class="line">        context.setStrategy(busStrategy);</span><br><span class="line">        context.doSomething();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//骑车</span></span><br><span class="line">        System.out.println(<span class="string">&quot;-----------------------------&quot;</span>);</span><br><span class="line">        context.setStrategy(bikeStrategy);</span><br><span class="line">        context.doSomething();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//飞机</span></span><br><span class="line">        System.out.println(<span class="string">&quot;-----------------------------&quot;</span>);</span><br><span class="line">        context.setStrategy(airPlaneStrategy);</span><br><span class="line">        context.doSomething();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//公交</span></span><br><span class="line">        System.out.println(<span class="string">&quot;-----------------------------&quot;</span>);</span><br><span class="line">        context.setStrategy(busStrategy);</span><br><span class="line">        context.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209061303618.png" alt="image-20220906130353573"></p>
+<p><strong>将环境和策略耦合松散，防止随着策略的增加代码主体越来越臃肿。</strong></p>
+<h2 id="策略模式适合应用场景"><a href="#策略模式适合应用场景" class="headerlink" title="策略模式适合应用场景"></a>策略模式适合应用场景</h2><p> <strong>当你想使用对象中各种不同的算法变体， 并希望能在运行时切换算法时， 可使用策略模式。</strong></p>
+<p> 策略模式让你能够将对象关联至可以不同方式执行特定子任务的不同子对象， 从而以间接方式在运行时更改对象行为。</p>
+<p> 当你有许多仅在执行某些行为时略有不同的相似类时， 可使用策略模式。</p>
+<p> 策略模式让你能将不同行为抽取到一个独立类层次结构中， 并将原始类组合成同一个， 从而减少重复代码。</p>
+<p> 如果算法在上下文的逻辑中不是特别重要， 使用该模式能将类的业务逻辑与其算法实现细节隔离开来。</p>
+<p> 策略模式让你能将各种算法的代码、 内部数据和依赖关系与其他代码隔离开来。 不同客户端可通过一个简单接口执行算法， 并能在运行时进行切换。</p>
+<p> 当类中使用了复杂条件运算符以在同一算法的不同变体中切换时， 可使用该模式。</p>
+<p> 策略模式将所有继承自同样接口的算法抽取到独立类中， 因此不再需要条件语句。 原始对象并不实现所有算法的变体， 而是将执行工作委派给其中的一个独立算法对象。</p>
+<h2 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h2><ol>
+<li><strong>从上下文类中找出修改频率较高的算法 （也可能是用于在运行时选择某个算法变体的复杂条件运算符）。</strong></li>
+<li><strong>声明该算法所有变体的通用策略接口。</strong></li>
+<li><strong>将算法逐一抽取到各自的类中， 它们都必须实现策略接口。</strong></li>
+<li><strong>在上下文类中添加一个成员变量用于保存对于策略对象的引用。 然后提供设置器以修改该成员变量。 上下文仅可通过策略接口同策略对象进行交互， 如有需要还可定义一个接口来让策略访问其数据。</strong></li>
+<li><strong>客户端必须将上下文类与相应策略进行关联， 使上下文可以预期的方式完成其主要工作。</strong></li>
+</ol>
+<h2 id="策略模式优缺点"><a href="#策略模式优缺点" class="headerlink" title="策略模式优缺点"></a>策略模式优缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>你可以在运行时切换对象内的算法。</li>
+<li>你可以将算法的实现和使用算法的代码隔离开来。</li>
+<li>你可以使用组合来代替继承。</li>
+<li><em>开闭原则</em>。 你无需对上下文进行修改就能够引入新的策略。</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>如果你的算法极少发生改变， 那么没有任何理由引入新的类和接口。 使用该模式只会让程序过于复杂。</li>
+<li>客户端必须知晓策略间的不同——它需要选择合适的策略。</li>
+<li>许多现代编程语言支持函数类型功能， 允许你在一组匿名函数中实现不同版本的算法。 这样， 你使用这些函数的方式就和使用策略对象时完全相同， 无需借助额外的类和接口来保持代码简洁。</li>
+</ul>
+<h2 id="与其他模式的关系"><a href="#与其他模式的关系" class="headerlink" title="与其他模式的关系"></a>与其他模式的关系</h2><ul>
+<li><a href="https://refactoringguru.cn/design-patterns/bridge">桥接模式</a>、 <a href="https://refactoringguru.cn/design-patterns/state">状态模式</a>和<a href="https://refactoringguru.cn/design-patterns/strategy">策略模式</a> （在某种程度上包括<a href="https://refactoringguru.cn/design-patterns/adapter">适配器模式</a>） 模式的接口非常相似。 实际上， 它们都基于<a href="https://refactoringguru.cn/design-patterns/composite">组合模式</a>——即将工作委派给其他对象， 不过也各自解决了不同的问题。 模式并不只是以特定方式组织代码的配方， 你还可以使用它们来和其他开发者讨论模式所解决的问题。</li>
+<li><a href="https://refactoringguru.cn/design-patterns/command">命令模式</a>和<a href="https://refactoringguru.cn/design-patterns/strategy">策略</a>看上去很像， 因为两者都能通过某些行为来参数化对象。 但是， 它们的意图有非常大的不同。<ul>
+<li>你可以使用<em>命令</em>来将任何操作转换为对象。 操作的参数将成为对象的成员变量。 你可以通过转换来延迟操作的执行、 将操作放入队列、 保存历史命令或者向远程服务发送命令等。</li>
+<li>另一方面， <em>策略</em>通常可用于描述完成某件事的不同方式， 让你能够在同一个上下文类中切换算法。</li>
+</ul>
+</li>
+<li><a href="https://refactoringguru.cn/design-patterns/decorator">装饰模式</a>可让你更改对象的外表， <a href="https://refactoringguru.cn/design-patterns/strategy">策略</a>则让你能够改变其本质。</li>
+<li><a href="https://refactoringguru.cn/design-patterns/template-method">模板方法模式</a>基于继承机制： 它允许你通过扩展子类中的部分内容来改变部分算法。 <a href="https://refactoringguru.cn/design-patterns/strategy">策略</a>基于组合机制： 你可以通过对相应行为提供不同的策略来改变对象的部分行为。 <em>模板方法</em>在类层次上运作， 因此它是静态的。 <em>策略</em>在对象层次上运作， 因此允许在运行时切换行为。</li>
 <li><a href="https://refactoringguru.cn/design-patterns/state">状态</a>可被视为<a href="https://refactoringguru.cn/design-patterns/strategy">策略</a>的扩展。 两者都基于组合机制： 它们都通过将部分工作委派给 “帮手” 对象来改变其在不同情景下的行为。 <em>策略</em>使得这些对象相互之间完全独立， 它们不知道其他对象的存在。 但<em>状态</em>模式没有限制具体状态之间的依赖， 且允许它们自行改变在不同情景下的状态。</li>
 </ul>
 ]]></content>

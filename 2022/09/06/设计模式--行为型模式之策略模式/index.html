@@ -1,0 +1,247 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>设计模式--行为型模式之策略模式 | Devil的个人博客</title><meta name="keywords" content="Developer"><meta name="author" content="Devil"><meta name="copyright" content="Devil"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="设计模式–行为型模式之策略模式意图策略模式是一种行为设计模式， 它能让你定义一系列算法， 并将每种算法分别放入独立的类中， 以使算法的对象能够相互替换。  问题一天， 你打算为游客们创建一款导游程序。 该程序的核心功能是提供美观的地图， 以帮助用户在任何城市中快速定位。 用户期待的程序新功能是自动路线规划： 他们希望输入地址后就能在地图上看到前往目的地的最快路线。 程序的首个版本只能规划公路路线。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式--行为型模式之策略模式">
+<meta property="og:url" content="https://devildyw.github.io/2022/09/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Devil的个人博客">
+<meta property="og:description" content="设计模式–行为型模式之策略模式意图策略模式是一种行为设计模式， 它能让你定义一系列算法， 并将每种算法分别放入独立的类中， 以使算法的对象能够相互替换。  问题一天， 你打算为游客们创建一款导游程序。 该程序的核心功能是提供美观的地图， 以帮助用户在任何城市中快速定位。 用户期待的程序新功能是自动路线规划： 他们希望输入地址后就能在地图上看到前往目的地的最快路线。 程序的首个版本只能规划公路路线。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/tag.jpg">
+<meta property="article:published_time" content="2022-09-06T04:52:09.000Z">
+<meta property="article:modified_time" content="2022-09-06T05:07:06.128Z">
+<meta property="article:author" content="Devil">
+<meta property="article:tag" content="Developer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/tag.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2022/09/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '设计模式--行为型模式之策略模式',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-09-06 13:07:06'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/dyw.css"><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">78</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">29</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/tag.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">设计模式--行为型模式之策略模式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-09-06T04:52:09.000Z" title="发表于 2022-09-06 12:52:09">2022-09-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-09-06T05:07:06.128Z" title="更新于 2022-09-06 13:07:06">2022-09-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="设计模式--行为型模式之策略模式"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="设计模式–行为型模式之策略模式"><a href="#设计模式–行为型模式之策略模式" class="headerlink" title="设计模式–行为型模式之策略模式"></a>设计模式–行为型模式之策略模式</h1><h2 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h2><p><strong>策略模式</strong>是一种行为设计模式， 它能让你定义一系列算法， 并将每种算法分别放入独立的类中， 以使算法的对象能够相互替换。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209061256882.png" alt="策略设计模式"></p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>一天， 你打算为游客们创建一款导游程序。 该程序的核心功能是提供美观的地图， 以帮助用户在任何城市中快速定位。</p>
+<p>用户期待的程序新功能是自动路线规划： 他们希望输入地址后就能在地图上看到前往目的地的最快路线。</p>
+<p>程序的首个版本只能规划公路路线。 驾车旅行的人们对此非常满意。 但很显然， 并非所有人都会在度假时开车。 因此你在下次更新时添加了规划步行路线的功能。 此后， 你又添加了规划公共交通路线的功能。</p>
+<p>而这只是个开始。 不久后， 你又要为骑行者规划路线。 又过了一段时间， 你又要为游览城市中的所有景点规划路线。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209061256885.png" alt="导游代码将变得非常臃肿"></p>
+<p>导游代码将变得非常臃肿。</p>
+<p>尽管从商业角度来看， 这款应用非常成功， 但其技术部分却让你非常头疼： 每次添加新的路线规划算法后， 导游应用中主要类的体积就会增加一倍。 终于在某个时候， 你觉得自己没法继续维护这堆代码了。</p>
+<p>无论是修复简单缺陷还是微调街道权重， 对某个算法进行任何修改都会影响整个类， 从而增加在已有正常运行代码中引入错误的风险。</p>
+<p>此外， 团队合作将变得低效。 如果你在应用成功发布后招募了团队成员， 他们会抱怨在合并冲突的工作上花费了太多时间。 在实现新功能的过程中， 你的团队需要修改同一个巨大的类， 这样他们所编写的代码相互之间就可能会出现冲突。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>策略模式建议找出负责用许多不同方式完成特定任务的类， 然后将其中的算法抽取到一组被称为<em>策略</em>的独立类中。</p>
+<p>名为<em>上下文</em>的原始类必须包含一个成员变量来存储对于每种策略的引用。 上下文并不执行任务， 而是将工作委派给已连接的策略对象。</p>
+<p>上下文不负责选择符合任务需要的算法——客户端会将所需策略传递给上下文。 实际上， 上下文并不十分了解策略， 它会通过同样的通用接口与所有策略进行交互， 而该接口只需暴露一个方法来触发所选策略中封装的算法即可。</p>
+<p>因此， 上下文可独立于具体策略。 这样你就可在不修改上下文代码或其他策略的情况下添加新算法或修改已有算法了。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209061256878.png" alt="路线规划策略"></p>
+<p>路线规划策略。</p>
+<p>在导游应用中， 每个路线规划算法都可被抽取到只有一个 <code>build­Route</code>生成路线方法的独立类中。 该方法接收起点和终点作为参数， 并返回路线中途点的集合。</p>
+<p>即使传递给每个路径规划类的参数一模一样， 其所创建的路线也可能完全不同。 主要导游类的主要工作是在地图上渲染一系列中途点， 不会在意如何选择算法。 该类中还有一个用于切换当前路径规划策略的方法， 因此客户端 （例如用户界面中的按钮） 可用其他策略替换当前选择的路径规划行为。</p>
+<h2 id="真实世界类比"><a href="#真实世界类比" class="headerlink" title="真实世界类比"></a>真实世界类比</h2><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209061256868.png" alt="各种出行策略"></p>
+<p>各种前往机场的出行策略</p>
+<p>假如你需要前往机场。 你可以选择乘坐公共汽车、 预约出租车或骑自行车。 这些就是你的出行策略。 你可以根据预算或时间等因素来选择其中一种策略。</p>
+<h2 id="策略模式结构"><a href="#策略模式结构" class="headerlink" title="策略模式结构"></a>策略模式结构</h2><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209061256520.png" alt="策略设计模式的结构"></p>
+<ol>
+<li><strong>上下文</strong> （Con­text） 维护指向具体策略的引用， 且仅通过策略接口与该对象进行交流。</li>
+<li><strong>策略</strong> （Strat­e­gy） 接口是所有具体策略的通用接口， 它声明了一个上下文用于执行策略的方法。</li>
+<li><strong>具体策略</strong> （Con­crete Strate­gies） 实现了上下文所用算法的各种不同变体。</li>
+<li>当上下文需要运行算法时， 它会在其已连接的策略对象上调用执行方法。 上下文不清楚其所涉及的策略类型与算法的执行方式。</li>
+<li><strong>客户端</strong> （Client） 会创建一个特定策略对象并将其传递给上下文。 上下文则会提供一个设置器以便客户端在运行时替换相关联的策略。</li>
+</ol>
+<h2 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h2><p>在本例中， 上下文使用了多个<strong>策略</strong>来执行不同的计算操作。</p>
+<p>一个人想去一个目的地，他现在有四种策略可以选择，分别是 <strong>飞机</strong>、<strong>开车</strong>、<strong>骑车</strong>和<strong>坐公交</strong>。</p>
+<p><code>Strategy 抽象策略类</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 策略类接口</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-06-12:38</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 执行策略的方法</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>Context 上下文</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 上下文环境</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-06-12:42</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Context</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Strategy strategy;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setStrategy</span><span class="params">(Strategy strategy)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.strategy = strategy;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doSomething</span><span class="params">()</span>&#123;</span><br><span class="line">        strategy.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>ConcreteStrategies 具体策略类</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 具体策略类</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 乘坐飞机的策略</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-06-12:44</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AirPlaneStrategy</span> <span class="keyword">implements</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;选择乘坐飞机,已为您规划好路线!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 具体策略类</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 骑自行车的策略</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-06-12:45</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BikeStrategy</span> <span class="keyword">implements</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;选择骑自行车,已为您规划好路线!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 具体策略类</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 乘坐公交车的策略</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-06-12:46</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BusStrategy</span> <span class="keyword">implements</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;选择乘坐公交车,已为您规划好路线!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 具体策略类</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 开车的策略</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-06-12:46</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CarStrategy</span> <span class="keyword">implements</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;选择开车,已为您规划好路线!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>Client 客户端</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 客户端</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Devil</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022-09-06-12:37</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">//创建上下文</span></span><br><span class="line">        <span class="type">Context</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Context</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建策略</span></span><br><span class="line">        <span class="type">BusStrategy</span> <span class="variable">busStrategy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BusStrategy</span>();</span><br><span class="line">        <span class="type">BikeStrategy</span> <span class="variable">bikeStrategy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BikeStrategy</span>();</span><br><span class="line">        <span class="type">AirPlaneStrategy</span> <span class="variable">airPlaneStrategy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AirPlaneStrategy</span>();</span><br><span class="line">        <span class="type">CarStrategy</span> <span class="variable">carStrategy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CarStrategy</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//开车</span></span><br><span class="line">        System.out.println(<span class="string">&quot;-----------------------------&quot;</span>);</span><br><span class="line">        context.setStrategy(busStrategy);</span><br><span class="line">        context.doSomething();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//骑车</span></span><br><span class="line">        System.out.println(<span class="string">&quot;-----------------------------&quot;</span>);</span><br><span class="line">        context.setStrategy(bikeStrategy);</span><br><span class="line">        context.doSomething();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//飞机</span></span><br><span class="line">        System.out.println(<span class="string">&quot;-----------------------------&quot;</span>);</span><br><span class="line">        context.setStrategy(airPlaneStrategy);</span><br><span class="line">        context.doSomething();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//公交</span></span><br><span class="line">        System.out.println(<span class="string">&quot;-----------------------------&quot;</span>);</span><br><span class="line">        context.setStrategy(busStrategy);</span><br><span class="line">        context.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202209061303618.png" alt="image-20220906130353573"></p>
+<p><strong>将环境和策略耦合松散，防止随着策略的增加代码主体越来越臃肿。</strong></p>
+<h2 id="策略模式适合应用场景"><a href="#策略模式适合应用场景" class="headerlink" title="策略模式适合应用场景"></a>策略模式适合应用场景</h2><p> <strong>当你想使用对象中各种不同的算法变体， 并希望能在运行时切换算法时， 可使用策略模式。</strong></p>
+<p> 策略模式让你能够将对象关联至可以不同方式执行特定子任务的不同子对象， 从而以间接方式在运行时更改对象行为。</p>
+<p> 当你有许多仅在执行某些行为时略有不同的相似类时， 可使用策略模式。</p>
+<p> 策略模式让你能将不同行为抽取到一个独立类层次结构中， 并将原始类组合成同一个， 从而减少重复代码。</p>
+<p> 如果算法在上下文的逻辑中不是特别重要， 使用该模式能将类的业务逻辑与其算法实现细节隔离开来。</p>
+<p> 策略模式让你能将各种算法的代码、 内部数据和依赖关系与其他代码隔离开来。 不同客户端可通过一个简单接口执行算法， 并能在运行时进行切换。</p>
+<p> 当类中使用了复杂条件运算符以在同一算法的不同变体中切换时， 可使用该模式。</p>
+<p> 策略模式将所有继承自同样接口的算法抽取到独立类中， 因此不再需要条件语句。 原始对象并不实现所有算法的变体， 而是将执行工作委派给其中的一个独立算法对象。</p>
+<h2 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h2><ol>
+<li><strong>从上下文类中找出修改频率较高的算法 （也可能是用于在运行时选择某个算法变体的复杂条件运算符）。</strong></li>
+<li><strong>声明该算法所有变体的通用策略接口。</strong></li>
+<li><strong>将算法逐一抽取到各自的类中， 它们都必须实现策略接口。</strong></li>
+<li><strong>在上下文类中添加一个成员变量用于保存对于策略对象的引用。 然后提供设置器以修改该成员变量。 上下文仅可通过策略接口同策略对象进行交互， 如有需要还可定义一个接口来让策略访问其数据。</strong></li>
+<li><strong>客户端必须将上下文类与相应策略进行关联， 使上下文可以预期的方式完成其主要工作。</strong></li>
+</ol>
+<h2 id="策略模式优缺点"><a href="#策略模式优缺点" class="headerlink" title="策略模式优缺点"></a>策略模式优缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>你可以在运行时切换对象内的算法。</li>
+<li>你可以将算法的实现和使用算法的代码隔离开来。</li>
+<li>你可以使用组合来代替继承。</li>
+<li><em>开闭原则</em>。 你无需对上下文进行修改就能够引入新的策略。</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>如果你的算法极少发生改变， 那么没有任何理由引入新的类和接口。 使用该模式只会让程序过于复杂。</li>
+<li>客户端必须知晓策略间的不同——它需要选择合适的策略。</li>
+<li>许多现代编程语言支持函数类型功能， 允许你在一组匿名函数中实现不同版本的算法。 这样， 你使用这些函数的方式就和使用策略对象时完全相同， 无需借助额外的类和接口来保持代码简洁。</li>
+</ul>
+<h2 id="与其他模式的关系"><a href="#与其他模式的关系" class="headerlink" title="与其他模式的关系"></a>与其他模式的关系</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://refactoringguru.cn/design-patterns/bridge">桥接模式</a>、 <a target="_blank" rel="noopener" href="https://refactoringguru.cn/design-patterns/state">状态模式</a>和<a target="_blank" rel="noopener" href="https://refactoringguru.cn/design-patterns/strategy">策略模式</a> （在某种程度上包括<a target="_blank" rel="noopener" href="https://refactoringguru.cn/design-patterns/adapter">适配器模式</a>） 模式的接口非常相似。 实际上， 它们都基于<a target="_blank" rel="noopener" href="https://refactoringguru.cn/design-patterns/composite">组合模式</a>——即将工作委派给其他对象， 不过也各自解决了不同的问题。 模式并不只是以特定方式组织代码的配方， 你还可以使用它们来和其他开发者讨论模式所解决的问题。</li>
+<li><a target="_blank" rel="noopener" href="https://refactoringguru.cn/design-patterns/command">命令模式</a>和<a target="_blank" rel="noopener" href="https://refactoringguru.cn/design-patterns/strategy">策略</a>看上去很像， 因为两者都能通过某些行为来参数化对象。 但是， 它们的意图有非常大的不同。<ul>
+<li>你可以使用<em>命令</em>来将任何操作转换为对象。 操作的参数将成为对象的成员变量。 你可以通过转换来延迟操作的执行、 将操作放入队列、 保存历史命令或者向远程服务发送命令等。</li>
+<li>另一方面， <em>策略</em>通常可用于描述完成某件事的不同方式， 让你能够在同一个上下文类中切换算法。</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://refactoringguru.cn/design-patterns/decorator">装饰模式</a>可让你更改对象的外表， <a target="_blank" rel="noopener" href="https://refactoringguru.cn/design-patterns/strategy">策略</a>则让你能够改变其本质。</li>
+<li><a target="_blank" rel="noopener" href="https://refactoringguru.cn/design-patterns/template-method">模板方法模式</a>基于继承机制： 它允许你通过扩展子类中的部分内容来改变部分算法。 <a target="_blank" rel="noopener" href="https://refactoringguru.cn/design-patterns/strategy">策略</a>基于组合机制： 你可以通过对相应行为提供不同的策略来改变对象的部分行为。 <em>模板方法</em>在类层次上运作， 因此它是静态的。 <em>策略</em>在对象层次上运作， 因此允许在运行时切换行为。</li>
+<li><a target="_blank" rel="noopener" href="https://refactoringguru.cn/design-patterns/state">状态</a>可被视为<a target="_blank" rel="noopener" href="https://refactoringguru.cn/design-patterns/strategy">策略</a>的扩展。 两者都基于组合机制： 它们都通过将部分工作委派给 “帮手” 对象来改变其在不同情景下的行为。 <em>策略</em>使得这些对象相互之间完全独立， 它们不知道其他对象的存在。 但<em>状态</em>模式没有限制具体状态之间的依赖， 且允许它们自行改变在不同情景下的状态。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2022/09/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">https://devildyw.github.io/2022/09/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Developer/">Developer</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/tag.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/09/05/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-28yzm9.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">设计模式--行为型模式之状态模式</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/02/28/Git%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7/" title="Git分布式版本控制工具"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">Git分布式版本控制工具</div></div></a></div><div><a href="/2022/04/06/RESTful%20API/" title="RESTful API"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-06</div><div class="title">RESTful API</div></div></a></div><div><a href="/2022/02/28/%E5%AE%9E%E9%99%85%E5%BC%80%E5%8F%91%E4%B8%AD%E5%B8%B8%E5%B8%B8%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%20%E6%88%96%E6%98%AF%20%E9%81%B5%E5%AE%88%E7%9A%84%E8%A7%84%E5%88%99/" title="实际开发中常常遇到的问题 或是 遵守的规则"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-57kw88.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">实际开发中常常遇到的问题 或是 遵守的规则</div></div></a></div><div><a href="/2022/05/15/Docker/" title="Docker"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-pkl5pm.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-15</div><div class="title">Docker</div></div></a></div><div><a href="/2022/04/17/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="设计模式----创建型模式之简单工厂设计模式"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-17</div><div class="title">设计模式----创建型模式之简单工厂设计模式</div></div></a></div><div><a href="/2022/04/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="设计模式----创建型模式之简单工厂设计模式"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-57kw88.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-28</div><div class="title">设计模式----创建型模式之简单工厂设计模式</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%93%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">设计模式–行为型模式之策略模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE"><span class="toc-number">1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">1.3.</span> <span class="toc-text">解决方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%9F%E5%AE%9E%E4%B8%96%E7%95%8C%E7%B1%BB%E6%AF%94"><span class="toc-number">1.4.</span> <span class="toc-text">真实世界类比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">1.5.</span> <span class="toc-text">策略模式结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">1.6.</span> <span class="toc-text">代码分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E9%80%82%E5%90%88%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.7.</span> <span class="toc-text">策略模式适合应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="toc-number">1.8.</span> <span class="toc-text">实现方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-number">1.9.</span> <span class="toc-text">策略模式优缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">1.9.1.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">1.9.2.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8E%E5%85%B6%E4%BB%96%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.10.</span> <span class="toc-text">与其他模式的关系</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
