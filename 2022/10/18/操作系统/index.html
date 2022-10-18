@@ -1,0 +1,239 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>操作系统 | Devil的个人博客</title><meta name="keywords" content="计算机网络"><meta name="author" content="Devil"><meta name="copyright" content="Devil"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="计算机网络基础篇TCP&#x2F;IP 网络模型计算机与计算机之间要有统一的连接标准才能够完成相互通信，这个标准被称为互联网协议，而网络就是物理链接介质+互联网协议。按照功能不同，人们将互联网协议从不同维度分为 OSI 七层、TCP&#x2F;IP 五层或 TCP&#x2F;IP 四层，如下图所示  这个网络协议是分层的，每一层都有各自的作用和职责。 在 TCP&#x2F;IP 五层模型中每层运行的常见设备如下图所示。  在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统">
+<meta property="og:url" content="https://devildyw.github.io/2022/10/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="Devil的个人博客">
+<meta property="og:description" content="计算机网络基础篇TCP&#x2F;IP 网络模型计算机与计算机之间要有统一的连接标准才能够完成相互通信，这个标准被称为互联网协议，而网络就是物理链接介质+互联网协议。按照功能不同，人们将互联网协议从不同维度分为 OSI 七层、TCP&#x2F;IP 五层或 TCP&#x2F;IP 四层，如下图所示  这个网络协议是分层的，每一层都有各自的作用和职责。 在 TCP&#x2F;IP 五层模型中每层运行的常见设备如下图所示。  在">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-1kpxgw.jpg">
+<meta property="article:published_time" content="2022-10-18T11:01:50.000Z">
+<meta property="article:modified_time" content="2022-10-18T13:47:36.952Z">
+<meta property="article:author" content="Devil">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-1kpxgw.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2022/10/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '操作系统',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-10-18 21:47:36'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/dyw.css"><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">83</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-1kpxgw.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">操作系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-10-18T11:01:50.000Z" title="发表于 2022-10-18 19:01:50">2022-10-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-10-18T13:47:36.952Z" title="更新于 2022-10-18 21:47:36">2022-10-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="操作系统"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h1><h2 id="基础篇"><a href="#基础篇" class="headerlink" title="基础篇"></a>基础篇</h2><h3 id="TCP-x2F-IP-网络模型"><a href="#TCP-x2F-IP-网络模型" class="headerlink" title="TCP&#x2F;IP 网络模型"></a>TCP&#x2F;IP 网络模型</h3><p>计算机与计算机之间要有统一的连接标准才能够完成相互通信，这个标准被称为互联网协议，而网络就是物理链接介质+互联网协议。按照功能不同，人们将互联网协议从不同维度分为 <code>OSI</code> 七层、<code>TCP/IP</code> 五层或 <code>TCP/IP</code> 四层，如下图所示</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210182110569.png" alt="image-20221018211041494"></p>
+<p>这个网络协议是分层的，每一层都有各自的作用和职责。</p>
+<p>在 <code>TCP/IP</code> 五层模型中每层运行的常见设备如下图所示。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210182111820.png" alt="image-20221018211134767"></p>
+<p>在 <code>TCP/IP</code> 四层模型中数据传输过程中每一层的封装格式：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210182029355.png" alt="img"></p>
+<blockquote>
+<p>网络接口层的传输单位是帧（frame），<code>IP</code> 层的传输单位是包（packet），TCP 层的传输单位是段（segment），HTTP 的传输单位则是消息或报文（message）。但这些名词并没有什么本质的区别，可以统称位<strong>数据包</strong>。</p>
+</blockquote>
+<h4 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h4><p>应用层位于 <code>TCP/IP</code> 模型的最上层，也是用户能直接接触到的，如电脑或手机上使用的应用软件都是在应用层上实现。</p>
+<p>当两个不同设备的应用需要进行通信的时候，应用就把应用数据传输给下一层，也就是<strong>传输层</strong>。</p>
+<p>所以，<strong>应用层只需要专注于为用户提供应用功能，而不用去关心数据是怎么传输的，数据传输是由下层次的协议负责。</strong>就类似于我们寄快递的时候，只需要把包裹交给快递员，由他负责运输快递，我们不需要关心快递是如何被运输的。</p>
+<p><strong>应用层是工作在操作系统中的用户态，传输层以及下则工作在内核态。</strong></p>
+<p>常见的应用层协议：<code>HTTP</code>、<code>FTP</code>、<code>Telnet</code>、<code>DNS</code>、<code>SMTP</code>等。</p>
+<h4 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h4><p>应用层的数据包会传给传输层，<strong>传输层（<em>Transport Layer</em>）</strong>是为应用层提供网络支持的。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210181922823.png" alt="img"></p>
+<p>在传输层中有两个传输协议，分别是 <code>TCP</code> 和 <code>UDP</code></p>
+<p><code>TCP</code> 全称叫传输控制协议（<em>Transmission Control Protocol</em>），大部分应用使用的正是 TCP 传输协议，比如 HTTP 应用层协议。<code>TCP</code> 相较于 <code>UDP</code> 多了很多特性，比如<strong>流量控制、超时重传、拥塞控制</strong>等，这些特性的目的都是为了保证数据传输时的<strong>可靠性</strong>。</p>
+<p><code>UDP</code> 相对来说就很简单，<code>UDP</code> 只负责发送数据包，<strong>不保证数据包是否能抵达对方</strong>，但它<strong>实时性</strong>相对更好，<strong>传输效率也更高</strong>（不用花费额外的时间去建立连接）。<code>UDP</code> 也可以实现可靠传输，把 <code>TCP</code> 的特性在应用层上实现就可以，但要是实现一个可以商用的可靠 <code>UDP </code> 传输协议，并不是一件简单的事。</p>
+<p>应用需要传输的数据可能会非常大，如果直接传输就不好控制，因此当传输层的<strong>数据包大小超过 <code>MSS</code><strong>（TCP 最大报文段长度），就</strong>需要将数据包分块</strong>，这样即使中途有一个分块丢失或损坏了，只需要重新发送这个分块，而不用发送整个数据包。在 TCP 协议中，我们把每个数据分块称为一个 <strong><code>TCP</code> 报文段</strong>（<em>TCP Segment</em>）</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210181932485.png" alt="img"></p>
+<p>当设备作为接收方时，传输层则要负责把数据包传给应用，但是一台设备上可能会有很多应用进程在接收或者传输数据，因此需要用一个标识来区分不同的应用进程，这个标识就是<strong>端口号</strong>（0~65535）</p>
+<blockquote>
+<p>80 端口通常是 Web 服务器用的，22端口通常是远程登录服务器用的。而对于浏览器（客户端）中的每个标签页都是一个独立的进程，操作系统会为这些进程分配临时的端口号。</p>
+</blockquote>
+<p><strong>由于传输层的报文中会携带端口号，因此接收方可以识别出该报文是发送给哪个应用进程的。</strong></p>
+<h4 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h4><p>传输层事实上也不负责将数据从一个设备传输到另一个设备。</p>
+<p>实际场景中的网络环节是错综复杂的，中间有着各种各样的线路和分岔路口，如果一个设备的数据传输给另一个设备，就需要在各种各样的路径和节点之间进行选择，而传输层的设计理念是简单、高效、专注，如果传输层还负责这一块功能就有点违背设计原则了。</p>
+<p>也就是说，传输层专注于为应用层服务，让其作为应用间数据传输的媒介，帮助实现应用到应用之间的通信，而实际的传输功能功能就交给了下层，也就是<strong>网络层</strong>（<em>Internet Layer</em>）。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210181950303.png" alt="img"></p>
+<p>网络层中最常（但不只有）使用的是 <code>IP</code> 协议（<em>Internet Protocol</em>），<code>IP</code> 协议会将传输层的报文做为数据部分，再加上 <code>IP</code> 包头组装成 <code>IP</code> 报文，如果 <code>IP</code> 报文大小超过了 <code>MTU</code>（以太网中一般为 1500 字节）就会<strong>再次进行分片</strong>，得到一个即将发送到网络的 <code>IP</code> 报文。 </p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210181954507.png" alt="img"></p>
+<p>网络层负责将数据从一个设备传输到另一个设备，世界上有这么多的设备，网络层是如何找到目标设备的呢？因此，<strong>网络层需要有区分设备的标识</strong>。</p>
+<p>我们通常<strong>使用 <code>IP</code> 地址作为设备的标识</strong>，对于 <code>IPv4</code> 协议，<code>IP</code> 地址供 32 位，分成了四段（如：192.168.100.1），每段是 8 位。只有一个单纯的 <code>IP</code> 地址虽然做到了区分设备，但是寻址起来就特别麻烦了，那么多的设备，一个一个去匹配显然不科学。</p>
+<p>实际上 <code>IP</code> 地址由两部分组成：<strong>网络部分（用来标识子网）和主机部分（用来标识主机）</strong>。</p>
+<ul>
+<li><strong>一个是网络号，负责标识该 <code>IP</code> 是属于那个 「子网」的；</strong></li>
+<li><strong>一个是主机号，负责标识同一 「子网」下的不同主机；</strong></li>
+</ul>
+<blockquote>
+<p>注意：单纯的 <code>IP</code> 地址段只是标识了 <code>IP</code> 地址的种类，从网络部分或主机部分都无法辨识一个 <code>IP</code> 地址所处的子网。例如，并不能确定172.16.10.1与172.16.10.2处于同一子网。因此，就需要子网掩码</p>
+</blockquote>
+<blockquote>
+<p>什么是子网？</p>
+<p>为了确定网络区域，分开主机和路由器的每个接口，从而产生了若干个分离的网络岛，接口端连接了这些独立网络的端点。这些独立的网络岛叫做<strong>子网(subnet)。子网之间用路由器互联。</strong></p>
+<p>什么是子网掩码？</p>
+<p>所谓“子网掩码”，就是表示子网络特征的一个参数。它在形式上等同于<code>IP</code>地址，也是一个32位二进制数字，它的网络部分全部为1，主机部分全部为0。</p>
+</blockquote>
+<p>配合子网掩码可以计算出 <code>IP</code> 地址的网络号和主机号。</p>
+<blockquote>
+<p>举例：</p>
+<p>比如 10.100.122.0&#x2F;24，后面的 <code>/24</code>标识就是 <code>255.255.255.0</code> 子网掩码，255.255.255.0 二进制是「11111111-11111111-11111111-00000000」，可以看出有 24 个 1，为了简化子网掩码的表示，用 <code>/24</code> 代替 <code>255.255.255.0</code>。</p>
+</blockquote>
+<p>使用子网掩码和 <code>IP</code> 地址计算出网络地址和主机地址。</p>
+<p>网络号 &#x3D; <code>IP</code> 地址和子网掩码进行<strong>按位与运算</strong>。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210182009553.jpeg"></p>
+<p>主机号 &#x3D; 子网掩码取反后与 <code>IP</code> 地址进行<strong>按位与运算</strong>。</p>
+<hr>
+<p>寻址过程：先匹配到相同的网络号（表示要找到同一个子网），才会去找对应的主机。</p>
+<blockquote>
+<p>上述寻址过程可以理解为我们要找到一个人，我们首先要找到这个人所在的小区（网络号），找到这个小区后，我们才去找对应的人。</p>
+</blockquote>
+<p>除了寻址能力，<code>IP</code> 协议还有另一个重要的能力就是<strong>路由</strong>。实际场景中，两台设备并不是用同一条网线连接起来的，而是通过很多网关、路由器、交换机等众多网络设备连接起来的，那么就会形成很多条网络的路径，因此当数据包到达一个网络节点，就需要通过路由算法决定下一步走那条路径。</p>
+<p>路由器寻址工作中，就是要找到目标地址的子网，找到后进而把数据包转发给对应的网络内。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210182017678.jpeg" alt="IP地址的网络号"></p>
+<p>所以，**<code>IP</code> 协议的寻址作用是告诉我们去往下一个目的地该朝那个方向走，路由则是根据「下一个目的地」选择路径。寻址更像在导航，路由更像在操作方向盘。**</p>
+<h4 id="网络接口层"><a href="#网络接口层" class="headerlink" title="网络接口层"></a>网络接口层</h4><p>生成了 <code>IP</code> 报文后，接下来要交给<strong>网络接口层</strong>（<em>Link Layer</em>）在 <code>IP</code> 头部前面加上 MAC 头部，并封装成数据帧（Data frame）发送到网络上。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210182023613.png" alt="img"></p>
+<p><code>IP</code> 头部中的接收方 <code>IP</code> 地址表示网络包的目的地，通过这个地址我们就可以判断要将包发到哪里，但在以太网的世界中，这个思路是行不通的。</p>
+<blockquote>
+<p>什么是以太网呢？</p>
+<p>电脑上的以太网接口，<code>Wi-Fi</code>接口，以太网交换机、路由器上的千兆，万兆以太网口，还有网线，它们都是以太网的组成部分。以太网就是一种在「局域网」内，把附近的设备连接起来，使它们之间可以进行通讯的技术。</p>
+<p>使用以太网进行数据传输，基于 MAC 地址的广播方式实现数据传输，只能在局域网内广播。</p>
+</blockquote>
+<p>以太网在判断网络包目的地时和 <code>IP</code> 的方式不同，因此必须采用相匹配的方式才能在以太网中将包发往目的地，而 MAC 头部就是干这个用的，所以，在以太网进行通讯要用到 MAC 地址。</p>
+<blockquote>
+<p>MAC 头部中包含的源地址和目标地址的由来： Ethernet（以太网协议） 规定接入Internet的设备必须配有网卡，发送端和接收端的地址便是指网卡的地址，即MAC地址。</p>
+<p>MAC 地址：每块网卡出厂时都被印上一个世界<strong>唯一的</strong> MAC 地址，它是一个长度为48位的二进制数，通常用12位十六进制数表示（前6位是厂商编号，后6位是流水线号）。</p>
+</blockquote>
+<p>MAC 头部是以太网使用的头部，它包含了接收方和发送方的 MAC 地址等信息，我们可以通过 <code>ARP</code> 协议获取对方的 MAC 地址。</p>
+<p>所以说，网络接口层主要为网络层提供<strong>「链路级别」</strong>传输的服务，负责在以太网、<code>WiFi</code> 这样的底层网络上发送原始数据包，<strong>工作在网卡这个层次，使用 MAC 地址来标识网络上的设备</strong>。</p>
+<h2 id="HTTP-篇"><a href="#HTTP-篇" class="headerlink" title="HTTP 篇"></a>HTTP 篇</h2><h2 id="TCP-篇"><a href="#TCP-篇" class="headerlink" title="TCP 篇"></a>TCP 篇</h2><h2 id="IP-篇"><a href="#IP-篇" class="headerlink" title="IP 篇"></a>IP 篇</h2></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2022/10/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">https://devildyw.github.io/2022/10/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-1kpxgw.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/10/18/ARP/"><img class="prev-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-1kpxgw.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">ARP</div></div></a></div><div class="next-post pull-right"><a href="/2022/10/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-9mo7kw.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">计算机网络</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/10/18/ARP/" title="ARP"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-1kpxgw.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-18</div><div class="title">ARP</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C"><span class="toc-number">1.</span> <span class="toc-text">计算机网络</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%AF%87"><span class="toc-number">1.1.</span> <span class="toc-text">基础篇</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-x2F-IP-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">TCP&#x2F;IP 网络模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">应用层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">传输层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="toc-number">1.1.1.3.</span> <span class="toc-text">网络层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3%E5%B1%82"><span class="toc-number">1.1.1.4.</span> <span class="toc-text">网络接口层</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E7%AF%87"><span class="toc-number">1.2.</span> <span class="toc-text">HTTP 篇</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-%E7%AF%87"><span class="toc-number">1.3.</span> <span class="toc-text">TCP 篇</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-%E7%AF%87"><span class="toc-number">1.4.</span> <span class="toc-text">IP 篇</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
