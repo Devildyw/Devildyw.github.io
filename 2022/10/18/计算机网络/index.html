@@ -5,13 +5,13 @@
 <meta property="og:site_name" content="Devil的个人博客">
 <meta property="og:description" content="计算机网络基础篇TCP&#x2F;IP 网络模型计算机与计算机之间要有统一的连接标准才能够完成相互通信，这个标准被称为互联网协议，而网络就是物理链接介质+互联网协议。按照功能不同，人们将互联网协议从不同维度分为 OSI 七层、TCP&#x2F;IP 五层或 TCP&#x2F;IP 四层，如下图所示  这个网络协议是分层的，每一层都有各自的作用和职责。 在 TCP&#x2F;IP 五层模型中每层运行的常见设备如下图所示。  在">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg">
+<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-v9orm5.jpg">
 <meta property="article:published_time" content="2022-10-18T11:01:50.000Z">
-<meta property="article:modified_time" content="2022-10-22T11:57:08.064Z">
+<meta property="article:modified_time" content="2022-10-26T12:45:38.906Z">
 <meta property="article:author" content="Devil">
 <meta property="article:tag" content="计算机网络">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2022/10/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-v9orm5.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2022/10/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
   root: '/',
   algolia: undefined,
   localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
@@ -53,7 +53,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2022-10-22 19:57:08'
+  postUpdate: '2022-10-26 20:45:38'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -143,7 +143,7 @@
     }
     detectApple()
     })(window)</script><link rel="stylesheet" href="/css/dyw.css"><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
-</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">84</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">31</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">计算机网络</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-10-18T11:01:50.000Z" title="发表于 2022-10-18 19:01:50">2022-10-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-10-22T11:57:08.064Z" title="更新于 2022-10-22 19:57:08">2022-10-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="计算机网络"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h1><h2 id="基础篇"><a href="#基础篇" class="headerlink" title="基础篇"></a>基础篇</h2><h3 id="TCP-x2F-IP-网络模型"><a href="#TCP-x2F-IP-网络模型" class="headerlink" title="TCP&#x2F;IP 网络模型"></a>TCP&#x2F;IP 网络模型</h3><p>计算机与计算机之间要有统一的连接标准才能够完成相互通信，这个标准被称为互联网协议，而网络就是物理链接介质+互联网协议。按照功能不同，人们将互联网协议从不同维度分为 <code>OSI</code> 七层、<code>TCP/IP</code> 五层或 <code>TCP/IP</code> 四层，如下图所示</p>
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">84</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">32</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-v9orm5.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">计算机网络</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-10-18T11:01:50.000Z" title="发表于 2022-10-18 19:01:50">2022-10-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-10-26T12:45:38.906Z" title="更新于 2022-10-26 20:45:38">2022-10-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="计算机网络"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h1><h2 id="基础篇"><a href="#基础篇" class="headerlink" title="基础篇"></a>基础篇</h2><h3 id="TCP-x2F-IP-网络模型"><a href="#TCP-x2F-IP-网络模型" class="headerlink" title="TCP&#x2F;IP 网络模型"></a>TCP&#x2F;IP 网络模型</h3><p>计算机与计算机之间要有统一的连接标准才能够完成相互通信，这个标准被称为互联网协议，而网络就是物理链接介质+互联网协议。按照功能不同，人们将互联网协议从不同维度分为 <code>OSI</code> 七层、<code>TCP/IP</code> 五层或 <code>TCP/IP</code> 四层，如下图所示</p>
 <p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210182110569.png" alt="image-20221018211041494"></p>
 <p>这个网络协议是分层的，每一层都有各自的作用和职责。</p>
 <p>在 <code>TCP/IP</code> 五层模型中每层运行的常见设备如下图所示。</p>
@@ -462,7 +462,226 @@
 <p>不知你发现了没有，在网络包传输的过程中，<strong>源 IP 和目标 IP 始终是不会变的，一直变化的是 MAC 地址</strong>，因为需要 MAC 地址在以太网内进行<strong>两个设备</strong>之间的包传输。</p>
 <hr>
 <p>至此我们的请求就顺利传输到 <code>Web</code> 服务器了，服务器响应请求按相同的步骤将资源传输到客户端（HTTP 响应报文）。</p>
-<h2 id="HTTP-篇"><a href="#HTTP-篇" class="headerlink" title="HTTP 篇"></a>HTTP 篇</h2><h2 id="TCP-篇"><a href="#TCP-篇" class="headerlink" title="TCP 篇"></a>TCP 篇</h2><h2 id="IP-篇"><a href="#IP-篇" class="headerlink" title="IP 篇"></a>IP 篇</h2></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2022/10/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">https://devildyw.github.io/2022/10/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/10/18/ARP/"><img class="prev-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-v99e1m.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">ARP</div></div></a></div><div class="next-post pull-right"><a href="/2022/10/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-pk9eye.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">操作系统</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/10/18/ARP/" title="ARP"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-v99e1m.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-18</div><div class="title">ARP</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C"><span class="toc-number">1.</span> <span class="toc-text">计算机网络</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%AF%87"><span class="toc-number">1.1.</span> <span class="toc-text">基础篇</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-x2F-IP-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">TCP&#x2F;IP 网络模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">应用层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">传输层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="toc-number">1.1.1.3.</span> <span class="toc-text">网络层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3%E5%B1%82"><span class="toc-number">1.1.1.4.</span> <span class="toc-text">网络接口层</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E7%BD%91%E5%9D%80%E5%88%B0%E7%BD%91%E9%A1%B5%E6%98%BE%E7%A4%BA%EF%BC%8C%E6%9C%9F%E9%97%B4%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">输入网址到网页显示，期间的过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-HTTP"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">1. HTTP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E7%9C%9F%E5%AE%9E%E5%9C%B0%E5%9D%80%E6%9F%A5%E8%AF%A2-%E2%80%93-DNS"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">2. 真实地址查询 – DNS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%8D%8F%E8%AE%AE%E6%A0%88"><span class="toc-number">1.1.2.3.</span> <span class="toc-text">3. 协议栈</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93-%E2%80%93-TCP"><span class="toc-number">1.1.2.4.</span> <span class="toc-text">4. 可靠传输 – TCP</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-number">1.1.2.4.1.</span> <span class="toc-text">三次握手</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#TCP-%E5%88%86%E5%89%B2%E6%95%B0%E6%8D%AE"><span class="toc-number">1.1.2.4.2.</span> <span class="toc-text">TCP 分割数据</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP-%E6%8A%A5%E6%96%87%E7%94%9F%E6%88%90"><span class="toc-number">1.1.2.5.</span> <span class="toc-text">TCP 报文生成</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E8%BF%9C%E7%A8%8B%E5%AE%9A%E4%BD%8D-%E2%80%93-IP"><span class="toc-number">1.1.2.6.</span> <span class="toc-text">5. 远程定位 – IP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E4%B8%A4%E7%82%B9%E4%BC%A0%E8%BE%93-%E2%80%93-MAC"><span class="toc-number">1.1.2.7.</span> <span class="toc-text">6. 两点传输 – MAC</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-%E5%87%BA%E5%8F%A3-%E2%80%93-%E7%BD%91%E5%8D%A1"><span class="toc-number">1.1.2.8.</span> <span class="toc-text">7. 出口 – 网卡</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="toc-number">1.1.2.9.</span> <span class="toc-text">8. 交换机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-%E8%B7%AF%E7%94%B1%E5%99%A8"><span class="toc-number">1.1.2.10.</span> <span class="toc-text">9. 路由器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E7%AF%87"><span class="toc-number">1.2.</span> <span class="toc-text">HTTP 篇</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-%E7%AF%87"><span class="toc-number">1.3.</span> <span class="toc-text">TCP 篇</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-%E7%AF%87"><span class="toc-number">1.4.</span> <span class="toc-text">IP 篇</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+<h2 id="HTTP-篇"><a href="#HTTP-篇" class="headerlink" title="HTTP 篇"></a>HTTP 篇</h2><h3 id="HTTP-常识"><a href="#HTTP-常识" class="headerlink" title="HTTP 常识"></a>HTTP 常识</h3><p><img src="https://img-blog.csdnimg.cn/6b9bfd38d2684b3f9843ebabf8771212.png" alt="提纲"></p>
+<h4 id="HTTP-基本概念"><a href="#HTTP-基本概念" class="headerlink" title="HTTP 基本概念"></a>HTTP 基本概念</h4><p>HTTP 是一个应用层的<strong>超文本传输协议</strong>（HyperText Transfer Protocol）</p>
+<p>HTTP的名字「超文本协议传输」，可以拆成三个部分。</p>
+<blockquote>
+<ul>
+<li>超文本</li>
+<li>传输</li>
+<li>协议</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/HTTP/3-HTTP%E4%B8%89%E9%83%A8%E5%88%86.png" alt="三个部分"></p>
+<p><em>1. 「协议」</em> </p>
+<p>在生活中随处可见协议。例如：</p>
+<ul>
+<li>保密协议</li>
+<li>三方协议</li>
+</ul>
+<p>生活中的协议本质上与计算机网络中的协议是相同的，协议的特点：</p>
+<ul>
+<li>「<strong>协</strong>」字，代表的意思是必须有<strong>两个以上的参与者</strong>。</li>
+<li>「<strong>议</strong>」字，代表的意思是对参与者的一种<strong>行为约定和规范</strong>。</li>
+</ul>
+<p>因此针对 HTTP <strong>协议</strong>，我们可以这么理解。</p>
+<p>HTTP 是一个用在计算机世界里的<strong>协议</strong>，它使用计算能够理解的语言确立了一种计算机之间交流通信的规范（<strong>两个以上的参与者</strong>），以及相关的各种控制和错误处理方式（<strong>行为规定和规范</strong>）。</p>
+<blockquote>
+<p>协议：就是两个以上的参与者能够理解，能够达成共识，能够相互遵守的一套行为规范。</p>
+</blockquote>
+<ol start="2">
+<li><em>「传输」</em></li>
+</ol>
+<p>HTTP 是一个双向协议</p>
+<p>HTTP 是一个在计算机世界里面专门用来在两点之间传输数据的约定和规范。</p>
+<ol start="3">
+<li><em>「超文本」</em></li>
+</ol>
+<p>HTTP 传输的内容是「超文本」。</p>
+<blockquote>
+<p>我们先来理解「文本」，在互联网早期的时候只是简单的字符文字，但现在「文本」的涵义已经可以扩展为图片、视频、压缩包等，在 HTTP 眼里这些都算作「文本」。</p>
+<p>再来理解「超文本」，它就是<strong>超越了普通文本的文本</strong>，它是文字、图片、视频等的混合体，最关键有超链接，能从一个超文本跳转到另外一个超文本。例如：HTML</p>
+</blockquote>
+<hr>
+<p>综上得出答案：<strong>HTTP 是一个在计算机世界里专门在「两点」之间「传输」文字、图片、音频、视频等「超文本」数据的「约定和规范」。</strong></p>
+<hr>
+<h5 id="HTTP-常见状态码"><a href="#HTTP-常见状态码" class="headerlink" title="HTTP 常见状态码"></a>HTTP 常见状态码</h5><p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/HTTP/6-%E4%BA%94%E5%A4%A7%E7%B1%BBHTTP%E7%8A%B6%E6%80%81%E7%A0%81.png" alt=" 五大类 HTTP 状态码 "></p>
+<ul>
+<li><p><strong>2XX</strong>：是我们最常看见的状态码，表示服务器成功处理了客户端的请求。</p>
+<ul>
+<li><p>「<strong>200 OK</strong>」是最常见的成功状态码，表示一切正常。如果是非 <code>HEAD</code> 请求，服务器返回的<strong>响应头都会有 body 数据</strong>。</p>
+</li>
+<li><p>「<strong>204 No Content</strong>」也是常见的成功状态码，与 200 OK 基本相同，<strong>但响应头没有 body 数据</strong>。</p>
+</li>
+<li><p>「<strong>206 Partial Content</strong>」是应用于 <strong>HTTP 分块下载或断点续传</strong>，表示响应返回的 <strong>body 数据并不是资源的全部，而是其中的一部分</strong>，也是服务器处理成功的状态。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>3XX</strong>：表示客户端请求的资源发生了变动，需要客户端用新的 URL 重新发送请求获取资源，即<strong>重定向</strong>。</p>
+<ul>
+<li><p>「<strong>301 Moved Permanently</strong>」表示<strong>永久重定向</strong>，说明请求的资源已经不存在了，需改用新的 URL 再次访问。</p>
+</li>
+<li><p>「<strong>302 Found</strong>」表示<strong>临时重定向</strong>，说明请求的资源还在，但暂时需要用另一个 URL 来访问。</p>
+<p>301 和 302 都会在<strong>响应头</strong>里使用字段 <code>Location</code>，指明后续要跳转的 URL，浏览器会<strong>自动</strong>重定向新的URL</p>
+</li>
+<li><p>「<strong>304 Not Modified</strong>」不具有跳转的含义，表示资源未修改，重定向已存在的缓冲文件，也称<strong>缓存重定向</strong>，也就是<strong>告诉客户端可以继续使用缓存资源，用于缓存控制</strong>。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>4XX</strong>：表示客户端发送的<strong>报文有误</strong>，服务器无法理解，也就是<strong>错误码</strong>的含义。</p>
+<ul>
+<li><p>「<strong>400 Bad Request</strong>」表示客户端请求的报文有错误，但只是个<strong>笼统的错误</strong>。</p>
+</li>
+<li><p>「<strong>403 Forbidden</strong>」表示<strong>服务器禁止访问资源</strong>，并不是客户端的请求出错。</p>
+</li>
+<li><p>「<strong>404 Not Found</strong>」表示请求的资源在服务器上<strong>不存在或未找到</strong>，所以无法提供给客户端。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>5XX</strong>：表示客户端的请求报文正确，但是<strong>服务器处理时内部发生了错误</strong>，属于服务端的错误码。</p>
+<ul>
+<li>「<strong>500 Internal Server Error</strong>」与 400 类型，是个笼统通用的错误码，服务器发生了什么错误，我们并不知道。</li>
+<li>「<strong>501 Not Implemented</strong>」表示客户端请求的功能还不支持，类似“即将开业，敬请期待”的意思。</li>
+<li>「<strong>502 Bad Gateway</strong>」通常是服务器作为<strong>网关或代理</strong>时返回的错误码，表示<strong>服务器自身工作正常</strong>，<strong>访问后端服务器发生了错误</strong>。</li>
+<li>「<strong>503 Service Unavailable</strong>」表示<strong>服务器当前很忙，暂时无法响应客户端</strong>，类似“网络服务正忙，请稍后重试”的意思。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="HTTP-报文常见字段"><a href="#HTTP-报文常见字段" class="headerlink" title="HTTP 报文常见字段"></a>HTTP 报文常见字段</h4><ol>
+<li><p><strong>Host</strong> 字段</p>
+<p>客户端发送请求时，用来指定服务器的域名。</p>
+<figure class="highlight http"><table><tr><td class="code"><pre><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>www.A.com</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Content-Length</strong> 字段</p>
+<p>响应报文中，表明此次响应的数据长度。</p>
+<figure class="highlight http"><table><tr><td class="code"><pre><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>1000</span><br></pre></td></tr></table></figure>
+
+<p>该字段告诉浏览器，本次数据长度是1000，超过这个长度后面的字节就属于下一个响应了。</p>
+<blockquote>
+<p>HTTP 协议是基于 TCP 传输协议通信的，而使用了 TCP 传输协议，就会存在一个”粘包”的问题</p>
+<p>解决方案：</p>
+<ul>
+<li>通过 Content-Length 字段作为 HTTP body 的边界。</li>
+<li>通过设置回车符、换行符作为 HTTP header 的边界。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>Connection 字段</p>
+<p><code>Connection</code> 字段常用于客户端要求服务器使用<strong>「 HTTP 长连接」</strong>机制，以便其他请求复用。</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/HTTP/9-connection%E5%AD%97%E6%AE%B5.png" alt="img"></p>
+<p>HTTP 长连接的特点是，只要任意一端没有明确提出断开连接，则保持 TCP 连接状态。</p>
+<p>开启了 <strong>HTTP Keep-Alive</strong> 机制后， 连接就不会中断，而是保持连接。当客户端发送另一个请求时，它会使用<strong>同一个连接</strong>，一直持续到客户端或服务器端提出断开连接。</p>
+<blockquote>
+<p><code>HTTP/1.1</code> 版本的默认链接都是长连接，但为了兼容老版本的 HTTP，需要指定 <code>Connection</code> 首部字段的值为 <code>Keep-Alive</code>。</p>
+</blockquote>
+</li>
+<li><p><em>Content-Type 字段</em></p>
+<p><code>Content-Type</code> 字段用于服务器回应时，告诉客户端，本次数据是什么格式。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Content-Type: text/html; charset=utf-8</span><br></pre></td></tr></table></figure>
+
+<p>上述类型表明，发送的是网页，编码是 UTF-8。</p>
+<p>客户端请求的时候可以使用 <code>Accept</code> 字段声明自己可以接受那些数据格式。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Accept: */*  表示自己可以接受任何格式的数据。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Content-Encoding 字段</p>
+<p><code>Content-Encoding</code> 字段说明数据的压缩方法。表示服务器返回的数据使用的是上面压缩格式。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Content-Encoding: gzip  表示服务器返回的数据采用了 gzip 方式压缩，告知客户端采用该方式解压</span><br></pre></td></tr></table></figure>
+
+<p>客户端在请求时，用 <code>Accept-Encoding</code> 字段说明自己可以接受那些压缩方法。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Accept-Encoding: gzip, deflate</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="GET-与-POST"><a href="#GET-与-POST" class="headerlink" title="GET 与 POST"></a>GET 与 POST</h4><h5 id="GET-与-POST-之间的区别"><a href="#GET-与-POST-之间的区别" class="headerlink" title="GET 与 POST 之间的区别"></a>GET 与 POST 之间的区别</h5><p> 根据 RFC 文档中的规范，<strong>GET 的语义是从服务器获取指定的资源</strong>，这个资源可以是静态的文本、页面、图片视频等。GET 请求的<strong>请求参数一般是写在 URL 中的</strong>，URL 规定只能支持 ACSII 编码，并且浏览器会对 URL 的长度有限制（HTTP 协议本身对于 URL 长度不做任何规定）。</p>
+<p>而 <strong>POST 请求的语义是根据请求负荷（报文 body）对指定的资源做出处理</strong>，具体方式视资源类型而不同。POST 请求携带数据的位置一般是写在报文 body 中，<strong>body 中的数据可以是任意格式的数据</strong>（json，表单，文件，xml等），<strong>只要客户端与服务端协商好即可</strong>，并且浏览器<strong>不会</strong>对 body 大小做限制。</p>
+<hr>
+<h5 id="GET-和-POST-方法都是安全和幂等的吗？"><a href="#GET-和-POST-方法都是安全和幂等的吗？" class="headerlink" title="GET 和 POST 方法都是安全和幂等的吗？"></a>GET 和 POST 方法都是安全和幂等的吗？</h5><ul>
+<li>在 HTTP 协议里，所谓的<strong>「安全」</strong>是指请求方法不会<strong>「破坏」</strong>服务器上的资源。</li>
+<li>所谓的<strong>「幂等」</strong>，意思是多次执行相同的操作，结果都是<strong>「相同」</strong>的。</li>
+</ul>
+<p>从 RFC 规范定义的语义来看：</p>
+<ul>
+<li><p><strong>GET 方法是安全且幂等的</strong>，因为它是<strong>「只读」</strong>操作，无论多少次，服务器上的数据都是安全的，且每次结果都是相同的。<strong>所以可以对 GET 请求的数据做缓存，这个缓存可以做到浏览器本身上（彻底避免浏览器发送请求），也可以做到代理上（如：nginx），而且在浏览器中 GET 请求可以保存为书签。</strong></p>
+</li>
+<li><p>POST 因为是<strong>「新增或提交数据」</strong>的操作，会修改服务器上的资源，所以是<strong>不安全</strong>的，且多次提交数据就会创建多个资源，所以也<strong>不是幂等</strong>的。因此浏览器一般不会缓存 POST 请求，也不能将其保存作为书签。</p>
+</li>
+</ul>
+<blockquote>
+<p>但实际上，开发者不一定会遵守 RFC 文档上规定的语音来实现 GET 和 POST 方法。如：</p>
+<ul>
+<li>用 GET 方法实现新增或删除数据的请求，这样 GET 请求就不再幂等和安全了。</li>
+<li>用 POST 方法实现查询数据的请求，这样 POST 请求自然就是幂等和安全的了。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>HTTP 传输的内容都是明文的，虽然在浏览器地址栏上看不到 POST 请求的 body 数据，但是只要抓包就都能看到了，所以要避免传输过程中的数据被窃取，就要使用 HTTPS 协议，这样所有 HTTP 的数据都会被加密。</p>
+</blockquote>
+<p>GET 请求可以带 body 吗？</p>
+<p>RFC 文档中并没有规定 GET 请求不能携带 body，理论上任何请求都可以携带 body。只是 RFC 规定 GET 语义是获取资源，根据这个语义不需要用到 body。</p>
+<blockquote>
+<p>但实际开发，GET 还是不要带 body 了。按照 RFC 语义规范来，否则会被前端骂的。</p>
+</blockquote>
+<hr>
+<h4 id="HTTP-缓存技术"><a href="#HTTP-缓存技术" class="headerlink" title="HTTP 缓存技术"></a>HTTP 缓存技术</h4><p>对于一些重复性 HTTP 请求，比如在每次或一段事件内相同的请求得到的数据都是一样的，我们可以把这对<strong>「请求-响应」</strong>的数据都缓存在本地。</p>
+<p>HTTP 设计者考虑到这一点，因此 <strong>HTTP 协议头部有不少的是针对缓存的字段</strong>。</p>
+<p>HTTP 缓存有两种实现方式，分别是<strong>强制缓存和协商缓存</strong>。</p>
+<h5 id="强制缓存"><a href="#强制缓存" class="headerlink" title="强制缓存"></a>强制缓存</h5><p>强制缓存指的是只要浏览器判断缓存没有过期，则直接使用浏览器的本地缓存，决定是否使用缓存的<strong>主动性在于浏览器这边</strong>。</p>
+<p>如下图中，返回的是 200 状态码，但在 size 项中标识的是 <em><strong>from disk cache</strong></em>，就是使用了<strong>强制缓存</strong>。</p>
+<p><img src="https://img-blog.csdnimg.cn/1cb6bc37597e4af8adfef412bfc57a42.png" alt="img"></p>
+<p>强制缓存是利用下面这两个 HTTP 响应头部（Response Header）字段实现的，它们都用来表示资源在客户端缓存的有效期：</p>
+<ul>
+<li><code>Cache-Control</code>， 是一个相对时间；</li>
+<li><code>Expires</code>，是一个绝对时间；</li>
+</ul>
+<p>如果 HTTP 响应头部<strong>同时</strong>有 Cache-Control 和 Expires 字段的话，<strong>Cache-Control的优先级高于 Expires</strong> 。</p>
+<p>Cache-control <strong>选项更多</strong>一些，设置更加精细，所以建议使用 <em><strong>Cache-Control</strong></em> 来实现强缓存。具体的实现流程如下：</p>
+<ul>
+<li>当浏览器第一次请求访问服务器资源时，服务器会在返回这个资源的同时，在 <strong>Response 头部</strong>加上 Cache-Control，Cache-Control 中设置了过期时间的大小。</li>
+<li>浏览器再次访问服务器中的该资源时，会先<strong>通过请求资源的时间与 Cache-Control 中设置的过期时间大小，来计算出该资源是否过期</strong>，如果没有，则使用缓存，否则重新请求服务器；</li>
+<li>服务器再次收到请求后，会再次更新 Response 头部的 Cache-Control。</li>
+</ul>
+<hr>
+<h5 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h5><p>当我们在浏览器使用开发者工具的时候，你可能会看到过某些请求的响应码是 <code>304</code>，这个是告诉浏览器可以使用本地缓存的资源，通常这种<strong>通过服务端告知客户端是否可以使用缓存的方式被称为协商缓存</strong>。</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4@main/%E7%BD%91%E7%BB%9C/http1.1%E4%BC%98%E5%8C%96/%E7%BC%93%E5%AD%98etag.png" alt="img"></p>
+<p>从上图中可以看到一个<strong>协商缓存</strong>的过程，所以<strong>协商缓存就是与服务端协商过后，通过协商结果来判断是否使用本地缓存。</strong></p>
+<p>协商缓存可以基于两种头部来实现。</p>
+<p><strong>第一种</strong>：请求头部中的 <code>If-Modified-Since</code> 字段与响应头部中的 <code>Last-Modified</code> 字段实现，这两个字段的意思是：</p>
+<ul>
+<li>响应头部中的 <code>Last-Modified</code>：标示这个响应资源的最后修改时间；</li>
+<li>请求头部中的 <code>If-Modified-Since</code>：当资源过期了，发现响应头中具有 Last-Modified 声明，则再次发起请求的时候带上 Last-Modified 的时间，服务器收到请求后发现有 If-Modified-Since 则与被请求资源的最后修改时间进行对比（Last-Modified），如果最后修改时间较新（大），说明资源又被改过，则返回最新资源，HTTP 200 OK；如果最后修改时间较旧（小），说明资源无新修改，响应 HTTP 304 走缓存。</li>
+</ul>
+<p><strong>第二种</strong>：请求头部中的 <code>If-None-Match</code> 字段与响应头部中的 <code>ETag</code> 字段，这两个字段的意思是：</p>
+<ul>
+<li>响应头部中 <code>Etag</code>：唯一标识响应资源；</li>
+<li>请求头部中的 <code>If-None-Match</code>：当资源过期时，浏览器发现响应头里有 Etag，则再次向服务器发起请求时，会将请求头If-None-Match 值设置为 Etag 的值。服务器收到请求后进行比对，如果资源没有变化返回 304，如果资源变化了返回 200。</li>
+</ul>
+<p>第一种实现方式是<strong>基于时间</strong>实现的，第二种实现方式是<strong>基于一个唯一标识</strong>实现的，相对来说<strong>后者可以更加准确地判断文件内容是否被修改，避免由于时间篡改导致的不可靠问题。</strong></p>
+<p>如果在第一次请求资源的时候，服务端返回的 HTTP 响应头部同时有 Etag 和 Last-Modified 字段，那么客户端再下一次请求的时候，如果带上了 ETag 和 Last-Modified 字段信息给服务端，<strong>这时 Etag 的优先级更高</strong>，也就是服务端先会判断 Etag 是否变化了，如果 Etag 有变化就不用在判断 Last-Modified 了，如果 Etag 没有变化，然后再看 Last-Modified。</p>
+<p><strong>为什么 ETag 的优先级更高？</strong>这是因为 ETag 主要能解决 Last-Modified 几个比较难以解决的问题：</p>
+<ol>
+<li>在没有修改文件内容情况下文件的最后修改时间可能也会改变，这会导致客户端认为这文件被改动了，从而重新请求；</li>
+<li>可能有些文件是在秒级以内修改的，<code>If-Modified-Since</code> 能检查到的粒度是秒级的，使用 Etag就能够保证这种需求下客户端在 1 秒内能刷新多次；</li>
+<li>有些服务器不能精确获取文件的最后修改时间。</li>
+</ol>
+<hr>
+<p>注意，<strong>协商缓存这两个字段都需要配合强制缓存中 Cache-control 字段来使用，只有在未能命中强制缓存的时候，才能发起带有协商缓存字段的请求</strong>。</p>
+<p>下图是强制缓存和协商缓存的工作流程：</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/network/http/http%E7%BC%93%E5%AD%98.png" alt="img"></p>
+<p>当使用 ETag 字段实现的协商缓存的过程：</p>
+<ul>
+<li>当浏览器第一次请求访问服务器资源时，服务器会在返回这个资源的同时，在 Response 头部加上 <strong>ETag 唯一标识</strong>，这个唯一标识的值是根据当前请求的资源生成的；</li>
+<li>当浏览器再次请求访问服务器中的该资源时，<strong>首先会先检查强制缓存是否过期</strong>：<ul>
+<li>如果没有过期，则直接使用本地缓存；</li>
+<li>如果缓存过期了，会在 Request 头部加上 <strong>If-None-Match</strong> 字段，该字段的值就是 <strong>ETag</strong> 唯一标识；</li>
+</ul>
+</li>
+<li>服务器再次收到请求后，<strong>会根据请求中的 If-None-Match 值与当前请求的资源生成的唯一标识进行比较：</strong><ul>
+<li><strong>如果值相等，则返回 304 Not Modified，不会返回资源</strong>；</li>
+<li>如果不相等，则返回 200 状态码和返回资源，并在 Response 头部加上<strong>新的 ETag 唯一标识</strong>；</li>
+</ul>
+</li>
+<li>如果浏览器收到 304 的请求响应状态码，则会从本地缓存中加载资源，否则更新资源。</li>
+</ul>
+<h2 id="TCP-篇"><a href="#TCP-篇" class="headerlink" title="TCP 篇"></a>TCP 篇</h2><h2 id="IP-篇"><a href="#IP-篇" class="headerlink" title="IP 篇"></a>IP 篇</h2></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2022/10/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">https://devildyw.github.io/2022/10/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-v9orm5.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/10/18/ARP/"><img class="prev-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-v99e1m.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">ARP</div></div></a></div><div class="next-post pull-right"><a href="/2022/10/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-28yzm9.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">操作系统</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/10/18/ARP/" title="ARP"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-v99e1m.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-18</div><div class="title">ARP</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C"><span class="toc-number">1.</span> <span class="toc-text">计算机网络</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%AF%87"><span class="toc-number">1.1.</span> <span class="toc-text">基础篇</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-x2F-IP-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">TCP&#x2F;IP 网络模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">应用层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">传输层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="toc-number">1.1.1.3.</span> <span class="toc-text">网络层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3%E5%B1%82"><span class="toc-number">1.1.1.4.</span> <span class="toc-text">网络接口层</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E7%BD%91%E5%9D%80%E5%88%B0%E7%BD%91%E9%A1%B5%E6%98%BE%E7%A4%BA%EF%BC%8C%E6%9C%9F%E9%97%B4%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">输入网址到网页显示，期间的过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-HTTP"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">1. HTTP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E7%9C%9F%E5%AE%9E%E5%9C%B0%E5%9D%80%E6%9F%A5%E8%AF%A2-%E2%80%93-DNS"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">2. 真实地址查询 – DNS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%8D%8F%E8%AE%AE%E6%A0%88"><span class="toc-number">1.1.2.3.</span> <span class="toc-text">3. 协议栈</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93-%E2%80%93-TCP"><span class="toc-number">1.1.2.4.</span> <span class="toc-text">4. 可靠传输 – TCP</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-number">1.1.2.4.1.</span> <span class="toc-text">三次握手</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#TCP-%E5%88%86%E5%89%B2%E6%95%B0%E6%8D%AE"><span class="toc-number">1.1.2.4.2.</span> <span class="toc-text">TCP 分割数据</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP-%E6%8A%A5%E6%96%87%E7%94%9F%E6%88%90"><span class="toc-number">1.1.2.5.</span> <span class="toc-text">TCP 报文生成</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E8%BF%9C%E7%A8%8B%E5%AE%9A%E4%BD%8D-%E2%80%93-IP"><span class="toc-number">1.1.2.6.</span> <span class="toc-text">5. 远程定位 – IP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E4%B8%A4%E7%82%B9%E4%BC%A0%E8%BE%93-%E2%80%93-MAC"><span class="toc-number">1.1.2.7.</span> <span class="toc-text">6. 两点传输 – MAC</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-%E5%87%BA%E5%8F%A3-%E2%80%93-%E7%BD%91%E5%8D%A1"><span class="toc-number">1.1.2.8.</span> <span class="toc-text">7. 出口 – 网卡</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="toc-number">1.1.2.9.</span> <span class="toc-text">8. 交换机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-%E8%B7%AF%E7%94%B1%E5%99%A8"><span class="toc-number">1.1.2.10.</span> <span class="toc-text">9. 路由器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E7%AF%87"><span class="toc-number">1.2.</span> <span class="toc-text">HTTP 篇</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-%E5%B8%B8%E8%AF%86"><span class="toc-number">1.2.1.</span> <span class="toc-text">HTTP 常识</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">HTTP 基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#HTTP-%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E7%A0%81"><span class="toc-number">1.2.1.1.1.</span> <span class="toc-text">HTTP 常见状态码</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP-%E6%8A%A5%E6%96%87%E5%B8%B8%E8%A7%81%E5%AD%97%E6%AE%B5"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">HTTP 报文常见字段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GET-%E4%B8%8E-POST"><span class="toc-number">1.2.1.3.</span> <span class="toc-text">GET 与 POST</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#GET-%E4%B8%8E-POST-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.2.1.3.1.</span> <span class="toc-text">GET 与 POST 之间的区别</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#GET-%E5%92%8C-POST-%E6%96%B9%E6%B3%95%E9%83%BD%E6%98%AF%E5%AE%89%E5%85%A8%E5%92%8C%E5%B9%82%E7%AD%89%E7%9A%84%E5%90%97%EF%BC%9F"><span class="toc-number">1.2.1.3.2.</span> <span class="toc-text">GET 和 POST 方法都是安全和幂等的吗？</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP-%E7%BC%93%E5%AD%98%E6%8A%80%E6%9C%AF"><span class="toc-number">1.2.1.4.</span> <span class="toc-text">HTTP 缓存技术</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%BC%BA%E5%88%B6%E7%BC%93%E5%AD%98"><span class="toc-number">1.2.1.4.1.</span> <span class="toc-text">强制缓存</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98"><span class="toc-number">1.2.1.4.2.</span> <span class="toc-text">协商缓存</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-%E7%AF%87"><span class="toc-number">1.3.</span> <span class="toc-text">TCP 篇</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-%E7%AF%87"><span class="toc-number">1.4.</span> <span class="toc-text">IP 篇</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
   endLoading: () => {
     document.body.style.overflow = 'auto';
     document.getElementById('loading-box').classList.add("loaded")

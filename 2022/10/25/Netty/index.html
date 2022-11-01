@@ -1,0 +1,246 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Netty | Devil的个人博客</title><meta name="keywords" content="Netty"><meta name="author" content="Devil"><meta name="copyright" content="Devil"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Netty1. 概述 Netty 是由 JBOSS 提供的一个 java 开源框架。它是一个异步的、基于事件驱动的网络应用框架，开源快速开发高性能、高可靠性的网络 IO 程序。 Netty 主要针对在 TCP 协议下，面向 Clients 端的高并发应用。或者 Peer-to-Peer 场景下的大量数据持续传输的应用。 Netty 是一个 NIO 框架，将 Java 底层的 NIO API 再次做">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty">
+<meta property="og:url" content="https://devildyw.github.io/2022/10/25/Netty/index.html">
+<meta property="og:site_name" content="Devil的个人博客">
+<meta property="og:description" content="Netty1. 概述 Netty 是由 JBOSS 提供的一个 java 开源框架。它是一个异步的、基于事件驱动的网络应用框架，开源快速开发高性能、高可靠性的网络 IO 程序。 Netty 主要针对在 TCP 协议下，面向 Clients 端的高并发应用。或者 Peer-to-Peer 场景下的大量数据持续传输的应用。 Netty 是一个 NIO 框架，将 Java 底层的 NIO API 再次做">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-28yzm9.jpg">
+<meta property="article:published_time" content="2022-10-25T03:49:55.000Z">
+<meta property="article:modified_time" content="2022-10-25T09:14:26.601Z">
+<meta property="article:author" content="Devil">
+<meta property="article:tag" content="Netty">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-28yzm9.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2022/10/25/Netty/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Netty',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-10-25 17:14:26'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/dyw.css"><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">84</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">32</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-28yzm9.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Netty</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-10-25T03:49:55.000Z" title="发表于 2022-10-25 11:49:55">2022-10-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-10-25T09:14:26.601Z" title="更新于 2022-10-25 17:14:26">2022-10-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Netty/">Netty</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Netty"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Netty"><a href="#Netty" class="headerlink" title="Netty"></a>Netty</h1><h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><ol>
+<li>Netty 是由 JBOSS 提供的一个 java 开源框架。它是一个<strong>异步的</strong>、<strong>基于事件驱动</strong>的<strong>网络</strong>应用框架，开源快速开发高性能、高可靠性的网络 IO 程序。</li>
+<li>Netty 主要针对在 <strong>TCP</strong> 协议下，面向 Clients 端的<strong>高并发</strong>应用。或者 Peer-to-Peer 场景下的大量数据持续传输的应用。</li>
+<li>Netty 是一个 NIO 框架，将 Java 底层的 NIO API 再次做了一个封装和优化，简化和流程化了 NIO 的开发过程。可以帮助你快速、简单的开发出一个网络应用。</li>
+<li>Netty 是目前最流行的 NIO 框架，Netty 在互联网领域、大数据分布式计算领域、游戏行业、通信行业等获得了广泛的应用，知名的 Elasticsearch 、Dubbo（RPC） 框架内部都采用了 Netty。</li>
+</ol>
+<h2 id="2-五种-I-x2F-O-通信模型"><a href="#2-五种-I-x2F-O-通信模型" class="headerlink" title="2. 五种 I&#x2F;O 通信模型"></a>2. 五种 I&#x2F;O 通信模型</h2><p>在网络环境下，通俗地讲，将 I&#x2F;O 分为两步：<strong>第一步是等待；第二步是数据搬迁。</strong></p>
+<p>如果想要提高 I&#x2F;O 效率，需要将<strong>等待时间降低</strong>。因此发展出来五种 I&#x2F;O 模型，分别是：<strong>阻塞 I&#x2F;O 模型、非阻塞 I&#x2F;O 模型、多路复用 I&#x2F;O 模型、信号驱动 I&#x2F;O 模型、异步 I&#x2F;O 模型。其中前四种被称为同步 I&#x2F;O</strong>，下面对每一种 I&#x2F;O 模型进行详细分析。</p>
+<h3 id="阻塞-I-x2F-O-模型"><a href="#阻塞-I-x2F-O-模型" class="headerlink" title="阻塞 I&#x2F;O 模型"></a>阻塞 I&#x2F;O 模型</h3><p>阻塞 I&#x2F;O 模型的通信过程示意如下图所示。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210251224203.png" alt="image-20221006205039163"></p>
+<p>我们第一次接触的到的网络编程都是从 <code>listen()</code>、<code>send()</code>、<code>recv()</code> 等接口开始的，这些接口都是阻塞型的。都属于阻塞 I&#x2F;O 模型。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210251224250.png" alt="image-20221006205154439"></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210251311000.png" alt="image-20221025131137955"></p>
+<blockquote>
+<p>后续模型都是在 BIO 的基础上演化而来的。</p>
+</blockquote>
+<h3 id="非阻塞-I-x2F-O-模型"><a href="#非阻塞-I-x2F-O-模型" class="headerlink" title="非阻塞 I&#x2F;O 模型"></a>非阻塞 I&#x2F;O 模型</h3><p>示意图如下。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210251224321.png" alt="image-20221006205243625"></p>
+<p>当用户进程发出 read 操作时，如果内核中的数据还没有准备好，那么它并不会阻塞用户进程，而是立刻返回一个 error。从用户进程的角度讲，他发起一个 read 操作后，并不需要等待，而是马上就得到了一个结果，用户进程判断结果是一个 error 时，他就知道数据还没有准备好。于是它可以再次发送 read 操作，一旦内核中的数据准备好了，并且再次收到了用户进程的系统调用，那么它会马上将数据拷贝到用户内存，然后返回，非阻塞接口相比于阻塞接口的显著差异在于，在被调用之后立即返回。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210251224275.png" alt="image-20221006205945061"></p>
+<blockquote>
+<p>非阻塞模式套接字与阻塞模式相比，不容易使用，使用非阻塞模式套接字，要编写更多的代码，但是，非阻塞模式套接字在控制建立多个链接、时间不定时，具有明显优势。</p>
+</blockquote>
+<h3 id="多路复用-I-x2F-O-模型"><a href="#多路复用-I-x2F-O-模型" class="headerlink" title="多路复用 I&#x2F;O 模型"></a>多路复用 I&#x2F;O 模型</h3><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210251224314.png" alt="image-20221008183741246"></p>
+<p>多个进程的 I&#x2F;O 可以注册到一个复用器（Selector）上，当用户进程调用该 Selector，Selector 会监听注册进来的所有 I&#x2F;O，如果Selector 监听的所有 I&#x2F;O 在内核缓冲区都没有可读数据，select 调用进程会被阻塞，而当任一 I&#x2F;O 在内核缓冲区中有可读数据时，select 调用进程就会返回，而后 select 调用进程可以自己或通知另外的进程（注册进程）再次发起读取 I&#x2F;O，读取内核中准备好的数据，多个进程注册 I&#x2F;O 后，只有一个 select 调用进程被阻塞。</p>
+<blockquote>
+<p>其实多路复用 I&#x2F;O 模型和阻塞 I&#x2F;O 模型并没有太大的不同，事实上由于这里要使用两个系统调用而比阻塞 I&#x2F;O 模型的性能还要差些。</p>
+<p>多路复用 I&#x2F;O 不一定比使用多线程加阻塞 I&#x2F;O 的模式更优，甚至性能更佳，多路复用的优势在于可以处理更多的连接，而不是单个连接处理更快。</p>
+</blockquote>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210251224264.png" alt="image-20221008184759480"></p>
+<h3 id="信号驱动-I-x2F-O-模型"><a href="#信号驱动-I-x2F-O-模型" class="headerlink" title="信号驱动 I&#x2F;O 模型"></a>信号驱动 I&#x2F;O 模型</h3><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210251224247.png" alt="image-20221008184819467"></p>
+<p>信号驱动 I&#x2F;O 是指进程预先告知内核，向内核注册一个信号处理函数，然后用户进程返回<strong>不阻塞</strong>，当内核<strong>数据就绪时会发送一个信号给进程</strong>，用户进程便在信号处理函数中调用 I&#x2F;O 读取数据，从上图可以看出，<strong>实际上 I&#x2F;O 内核拷贝到用户进程的过程还是阻塞的，信号驱动 I&#x2F;O 并没有实现真正的异步，因为通知到进程后，依然由进程来完成 I&#x2F;O 操作。</strong></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210251224253.png" alt="image-20221008185312018"></p>
+<h3 id="异步-I-x2F-O-模型"><a href="#异步-I-x2F-O-模型" class="headerlink" title="异步 I&#x2F;O 模型"></a>异步 I&#x2F;O 模型</h3><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210251224250.png" alt="image-20221008185359939"></p>
+<p>用户进程发起 aio_read 操作后，给内核传递与 read 相同的描述符、缓冲区指针、缓冲区大小三个参数及文件偏移，告诉内核当整个操作完成时，如何通知我们立刻就可以开始去做其他的事；而另一方面，从内核的角度，当他收到一个 aio_read 之后，首先他会立刻返回，所以不会对用户进程产生任何阻塞，内核会等待数据准备完成，然后将数据拷贝到用户内存，当这一切都完成之后，内核会给用户进程发送一个信号，告诉它 aio_read 操作完成。</p>
+<blockquote>
+<p>异步 I&#x2F;O 的工作机制是：告知内核启动某个操作，并让内核在整个操作完成后通知我们，这种模型与信号驱动 I&#x2F;O 模型的区别在于，<strong>信号驱动 I&#x2F;O 模型是由内核通知我们何时可以启动一个 I&#x2F;O 操作，这个 I&#x2F;O 操作由用户自定义的信号函数来实现，而异步 I&#x2F;O 模型由内核告知我们 I&#x2F;O 操作何时完成。</strong></p>
+</blockquote>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210251224272.png" alt="image-20221008192424929"></p>
+<h3 id="各-I-x2F-O-模型的对比与总结"><a href="#各-I-x2F-O-模型的对比与总结" class="headerlink" title="各 I&#x2F;O 模型的对比与总结"></a>各 I&#x2F;O 模型的对比与总结</h3><p>前四种 I&#x2F;O 模型都是同步 I&#x2F;O 操作，它们的区别在于第一阶段，而第二阶段是一样的：数据（准备好后）从内核拷贝到应用缓冲区期间（用户空间），进程阻塞于 <code>recvfrom</code> 调用。</p>
+<blockquote>
+<p>recvfrom 会将数据从内核（Kernel）拷贝到用户内存中，这个时候进程就被阻塞了。在这段时间内，进程是被阻塞的。</p>
+</blockquote>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210251224382.png" alt="image.png"></p>
+<p>由上图可以看出，阻塞程度：阻塞 I&#x2F;O &gt; 非阻塞 I&#x2F;O &gt; 多路复用 I&#x2F;O &gt; 信号驱动 I&#x2F;O &gt; 异步 I&#x2F;O，效率是由低到高的。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210251224287.png" alt="image-20221008193056732"></p>
+<p>Java BIO 和 NIO 之间的主要差异。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210081952389.png" alt="image-20221008195234349"></p>
+<h2 id="易混淆概念解释"><a href="#易混淆概念解释" class="headerlink" title="易混淆概念解释"></a>易混淆概念解释</h2><ul>
+<li>同步与异步：主要看请求发起方对消息结果的获取是主动发起还是被动通知的。</li>
+</ul>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210251224283.png" alt="image-20221008193426801"></p>
+<ul>
+<li>阻塞与非阻塞：调用一个函数后，在等待这个函数返回结果之前，当前的线程是处于挂起状态还是运行状态。</li>
+</ul>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210081936694.png" alt="image-20221008193611650"></p>
+<ul>
+<li>同步阻塞：请求方主动发起的，一直等待应答结果（用户线程阻塞挂起）；</li>
+<li>异步非阻塞：请求方主动发起，但是可以去做其他的事情，但是需要不断轮询查看发起的请求是否有结果；</li>
+<li>异步阻塞：请求方发起请求，一直阻塞等待答应结果（实际不应用）；</li>
+<li>异步非阻塞：请求方发起请求，可以去干自己的事，服务会主动通知该请求已完成。</li>
+</ul>
+<h2 id="NIO-介绍"><a href="#NIO-介绍" class="headerlink" title="NIO 介绍"></a>NIO 介绍</h2><h3 id="缓冲区（Buffer）"><a href="#缓冲区（Buffer）" class="headerlink" title="缓冲区（Buffer）"></a>缓冲区（Buffer）</h3><p>在谈到缓冲区，<strong>我们说缓冲区对象本质上是一个数组，但它其实是一个特殊的数组，缓冲区对象内置了一些机制，能够追踪和记录缓冲区的状态变化情况</strong>，如果我们使用 <code>get()</code> 方法从缓冲区获取数据或者使用 <code>put()</code> 方法把数据写入缓冲区，都会引起缓冲区状态的变化。</p>
+<blockquote>
+<p>缓冲区三个重要属性：</p>
+<ul>
+<li>position：指定下一个将要被写入或者读取的元素索引，它的值由 get()&#x2F;put() 方法自动更新，在新创建一个 Buffer 对象时，position 被初始化为 0。</li>
+<li>limit：指定还有多少数据需要取出（在从缓冲区写入通道时），或者还有多少空间可以放入数据（在从通道读入缓冲区时）。</li>
+<li>capacity：指定了可以存储在缓冲区的最大数据容量，实际上，它指定了底层数据的大小，或者至少时指定了准许我们使用的底层数组的容量。‘</li>
+</ul>
+<p>注：0&lt;&#x3D; position &lt;&#x3D; limit &lt;&#x3D; capacity</p>
+</blockquote>
+<p>在 NIO 中，所有的缓冲区类型都继承与抽象类 Buffer，最常用的就是 ByteBuffer，对于 Java 中的基本类型，基本都有一个具体 Buffer 类型与之相对应。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/202210082019274.png" alt="image-20221008201920235"></p>
+<ul>
+<li><p><strong>缓存区的分配</strong>：可以通过调用静态方法 <code>allocate()</code> 来指定缓冲区的容量，其实调用 allocate 方法相当于<strong>创建了一个指定大小的数组，并把它包装为缓冲区对象</strong>。我们也可以<strong>自己创建一个数组通过调用静态方法 <code>wrap()</code> 来将其包装为缓冲区对象。</strong> </p>
+</li>
+<li><p><strong>缓冲区分片</strong>：根据现有的缓冲区对象创建一个子缓冲区，<strong>即在现有缓冲区上切出一片作为一个新的缓冲区，但现有的缓冲区与创建的子缓冲区在底层数面上是数据共享的（子缓冲区相当于现有缓冲区的一个视图窗口）。</strong>可以通过调用缓冲区对象的 <code>slice()</code> 创建。</p>
+</li>
+<li><p><strong>只读缓冲区</strong>：通过调用缓冲区对象的 <code>asReadOnlyBuffer()</code> 方法，将任何<strong>常规缓冲区转换为只读缓冲区</strong>，这个方法返回一个与原缓冲区<strong>完全相同</strong>的缓冲区，并与原缓冲区<strong>共享数据</strong>，只不过它是只读的。如果<strong>原缓冲区的内容发生了变化，只读缓冲区的内容也随之发生变化</strong>。<strong>注意：尝试修改只读缓冲区的内容，则会报 ReadOnlyBufferException 异常；只可以 常规–&gt; 只读 不可以 只读 –&gt; 可写</strong></p>
+</li>
+<li><p><strong>直接缓冲区</strong>：直接缓冲区是为了加快 I&#x2F;O 速度，使用一种特殊方式为其分配内存的缓冲区。<strong>该缓冲区会在每一次调用底层操作系统的本机 I&#x2F;O 操作之前（或之后），尝试避免将缓冲区内容拷贝到一个中间缓冲区拷贝数据。</strong>通过调用静态方法 <code>allocateDirect()</code> 方法</p>
+</li>
+<li><p><strong>内存映射</strong>：比常规的基于流或者基于通道的 I&#x2F;O 快得多。 <strong>内存映射文件 I&#x2F;O 通过使文件的数据表现为内存数组的内容来完成</strong>。一般来说，<strong>只有文件中实际读取或写入的部分才会映射到内存中</strong>。</p>
+</li>
+</ul>
+<h3 id="选择器（Selector）"><a href="#选择器（Selector）" class="headerlink" title="选择器（Selector）"></a>选择器（Selector）</h3><p>NIO 中非阻塞 I&#x2F;O 采用了基于 Reactor 模式的工作方式， I&#x2F;O 调用不会被阻塞，而是注册感兴趣的特定 I&#x2F;O 事件，如可读数据到达、新的套接字连接等，在发生特定事件时，系统再通知我们。NIO 中实现非阻塞 I&#x2F;O 的核心对象是 Selector，Selector 是注册各种 I&#x2F;O 事件的地方，而且当那些事情发生时，就是 Selector 告诉我们所发生的事件。</p>
+<h3 id="通道（Channel）"><a href="#通道（Channel）" class="headerlink" title="通道（Channel）"></a>通道（Channel）</h3><p>通道是一个对象，通过它可以读取和写入数据，当然所有数据都通过 Buffer 对象来处理。我们永远不会将字节直接写入通道，而是将数据写入包含一个或者多个字节的缓冲区。同样也不会直接从通道中读取字节，而是通过数据从通道读入缓冲区，再从缓冲区获取这个字节。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-537ed6de4ca2cfeefd0dd11654519b65_720w.webp" alt="img"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2022/10/25/Netty/">https://devildyw.github.io/2022/10/25/Netty/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Netty/">Netty</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-28yzm9.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/10/25/NIO/"><img class="prev-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">NIO</div></div></a></div><div class="next-post pull-right"><a href="/2022/10/19/SpringMVC%E4%B9%8BRequestContextHolder/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-3zkmod.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">SpringMVC之RequestContextHolder</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/10/06/%E3%80%8ANetty4%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E4%B8%8E%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6%E5%AE%9E%E6%88%98%E3%80%8B/" title="《Netty4核心原理与手写RPC框架实战》"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-06</div><div class="title">《Netty4核心原理与手写RPC框架实战》</div></div></a></div><div><a href="/2022/10/25/NIO/" title="NIO"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-25</div><div class="title">NIO</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Netty"><span class="toc-number">1.</span> <span class="toc-text">Netty</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">1. 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BA%94%E7%A7%8D-I-x2F-O-%E9%80%9A%E4%BF%A1%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.</span> <span class="toc-text">2. 五种 I&#x2F;O 通信模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%BB%E5%A1%9E-I-x2F-O-%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">阻塞 I&#x2F;O 模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E9%98%BB%E5%A1%9E-I-x2F-O-%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.2.</span> <span class="toc-text">非阻塞 I&#x2F;O 模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8-I-x2F-O-%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.3.</span> <span class="toc-text">多路复用 I&#x2F;O 模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%A9%B1%E5%8A%A8-I-x2F-O-%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.4.</span> <span class="toc-text">信号驱动 I&#x2F;O 模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5-I-x2F-O-%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.5.</span> <span class="toc-text">异步 I&#x2F;O 模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%84-I-x2F-O-%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%AF%B9%E6%AF%94%E4%B8%8E%E6%80%BB%E7%BB%93"><span class="toc-number">1.2.6.</span> <span class="toc-text">各 I&#x2F;O 模型的对比与总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%98%93%E6%B7%B7%E6%B7%86%E6%A6%82%E5%BF%B5%E8%A7%A3%E9%87%8A"><span class="toc-number">1.3.</span> <span class="toc-text">易混淆概念解释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NIO-%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.4.</span> <span class="toc-text">NIO 介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%86%B2%E5%8C%BA%EF%BC%88Buffer%EF%BC%89"><span class="toc-number">1.4.1.</span> <span class="toc-text">缓冲区（Buffer）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E5%99%A8%EF%BC%88Selector%EF%BC%89"><span class="toc-number">1.4.2.</span> <span class="toc-text">选择器（Selector）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E9%81%93%EF%BC%88Channel%EF%BC%89"><span class="toc-number">1.4.3.</span> <span class="toc-text">通道（Channel）</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
