@@ -5,13 +5,13 @@
 <meta property="og:site_name" content="Devil的个人博客">
 <meta property="og:description" content="操作系统硬件结构该部分主要接收一些计算机中的硬件知识。 CPU 是如何执行程序的？冯诺依曼模型冯诺依曼模型定义了计算机基本结构的 5 个部分，分别是运算器、控制器、存储器、输入设备、输出设备。  运算器、控制器是在中央处理器里的，存储器就是我们常见的内存，输入输出设备则是计算机外接的设备，比如键盘、鼠标就是常见的输入设备，显示器、音响就是常见的输出设备。 存储单元和输入&#x2F;输出设备要与中央">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-28yzm9.jpg">
+<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-x87m9z.jpg">
 <meta property="article:published_time" content="2022-10-18T11:01:33.000Z">
-<meta property="article:modified_time" content="2022-11-01T13:26:04.604Z">
+<meta property="article:modified_time" content="2022-11-05T10:16:00.760Z">
 <meta property="article:author" content="Devil">
 <meta property="article:tag" content="操作系统">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-28yzm9.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2022/10/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-x87m9z.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2022/10/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
   root: '/',
   algolia: undefined,
   localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
@@ -53,7 +53,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2022-11-01 21:26:04'
+  postUpdate: '2022-11-05 18:16:00'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -143,7 +143,7 @@
     }
     detectApple()
     })(window)</script><link rel="stylesheet" href="/css/dyw.css"><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
-</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">84</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">32</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-28yzm9.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">操作系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-10-18T11:01:33.000Z" title="发表于 2022-10-18 19:01:33">2022-10-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-11-01T13:26:04.604Z" title="更新于 2022-11-01 21:26:04">2022-11-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="操作系统"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h1><h2 id="硬件结构"><a href="#硬件结构" class="headerlink" title="硬件结构"></a>硬件结构</h2><p>该部分主要接收一些计算机中的硬件知识。</p>
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">84</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">32</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-x87m9z.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">操作系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-10-18T11:01:33.000Z" title="发表于 2022-10-18 19:01:33">2022-10-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-11-05T10:16:00.760Z" title="更新于 2022-11-05 18:16:00">2022-11-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="操作系统"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h1><h2 id="硬件结构"><a href="#硬件结构" class="headerlink" title="硬件结构"></a>硬件结构</h2><p>该部分主要接收一些计算机中的硬件知识。</p>
 <h3 id="CPU-是如何执行程序的？"><a href="#CPU-是如何执行程序的？" class="headerlink" title="CPU 是如何执行程序的？"></a>CPU 是如何执行程序的？</h3><h4 id="冯诺依曼模型"><a href="#冯诺依曼模型" class="headerlink" title="冯诺依曼模型"></a>冯诺依曼模型</h4><p>冯诺依曼模型定义了计算机基本结构的 5 个部分，分别是<strong>运算器、控制器、存储器、输入设备、输出设备</strong>。</p>
 <p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Von_Neumann_architecture.svg" alt="img"></p>
 <p>运算器、控制器是在中央处理器里的，存储器就是我们常见的内存，输入输出设备则是计算机外接的设备，比如键盘、鼠标就是常见的输入设备，显示器、音响就是常见的输出设备。</p>
@@ -376,7 +376,254 @@
 <p><strong>因为硬盘的访问速度要比内存慢太多了</strong>，每一次内存交换，我们都需要把一大段连续的内存数据写到硬盘上。</p>
 <p>所以，<strong>如果内存交换的时候，交换的是一个占内存空间很大的程序，这样整个机器都会显得卡顿。</strong></p>
 <p>为了解决内存分段的<strong>「外部内存碎片和内存交换效率低」</strong>的问题，就出现了<strong>内存分页</strong>。</p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2022/10/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">https://devildyw.github.io/2022/10/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-28yzm9.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/10/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><img class="prev-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-3zzkdv.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">计算机网络</div></div></a></div><div class="next-post pull-right"><a href="/2022/10/06/%E3%80%8ANetty4%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E4%B8%8E%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6%E5%AE%9E%E6%88%98%E3%80%8B/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">《Netty4核心原理与手写RPC框架实战》</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">操作系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">硬件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU-%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F%E7%9A%84%EF%BC%9F"><span class="toc-number">1.1.1.</span> <span class="toc-text">CPU 是如何执行程序的？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%AF%E8%AF%BA%E4%BE%9D%E6%9B%BC%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">冯诺依曼模型</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">1.1.1.1.1.</span> <span class="toc-text">内存</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%AD%E5%A4%AE%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">1.1.1.1.2.</span> <span class="toc-text">中央处理器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%BB%E7%BA%BF"><span class="toc-number">1.1.1.1.3.</span> <span class="toc-text">总线</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BE%93%E5%85%A5-x2F-%E8%BE%93%E5%87%BA%E8%AE%BE%E5%A4%87"><span class="toc-number">1.1.1.1.4.</span> <span class="toc-text">输入&#x2F;输出设备</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E8%B7%AF%E4%BD%8D%E5%AE%BD%E4%B8%8E-CPU-%E4%BD%8D%E5%AE%BD"><span class="toc-number">1.1.2.</span> <span class="toc-text">线路位宽与 CPU 位宽</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%BF%87%E7%A8%8B"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">程序执行的基本过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#a-x3D-1-2-%E6%89%A7%E8%A1%8C%E5%85%B7%E4%BD%93%E8%BF%87%E7%A8%8B"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">a &#x3D; 1 + 2 执行具体过程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">操作系统结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8"><span class="toc-number">1.2.1.</span> <span class="toc-text">内核</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E7%9A%84%E8%83%BD%E5%8A%9B"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">内核的能力</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E6%80%8E%E6%A0%B7%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">内核怎样工作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux-%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.2.2.</span> <span class="toc-text">Linux 的设计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MultiTask-%E5%A4%9A%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">MultiTask 多任务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SMP-%E5%AF%B9%E7%A7%B0%E5%A4%9A%E5%A4%84%E7%90%86"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">SMP 对称多处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ELF"><span class="toc-number">1.2.2.3.</span> <span class="toc-text">ELF</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Monolithic-Kernel"><span class="toc-number">1.2.2.4.</span> <span class="toc-text">Monolithic Kernel</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.2.3.</span> <span class="toc-text">Windows 设计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">1.3.</span> <span class="toc-text">内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%EF%BC%9F"><span class="toc-number">1.3.1.</span> <span class="toc-text">为什么要有虚拟内存？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%EF%BC%9F"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">什么是虚拟内存？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E6%AE%B5"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">内存分段</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+<h4 id="内存分页"><a href="#内存分页" class="headerlink" title="内存分页"></a>内存分页</h4><p>上述我们已经讨论了分段的好处是能够产生连续的空间，但是会出现<strong>「外部内存碎片和内存交换的空间太大」</strong>的问题。</p>
+<p><strong>内存分页</strong>可以使内存碎片出现的更少，另外，当需要进行内存交换的时候，让需要交换写入或者从磁盘预装的数据更少一点。</p>
+<p><strong>分页是把整个虚拟和物理内存空间切成一段段固定尺寸的大小</strong>。这样一个连续并且尺寸固定的内存空间，我们叫<strong>页</strong>（<em>Page</em>）。在 Linux 下，每一页的大小为 <code>4KB</code>。</p>
+<p>虚拟地址与物理地址之间通过页表来映射，如图：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/08a8e315fedc4a858060db5cb4a654af.png" alt="img"></p>
+<p>页表是存储在<strong>内存</strong>里的，<strong>内存管理单元</strong>（<em>MMU</em>）就做将虚拟内存地址转换为物理地址的工作。</p>
+<blockquote>
+<p>当进程访问的虚拟地址在页表中查不到时，系统会产生一个<strong>缺页异常</strong>，进入系统<strong>内核空间</strong>分配物理内存、更新页表，最后再返回用户空间，恢复进程的运行。</p>
+</blockquote>
+<hr>
+<h5 id="分页是怎么解决分段的「外部内存碎片和内存交换效率低」的问题？"><a href="#分页是怎么解决分段的「外部内存碎片和内存交换效率低」的问题？" class="headerlink" title="分页是怎么解决分段的「外部内存碎片和内存交换效率低」的问题？"></a>分页是怎么解决分段的「外部内存碎片和内存交换效率低」的问题？</h5><p>内存分页由于内存空间都是预先分配好的，也就不会像内存分段一样，在段与段之间产生间隙非常小的内存，这正是分段会产生外部碎片的原因，而<strong>采用了分页，页与页之间是紧密排列的，所以不会有外部碎片。</strong></p>
+<p>但，由于内存分页机制分配内存的最小单位是一页，即使程序不足一页大小，我们还是最少只能分配一页所以会出现内存浪费的情况，所以<strong>内存分页会有内部内存碎片</strong>的情况。</p>
+<blockquote>
+<p>内存交换：如果内存空间不够，操作系统会把其他正在运行的进程中<strong>「最近没被使用」</strong>的内存页面给释放掉，将其暂时写入硬盘，称之为<strong>换出（Swap Out）</strong>。一旦需要的时候，再加载进来，成为<strong>换入（Swap In）</strong>。</p>
+</blockquote>
+<p>针对内存分页的内存交换，一次性写入磁盘的也只有少数的一个页或者几个页，<strong>相较于分段内存每次交换都是交换内存较大的段而言效率很高。</strong></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/388a29f45fe947e5a49240e4eff13538.png" alt="img"></p>
+<blockquote>
+<p>更进一步的，分页的方式使得我们在加载程序的时候，不再需要一次性都把程序加载到物理内存中。我们完全可以在进行虚拟内存和物理内存的页之间的映射之后，并不真的把页都加载到物理内存里，而是<strong>只在有程序运行中，需要用到对应的内存页里面的指令和数据时，再加载到物理内存里面去。</strong></p>
+</blockquote>
+<hr>
+<h5 id="分页机制下，虚拟地址和物理地址如何映射的？"><a href="#分页机制下，虚拟地址和物理地址如何映射的？" class="headerlink" title="分页机制下，虚拟地址和物理地址如何映射的？"></a>分页机制下，虚拟地址和物理地址如何映射的？</h5><p>先看下面的图：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/7884f4d8db4949f7a5bb4bbd0f452609.png" alt="img"></p>
+<p>在分页机制下，虚拟地址可以分为两个部分，<strong>页号和页内偏移</strong>。也好作为页表的索引，页表包含物理页每页所在物理内存的基地址，<strong>这个基地址与页内偏移组成就形成了物理内存地址。</strong></p>
+<blockquote>
+<p>内存地址转换三大步：</p>
+<ul>
+<li>把虚拟内存地址，切分为页号和偏移量；</li>
+<li>根据页号，从页表里面，查询对应的物理页号；</li>
+<li>直接拿物理页号，加上前面的偏移量，就得到了物理内存地址。</li>
+</ul>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/8f187878c809414ca2486b0b71e8880e.png" alt="img"></p>
+</blockquote>
+<hr>
+<h5 id="简单分页的缺陷"><a href="#简单分页的缺陷" class="headerlink" title="简单分页的缺陷"></a>简单分页的缺陷</h5><p>上述这种分页是简单的分页，有空间上的缺陷。</p>
+<blockquote>
+<p>每个进程都有自己的页表，存放在内存里。</p>
+</blockquote>
+<p>因为操作系统是可以同时运行非常多的进程的，那这不就意味着页表会非常的庞大。</p>
+<blockquote>
+<p>例如：在 32 位的环境下，虚拟地址空间共有 4GB，假设一个页的大小是 4KB（2^12），那么就需要大约 100 万 （2^20） 个页，每个「页表项」需要 4 个字节大小来存储，那么整个 4GB 空间的映射就需要有 <code>4MB</code> 的内存来存储页表。</p>
+<p>这 4MB 大小的页表，看起来也不是很大。<strong>但是要知道每个进程都是有自己的虚拟地址空间的，也就说都有自己的页表。</strong></p>
+<p>那么，<code>100</code> 个进程的话，就需要 <code>400MB</code> 的内存来存储页表，这是非常大的内存了，更别说 64 位的环境了。</p>
+</blockquote>
+<h4 id="多级分页"><a href="#多级分页" class="headerlink" title="多级分页"></a>多级分页</h4><p>为了解决简单分页上空间上的缺陷，就需要采用一种叫做<strong>多级页表（Multi-Level Page Table）</strong>的解决方案了。</p>
+<p>根据前面对于简单页表的缺陷分析，我们知道如果运行100个进程，那么一个进程的页表需要装下 100 多万个「页表项」，并且每个页表项是占用 4 字节大小的，于是相当于每个页表需占用 4MB 大小的空间。</p>
+<p>我们把这个 100 多万个「页表项」的单级页表再分页，将页表（一级页表）分为 <code>1024</code> 个页表（二级页表），每个表（二级页表）中包含 <code>1024</code> 个「页表项」，形成<strong>二级分页</strong>。如下图所示：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/19296e249b2240c29f9c52be70f611d5.png"></p>
+<blockquote>
+<p>你可能会问，分了二级表，映射 4GB 地址空间就需要 4KB（一级页表）+ 4MB（二级页表）的内存，这样占用空间不是更大了吗？</p>
+</blockquote>
+<p>当然如果 4GB 的虚拟地址全部都映射到了物理内存上的话，二级分页占用空间确实是更大了，但是，我们往往不会为一个进程分配那么多内存。</p>
+<p>其实我们应该换个角度来看问题，还记得计算机组成原理里面无处不在的<strong>局部性原理</strong>么？</p>
+<p>每个进程都有 4GB 的虚拟地址空间，而显然对于大多数程序来说，其使用到的空间远未达到 4GB，因为会存在部分对应的页表项都是空的，根本没有分配，对于已分配的页表项，如果存在最近一定时间未访问的页表，在物理内存紧张的情况下，操作系统会将页面换出到硬盘，也就是说不会占用物理内存。</p>
+<p>如果使用了二级分页，一级页表就可以覆盖整个 4GB 虚拟地址空间，但<strong>如果某个一级页表的页表项没有被用到，也就不需要创建这个页表项对应的二级页表了，即可以在需要时才创建二级页表</strong>。做个简单的计算，假设只有 20% 的一级页表项被用到了，那么页表占用的内存空间就只有 4KB（一级页表） + 20% * 4MB（二级页表）&#x3D; <code>0.804MB</code>，这对比单级页表的 <code>4MB</code> 是不是一个巨大的节约？</p>
+<p>那么为什么不分级的页表就做不到这样节约内存呢？</p>
+<p>我们从页表的性质来看，保存在内存中的页表承担的职责是将虚拟地址翻译成物理地址。假如虚拟地址在页表中找不到对应的页表项，计算机系统就不能工作了。所以<strong>页表一定要覆盖全部虚拟地址空间，不分级的页表就需要有 100 多万个页表项来映射，而二级分页则只需要 1024 个页表项</strong>（此时一级页表覆盖到了全部虚拟地址空间，二级页表在需要时创建）。</p>
+<p>我们把二级分页再推广到多级页表，就会发现页表占用的内存空间更少了，这一切都要归功于对局部性原理的充分应用。</p>
+<blockquote>
+<p>在一级页表中只有20%被用到了，在二级页表中也只有20%被用到了，在三级页表中。。。。。这样依次类推就是多级页表内存空间占用更少的原因。</p>
+</blockquote>
+<p>对于 64 位的系统，两级分页肯定不够了，就变成了四级目录，分别是：</p>
+<ul>
+<li>全局页目录项 PGD（<em>Page Global Directory</em>）；</li>
+<li>上层页目录项 PUD（<em>Page Upper Directory</em>）；</li>
+<li>中间页目录项 PMD（<em>Page Middle Directory</em>）；</li>
+<li>页表项 PTE（<em>Page Table Entry</em>）；</li>
+<li><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%9B%9B%E7%BA%A7%E5%88%86%E9%A1%B5.png" alt="img"></li>
+</ul>
+<h4 id="TLB"><a href="#TLB" class="headerlink" title="TLB"></a>TLB</h4><p>多级页表虽然解决了空间上的问题，但是虚拟地址到物理地址的转换就多了几道转换的工序，这显然就降低了这俩地址转换的速度，也就是带来了时间上的开销。</p>
+<p><strong>程序是有局部性的，即在一段时间内，整个程序的执行仅限于程序中的某一部分。相应地，执行所访问的存储空间也局限于某个内存区域。</strong></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/edce58534d9342ff89f5261b1929c754.png"></p>
+<p>我们就可以利用这一特性，把<strong>最常访问的几个页表项存储到访问速度更快的硬件</strong>，于是计算机科学家们，就在 CPU 芯片中，加入了一个专门存放程序最常访问的页表项的 Cache，这个 Cache 就是 <strong>TLB（<em>Translation Lookaside Buffer</em>）</strong> ，通常称为页表缓存、转址旁路缓存、快表等。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/a3cdf27646b24614a64cfc5d7ccffa35.png" alt="img"></p>
+<p>在 CPU 芯片里面，封装了内存管理单元（<em>Memory Management Unit</em>）芯片，它用来完成地址转换和 TLB 的访问与交互。</p>
+<p><strong>有了 TLB 后，那么 CPU 在寻址时，会先查 TLB，如果没找到，才会继续查常规的页表。</strong></p>
+<p><strong>TLB 的命中率其实是很高的，因为程序最常访问的页就那么几个。</strong></p>
+<hr>
+<h4 id="段页式内存管理"><a href="#段页式内存管理" class="headerlink" title="段页式内存管理"></a>段页式内存管理</h4><p>内存分段和内存分页是可以组合在一起使用的，通常称这种组合为<strong>段页式内存管理</strong>。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/f19ebd6f70f84083b0d87cc5e9dea8e3.png" alt="img"></p>
+<p>段页式内存管理实现的方式：</p>
+<ul>
+<li><strong>先将程序划分为多个有逻辑意义的段，也就是前面提到的分段机制；</strong></li>
+<li><strong>接着再把每个段划分为多个页，也就是对分段划分出来的连续空间，再划分固定大小的页；</strong></li>
+</ul>
+<p>这样，地址结构就由<strong>段号、段内页号和页内位移</strong>三部分组成。</p>
+<p>用于段页式地址变换的数据结构是每一个程序一张段表，每个段又建立一张页表，段表中的地址是页表的起始地址，而页表中的地址则为某页的物理页号，如图所示：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/8904fb89ae0c49c4b0f2f7b5a0a7b099.png" alt="img"></p>
+<blockquote>
+<p>段页式地址变换中要得到物理地址需要经过三次内存访问：</p>
+<ul>
+<li>第一次访问段表，得到页表其实位置</li>
+<li>第二次访问页表，得到物理页号</li>
+<li>第三次将物理页号与页内位移组合，得到物理地址。</li>
+</ul>
+<p><strong>可用软、硬件相结合的方法实现段页式地址变换，这样虽然增加了硬件成本和系统开销，但提高了内存的利用率。</strong></p>
+</blockquote>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>虚拟内存的作用：</p>
+<ul>
+<li>第一，虚拟内存可以使得进程对运行内存超过物理内存大小，因为程序运行符合局部性原理，CPU 访问内存会有很明显的重复访问的倾向性，对于那些没有被经常使用到的内存，我们可以把它换出到物理内存之外，比如硬盘上的 swap 区域。</li>
+<li>第二，由于每个进程都有自己的页表，所以每个进程的虚拟内存空间就是相互独立的。进程也没有办法访问其他进程的页表，所以这些页表是私有的，这就解决了多进程之间地址冲突的问题。</li>
+<li>第三，页表里的页表项中除了物理地址之外，还有一些标记属性的比特，比如控制一个页的读写权限，标记该页是否存在等。在内存访问方面，操作系统提供了更好的安全性。</li>
+</ul>
+<hr>
+<h3 id="系统内存紧张时，会发生什么？"><a href="#系统内存紧张时，会发生什么？" class="headerlink" title="系统内存紧张时，会发生什么？"></a><strong>系统内存紧张时，会发生什么？</strong></h3><blockquote>
+<p>当应用程序通过 <code>malloc</code> 函数申请内存时，实际上申请的是虚拟内存，此时并不会分配物理内存。</p>
+</blockquote>
+<p>当应用程序读写了这块虚拟内存，CPU 就会去访问这个虚拟内存，这时会发现这个虚拟内存没有映射到物理内存，CPU 就会产生<strong>缺页中断</strong>，进程会从用户态切换到内核态，并将缺页交给内核的 <strong>Page Fault Handler （缺页中断函数）</strong>处理。</p>
+<p>缺页中断函数，会判断当前是否还有空闲的物理内存，如果有，直接分配，并建立与虚拟内存与物理内存之间的关系。</p>
+<p>如果没有，那么内核就会开始进行内存回收的工作，回收的方式主要有两种：<strong>直接内存回收和后台内存回收。</strong></p>
+<ul>
+<li><strong>后台内存回收</strong>（<code>kswapd</code>）：在物理内存紧张的时候，会唤醒 <code>kswapd</code> 内核线程来回收内存，这个回收内存的过程<strong>异步</strong>的，不会阻塞进程的执行。</li>
+<li><strong>直接内存回收</strong>（<code>direct reclaim</code>）：如果后台异步回收跟不上进程内存申请的速度，就会开始直接回收，这个回收内存的过程是<strong>同步</strong>的，会阻塞进程的执行。</li>
+</ul>
+<blockquote>
+<p>这里的阻塞是针对申请内存的进程</p>
+</blockquote>
+<p>如果<strong>直接内存回收后</strong>，空闲的物理内存仍然无法满足此次物理内存的申请，那么内核就会放最后的大招了 ——<strong>触发 OOM （Out of Memory）机制</strong>。</p>
+<p><strong>机制讲解</strong>：OOM Killer 机制会根据算法选择一个<strong>占用物理内存较高</strong>的进程，然后将其杀死，以便释放内存资源，<strong>如果物理内存依然不足</strong>，OOM Killer 会<strong>继续</strong>杀死占用物理内存较高的进程，直到释放足够的内存位置。</p>
+<blockquote>
+<p>优先级：后台内存回收 &gt; 直接内存回收 &gt; OOM 机制</p>
+</blockquote>
+<p>申请物理内存的过程如下图：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/2f61b0822b3c4a359f99770231981b07.png" alt="img"></p>
+<h4 id="那些内存可以被回收？"><a href="#那些内存可以被回收？" class="headerlink" title="那些内存可以被回收？"></a>那些内存可以被回收？</h4><p>主要有两类可以被回收，它们的回收方式也不同。</p>
+<ul>
+<li><strong>文件页</strong>（File-backed Page）：<strong>内核缓存的磁盘数据（Buffer）和内核缓存的文件数据（Cache）都叫作文件页</strong>。大部分文件页，都可以直接释放内存，以后有需要时，再从磁盘重新读取就可以了。而那些被应用程序修改过，并且暂时还没写入磁盘的数据（也就是脏页），就得先写入磁盘，然后才能进行内存释放。所以，<strong>回收干净页的方式是直接释放内存，回收脏页的方式是先写回磁盘后再释放内存</strong>。</li>
+<li><strong>匿名页</strong>（Anonymous Page）：这部分内存没有实际载体，不像文件缓存有硬盘文件这样一个载体，比如<strong>堆、栈数据</strong>等。这部分内存很可能还要再次被访问，所以不能直接释放内存，它们<strong>回收的方式是通过 Linux 的 Swap 机制</strong>，Swap 会把不常访问的内存先写到磁盘中，然后释放这些内存，给其他更需要的进程使用。再次访问这些内存时，重新从磁盘读入内存就可以了。</li>
+</ul>
+<p>文件页和匿名页的回收都是基于 LRU 算法，也就是<strong>优先回收不常访问的内存</strong>。LRU 回收算法，实际上维护着 active 和 inactive 两个双向链表，其中：</p>
+<ul>
+<li><strong>active_list</strong> 活跃内存页链表，这里存放的是最近被访问过（活跃）的内存页；</li>
+<li><strong>inactive_list</strong> 不活跃内存页链表，这里存放的是很少被访问（非活跃）的内存页；</li>
+</ul>
+<p><strong>越接近链表尾部，就表示内存页越不常访问</strong>。这样，在回收内存时，系统就可以根据活跃程度，优先回收不活跃的内存。</p>
+<p><strong>活跃和非活跃的内存页，按照类型的不同，又分别分为文件页和匿名页。</strong>可以从 &#x2F;proc&#x2F;meminfo 中，查询它们的大小，比如：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">grep表示只保留包含active的指标（忽略大小写）</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash"><span class="built_in">sort</span>表示按照字母顺序排序</span></span><br><span class="line">[root@xiaolin ~]# cat /proc/meminfo | grep -i active | sort</span><br><span class="line">Active:           901456 kB</span><br><span class="line">Active(anon):     227252 kB</span><br><span class="line">Active(file):     674204 kB</span><br><span class="line">Inactive:         226232 kB</span><br><span class="line">Inactive(anon):    41948 kB</span><br><span class="line">Inactive(file):   184284 kB</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="回收带来的性能影响"><a href="#回收带来的性能影响" class="headerlink" title="回收带来的性能影响"></a>回收带来的性能影响</h4><p>根据回收机制来说：</p>
+<ul>
+<li>后台内存回收，唤醒 kswaped 内核线程，这种方式是异步回收，不会阻塞进程，性能较好。</li>
+<li>直接内存回收，这种方式是同步回收的，会阻塞进程，这样就会造成很长时间的延迟，以及系统 CPU 利用率会升高，最终引起系统负荷飙高。</li>
+</ul>
+<p>根据可被回收的内存类型来说：</p>
+<ul>
+<li>文件页的回收：对于干净页是直接释放内存，这个操作不会影响性能，而对于脏页会先写到磁盘再释放内存，这个操作会发生磁盘 I&#x2F;O 的，所以脏页的回收是会影响系统性能的。</li>
+<li>匿名页的回收：如果开启了 Swap 机制，那么 Swap 机制会将不常访问的匿名页换出到磁盘中，下次访问时，再从磁盘换出到内存中，这个操作是会影响系统性能的（磁盘 I&#x2F;O）。</li>
+</ul>
+<p>可以看到，回收内存的操作基本都会发生磁盘 I&#x2F;O 的，如果回收内存的操作很频繁，意味着磁盘 I&#x2F;O 次数会很多，这个过程势必会影响系统的性能。</p>
+<p>既然频繁的内存回收会影响性能，那下面介绍几个常见的解决方式。</p>
+<h5 id="调整文件页和匿名页的回收倾向"><a href="#调整文件页和匿名页的回收倾向" class="headerlink" title="调整文件页和匿名页的回收倾向"></a>调整文件页和匿名页的回收倾向</h5><p>从上述性能分析来看，文件页的回收操作对系统的影响相比匿名页的回收操作会少一点，因为文件页对于干净页来看是不会发生磁盘 I&#x2F;O，而匿名页的 Swap 换入换出这两个操作都会发生磁盘 I&#x2F;O。</p>
+<p>Linux 提供了一个 <code>/proc/sys/vm/swappiness</code> 选项，用来调整文件页和匿名页的回收倾向。</p>
+<p>swappiness 的范围是 0-100，数值越大，越积极使用 Swap，也就是更倾向于回收匿名页；数值越小，越消极使用 Swap，也就是更倾向于回收文件页。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@xiaolin ~]# cat /proc/sys/vm/swappiness</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
+<p>一般建议 swappiness 设置为 0（默认值是 60），这样在回收内存的时候，<strong>会更倾向于文件页的回收，但是并不代表不会回收匿名页。</strong></p>
+<hr>
+<h5 id="尽早触发-kswapd-内核线程异步回收内存"><a href="#尽早触发-kswapd-内核线程异步回收内存" class="headerlink" title="尽早触发 kswapd 内核线程异步回收内存"></a>尽早触发 kswapd 内核线程异步回收内存</h5><blockquote>
+<p>如何查看系统的直接内存回收和后台内存回收的指标？</p>
+</blockquote>
+<p>我们可以使用 <code>sar -B 1</code> 来观察：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20221105174012664.png" alt="image-20221105174012664"></p>
+<blockquote>
+<p>如果输入命令后 <code>not found commnd!</code> , 可能是系统没有安装这个工具，centOS 下 sar 工具命令为 :</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="language-bash">CentOS</span></span><br><span class="line">yum install sysstat</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>图中红色框住的就是后台内存回收和直接内存回收的指标，它们分别表示：</p>
+<ul>
+<li><strong>pgscank&#x2F;s : kswapd(后台回收线程) 每秒扫描的 page 个数。</strong></li>
+<li><strong>pgscand&#x2F;s: 应用程序在内存申请过程中每秒直接扫描的 page 个数。</strong></li>
+<li><strong>pgsteal&#x2F;s: 扫描的 page 中每秒被回收的个数（pgscank+pgscand）。</strong></li>
+</ul>
+<blockquote>
+<p>如果系统时不时发生抖动，并且在抖动的时间段里如果通过 sar -B 观察到 pgscand 数值很大，那大概率是因为「直接内存回收」导致的。</p>
+<p>针对这个问题，解决的办法就是，<strong>可以通过尽早的触发「后台内存回收」来避免应用程序进行直接内存回收。</strong></p>
+</blockquote>
+<blockquote>
+<p>什么条件下才能触发 kswapd 内核线程回收内存呢？</p>
+</blockquote>
+<p>内核定义了三个内存阈值（watermark，也称为水位），用来衡量当前剩余内存（pages_free）是否充裕或者紧张，分别是：</p>
+<ul>
+<li><strong>页最小阈值（pages_min）；</strong></li>
+<li><strong>页低阈值（pages_low）；</strong></li>
+<li><strong>页高阈值（pages_high）；</strong></li>
+</ul>
+<p>这三个内存阈值会划分为四种内存使用情况，如下图：</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/166bc9f5b7c545d89f1e36ab8dd772cf.png" alt="img"></p>
+<p>kswapd 会定期扫描内存的使用情况，根据剩余内存（pages_free）的情况来进行内存回收的工作。</p>
+<ul>
+<li>图中绿色部分：如果剩余内存（pages_free）大于 页高阈值（pages_high），说明剩余内存是充足的；</li>
+<li>图中蓝色部分：如果剩余内存（pages_free）在页高阈值（pages_high）和页低阈值（pages_low）之间，说明内存有一定压力，但还可以满足应用程序申请内存的请求；</li>
+<li>图中橙色部分：如果剩余内存（pages_free）在页低阈值（pages_low）和页最小阈值（pages_min）之间，说明内存压力比较大，剩余内存不多了。<strong>这时 kswapd0 会执行内存回收，直到剩余内存大于高阈值（pages_high）为止</strong>。虽然会触发内存回收，但是不会阻塞应用程序，因为两者关系是异步的。</li>
+<li>图中红色部分：如果剩余内存（pages_free）小于页最小阈值（pages_min），说明用户可用内存都耗尽了，此时就会<strong>触发直接内存回收</strong>，这时应用程序就会被阻塞，因为两者关系是同步的。</li>
+</ul>
+<p>可以看到，当<strong>剩余内存页（pages_free） 小于页低阈值（pages_lows）</strong>，就会触发 kswapd 进行后台回收，然后 kswapd 会<strong>一直回收到剩余内存页（pages_free）大于页高阈值（pages_high）</strong>。</p>
+<p>也就是说 kswapd 的活动空间只有 pages_low 与 pages_min 之间的这段区域，如果剩余内存低于了 pages_min 会触发直接内存回收，高于了 pages_high 又不会唤醒 kswapd。</p>
+<p>页低阈值（pages_low）可以通过内核选项 <code>/proc/sys/vm/min_free_kbytes</code> （该参数代表系统所保留空闲内存的最低限）来间接设置。</p>
+<p>min_free_kbytes 虽然设置的是页最小阈值（pages_min），但是页高阈值（pages_high）和页低阈值（pages_low）都是根据页最小阈值（pages_min）计算生成的，它们之间的计算关系如下：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">pages_min = min_free_kbytes</span><br><span class="line">pages_low = pages_min*5/4</span><br><span class="line">pages_high = pages_min*3/2</span><br></pre></td></tr></table></figure>
+
+<p>如果系统时不时发生抖动，并且通过 sar -B 观察到 pgscand 数值很大，那大概率是因为直接内存回收导致的，这时可以<strong>增大 min_free_kbytes 这个配置选项来及早地触发后台回收</strong>，然后继续观察 pgscand 是否会降为 0。</p>
+<p><strong>增大了 min_free_kbytes 配置后</strong>，这会使得系统预留过多的空闲内存，从而在一定程度上降低了应用程序可使用的内存量，这在<strong>一定程度上浪费了内存</strong>。<strong>极端情况下设置 min_free_kbytes 接近实际物理内存大小时</strong>，留给应用程序的内存就会太少而<strong>可能会频繁地导致 OOM 的发生</strong>。</p>
+<p><strong>所以在调整 min_free_kbytes 之前，需要先思考一下，应用程序更加关注什么，如果关注延迟那就适当地增大 min_free_kbytes，如果关注内存的使用量那就适当地调小 min_free_kbytes。</strong></p>
+<hr>
+<h5 id="NUMA-架构下的内存回收策略"><a href="#NUMA-架构下的内存回收策略" class="headerlink" title="NUMA 架构下的内存回收策略"></a>NUMA 架构下的内存回收策略</h5><blockquote>
+<p>什么是 NUMA 架构？</p>
+<p>SMP 指的是一种<strong>多个 CPU 处理器共享资源的电脑硬件架构</strong>，也就是说每个 CPU 地位平等，它们共享相同的物理资源，包括总线、内存、IO、操作系统等。每个 CPU 访问内存所用时间都是相同的，因此，这种系统也被称为一致存储访问结构（UMA，Uniform Memory Access）。</p>
+<p>随着 CPU 处理器核数的增多，多个 CPU 都通过一个总线访问内存，这样总线的带宽压力会越来越大，同时每个 CPU 可用带宽会减少，这也就是 SMP 架构的问题。</p>
+</blockquote>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/feec409868070d8cd79aecad2895b531.png" alt="SMP 与 NUMA 架构"></p>
+<p>为了解决 SMP 架构的问题，就研制出了 NUMA 结构，即<strong>非一致存储访问结构（Non-uniform memory access，NUMA）。</strong></p>
+<p>NUMA 架构将每个 CPU 进行了分组，每一组 CPU 用 Node 来表示，一个 Node 可能包含多个 CPU 。</p>
+<p><strong>每个 Node 有自己独立的资源，包括内存、IO 等</strong>，每个 Node 之间可以通过互联模块总线（QPI）进行通信，所以，也就意味着每个 Node 上的 CPU 都可以访问到整个系统中的所有内存。但是，访问远端 Node 的内存比访问本地内存要耗时很多。</p>
+<blockquote>
+<p>NUMA 架构跟回收内存有什么关系？</p>
+</blockquote>
+<p>在 NUMA 架构下，当某个 Node 内存不足时，系统可以从其他 Node 寻找空闲内存，也可以从本地内存中回收内存。</p>
+<p>具体选哪种模式，可以通过 &#x2F;proc&#x2F;sys&#x2F;vm&#x2F;zone_reclaim_mode 来控制。它支持以下几个选项：</p>
+<ul>
+<li>0 （默认值）：在回收本地内存之前，在其他 Node 寻找空闲内存；</li>
+<li>1：只回收本地内存；</li>
+<li>2：只回收本地内存，在本地回收内存时，可以将文件页中的脏页写回硬盘，以回收内存。</li>
+<li>4：只回收本地内存，在本地回收内存时，可以用 swap 方式回收内存。</li>
+</ul>
+<p>在使用 NUMA 架构的服务器，如果系统出现还有一半内存的时候，却发现系统频繁触发「直接内存回收」，导致了影响了系统性能，那么大概率是因为 zone_reclaim_mode 没有设置为 0 ，导致当本地内存不足的时候，只选择回收本地内存的方式，而不去使用其他 Node 的空闲内存。</p>
+<p>虽然说访问远端 Node 的内存比访问本地内存要耗时很多，但是相比内存回收的危害而言，访问远端 Node 的内存带来的性能影响还是比较小的。因此，<strong>zone_reclaim_mode 一般建议设置为 0。</strong></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20221105181039326.png" alt="image-20221105181039326"></p>
+<h4 id="如何保护一个进程不被-OOM-杀掉呢"><a href="#如何保护一个进程不被-OOM-杀掉呢" class="headerlink" title="如何保护一个进程不被 OOM 杀掉呢"></a>如何保护一个进程不被 OOM 杀掉呢</h4><p>在系统空闲内存不足的情况，进程申请了 一个很大的内存，如果直接回收都无法回收出足够大的内存，那么就会会触发 <code>OOM</code> 机制，内核就会根据算法选择一个进程杀掉（可能和手机系统的杀后台差不多）。</p>
+<p>这就要提到一个在 Linux 内核里有一个 <code>oom_badness()</code> 函数，它会把系统中可以被杀掉的进程扫描一遍，并对每个进程打分，得分最高的进程就会被首先杀掉。</p>
+<p>进程得分的结果受下面这两个方面影响：</p>
+<ul>
+<li>第一，进程已经使用的物理内存页面数。</li>
+<li>第二，每个进程的 <code>OOM</code> 校准值 <code>oom_score_adj</code>。它是可以通过 <code>/proc/[pid]/oom_score_adj</code> 来配置的。我们可以在设置 -1000 到 1000 之间的任意一个数值，调整进程被 <code>OOM</code> Kill 的几率。</li>
+</ul>
+<p>函数 <code>oom_badness()</code> 里的最终计算方法是这样的：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// points 代表打分的结果</span></span><br><span class="line"><span class="comment">// process_pages 代表进程已经使用的物理内存页面数</span></span><br><span class="line"><span class="comment">// oom_score_adj 代表 OOM 校准值</span></span><br><span class="line"><span class="comment">// totalpages 代表系统总的可用页面数</span></span><br><span class="line">points = process_pages + oom_score_adj*totalpages/<span class="number">1000</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>用「系统总的可用页面数」乘以 「<code>OOM</code> 校准值 <code>oom_score_adj</code>」再除以 1000，最后再加上进程已经使用的物理页面数，计算出来的值越大，那么这个进程被 <code>OOM</code> Kill 的几率也就越大</strong>。</p>
+<p>每个进程的 <code>oom_score_adj</code> 默认值都为 0，所以最终得分跟进程自身消耗的内存有关，消耗的内存越大越容易被杀掉。我们可以通过调整 <code>oom_score_adj</code> 的数值，来改成进程的得分结果：</p>
+<ul>
+<li>如果你不想某个进程被首先杀掉，那你可以调整该进程的 <code>oom_score_adj</code>，从而改变这个进程的得分结果，降低该进程被 <code>OOM</code> 杀死的概率。</li>
+<li><strong>如果你想某个进程无论如何都不能被杀掉，那你可以将 <code>oom_score_adj</code> 配置为 -1000。</strong></li>
+</ul>
+<p>我们最好将一些很重要的系统服务的 <code>oom_score_adj</code> 配置为 -1000，比如 <code>sshd</code>，因为这些系统服务一旦被杀掉，我们就很难再登陆进系统了。</p>
+<p><strong>注意</strong>：但是，不建议将我们自己的业务程序的 <code>oom_score_adj</code> 设置为 -1000，因为业务程序一旦发生了内存泄漏，而它又不能被杀掉，这就会导致随着它的内存开销变大，<code>OOM</code> killer 不停地被唤醒，从而把其他进程一个个给杀掉。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2022/10/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">https://devildyw.github.io/2022/10/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-x87m9z.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/10/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><img class="prev-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-3zzkdv.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">计算机网络</div></div></a></div><div class="next-post pull-right"><a href="/2022/10/06/%E3%80%8ANetty4%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E4%B8%8E%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6%E5%AE%9E%E6%88%98%E3%80%8B/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">《Netty4核心原理与手写RPC框架实战》</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">操作系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">硬件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU-%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F%E7%9A%84%EF%BC%9F"><span class="toc-number">1.1.1.</span> <span class="toc-text">CPU 是如何执行程序的？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%AF%E8%AF%BA%E4%BE%9D%E6%9B%BC%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">冯诺依曼模型</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">1.1.1.1.1.</span> <span class="toc-text">内存</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%AD%E5%A4%AE%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">1.1.1.1.2.</span> <span class="toc-text">中央处理器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%BB%E7%BA%BF"><span class="toc-number">1.1.1.1.3.</span> <span class="toc-text">总线</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BE%93%E5%85%A5-x2F-%E8%BE%93%E5%87%BA%E8%AE%BE%E5%A4%87"><span class="toc-number">1.1.1.1.4.</span> <span class="toc-text">输入&#x2F;输出设备</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E8%B7%AF%E4%BD%8D%E5%AE%BD%E4%B8%8E-CPU-%E4%BD%8D%E5%AE%BD"><span class="toc-number">1.1.2.</span> <span class="toc-text">线路位宽与 CPU 位宽</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%BF%87%E7%A8%8B"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">程序执行的基本过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#a-x3D-1-2-%E6%89%A7%E8%A1%8C%E5%85%B7%E4%BD%93%E8%BF%87%E7%A8%8B"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">a &#x3D; 1 + 2 执行具体过程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">操作系统结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8"><span class="toc-number">1.2.1.</span> <span class="toc-text">内核</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E7%9A%84%E8%83%BD%E5%8A%9B"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">内核的能力</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E6%80%8E%E6%A0%B7%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">内核怎样工作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux-%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.2.2.</span> <span class="toc-text">Linux 的设计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MultiTask-%E5%A4%9A%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">MultiTask 多任务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SMP-%E5%AF%B9%E7%A7%B0%E5%A4%9A%E5%A4%84%E7%90%86"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">SMP 对称多处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ELF"><span class="toc-number">1.2.2.3.</span> <span class="toc-text">ELF</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Monolithic-Kernel"><span class="toc-number">1.2.2.4.</span> <span class="toc-text">Monolithic Kernel</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.2.3.</span> <span class="toc-text">Windows 设计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">1.3.</span> <span class="toc-text">内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%EF%BC%9F"><span class="toc-number">1.3.1.</span> <span class="toc-text">为什么要有虚拟内存？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%EF%BC%9F"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">什么是虚拟内存？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E6%AE%B5"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">内存分段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5"><span class="toc-number">1.3.1.3.</span> <span class="toc-text">内存分页</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%86%E9%A1%B5%E6%98%AF%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3%E5%88%86%E6%AE%B5%E7%9A%84%E3%80%8C%E5%A4%96%E9%83%A8%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87%E5%92%8C%E5%86%85%E5%AD%98%E4%BA%A4%E6%8D%A2%E6%95%88%E7%8E%87%E4%BD%8E%E3%80%8D%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">1.3.1.3.1.</span> <span class="toc-text">分页是怎么解决分段的「外部内存碎片和内存交换效率低」的问题？</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6%E4%B8%8B%EF%BC%8C%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E5%92%8C%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E5%A6%82%E4%BD%95%E6%98%A0%E5%B0%84%E7%9A%84%EF%BC%9F"><span class="toc-number">1.3.1.3.2.</span> <span class="toc-text">分页机制下，虚拟地址和物理地址如何映射的？</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E5%88%86%E9%A1%B5%E7%9A%84%E7%BC%BA%E9%99%B7"><span class="toc-number">1.3.1.3.3.</span> <span class="toc-text">简单分页的缺陷</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E7%BA%A7%E5%88%86%E9%A1%B5"><span class="toc-number">1.3.1.4.</span> <span class="toc-text">多级分页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TLB"><span class="toc-number">1.3.1.5.</span> <span class="toc-text">TLB</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AE%B5%E9%A1%B5%E5%BC%8F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">1.3.1.6.</span> <span class="toc-text">段页式内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.1.6.1.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%86%85%E5%AD%98%E7%B4%A7%E5%BC%A0%E6%97%B6%EF%BC%8C%E4%BC%9A%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.3.2.</span> <span class="toc-text">系统内存紧张时，会发生什么？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%82%A3%E4%BA%9B%E5%86%85%E5%AD%98%E5%8F%AF%E4%BB%A5%E8%A2%AB%E5%9B%9E%E6%94%B6%EF%BC%9F"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">那些内存可以被回收？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9E%E6%94%B6%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%80%A7%E8%83%BD%E5%BD%B1%E5%93%8D"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">回收带来的性能影响</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E6%96%87%E4%BB%B6%E9%A1%B5%E5%92%8C%E5%8C%BF%E5%90%8D%E9%A1%B5%E7%9A%84%E5%9B%9E%E6%94%B6%E5%80%BE%E5%90%91"><span class="toc-number">1.3.2.2.1.</span> <span class="toc-text">调整文件页和匿名页的回收倾向</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B0%BD%E6%97%A9%E8%A7%A6%E5%8F%91-kswapd-%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B%E5%BC%82%E6%AD%A5%E5%9B%9E%E6%94%B6%E5%86%85%E5%AD%98"><span class="toc-number">1.3.2.2.2.</span> <span class="toc-text">尽早触发 kswapd 内核线程异步回收内存</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NUMA-%E6%9E%B6%E6%9E%84%E4%B8%8B%E7%9A%84%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6%E7%AD%96%E7%95%A5"><span class="toc-number">1.3.2.2.3.</span> <span class="toc-text">NUMA 架构下的内存回收策略</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8A%A4%E4%B8%80%E4%B8%AA%E8%BF%9B%E7%A8%8B%E4%B8%8D%E8%A2%AB-OOM-%E6%9D%80%E6%8E%89%E5%91%A2"><span class="toc-number">1.3.2.3.</span> <span class="toc-text">如何保护一个进程不被 OOM 杀掉呢</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
   endLoading: () => {
     document.body.style.overflow = 'auto';
     document.getElementById('loading-box').classList.add("loaded")
