@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://devildyw.github.io/2022/10/25/Netty/</loc>
+    
+    <lastmod>2022-11-08T10:09:30.952Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://devildyw.github.io/2022/10/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</loc>
     
     <lastmod>2022-11-06T10:53:20.335Z</lastmod>
@@ -19,13 +26,6 @@
     <loc>https://devildyw.github.io/2022/10/25/NIO/</loc>
     
     <lastmod>2022-10-26T07:59:51.994Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://devildyw.github.io/2022/10/25/Netty/</loc>
-    
-    <lastmod>2022-10-25T09:14:26.601Z</lastmod>
     
   </url>
   
