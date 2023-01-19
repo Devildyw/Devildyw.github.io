@@ -1,0 +1,547 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Cache缓存 | Devil的个人博客</title><meta name="keywords" content="Developer"><meta name="author" content="Devil"><meta name="copyright" content="Devil"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Cache缓存1. 缓存为了系统性能的提升，我们一般都会将部分数据放入缓存中，加速访问。而 db 承担数据落盘工作。 哪些数据适合放入缓存？  即时性、数据一致性要求不高的 访问量大且更新频率不高的数据（读多，写少）  举例：电商类应用，商品分类，商品列表等适合缓存并加一个失效时间(根据数据更新频率来定)，后台如果发布一个商品，买家需要 5 分钟才能看到新的商品一般还是可以接受的。  伪代码如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cache缓存">
+<meta property="og:url" content="https://devildyw.github.io/2023/01/19/Cache%E7%BC%93%E5%AD%98/index.html">
+<meta property="og:site_name" content="Devil的个人博客">
+<meta property="og:description" content="Cache缓存1. 缓存为了系统性能的提升，我们一般都会将部分数据放入缓存中，加速访问。而 db 承担数据落盘工作。 哪些数据适合放入缓存？  即时性、数据一致性要求不高的 访问量大且更新频率不高的数据（读多，写少）  举例：电商类应用，商品分类，商品列表等适合缓存并加一个失效时间(根据数据更新频率来定)，后台如果发布一个商品，买家需要 5 分钟才能看到新的商品一般还是可以接受的。  伪代码如下：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-1k2zgg.jpg">
+<meta property="article:published_time" content="2023-01-19T10:38:33.000Z">
+<meta property="article:modified_time" content="2023-01-19T10:44:42.666Z">
+<meta property="article:author" content="Devil">
+<meta property="article:tag" content="Developer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-1k2zgg.jpg"><link rel="shortcut icon" href="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/favicon.png"><link rel="canonical" href="https://devildyw.github.io/2023/01/19/Cache%E7%BC%93%E5%AD%98/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Cache缓存',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-01-19 18:44:42'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/dyw.css"><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="Devil的个人博客" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/avatar.png" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">87</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">32</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-1k2zgg.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Devil的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> 自我介绍</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Cache缓存</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-01-19T10:38:33.000Z" title="发表于 2023-01-19 18:38:33">2023-01-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-01-19T10:44:42.666Z" title="更新于 2023-01-19 18:44:42">2023-01-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/">开发规范</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Cache缓存"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Cache缓存"><a href="#Cache缓存" class="headerlink" title="Cache缓存"></a>Cache缓存</h1><h1 id="1-缓存"><a href="#1-缓存" class="headerlink" title="1. 缓存"></a>1. 缓存</h1><p>为了系统性能的提升，我们一般都会将部分数据放入缓存中，加速访问。而 db 承担数据落盘工作。</p>
+<p><strong>哪些数据适合放入缓存？</strong></p>
+<ul>
+<li><strong>即时性、数据一致性要求不高的</strong></li>
+<li><strong>访问量大且更新频率不高的数据（读多，写少）</strong></li>
+</ul>
+<p>举例：电商类应用，商品分类，商品列表等适合缓存并加一个失效时间(根据数据更新频率来定)，后台如果发布一个商品，买家需要 5 分钟才能看到新的商品一般还是可以接受的。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20230115131144886.png" alt="image-20230115131144886"></p>
+<p>伪代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">data = cache.load(id);<span class="comment">//从缓存加载数据</span></span><br><span class="line">If(data == <span class="literal">null</span>)&#123;</span><br><span class="line">data = db.load(id);<span class="comment">//从数据库加载数据</span></span><br><span class="line">cache.put(id,data);<span class="comment">//保存到 cache 中</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> data;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>注意：</strong>在开发中，<strong>凡是放入缓存中的数据我们都应该指定过期时间</strong>，使其可以在系统即使没有主动更新数据也能自动触发数据加载进缓存的流程。避免业务崩溃导致的数据永久不一致问题。</p>
+</blockquote>
+<h2 id="1-1-使用-Redis-作为缓存"><a href="#1-1-使用-Redis-作为缓存" class="headerlink" title="1.1 使用 Redis 作为缓存"></a>1.1 使用 Redis 作为缓存</h2><p>使用 <code>redis</code> 作为缓存可以大大减小对磁盘的压力，以及提升系统的性能，将那些读多写少且构建起来耗时的数据存入 <code>redis</code> 中作为缓存。</p>
+<h3 id="1-1-2-导入依赖"><a href="#1-1-2-导入依赖" class="headerlink" title="1.1.2 导入依赖"></a>1.1.2 导入依赖</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-redis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>因为 Redis 是一个操作内存的 <code>nosql</code>，所以我们所作的缓存操作，无非就是将缓存数据存入  <code>redis</code>。</p>
+<ul>
+<li>对于查询出的结果，我们将其放入缓存中，并设置过期时间</li>
+<li>对于修改的数据，我们可以先将其在数据库中修改，再将结果写入缓存；也可以修改数据库后，将缓存中的旧数据删除。来达到数据库数据与缓存中的数据的一致性。</li>
+</ul>
+<h1 id="2-缓存失效问题"><a href="#2-缓存失效问题" class="headerlink" title="2. 缓存失效问题"></a>2. 缓存失效问题</h1><p>在学习缓存相关知识之前，先了解在大并发情况下的缓存失效问题；</p>
+<h2 id="2-1-缓存穿透"><a href="#2-1-缓存穿透" class="headerlink" title="2.1 缓存穿透"></a>2.1 缓存穿透</h2><ul>
+<li><p><strong>缓存穿透</strong>是指<strong>查询一个一定不存在的数据</strong>，由于缓存是不命中，将去查询数据库，但是数据库也无此记录，我们没有将这次查询的 null 写入缓存，这将导致这个不存在的数据每次请求都要到存储层去查询，失去了缓存的意义。</p>
+</li>
+<li><p><strong>不存在的数据在数据库中查询对于数据库来说是会遍历全部数据然后返回NULL这对数据库的压力很大。</strong>在流量大时，可能 DB 就挂掉了，要是有人利用不存在的 key 频繁攻击我们的应用，这就是漏洞。<img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220311161920235.png" alt="image-20220311161920235"></p>
+</li>
+<li><p><strong>解决方案</strong></p>
+<ul>
+<li><p><strong>缓存空对象</strong></p>
+<ul>
+<li>优点: 实现简单,维护方便</li>
+<li>缺点:<ul>
+<li>额外的内存消耗(一般设置过期时间,且过期时间较短)</li>
+<li>可能造成短期的不一致(此时新增一条该key对应的数据,但是在TTL结束前,查询到的都是NULL 造成短期不一致)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>布隆过滤器</strong></p>
+<ul>
+<li><p>优点：内存占用较少，没有多余key</p>
+</li>
+<li><p>缺点：</p>
+<ul>
+<li>实现复杂</li>
+<li>存在误判（利用hash原理，存在hash冲突，但是判断出为null，那就一定为null）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>除此之外缓存穿透的解决方案还有:</strong></p>
+<ul>
+<li><strong>增强id的复杂度,避免被猜测id规律</strong></li>
+<li><strong>做好数据的基础格式校验</strong></li>
+<li><strong>加强用户权限校验</strong></li>
+<li><strong>做好热点参数的限流(也可以减小数据库压力)</strong></li>
+</ul>
+<hr>
+<h2 id="2-2-缓存雪崩"><a href="#2-2-缓存雪崩" class="headerlink" title="2.2 缓存雪崩"></a>2.2 缓存雪崩</h2><ul>
+<li>缓存雪崩是指在我们设置缓存时采用了相同的过期时间，导致缓存在某一时刻同时失效或者 Redis 服务宕机，请求全部转发到 DB，DB 瞬时压力过重雪崩。</li>
+</ul>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220311163954070.png"></p>
+<p><strong>解决方案：</strong></p>
+<ul>
+<li><strong>给不同的key的TTL添加随机值</strong>(防止大量的缓存Key同时失效)</li>
+<li><strong>利用Redis集群提高服务的可用性</strong>(防止单机宕机的情况)</li>
+<li>给缓存业务添加降级限流策略(待学)</li>
+<li>给业务添加多级缓存</li>
+</ul>
+<h2 id="2-3-缓存击穿"><a href="#2-3-缓存击穿" class="headerlink" title="2.3 缓存击穿"></a>2.3 缓存击穿</h2><p><strong>缓存击穿问题</strong>也叫热点Key问题,就是一个被<strong>高并发访问</strong>并且<strong>缓存重建业务比较复杂</strong>的key突然失效了,无数的请求访问会在瞬间给数据库带来巨大的冲击。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220311165255394.png" alt="image-20220311165255394"></p>
+<ul>
+<li><p><strong>解决：</strong></p>
+<ul>
+<li><p><strong>互斥锁</strong></p>
+<ul>
+<li>大量请求访问，只有获取到锁的那个线程可以去查询数据库重建缓存数据。</li>
+<li>缺点：加锁对性能有一定的影响。并且可能死锁</li>
+</ul>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220311165723072.png" alt="image-20220311165723072"></p>
+</li>
+<li><p><strong>逻辑过期</strong></p>
+<ul>
+<li>设置逻辑过期时间而非TTL</li>
+<li>获取互斥锁开启新线程，去查询数据库重建缓存数据。</li>
+</ul>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220311170401649.png"></p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>两种方案的比较</strong>:</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220311170545184.png" alt="image-20220311170545184"></p>
+<h1 id="3-加锁解决缓存击穿的问题"><a href="#3-加锁解决缓存击穿的问题" class="headerlink" title="3. 加锁解决缓存击穿的问题"></a>3. 加锁解决缓存击穿的问题</h1><p>假设有百万请求同时访问同一个失效的热点key，加锁解决的流程如下。</p>
+<ol>
+<li>查缓存，缓存未命中。</li>
+<li>获取锁。</li>
+<li>第一个获取锁成功；其他未获取到锁的线程循环阻塞等待。</li>
+<li>获取锁成功的线程先检查缓存有没有被其他线程更新。</li>
+<li>没有，查数据库构建缓存。</li>
+<li>释放锁。</li>
+<li>返回结果。</li>
+</ol>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20230115143305993.png" alt="image-20230115143305993"></p>
+<h2 id="3-1-本地锁在分布式场景下的问题"><a href="#3-1-本地锁在分布式场景下的问题" class="headerlink" title="3.1 本地锁在分布式场景下的问题"></a>3.1 本地锁在分布式场景下的问题</h2><p>在分布式服务集群的情况下，本地锁只能锁住当前实例对象，但是在集群的情况下，一个服务会部署在多个服务器的容器下，对于单个容器这个实例对象是唯一的，但是对于多节点集群的情况下，就不是了，所以会造成锁不住的情况。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20230115143425118.png" alt="image-20230115143425118"></p>
+<p>本地锁，只能锁住当前线程，所以我们需要分布式锁。</p>
+<h1 id="4-分布式锁"><a href="#4-分布式锁" class="headerlink" title="4. 分布式锁"></a>4. 分布式锁</h1><h2 id="4-1-分布式锁原理与使用（Redis）"><a href="#4-1-分布式锁原理与使用（Redis）" class="headerlink" title="4.1 分布式锁原理与使用（Redis）"></a>4.1 分布式锁原理与使用（Redis）</h2><p>利用SET NX的互斥机制 和DEL的删除机制</p>
+<p>为了防止Redis异常宕机的情况下锁的安全性问题(需要设置锁的过期时间)</p>
+<ul>
+<li><p>获取锁:</p>
+<ul>
+<li><p>互斥: 确保只能有一个线程获取锁</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">添加锁, NX是互斥 EX是设置超时时间</span></span><br><span class="line">set lock thread1 NX EX 10</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>释放锁:</p>
+<ul>
+<li><p>手动释放</p>
+</li>
+<li><p>超时释放: 获取锁时添加一个超时时间</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">释放锁, 删除即可</span></span><br><span class="line">DEL key</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220312145523204.png" alt="image-20220312145523204"></p>
+<h2 id="4-2-锁的粒度"><a href="#4-2-锁的粒度" class="headerlink" title="4.2 锁的粒度"></a>4.2 锁的粒度</h2><p>锁的名字。锁的粒度，越细越快。</p>
+<p>锁的粒度：具体缓存的是某个数据，如11号商品；12号商品，而不是像粗粒度锁那样锁住所有商品而导致性能下降（根据具体数据上具体的锁）。</p>
+<h2 id="4-3-简单分布式锁的问题"><a href="#4-3-简单分布式锁的问题" class="headerlink" title="4.3 简单分布式锁的问题"></a>4.3 简单分布式锁的问题</h2><ol>
+<li><p>在获取到分布式锁后，获取到锁的线程所在的服务器断电关机了，没有来得及释放锁，此时会造成其他线程永远获取不到锁。</p>
+<ul>
+<li><p>解决方案：加入过期时间，最好是在设置锁的同时设置过期时间，防止分布操作失去原子性，导致在设置过期时间时服务器断电而导致同样的问题。</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220312152342991.png" alt="image-20220312152342991"></p>
+</li>
+</ul>
+</li>
+<li><p>线程安全问题，业务堵塞导致锁的时间到期释放，第二个线程此时获取到锁，在执行业务中，一号线程业务阻塞完毕时释放锁就导致线程二的锁被释放了。</p>
+<ul>
+<li><p>解决方案：为每个线程获取到的锁的值设置为不同的值，因为 Redis 是 key-value 型的，所以在 set nx 时可以通过设置不同的值来作为不同的线程的锁标识。</p>
+</li>
+<li><p><strong>通过新增 UUID+ ThreadID 作为锁标识</strong>，在释放锁之前判断锁标识是否一致（同一个线程的锁标识一致，这样就不会出现业务阻塞导致释放了其他线程的锁的情况）</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220312152522311.png"></p>
+</li>
+</ul>
+</li>
+<li><p>线程安全问题，在释放锁时，我们要根据线程的锁标识来判断是否一致来释放锁，防止出现线程安全问题，但是我们要先获取锁的值，才能判断是否一致来释放锁，而操作 Redis 是一个网络请求，<strong>中间存在网络延迟或者网络阻塞</strong>。如果<strong>线程1</strong>在锁将要过期的时候去请求锁的值，此时得到的值确实是当前线程的值，但是在回传值得过程中，锁过期了，<strong>线程2</strong>获取到了锁。此时回传的结果才到达<strong>线程1</strong>，<strong>线程1</strong>判断值确实相等，所以释放锁了，但是这个锁是<strong>线程2</strong>的锁。</p>
+<ul>
+<li><p>解决方案：将比对锁标识和释放锁，作为一个原子操作，发送给 Redis。Redis 官方推荐使用 <code>lua</code> 脚本。</p>
+</li>
+<li><p>释放锁业务的Lua脚本</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">-- 比较线程标示与锁中的标示是否一致</span><br><span class="line"><span class="keyword">if</span>(redis.call(<span class="string">&#x27;get&#x27;</span>, KEYS[<span class="number">1</span>]) ==  ARGV[<span class="number">1</span>]) then</span><br><span class="line">    -- 释放锁 del key</span><br><span class="line">    <span class="keyword">return</span> redis.call(<span class="string">&#x27;del&#x27;</span>, KEYS[<span class="number">1</span>])</span><br><span class="line">end</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220312173903547.png"></p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="4-4-基于Redis的简单分布式锁问题总结"><a href="#4-4-基于Redis的简单分布式锁问题总结" class="headerlink" title="4.4 基于Redis的简单分布式锁问题总结"></a>4.4 基于Redis的简单分布式锁问题总结</h2><p>基于SETNX实现的分布式锁存在下面的问题:</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20220312184555611.png" alt="image-20220312184555611"></p>
+<h1 id="5-Redisson"><a href="#5-Redisson" class="headerlink" title="5. Redisson"></a>5. Redisson</h1><p><a target="_blank" rel="noopener" href="https://github.com/redisson/redisson/wiki/%E7%9B%AE%E5%BD%95"><strong>Redission官方文档</strong></a></p>
+<p>Redis 官方并不推荐使用简单的方式来实现 <code>redis</code> 分布式锁，<code>Redisson</code> 是 Redis 官方推荐的 Java 分布式锁算法的实现。</p>
+<p><code>Redisson</code> 底层采用 <code>Netty</code> 作为网络通信框架。</p>
+<h2 id="5-1-概述"><a href="#5-1-概述" class="headerlink" title="5.1 概述"></a>5.1 概述</h2><p><code>Redisson</code> 是一个在Redis的基础上实现的Java驻内存数据网格（In-Memory Data Grid）。它不仅提供了一系列的分布式的Java常用对象，还提供了许多分布式服务。其中包括(<code>BitSet</code>, <code>Set</code>, <code>Multimap</code>, <code>SortedSet</code>, <code>Map</code>, <code>List</code>, <code>Queue</code>, <code>BlockingQueue</code>, <code>Deque</code>, <code>BlockingDeque</code>, <code>Semaphore</code>, <code>Lock</code>, <code>AtomicLong</code>, <code>CountDownLatch</code>, <code>Publish / Subscribe</code>, <code>Bloom filter</code>, <code>Remote service</code>, <code>Spring cache</code>, <code>Executor service</code>, <code>Live Object service</code>, <code>Scheduler service</code>) <code>Redisson</code>提供了使用Redis的最简单和最便捷的方法。<code>Redisson</code> 的宗旨是促进使用者对Redis的关注分离（Separation of Concern），从而让使用者能够将精力更集中地放在处理业务逻辑上。</p>
+<p><code>Redisson</code> 也可以算作是一个操作 Redis 的客户端，提供了原子操作 Redis 的接口，提供了分布式锁、分布式对象、分布式集合等功能，底层使用了大量的 <code>lua</code> 脚本。</p>
+<h2 id="5-2-配置"><a href="#5-2-配置" class="headerlink" title="5.2 配置"></a>5.2 配置</h2><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.redisson/redisson --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.redisson<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>redisson<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.19.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>或是</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.redisson/redisson-spring-boot-starter --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.redisson<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>redisson-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.19.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>spring 整合版省去了大量配置。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean(destroyMethod=&quot;shutdown&quot;)</span></span><br><span class="line">RedissonClient <span class="title function_">redisson</span><span class="params">()</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="type">Config</span> <span class="variable">config</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Config</span>();</span><br><span class="line">    config.useSingleServer().setAddress(<span class="string">&quot;redis://124.222.35.20:6666&quot;</span>).setPassword(<span class="string">&quot;dyw20020304&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> Redisson.create(config);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="5-3-分布式锁"><a href="#5-3-分布式锁" class="headerlink" title="5.3 分布式锁"></a>5.3 分布式锁</h2><p>如果负责储存这个分布式锁的 <code>Redisson</code> 节点宕机以后，而且这个锁正好处于锁住的状态时，这个锁会出现锁死的状态。为了避免这种情况的发生，<code>Redisson</code> 内部提供了一个监控锁的<strong>看门狗</strong>，它的作用是在<code>Redisson</code>实例被关闭前，不断的延长锁的有效期。默认情况下，看门狗的检查锁的超时时间是30秒钟，也可以通过修改 <a target="_blank" rel="noopener" href="https://github.com/redisson/redisson/wiki/2.-%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95#lockwatchdogtimeout%E7%9B%91%E6%8E%A7%E9%94%81%E7%9A%84%E7%9C%8B%E9%97%A8%E7%8B%97%E8%B6%85%E6%97%B6%E5%8D%95%E4%BD%8D%E6%AF%AB%E7%A7%92">Config.lockWatchdogTimeout</a> 来另行指定。</p>
+<p>就是说，在锁还未被释放之前，<code>Redisson</code> 的看门狗机制会在到达一定阈值的时候对锁进行续期。如果存储这个分布式锁的 <code>Redisson</code> 节点宕机了，那么就不会延长了，超过时间后，释放锁。</p>
+<h3 id="5-3-1-可重入锁（Reentrant-Lock）"><a href="#5-3-1-可重入锁（Reentrant-Lock）" class="headerlink" title="5.3.1 可重入锁（Reentrant Lock）"></a>5.3.1 可重入锁（Reentrant Lock）</h3><p>基于Redis的Redisson分布式可重入锁<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RLock.html"><code>RLock</code></a> Java对象实现了<code>java.util.concurrent.locks.Lock</code>接口。同时还提供了<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RLockAsync.html">异步（Async）</a>、<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RLockReactive.html">反射式（Reactive）</a>和<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RLockRx.html">RxJava2标准</a>的接口。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">RLock</span> <span class="variable">lock</span> <span class="operator">=</span> redisson.getLock(<span class="string">&quot;anyLock&quot;</span>);</span><br><span class="line"><span class="comment">// 最常见的使用方法</span></span><br><span class="line">lock.lock();</span><br></pre></td></tr></table></figure>
+
+
+
+<p>另外 <code>Redisson</code>还通过加锁的方法提供了<code>leaseTime</code>的参数来指定加锁的时间。超过这个时间后锁便自动解开了(但是这样就没有看门狗机制了)。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 加锁以后10秒钟自动解锁</span></span><br><span class="line"><span class="comment">// 无需调用unlock方法手动解锁</span></span><br><span class="line">lock.lock(<span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 尝试加锁，最多等待100秒，上锁以后10秒自动解锁</span></span><br><span class="line"><span class="type">boolean</span> <span class="variable">res</span> <span class="operator">=</span> lock.tryLock(<span class="number">100</span>, <span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line"><span class="keyword">if</span> (res) &#123;</span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">     ...</span><br><span class="line">   &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">       lock.unlock();</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-3-2-公平锁（Fair-Lock）"><a href="#5-3-2-公平锁（Fair-Lock）" class="headerlink" title="5.3.2 公平锁（Fair Lock）"></a>5.3.2 公平锁（Fair Lock）</h3><p>它保证了当多个 <code>Redisson</code> 客户端线程同时请求加锁时，优先分配给先发出请求的线程。所有请求线程会在一个队列中排队，当某个线程出现宕机时，<code>Redisson</code> 会等待5秒后继续下一个线程，也就是说如果前面有5个线程都处于等待状态，那么后面的线程会等待至少25秒。</p>
+<p>总所周知公平锁的性能并不好。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">RLock</span> <span class="variable">fairLock</span> <span class="operator">=</span> redisson.getFairLock(<span class="string">&quot;anyLock&quot;</span>);</span><br><span class="line"><span class="comment">// 最常见的使用方法</span></span><br><span class="line">fairLock.lock();</span><br></pre></td></tr></table></figure>
+
+<p>手动指定过期时间。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 10秒钟以后自动解锁</span></span><br><span class="line"><span class="comment">// 无需调用unlock方法手动解锁</span></span><br><span class="line">fairLock.lock(<span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 尝试加锁，最多等待100秒，上锁以后10秒自动解锁</span></span><br><span class="line"><span class="type">boolean</span> <span class="variable">res</span> <span class="operator">=</span> fairLock.tryLock(<span class="number">100</span>, <span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line">...</span><br><span class="line">fairLock.unlock();</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-3-联锁（MultiLock）"><a href="#5-3-3-联锁（MultiLock）" class="headerlink" title="5.3.3 联锁（MultiLock）"></a>5.3.3 联锁（MultiLock）</h3><p>基于Redis的 <code>Redisson</code> 分布式联锁<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/RedissonMultiLock.html"><code>RedissonMultiLock</code></a>对象可以将多个<code>RLock</code>对象关联为一个联锁，每个<code>RLock</code>对象实例可以来自于不同的 <code>Redisson</code> 实例。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">RLock</span> <span class="variable">lock1</span> <span class="operator">=</span> redissonInstance1.getLock(<span class="string">&quot;lock1&quot;</span>);</span><br><span class="line"><span class="type">RLock</span> <span class="variable">lock2</span> <span class="operator">=</span> redissonInstance2.getLock(<span class="string">&quot;lock2&quot;</span>);</span><br><span class="line"><span class="type">RLock</span> <span class="variable">lock3</span> <span class="operator">=</span> redissonInstance3.getLock(<span class="string">&quot;lock3&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">RedissonMultiLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RedissonMultiLock</span>(lock1, lock2, lock3);</span><br><span class="line"><span class="comment">// 同时加锁：lock1 lock2 lock3</span></span><br><span class="line"><span class="comment">// 所有的锁都上锁成功才算成功。</span></span><br><span class="line">lock.lock();</span><br><span class="line">...</span><br><span class="line">lock.unlock();</span><br></pre></td></tr></table></figure>
+
+<p>手动指定过期时间(但是这样就没有看门狗机制了)。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">RedissonMultiLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RedissonMultiLock</span>(lock1, lock2, lock3);</span><br><span class="line"><span class="comment">// 给lock1，lock2，lock3加锁，如果没有手动解开的话，10秒钟后将会自动解开</span></span><br><span class="line">lock.lock(<span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为加锁等待100秒时间，并在加锁成功10秒钟后自动解开</span></span><br><span class="line"><span class="type">boolean</span> <span class="variable">res</span> <span class="operator">=</span> lock.tryLock(<span class="number">100</span>, <span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line">...</span><br><span class="line">lock.unlock();</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-3-4-红锁（RedLock）"><a href="#5-3-4-红锁（RedLock）" class="headerlink" title="5.3.4 红锁（RedLock）"></a>5.3.4 红锁（RedLock）</h3><p>基于Redis的 <code>Redisson</code>红锁<code>RedissonRedLock</code>对象实现了<a target="_blank" rel="noopener" href="http://redis.cn/topics/distlock.html">Redlock</a>介绍的加锁算法。该对象也可以用来将多个<code>RLock</code>对象关联为一个红锁，每个<code>RLock</code>对象实例可以来自于不同的 <code>Redisson</code> 实例。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">RLock</span> <span class="variable">lock1</span> <span class="operator">=</span> redissonInstance1.getLock(<span class="string">&quot;lock1&quot;</span>);</span><br><span class="line"><span class="type">RLock</span> <span class="variable">lock2</span> <span class="operator">=</span> redissonInstance2.getLock(<span class="string">&quot;lock2&quot;</span>);</span><br><span class="line"><span class="type">RLock</span> <span class="variable">lock3</span> <span class="operator">=</span> redissonInstance3.getLock(<span class="string">&quot;lock3&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">RedissonRedLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RedissonRedLock</span>(lock1, lock2, lock3);</span><br><span class="line"><span class="comment">// 同时加锁：lock1 lock2 lock3</span></span><br><span class="line"><span class="comment">// 红锁在大部分节点上加锁成功就算成功。</span></span><br><span class="line">lock.lock();</span><br><span class="line">...</span><br><span class="line">lock.unlock();</span><br></pre></td></tr></table></figure>
+
+<p>手动指定过期时间(但是这样就没有看门狗机制了)。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">RedissonRedLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RedissonRedLock</span>(lock1, lock2, lock3);</span><br><span class="line"><span class="comment">// 给lock1，lock2，lock3加锁，如果没有手动解开的话，10秒钟后将会自动解开</span></span><br><span class="line">lock.lock(<span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为加锁等待100秒时间，并在加锁成功10秒钟后自动解开</span></span><br><span class="line"><span class="type">boolean</span> <span class="variable">res</span> <span class="operator">=</span> lock.tryLock(<span class="number">100</span>, <span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line">...</span><br><span class="line">lock.unlock();</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-3-5-读写锁（ReadWriteLock）"><a href="#5-3-5-读写锁（ReadWriteLock）" class="headerlink" title="5.3.5 读写锁（ReadWriteLock）"></a>5.3.5 读写锁（ReadWriteLock）</h3><p>基于Redis的 <code>Redisson</code> 分布式可重入读写锁<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.4.3/org/redisson/api/RReadWriteLock.html"><code>RReadWriteLock</code></a> Java对象实现了<code>java.util.concurrent.locks.ReadWriteLock</code>接口。其中读锁和写锁都继承了<a target="_blank" rel="noopener" href="https://github.com/redisson/redisson/wiki/8.-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%92%8C%E5%90%8C%E6%AD%A5%E5%99%A8#81-%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81reentrant-lock">RLock</a>接口。</p>
+<p>分布式可重入读写锁允许同时有<strong>多个读锁</strong>和<strong>一个写锁</strong>处于加锁状态。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">RReadWriteLock</span> <span class="variable">rwlock</span> <span class="operator">=</span> redisson.getReadWriteLock(<span class="string">&quot;anyRWLock&quot;</span>);</span><br><span class="line"><span class="comment">// 最常见的使用方法</span></span><br><span class="line">rwlock.readLock().lock();</span><br><span class="line"><span class="comment">// 或</span></span><br><span class="line">rwlock.writeLock().lock();</span><br></pre></td></tr></table></figure>
+
+<p>手动指定过期时间(但是这样就没有看门狗机制了)。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 10秒钟以后自动解锁</span></span><br><span class="line"><span class="comment">// 无需调用unlock方法手动解锁</span></span><br><span class="line">rwlock.readLock().lock(<span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line"><span class="comment">// 或</span></span><br><span class="line">rwlock.writeLock().lock(<span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 尝试加锁，最多等待100秒，上锁以后10秒自动解锁</span></span><br><span class="line"><span class="type">boolean</span> <span class="variable">res</span> <span class="operator">=</span> rwlock.readLock().tryLock(<span class="number">100</span>, <span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line"><span class="comment">// 或</span></span><br><span class="line"><span class="type">boolean</span> <span class="variable">res</span> <span class="operator">=</span> rwlock.writeLock().tryLock(<span class="number">100</span>, <span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line">...</span><br><span class="line">lock.unlock();</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-3-6-信号量（Semaphore）"><a href="#5-3-6-信号量（Semaphore）" class="headerlink" title="5.3.6 信号量（Semaphore）"></a>5.3.6 信号量（Semaphore）</h3><p>基于Redis的 <code>Redisson</code> 的分布式信号量（<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RSemaphore.html">Semaphore</a>）Java对象<code>RSemaphore</code>采用了与<code>java.util.concurrent.Semaphore</code>相似的接口和用法。同时还提供了<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RSemaphoreAsync.html">异步（Async）</a>、<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RSemaphoreReactive.html">反射式（Reactive）</a>和<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RSemaphoreRx.html">RxJava2标准</a>的接口。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">RSemaphore</span> <span class="variable">semaphore</span> <span class="operator">=</span> redisson.getSemaphore(<span class="string">&quot;semaphore&quot;</span>);</span><br><span class="line">semaphore.acquire();</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line">semaphore.acquireAsync();</span><br><span class="line">semaphore.acquire(<span class="number">23</span>);</span><br><span class="line">semaphore.tryAcquire();</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line">semaphore.tryAcquireAsync();</span><br><span class="line">semaphore.tryAcquire(<span class="number">23</span>, TimeUnit.SECONDS);</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line">semaphore.tryAcquireAsync(<span class="number">23</span>, TimeUnit.SECONDS);</span><br><span class="line">semaphore.release(<span class="number">10</span>);</span><br><span class="line">semaphore.release();</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line">semaphore.releaseAsync();</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-3-7-可过期性信号量（PermitExpirableSemaphore）"><a href="#5-3-7-可过期性信号量（PermitExpirableSemaphore）" class="headerlink" title="5.3.7 可过期性信号量（PermitExpirableSemaphore）"></a>5.3.7 可过期性信号量（PermitExpirableSemaphore）</h3><p>基于 <code>Redis</code> 的 <code>Redisson</code> 可过期性信号量（<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RPermitExpirableSemaphore.html">PermitExpirableSemaphore</a>）是在<code>RSemaphore</code>对象的基础上，为每个信号增加了一个过期时间。每个信号可以通过独立的ID来辨识，释放时只能通过提交这个ID才能释放。它提供了<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RPermitExpirableSemaphoreAsync.html">异步（Async）</a>、<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RPermitExpirableSemaphoreReactive.html">反射式（Reactive）</a>和<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RPermitExpirableSemaphoreRx.html">RxJava2标准</a>的接口。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">RPermitExpirableSemaphore</span> <span class="variable">semaphore</span> <span class="operator">=</span> redisson.getPermitExpirableSemaphore(<span class="string">&quot;mySemaphore&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">permitId</span> <span class="operator">=</span> semaphore.acquire();</span><br><span class="line"><span class="comment">// 获取一个信号，有效期只有2秒钟。</span></span><br><span class="line"><span class="type">String</span> <span class="variable">permitId</span> <span class="operator">=</span> semaphore.acquire(<span class="number">2</span>, TimeUnit.SECONDS);</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">semaphore.release(permitId);</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="5-3-8-闭锁（CountDownLatch）"><a href="#5-3-8-闭锁（CountDownLatch）" class="headerlink" title="5.3.8 闭锁（CountDownLatch）"></a>5.3.8 闭锁（CountDownLatch）</h3><p>基于 <code>Redisson</code> 的 <code>Redisson</code> 分布式闭锁（<a target="_blank" rel="noopener" href="http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RCountDownLatch.html">CountDownLatch</a>）Java对象<code>RCountDownLatch</code>采用了与<code>java.util.concurrent.CountDownLatch</code>相似的接口和用法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">RCountDownLatch</span> <span class="variable">latch</span> <span class="operator">=</span> redisson.getCountDownLatch(<span class="string">&quot;anyCountDownLatch&quot;</span>);</span><br><span class="line">latch.trySetCount(<span class="number">1</span>);</span><br><span class="line">latch.await();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在其他线程或其他JVM里</span></span><br><span class="line"><span class="type">RCountDownLatch</span> <span class="variable">latch</span> <span class="operator">=</span> redisson.getCountDownLatch(<span class="string">&quot;anyCountDownLatch&quot;</span>);</span><br><span class="line">latch.countDown();</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="6-缓存数据一致性"><a href="#6-缓存数据一致性" class="headerlink" title="6. 缓存数据一致性"></a>6. 缓存数据一致性</h1><h2 id="6-1-保证一致性模式"><a href="#6-1-保证一致性模式" class="headerlink" title="6.1 保证一致性模式"></a>6.1 保证一致性模式</h2><p>缓存里面的数据如何和数据库保持一致</p>
+<p>缓存数据一致性</p>
+<h3 id="6-1-1-双写模式"><a href="#6-1-1-双写模式" class="headerlink" title="6.1.1 双写模式"></a>6.1.1 双写模式</h3><p><strong>在更新数据库中的数据时，同时更新缓存。</strong></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20230115164854481.png" alt="image-20230115164854481"></p>
+<p>大并发场景下的问题：</p>
+<ul>
+<li>线程1在修改数据库后，由于卡顿等问题，导致在线程2修改数据库和写缓存之后执行写缓存。导致了出现了不一致脏数据问题。</li>
+</ul>
+<p>但这是暂时性的脏数据问题，在数据库数据稳定，缓存过期以后，又能得到最新的正确的数据。</p>
+<h3 id="6-1-2-失效模式"><a href="#6-1-2-失效模式" class="headerlink" title="6.1.2 失效模式"></a>6.1.2 失效模式</h3><p><strong>在更新数据库中的数据时，同时删除缓存。</strong></p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20230115170450029.png" alt="image-20230115170450029"></p>
+<p>大并发场景下的问题：</p>
+<ul>
+<li>线程1 首先对数据库进行修改，并且将缓存删除</li>
+<li>然后 线程2 也对数据库进行修改（时间较长），但是还在修改数据库时，线程3 进行读请求</li>
+<li>线程3，此时读缓存未命中，所以读数据库，但是此时线程2还完成对数据库的修改，所以线程3 得到的是线程1 修改的数据。</li>
+<li>线程3再在线程2删缓存后，再将数据更新缓存，就出现了不一致脏数据得问题。</li>
+</ul>
+<h2 id="6-2-缓存数据一致性-解决方案"><a href="#6-2-缓存数据一致性-解决方案" class="headerlink" title="6.2 缓存数据一致性-解决方案"></a>6.2 缓存数据一致性-解决方案</h2><ul>
+<li><p>无论是双写模式还是失效模式，都会导致缓存的不一致问题。即多个实例同时更新会出事。怎么办?</p>
+<ul>
+<li>如果是用户纬度数据（订单数据、用户数据)，这种并发几率非常小，不用考虑这个问题，缓存数据加上过期时间，每隔―段时间触发读的主动更新即可。</li>
+<li>如果是菜单，商品介绍等基础数据，也可以去使用canal订阅binlog的方式。</li>
+<li>缓存数据+过期时间也足够解决大部分业务对于缓存的要求。</li>
+<li>通过加锁保证并发读写，写写的时候按顺序排好队。读读无所谓。所以适合使用读写锁。(业务不关心脏数据，允许临时脏数据可忽略);</li>
+</ul>
+</li>
+<li><p>总结：</p>
+<ul>
+<li><strong>我们能放入缓存的数据本就不应该是实时性、一致性要求超高的。所以缓存数据的时候加上过期时间， 保证每天拿到当前最新数据即可。</strong></li>
+<li><strong>我们不应该过度设计，增加系统的复杂性 ·遇到实时性、一致性要求高的数据，就应该查数据库，即使慢点。</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="改进方案"><a href="#改进方案" class="headerlink" title="改进方案"></a>改进方案</h4><ol>
+<li><p>分布式读写锁。读数据等待写数据整个操作完成。</p>
+</li>
+<li><p>使用 cananl</p>
+<p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20230115171723366.png" alt="image-20230115171723366"></p>
+</li>
+</ol>
+<p>Canal 会伪装成数据的一个租户，去监听 <code>binlog</code>（数据库操作日志） 的变化，实时更新 <code>redis</code> 缓存。</p>
+<p>缺点：引入了额外的中间件，需要额外地开发。</p>
+<h1 id="7-Spring-Cache"><a href="#7-Spring-Cache" class="headerlink" title="7. Spring Cache"></a>7. Spring Cache</h1><p>官方文档：<a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/5.3.25/reference/html/integration.html#cache">https://docs.spring.io/spring-framework/docs/5.3.25/reference/html/integration.html#cache</a></p>
+<ul>
+<li><p>Spring从3.1开始定义了<code>org.springframework.cache.Cache</code> 和<code>org.springframework.cache.CacheManager</code>接口来统一不同的缓存技术；并支持使用<code>JCache</code>（JSR-107）注解简化我们开发；</p>
+</li>
+<li><p>Cache接口为缓存的组件规范定义，包含缓存的各种操作集合；Cache接口下Spring提供了各种<code>xxxCache</code>的实现；如 <code>RedisCache</code>，<code>EhCacheCache</code>，<code>ConcurrentMapCache</code>等；</p>
+</li>
+<li><p>每次调用需要缓存功能的方法时，Spring会检查检查指定参数的指定的目标方法是否已经被调用过；如果有就直接从缓存中获取方法调用后的结果，如果没有就调用方法并缓存结果后返回给用户。下次调用直接从缓存中获取。</p>
+</li>
+<li><p>使用Spring缓存抽象时我们需要关注以下两点；</p>
+<ol>
+<li>确定方法需要被缓存以及他们的缓存策略</li>
+<li>从缓存中读取之前缓存存储的数据</li>
+</ol>
+</li>
+</ul>
+<h2 id="7-1-基础概念"><a href="#7-1-基础概念" class="headerlink" title="7.1 基础概念"></a>7.1 基础概念</h2><p><img src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/image-20230115173637770.png" alt="image-20230115173637770"></p>
+<p>Spring Cache 通过 <code>CacheManager</code> 来管理缓存组件，<code>CacheManager</code>  为了方便管理为每一个 Cache 组件起了一个名字，Cache 组件就是真正操作缓存的组件。</p>
+<p>Cache：缓存接口，定义缓存操作。实现有：<code>RedisCache</code>、<code>EhCacheCache</code>、<code>ConcurrentMapCache</code>等。</p>
+<p><code>CacheManager</code>：缓存管理器，管理各种缓存（Cache）组件。</p>
+<h2 id="7-2-注解"><a href="#7-2-注解" class="headerlink" title="7.2 注解"></a>7.2 注解</h2><ul>
+<li><code>@Cacheable</code>: 主要针对方法配置，能够根据方法的请求参数对其结果进行缓存。</li>
+<li><code>@CacheEvict</code>: 将数据从缓存删除。<strong>对应失效模式</strong></li>
+<li><code>@CachePut</code>: 在不干扰方法执行的情况下更新缓存。<strong>对应双写模式</strong></li>
+<li><code>@Caching</code>: 重新组合要应用于某个方法的多个缓存操作。</li>
+<li><code>@CacheConfig</code>: 在类级别共享一些常见的与缓存相关的设置。</li>
+<li><code>@EnableCaching</code>: 开启基于注解的缓存</li>
+</ul>
+<h2 id="7-3-配置"><a href="#7-3-配置" class="headerlink" title="7.3 配置"></a>7.3 配置</h2><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-cache<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>配置缓存类型</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">	<span class="attr">cache:</span></span><br><span class="line">   	<span class="attr">type:</span> <span class="string">REDIS</span></span><br></pre></td></tr></table></figure>
+
+<p>并且在主启动类上添加 <code>@EnableCaching</code> 开启缓存。</p>
+<h3 id="7-3-1-Cacheable-配置"><a href="#7-3-1-Cacheable-配置" class="headerlink" title="7.3.1 @Cacheable 配置"></a>7.3.1 <code>@Cacheable</code> 配置</h3><p><strong>默认行为：</strong></p>
+<ul>
+<li>如果缓存中有，方法不调用</li>
+<li>key默认自动生成；缓存的名字::SimpleKey [] (自主生成的key值)</li>
+<li>缓存的value值。默认使用 <code>jdk</code> 序列化方式，将序列化后的数据存到 <code>redis</code></li>
+<li>默认缓存过期时间 <code>ttl = -1</code>（不过期）</li>
+</ul>
+<p><strong>自定义：</strong></p>
+<ul>
+<li><p>每一个需要缓存的数据我们都来指定要放到那个名字的缓存。【缓存的分区（按照业务类型分）】</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Cacheable(value = &#123;&quot;category&quot;&#125;)</span></span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指定生成的缓存使用的 key：key属性指定，接受一个 <code>SpEL</code> 表达式 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/5.3.25/reference/html/integration.html#cache-spel-context">SpEL 表达式参考</a></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Cacheable(value = &#123;&quot;category&quot;&#125;,key = &quot;#root.methodName&quot;)</span> <span class="comment">//用方法名作为key</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指定缓存的数据存活时间：配置文件中修改 <code>ttl</code></p>
+</li>
+<li><p>将数据保存为 json 格式</p>
+</li>
+</ul>
+<h3 id="7-3-2-配置文件"><a href="#7-3-2-配置文件" class="headerlink" title="7.3.2 配置文件"></a>7.3.2 配置文件</h3><figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span>        </span><br><span class="line">  <span class="attr">cache:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">REDIS</span> <span class="comment">#缓存的类型</span></span><br><span class="line">    <span class="attr">redis:</span></span><br><span class="line">      <span class="attr">time-to-live:</span> <span class="number">300000</span> <span class="comment"># 缓存过期时间</span></span><br><span class="line">      <span class="attr">key-prefix:</span> <span class="string">CACHE_</span> <span class="comment">#缓存key前缀</span></span><br><span class="line">      <span class="attr">use-key-prefix:</span> <span class="literal">true</span> <span class="comment">#是否使用缓存key前缀 会使用key-prefix+cachenames 的方式作为key前缀</span></span><br><span class="line">      <span class="attr">cache-null-values:</span> <span class="literal">true</span> <span class="comment">#是否缓存空值 应对缓存穿透</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="7-3-3-缓存自定义配置"><a href="#7-3-3-缓存自定义配置" class="headerlink" title="7.3.3 缓存自定义配置"></a>7.3.3 缓存自定义配置</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@EnableConfigurationProperties(CacheProperties.class)</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedisConfig</span> &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    RedisCacheConfiguration <span class="title function_">redisCacheConfiguration</span><span class="params">(CacheProperties cacheProperties)</span> &#123;</span><br><span class="line">		</span><br><span class="line">        CacheProperties.<span class="type">Redis</span> <span class="variable">redisProperties</span> <span class="operator">=</span> cacheProperties.getRedis();</span><br><span class="line">        <span class="comment">//配置key-value序列化方式</span></span><br><span class="line">        <span class="type">RedisCacheConfiguration</span> <span class="variable">config</span> <span class="operator">=</span> RedisCacheConfiguration.defaultCacheConfig()</span><br><span class="line">                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(<span class="keyword">new</span> <span class="title class_">StringRedisSerializer</span>()))</span><br><span class="line">                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(<span class="keyword">new</span> <span class="title class_">GenericFastJsonRedisSerializer</span>()));</span><br><span class="line">		<span class="comment">//使配置文件生效</span></span><br><span class="line">        <span class="keyword">if</span> (redisProperties.getTimeToLive()!=<span class="literal">null</span>)&#123;</span><br><span class="line">            config = config.entryTtl(redisProperties.getTimeToLive());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (redisProperties.getKeyPrefix()!=<span class="literal">null</span>)&#123;</span><br><span class="line">            config = config.prefixCacheNameWith(redisProperties.getKeyPrefix());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!redisProperties.isCacheNullValues())&#123;</span><br><span class="line">            config =config.disableCachingNullValues();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!redisProperties.isUseKeyPrefix())&#123;</span><br><span class="line">            config = config.disableKeyPrefix();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> config;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="7-3-4-CacheEvict，-CachePut"><a href="#7-3-4-CacheEvict，-CachePut" class="headerlink" title="7.3.4 @CacheEvict，@CachePut"></a>7.3.4 <code>@CacheEvict</code>，<code>@CachePut</code></h3><p>对于修改数据库后，为了保证缓存和数据库的数据一致性，我们可以使用<strong>双写模式</strong>和<strong>失效模式</strong>，Spring Cache 提供了两个注解来对应修改的两种方式。</p>
+<p><code>@CacheEvict</code>：对应失效模式</p>
+<p><code>@CachePut</code>：对应双写模式</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@CacheEvict(value = &#123;&quot;category&quot;&#125;,key = &quot;&#x27;getLevel1Categorys&#x27;&quot;)</span> <span class="comment">//采用失效模式来保证缓存和数据库的数据一致性</span></span><br><span class="line"><span class="meta">@CachePut(value = &#123;&quot;category&quot;&#125;,key = &quot;&#x27;getLevel1Categorys&#x27;&quot;)</span><span class="comment">//双写模式</span></span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<p>对于数据库更新，可能会牵扯到许多缓存的更新，所以除了删除缓存的可能不止一个，对于这种情况我们可以采用如下两种方式。（<code>@CacheEvict</code>，<code>@CachePut</code> 同理）</p>
+<p>方式一：<code>@Caching</code> </p>
+<ul>
+<li><pre><code class="java">@Caching(evict = &#123; //通过这种配置可以同时指定操作多个，同时还可以组合 cacheable、put、evict
+        @CacheEvict(value = &#123;&quot;category&quot;&#125;,key = &quot;&#39;getLevel1Categorys&#39;&quot;),
+        @CacheEvict(value = &#123;&quot;category&quot;&#125;,key = &quot;&#39;getCatalogJson&#39;&quot;)
+&#125;)
+......
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">方式二：删除同一个 `cacheNames` 下的所有缓存</span><br><span class="line"></span><br><span class="line">* ```java</span><br><span class="line">  @CacheEvict(value = &#123;&quot;category&quot;&#125;,allEntries = true) //清空该 cacheNames 下的所有缓存</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p>所以一般相关联的缓存可以放在同一个 <code>cacheNames</code> 下。</p>
+</li>
+</ul>
+<h2 id="7-4-Spring-Cache-总结"><a href="#7-4-Spring-Cache-总结" class="headerlink" title="7.4 Spring Cache 总结"></a>7.4 Spring Cache 总结</h2><p><strong>读模式</strong></p>
+<ol>
+<li><p>缓存穿透：查询一个 null 数据。解决，缓存空数据；<code>cache-null-values=true</code></p>
+</li>
+<li><p>缓存击穿：大量并发进来同时查询一个正好过期的数据。解决：加锁；Spring Cache 可以设置 @Cacheable sync属性为 true，这样在查数据是可以加锁避免缓存击穿。</p>
+<ul>
+<li>不足：SpringCache的实现是使用本地锁的方式，而且是将查缓存的整个方法都上锁导致，即使缓存没有过期，获取缓存也是一个串行执行的过程，这样会大大影响性能。</li>
+</ul>
+</li>
+<li><p>缓存雪崩：大量的 key 同时过期。解决：加随机时间。加上过期时间(时间轴是分散的，所以加上固定的过期时间也可以保证缓存的过期时间是分散的)。<code>spring.cache.redis.time-to-live=30000</code></p>
+<ul>
+<li>不足：还是应该使用随机过期时间的方式。</li>
+</ul>
+</li>
+</ol>
+<p><strong>写模式</strong>（缓存与数据库一致）：</p>
+<ol>
+<li>读写加锁</li>
+<li>引入 canal，感知到 <code>Mysql</code> 的更新去去更新缓存。</li>
+<li>读多写多，直接去查数据库。</li>
+</ol>
+<p>为了解决上述的问题：因为这里使用的 <code>RedisCache</code>，可以考虑使用整合 <code>Redisson</code> 客户端来达到解决分布式锁得问题。并且只会在获取不到缓存的时候才会加锁去查数据。</p>
+<p><strong>总结：</strong></p>
+<p>常规数据（读多写少，及时性，一致性要求不高的数据）；完全可以使用 Spring Cache；写模式（只要缓存的数据有过期时间就足够了）</p>
+<p>特殊数据：特殊设计。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Devil</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://devildyw.github.io/2023/01/19/Cache%E7%BC%93%E5%AD%98/">https://devildyw.github.io/2023/01/19/Cache%E7%BC%93%E5%AD%98/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://devildyw.github.io" target="_blank">Devil的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Developer/">Developer</a></div><div class="post_share"><div class="social-share" data-image="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-1k2zgg.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/01/09/Elasticsearch%E5%AD%A6%E4%B9%A0/"><img class="next-cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-x87m9z.jpg" onerror="onerror=null;src='https://tva1.sinaimg.cn/large/832afe33ly1gbi8718jtpg20r00lc776.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Elasticsearch学习</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/02/28/Git%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7/" title="Git分布式版本控制工具"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">Git分布式版本控制工具</div></div></a></div><div><a href="/2022/04/06/RESTful%20API/" title="RESTful API"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-q2r727.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-06</div><div class="title">RESTful API</div></div></a></div><div><a href="/2022/02/28/%E5%AE%9E%E9%99%85%E5%BC%80%E5%8F%91%E4%B8%AD%E5%B8%B8%E5%B8%B8%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%20%E6%88%96%E6%98%AF%20%E9%81%B5%E5%AE%88%E7%9A%84%E8%A7%84%E5%88%99/" title="实际开发中常常遇到的问题 或是 遵守的规则"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-57kw88.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="title">实际开发中常常遇到的问题 或是 遵守的规则</div></div></a></div><div><a href="/2022/05/15/Docker/" title="Docker"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-pkl5pm.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-15</div><div class="title">Docker</div></div></a></div><div><a href="/2022/04/17/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="设计模式----创建型模式之简单工厂设计模式"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-6omo76.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-17</div><div class="title">设计模式----创建型模式之简单工厂设计模式</div></div></a></div><div><a href="/2022/04/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="设计模式----创建型模式之简单工厂设计模式"><img class="cover" src="https://ding-blog.oss-cn-chengdu.aliyuncs.com/images/wallhaven-57kw88.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-28</div><div class="title">设计模式----创建型模式之简单工厂设计模式</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Cache%E7%BC%93%E5%AD%98"><span class="toc-number">1.</span> <span class="toc-text">Cache缓存</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E7%BC%93%E5%AD%98"><span class="toc-number">2.</span> <span class="toc-text">1. 缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E4%BD%BF%E7%94%A8-Redis-%E4%BD%9C%E4%B8%BA%E7%BC%93%E5%AD%98"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 使用 Redis 作为缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-2-%E5%AF%BC%E5%85%A5%E4%BE%9D%E8%B5%96"><span class="toc-number">2.1.1.</span> <span class="toc-text">1.1.2 导入依赖</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E7%BC%93%E5%AD%98%E5%A4%B1%E6%95%88%E9%97%AE%E9%A2%98"><span class="toc-number">3.</span> <span class="toc-text">2. 缓存失效问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 缓存穿透</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 缓存雪崩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="toc-number">3.3.</span> <span class="toc-text">2.3 缓存击穿</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%8A%A0%E9%94%81%E8%A7%A3%E5%86%B3%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">4.</span> <span class="toc-text">3. 加锁解决缓存击穿的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E6%9C%AC%E5%9C%B0%E9%94%81%E5%9C%A8%E5%88%86%E5%B8%83%E5%BC%8F%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 本地锁在分布式场景下的问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-number">5.</span> <span class="toc-text">4. 分布式锁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%EF%BC%88Redis%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">4.1 分布式锁原理与使用（Redis）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E9%94%81%E7%9A%84%E7%B2%92%E5%BA%A6"><span class="toc-number">5.2.</span> <span class="toc-text">4.2 锁的粒度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E7%AE%80%E5%8D%95%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">5.3.</span> <span class="toc-text">4.3 简单分布式锁的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-%E5%9F%BA%E4%BA%8ERedis%E7%9A%84%E7%AE%80%E5%8D%95%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93"><span class="toc-number">5.4.</span> <span class="toc-text">4.4 基于Redis的简单分布式锁问题总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Redisson"><span class="toc-number">6.</span> <span class="toc-text">5. Redisson</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E6%A6%82%E8%BF%B0"><span class="toc-number">6.1.</span> <span class="toc-text">5.1 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E9%85%8D%E7%BD%AE"><span class="toc-number">6.2.</span> <span class="toc-text">5.2 配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-number">6.3.</span> <span class="toc-text">5.3 分布式锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-1-%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81%EF%BC%88Reentrant-Lock%EF%BC%89"><span class="toc-number">6.3.1.</span> <span class="toc-text">5.3.1 可重入锁（Reentrant Lock）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-2-%E5%85%AC%E5%B9%B3%E9%94%81%EF%BC%88Fair-Lock%EF%BC%89"><span class="toc-number">6.3.2.</span> <span class="toc-text">5.3.2 公平锁（Fair Lock）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-3-%E8%81%94%E9%94%81%EF%BC%88MultiLock%EF%BC%89"><span class="toc-number">6.3.3.</span> <span class="toc-text">5.3.3 联锁（MultiLock）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-4-%E7%BA%A2%E9%94%81%EF%BC%88RedLock%EF%BC%89"><span class="toc-number">6.3.4.</span> <span class="toc-text">5.3.4 红锁（RedLock）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-5-%E8%AF%BB%E5%86%99%E9%94%81%EF%BC%88ReadWriteLock%EF%BC%89"><span class="toc-number">6.3.5.</span> <span class="toc-text">5.3.5 读写锁（ReadWriteLock）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-6-%E4%BF%A1%E5%8F%B7%E9%87%8F%EF%BC%88Semaphore%EF%BC%89"><span class="toc-number">6.3.6.</span> <span class="toc-text">5.3.6 信号量（Semaphore）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-7-%E5%8F%AF%E8%BF%87%E6%9C%9F%E6%80%A7%E4%BF%A1%E5%8F%B7%E9%87%8F%EF%BC%88PermitExpirableSemaphore%EF%BC%89"><span class="toc-number">6.3.7.</span> <span class="toc-text">5.3.7 可过期性信号量（PermitExpirableSemaphore）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-8-%E9%97%AD%E9%94%81%EF%BC%88CountDownLatch%EF%BC%89"><span class="toc-number">6.3.8.</span> <span class="toc-text">5.3.8 闭锁（CountDownLatch）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E7%BC%93%E5%AD%98%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">7.</span> <span class="toc-text">6. 缓存数据一致性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E4%BF%9D%E8%AF%81%E4%B8%80%E8%87%B4%E6%80%A7%E6%A8%A1%E5%BC%8F"><span class="toc-number">7.1.</span> <span class="toc-text">6.1 保证一致性模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-1-%E5%8F%8C%E5%86%99%E6%A8%A1%E5%BC%8F"><span class="toc-number">7.1.1.</span> <span class="toc-text">6.1.1 双写模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-2-%E5%A4%B1%E6%95%88%E6%A8%A1%E5%BC%8F"><span class="toc-number">7.1.2.</span> <span class="toc-text">6.1.2 失效模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-%E7%BC%93%E5%AD%98%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">7.2.</span> <span class="toc-text">6.2 缓存数据一致性-解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%B9%E8%BF%9B%E6%96%B9%E6%A1%88"><span class="toc-number">7.2.0.1.</span> <span class="toc-text">改进方案</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-Spring-Cache"><span class="toc-number">8.</span> <span class="toc-text">7. Spring Cache</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="toc-number">8.1.</span> <span class="toc-text">7.1 基础概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E6%B3%A8%E8%A7%A3"><span class="toc-number">8.2.</span> <span class="toc-text">7.2 注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-3-%E9%85%8D%E7%BD%AE"><span class="toc-number">8.3.</span> <span class="toc-text">7.3 配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-1-Cacheable-%E9%85%8D%E7%BD%AE"><span class="toc-number">8.3.1.</span> <span class="toc-text">7.3.1 @Cacheable 配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-2-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">8.3.2.</span> <span class="toc-text">7.3.2 配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-3-%E7%BC%93%E5%AD%98%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE"><span class="toc-number">8.3.3.</span> <span class="toc-text">7.3.3 缓存自定义配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-4-CacheEvict%EF%BC%8C-CachePut"><span class="toc-number">8.3.4.</span> <span class="toc-text">7.3.4 @CacheEvict，@CachePut</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-4-Spring-Cache-%E6%80%BB%E7%BB%93"><span class="toc-number">8.4.</span> <span class="toc-text">7.4 Spring Cache 总结</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Devil</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">无它,唯手熟尔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
